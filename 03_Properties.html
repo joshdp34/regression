@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 3&nbsp; Properties of the Least Squares Estimators and Model Assumptions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./02_Fitting.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_Properties.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#properties-of-the-least-squares-estimators" id="toc-properties-of-the-least-squares-estimators" class="nav-link active" data-scroll-target="#properties-of-the-least-squares-estimators"><span class="header-section-number">3.1</span> Properties of the Least Squares Estimators</a>
+  <ul class="collapse">
+  <li><a href="#linear-estimators" id="toc-linear-estimators" class="nav-link" data-scroll-target="#linear-estimators"><span class="header-section-number">3.1.1</span> Linear Estimators</a></li>
+  <li><a href="#b_1-as-a-linear-estimator" id="toc-b_1-as-a-linear-estimator" class="nav-link" data-scroll-target="#b_1-as-a-linear-estimator"><span class="header-section-number">3.1.2</span> <span class="math inline">\(b_1\)</span> as a Linear Estimator</a></li>
+  <li><a href="#b_0-as-a-linear-estimator" id="toc-b_0-as-a-linear-estimator" class="nav-link" data-scroll-target="#b_0-as-a-linear-estimator"><span class="header-section-number">3.1.3</span> <span class="math inline">\(b_0\)</span> as a Linear Estimator</a></li>
+  </ul></li>
+  <li><a href="#model-assumptions" id="toc-model-assumptions" class="nav-link" data-scroll-target="#model-assumptions"><span class="header-section-number">3.2</span> Model Assumptions</a></li>
+  <li><a href="#an-estimator-of-sigma2" id="toc-an-estimator-of-sigma2" class="nav-link" data-scroll-target="#an-estimator-of-sigma2"><span class="header-section-number">3.3</span> An Estimator of <span class="math inline">\(\sigma^2\)</span></a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“The most important questions of life are, for the most part, really only problems of probability.” - Pierre Simon, Marquis de Laplace</p>
+</blockquote>
+<p>In the simple linear regression model <span class="math display">\[\begin{align*}
+y = \beta_0 + \beta_1 x +\varepsilon
+\end{align*}\]</span> we have previously discussed how to estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> with sample data using the least squares estimators. Below is an example of finding the least squares estimates with R.</p>
+<div id="exm-3_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.1 (The <code>mtcars</code> dataset) </strong></span>The <code>mtcars</code> data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).</p>
+<p>We first will make a scatterplot of <code>mpg</code> versus <code>wt</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(<span class="st">"mtcars"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>mtcars <span class="sc">|&gt;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> wt, <span class="at">y =</span> mpg)) <span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="03_Properties_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We see a linear relationship makes sense for modeling <code>mpg</code> based on <code>wt</code>.</p>
+<p>Let’s find the least squares estimates using the <code>lm()</code> function in <code>R</code>. Note that in this function, the model is specified with a <code>formula</code>. We specify the <code>formula</code> with the response variable, followed by a <code>~</code>, then the predictor variables. Here, we only have one predictor variable (<code>wt</code>).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Coefficients:
+(Intercept)           wt  
+     37.285       -5.344  </code></pre>
+</div>
+</div>
+<p>The fitted line (or prediction equation): <span class="math display">\[\begin{align*}
+\hat{y} = 37.285 - 5.344 x
+\end{align*}\]</span></p>
+</div>
+<section id="properties-of-the-least-squares-estimators" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="properties-of-the-least-squares-estimators"><span class="header-section-number">3.1</span> Properties of the Least Squares Estimators</h2>
+<section id="linear-estimators" class="level3" data-number="3.1.1">
+<h3 data-number="3.1.1" class="anchored" data-anchor-id="linear-estimators"><span class="header-section-number">3.1.1</span> Linear Estimators</h3>
+<p>Note that the least squares estimators are <em>linear functions</em> of the observations <span class="math inline">\(y_{1},\ldots,y_{n}\)</span>. That is, both <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> can be written as a linear combination of the <span class="math inline">\(y\)</span>’s.</p>
+<p>Since <span class="math inline">\(y\)</span> is the variable that we want to model, we call an estimator for some parameter that takes the form of a linear combination of <span class="math inline">\(y\)</span> a <em>linear estimator</em>.</p>
+</section>
+<section id="b_1-as-a-linear-estimator" class="level3" data-number="3.1.2">
+<h3 data-number="3.1.2" class="anchored" data-anchor-id="b_1-as-a-linear-estimator"><span class="header-section-number">3.1.2</span> <span class="math inline">\(b_1\)</span> as a Linear Estimator</h3>
+<p>We can express <span class="math inline">\(b_1\)</span> as <span id="eq-w1_5"><span class="math display">\[
+\begin{align}
+b_1 &amp; =\sum k_{i}y_{i}
+\end{align}
+\tag{3.1}\]</span></span> where <span class="math display">\[\begin{align*}
+k_{i} &amp; =\frac{x_{i}-\bar{x}}{\sum \left(x_{i}-\bar{x}\right)^{2}}
+\end{align*}\]</span></p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+For those who want to see the math:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We first note that <span class="math inline">\(\sum\left(x_{i}-\bar{x}\right)=0\)</span>.</p>
+<p>We now rewrite <span class="math inline">\(b_1\)</span> as <span class="math display">\[\begin{align*}
+b_1 &amp; =\frac{\sum\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
+&amp; =\frac{\sum\left(x_{i}-\bar{x}\right)y_{i}-\bar{y}\sum\left(x_{i}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
+&amp; =\frac{\sum\left(x_{i}-\bar{x}\right)y_{i}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
+&amp; =\left(\frac{1}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)\sum\left(x_{i}-\bar{x}\right)y_{i}
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
+<p>From <a href="#eq-w1_5">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math inline">\(b_1\)</span> is a linear combination of the <span class="math inline">\(y\)</span>’s since <span class="math inline">\(k_{i}\)</span> are known constants (recall that <span class="math inline">\(x_{i}\)</span> are treated as known constants).</p>
+</section>
+<section id="b_0-as-a-linear-estimator" class="level3" data-number="3.1.3">
+<h3 data-number="3.1.3" class="anchored" data-anchor-id="b_0-as-a-linear-estimator"><span class="header-section-number">3.1.3</span> <span class="math inline">\(b_0\)</span> as a Linear Estimator</h3>
+<p>We can write <span class="math inline">\(b_0\)</span> as <span id="eq-w1_6"><span class="math display">\[
+\begin{align}
+b_0 &amp; =\sum c_{i}y_{i}
+\end{align}
+\tag{3.2}\]</span></span> where <span class="math display">\[\begin{align*}
+c_{i} &amp; =\frac{1}{n}-\bar{x}k_{i}
+\end{align*}\]</span></p>
+<p>Therefore, <span class="math inline">\(b_0\)</span> is a linear combination of <span class="math inline">\(y_{i}\)</span>.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+For those who want to see the math:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>We can rewrite <span class="math inline">\(b_0\)</span> as <span class="math display">\[\begin{align*}
+b_0 &amp; =\bar{y}-b_{1}\bar{x}\\
+&amp; =\frac{1}{n}\sum y_{i}-\bar{x}\sum k_{i}y_{i}\\
+&amp; =\sum\left(\frac{1}{n}-\bar{x}k_{i}\right)y_{i}
+\end{align*}\]</span></p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="model-assumptions" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="model-assumptions"><span class="header-section-number">3.2</span> Model Assumptions</h2>
+<p>Let’s now focus on the random component <span class="math inline">\(\varepsilon\)</span> in the probabilistic model and its connection to the errors in estimating <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<p>Specifically, we’ll explore how the <em>probability</em> distribution of <span class="math inline">\(\varepsilon\)</span> influences the accuracy of the model in representing the true relationship between the dependent variable <span class="math inline">\(y\)</span> and the independent variable <span class="math inline">\(x\)</span>.</p>
+<p>We make four key assumptions about the probability distribution of <span class="math inline">\(\varepsilon\)</span>:</p>
+<ol type="1">
+<li><p>The <em>mean</em> of <span class="math inline">\(\varepsilon\)</span>’s probability distribution is 0. This means that, on average, the errors cancel out over an infinitely large number of experiments for each value of the independent variable <span class="math inline">\(x\)</span>. Consequently, the mean value of <span class="math inline">\(y\)</span>, <span class="math inline">\(E(y)\)</span>, for a given <span class="math inline">\(x\)</span> is <span class="math inline">\(E(y) = \beta_0 + \beta_1 x\)</span>.</p></li>
+<li><p>The <em>variance</em> of <span class="math inline">\(\varepsilon\)</span>’s probability distribution is <em>constant</em> across all values of the independent variable <span class="math inline">\(x\)</span>. For our linear model, this implies that the variance of <span class="math inline">\(\varepsilon\)</span> is a constant, say, <span class="math inline">\(\sigma^2\)</span>, regardless of the value of <span class="math inline">\(x\)</span>.</p></li>
+<li><p>The probability distribution of <span class="math inline">\(\varepsilon\)</span> is <em>normal</em>.</p></li>
+<li><p>The errors for different observations are <em>independent</em>. In other words, the error for one value of <span class="math inline">\(y\)</span> does not influence the errors for other <span class="math inline">\(y\)</span> values.</p></li>
+</ol>
+<p>The implications of the first three assumptions can be seen in <a href="#fig-3_8">Figure&nbsp;<span>3.1</span></a>;, which shows distributions of errors for four particular values of <span class="math inline">\(x\)</span>.</p>
+<div class="cell">
+<div class="cell-output-display">
+<div id="fig-3_8" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="03_Properties_files/figure-html/fig-3_8-1.png" class="img-fluid figure-img" width="576"></p>
+<figcaption class="figure-caption">Figure&nbsp;3.1: The probability distribution of <span class="math inline">\(\varepsilon\)</span>. At every value of <span class="math inline">\(x\)</span>, there is a distribution of <span class="math inline">\(y\)</span> values that satisfy the four assumptions listed above. The red points are observed values.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>From <a href="#fig-3_8">Figure&nbsp;<span>3.1</span></a>, we see that the probability distributions of the errors are <em>normal</em>, with a mean of 0 and a <em>constant</em> variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The line in the middle of the curve that goes to the regression line represents the mean value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. The line of means is given by the equation: <span class="math display">\[
+E(y) = \beta_0 + \beta_1 x
+\]</span></p>
+<p>These assumptions allow us to create measures of <em>reliability</em> for the least squares estimators and to develop hypothesis tests to evaluate the utility of the least squares line.</p>
+<p>Various diagnostic techniques are available for checking the validity of these assumptions, and these diagnostics suggest remedies when the assumptions seem invalid.</p>
+<p>Therefore, it is crucial to apply these diagnostic tools in every regression analysis. We will discuss these techniques in detail later.</p>
+<p>In practice, the assumptions do not need to hold <em>exactly</em> for least squares estimators and test statistics to have the reliability we expect from a regression analysis. The assumptions will be sufficiently satisfied for many real-world applications.</p>
+</section>
+<section id="an-estimator-of-sigma2" class="level2" data-number="3.3">
+<h2 data-number="3.3" class="anchored" data-anchor-id="an-estimator-of-sigma2"><span class="header-section-number">3.3</span> An Estimator of <span class="math inline">\(\sigma^2\)</span></h2>
+<p>The variability of random error, measured by its variance <span class="math inline">\(\sigma^2\)</span>, plays a crucial role in the accuracy of estimating model parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, as well as in the precision of predictions when using <span class="math inline">\(\hat{y}\)</span> to estimate <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. As a result, it is expected that <span class="math inline">\(\sigma^2\)</span> will appear in the formulas for confidence intervals and test statistics.</p>
+<p>In most real-world scenarios, <span class="math inline">\(\sigma^2\)</span> is <em>unknown</em> and must be estimated using the available data. The best estimate for <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(s^2\)</span>, calculated by dividing the sum of squares of residuals by the associated <em>degrees of freedom</em> (df). The sum of squares of residuals is given by: <span class="math display">\[
+SSE = \sum \left(y_i - \hat{y}_i\right)^2
+\]</span></p>
+<p>In a simple linear regression model, 2 degrees of freedom are used to estimate the y-intercept and slope, leaving <span class="math inline">\((n - 2)\)</span> degrees of freedom for estimating the error variance. Thus, the estimate of <span class="math inline">\(\sigma^2\)</span> is: <span class="math display">\[
+\begin{align*}
+s^2 &amp;= \frac{SSE}{n-2}\\
+&amp;= \frac{\sum \left(y_i - \hat{y}_ i\right)^2}{n-2}
+\end{align*}
+\]</span></p>
+<p>This <span class="math inline">\(s^2\)</span> serves as the basis for further statistical analysis, including the construction of confidence intervals and hypothesis testing.</p>
+<p>The value of <span class="math inline">\(s^2\)</span> is referred to as the <em>mean square error</em> (MSE).</p>
+<p>The value <span class="math display">\[\begin{align*}
+s &amp;= \sqrt{s^2}
+\end{align*}\]</span> is referred to as the <em>standard error</em> of the regression model or as the <em>root</em> MSE (RMSE).</p>
+<p>Using the empirical rule, we expect approximately 95% of the observed <span class="math inline">\(y\)</span> values to lie within <span class="math inline">\(2s\)</span> of their respective least squares predicted values, <span class="math inline">\(\hat y\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Review: The Empirical Rule
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recall the empirical rule applies to distributions that are mound-shaped and symmetric. It state that approximately 68% of the distribution is within one standard deviation of the mean, approximately 95% of the distribution is within two standard deviations of the mean, and approximatley 99.7% of the distribution is withing three standard deviations of the mean. Since we assume <span class="math inline">\(\varepsilon\)</span> is normally distributed, then the empirical rule holds.</p>
+</div>
+</div>
+<div id="exm-3_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 3.2 (<a href="#exm-3_1">Example&nbsp;<span>3.1</span></a> - revisited) </strong></span>We can use the <code>summary()</code> function with the fit from <code>lm</code> to obtain the summary stats of the fit.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt, <span class="at">data =</span> mtcars)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = mpg ~ wt, data = mtcars)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.5432 -2.3647 -0.1252  1.4096  6.8727 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept)  37.2851     1.8776  19.858  &lt; 2e-16 ***
+wt           -5.3445     0.5591  -9.559 1.29e-10 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 3.046 on 30 degrees of freedom
+Multiple R-squared:  0.7528,    Adjusted R-squared:  0.7446 
+F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
+</div>
+</div>
+<p>The standard error (RMSE) of the fit is 3.046.</p>
+<p>We can obtain the MSE with the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: mpg
+          Df Sum Sq Mean Sq F value    Pr(&gt;F)    
+wt         1 847.73  847.73  91.375 1.294e-10 ***
+Residuals 30 278.32    9.28                      
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>The MSE is 9.28.</p>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./02_Fitting.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>
