@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<title>STA 3386 Regression Analysis - 5&nbsp; Correlation Coefficient and the Coefficient of Determination</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./04_Sampling.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><link rel="stylesheet" href="styles.css">
+</head>
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./05_Correlation.html"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+<li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+    </ul>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+<li>
+<a href="#the-coefficient-of-correlation" id="toc-the-coefficient-of-correlation" class="nav-link active" data-scroll-target="#the-coefficient-of-correlation"><span class="header-section-number">5.1</span> The Coefficient of Correlation</a>
+  <ul class="collapse">
+<li><a href="#defining-the-correlation-coefficient" id="toc-defining-the-correlation-coefficient" class="nav-link" data-scroll-target="#defining-the-correlation-coefficient"><span class="header-section-number">5.1.1</span> Defining the Correlation Coefficient</a></li>
+  <li><a href="#some-examples-of-r" id="toc-some-examples-of-r" class="nav-link" data-scroll-target="#some-examples-of-r"><span class="header-section-number">5.1.2</span> Some Examples of <span class="math inline">\(r\)</span></a></li>
+  <li><a href="#the-population-correlation-coefficient" id="toc-the-population-correlation-coefficient" class="nav-link" data-scroll-target="#the-population-correlation-coefficient"><span class="header-section-number">5.1.3</span> The Population Correlation Coefficient</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#the-coefficient-of-determination" id="toc-the-coefficient-of-determination" class="nav-link" data-scroll-target="#the-coefficient-of-determination"><span class="header-section-number">5.2</span> The Coefficient of Determination</a>
+  <ul class="collapse">
+<li><a href="#proportion-of-variation-explained" id="toc-proportion-of-variation-explained" class="nav-link" data-scroll-target="#proportion-of-variation-explained"><span class="header-section-number">5.2.1</span> Proportion of Variation Explained</a></li>
+  </ul>
+</li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span>
+</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header><blockquote class="blockquote">
+<p><img src="correlation.png" class="img-fluid"></p>
+</blockquote>
+<section id="the-coefficient-of-correlation" class="level2" data-number="5.1"><h2 data-number="5.1" class="anchored" data-anchor-id="the-coefficient-of-correlation">
+<span class="header-section-number">5.1</span> The Coefficient of Correlation</h2>
+<p>The claim is often made that the crime rate and the unemployment rate are “<em>highly</em> <em>correlated</em>.”</p>
+<p>Another popular belief is that IQ and academic performance are “correlated.” Some people even believe that the Dow Jones Industrial Average and the lengths of fashionable skirts are “correlated.”</p>
+<p>Thus, the term correlation implies a <em>relationship</em> or <em>association</em> between two variables.</p>
+<p>For the data <span class="math inline">\((x_i,y_i)\)</span>, <span class="math inline">\(i=1,\ldots,n\)</span>, we want a measure of how well a linear model explains a <em>linear</em> relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>Recall the quantities <span class="math inline">\(SS_{xx}\)</span>, <span class="math inline">\(SS_{yy}\)</span>, and <span class="math inline">\(SS_{xy}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Review: Different <span class="math inline">\(SS\)</span> quantities
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Recall that <span class="math display">\[
+\begin{align*}
+SS_{xx} &amp;= \sum\left(x_i-\bar{x}\right)^2\\
+SS_{yy} &amp;= \sum\left(y_i-\bar{y}\right)^2\\
+SS_{xy} &amp;= \sum\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)
+\end{align*}
+\]</span></p>
+</div>
+</div>
+<p><span class="math inline">\(SS_{xx}\)</span> and <span class="math inline">\(SS_{yy}\)</span> are measures of <em>variability</em> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively. That is, they indicate how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> varies about their mean, individually.</p>
+<p><span class="math inline">\(SS_{xy}\)</span> is a measure of how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary <em>together</em>.</p>
+<div id="exm-5_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.1 (Data from <a href="02_Fitting.html#tbl-table2_1">Table&nbsp;<span>2.1</span></a>) </strong></span>For example, consider the data from <a href="02_Fitting.html#tbl-table2_1">Table&nbsp;<span>2.1</span></a>. Let’s find <span class="math inline">\(SS_{xx}\)</span>, <span class="math inline">\(SS_{yy}\)</span>, and <span class="math inline">\(SS_{xy}\)</span> in R.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span> ,<span class="fl">2.75</span>, <span class="fl">4</span>, <span class="fl">6</span>, <span class="fl">7</span>, <span class="fl">8</span>, <span class="fl">10</span><span class="op">)</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span>, <span class="fl">1.4</span>, <span class="fl">1.6</span>, <span class="fl">1.25</span>, <span class="fl">1</span>, <span class="fl">0.5</span>, <span class="fl">0.5</span>, <span class="fl">0.4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">=</span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ybar</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
+<span><span class="va">xbar</span> <span class="op">=</span>  <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">xlim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">ybar</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">xbar</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="05_Correlation_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dev_x</span> <span class="op">=</span> <span class="va">x</span><span class="op">-</span><span class="va">xbar</span></span>
+<span><span class="va">dev_y</span> <span class="op">=</span> <span class="va">y</span><span class="op">-</span><span class="va">ybar</span></span>
+<span></span>
+<span><span class="va">dev_xy</span> <span class="op">=</span> <span class="va">dev_x</span><span class="op">*</span><span class="va">dev_y</span></span>
+<span></span>
+<span><span class="va">dat1</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span>,<span class="va">dev_x</span><span class="op">^</span><span class="fl">2</span>,<span class="va">dev_y</span><span class="op">^</span><span class="fl">2</span>,<span class="va">dev_xy</span><span class="op">)</span></span>
+<span><span class="va">dat1</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 5
+      x     y `dev_x^2` `dev_y^2`  dev_xy
+  &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1  1     2       16.8     0.844   -3.76  
+2  2     1.4      9.57    0.102   -0.986 
+3  2.75  1.6      5.49    0.269   -1.22  
+4  4     1.25     1.20    0.0285  -0.185 
+5  6     1        0.821   0.00660 -0.0736
+6  7     0.5      3.63    0.338   -1.11  
+7  8     0.5      8.45    0.338   -1.69  
+8 10     0.4     24.1     0.464   -3.34  </code></pre>
+</div>
+</div>
+</div>
+<p>In the output of <code>dat1</code>, <code>dev_x^2</code> represents <span class="math inline">\((x_i-\bar{x})^2\)</span> and <code>dev_y^2</code> represents <span class="math inline">\((y_i-\bar{y})^2\)</span> for each observation. <code>dev_xy</code> represents <span class="math inline">\((x_i-\bar{x})(y_i-\bar{y})\)</span> for each observation. Note that each value is negative. This is because as <span class="math inline">\(x\)</span> is below <span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(y\)</span> is above <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>Likewise, as <span class="math inline">\(X\)</span> is above <span class="math inline">\(\bar{x}\)</span>, <span class="math inline">\(Y\)</span> is below <span class="math inline">\(\bar{y}\)</span>. In the <code>ggplot</code> above, the two red lines represent <span class="math inline">\(\bar{x}\)</span> (the vertical red line) and <span class="math inline">\(\bar{y}\)</span> (the horizontal red line). You can see how the observations are below or above these lines.</p>
+<p>We can find the values of <span class="math inline">\(SS_{xx}\)</span>, <span class="math inline">\(SS_{yy}\)</span>, and <span class="math inline">\(SS_{xy}\)</span> by</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_XX</span></span>
+<span><span class="va">dev_x</span><span class="op">^</span><span class="fl">2</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 69.99219</code></pre>
+</div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_YY</span></span>
+<span><span class="va">dev_y</span><span class="op">^</span><span class="fl">2</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.389687</code></pre>
+</div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_XY</span></span>
+<span><span class="va">dev_xy</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] -12.36094</code></pre>
+</div>
+</div>
+<div id="exm-5_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.2 (The <code>trees</code> dataset) </strong></span>For another example, consider the <code>trees</code> dataset.</p>
+<p>In R, a packaged called <code>datasets</code> include a number of available datasets. One of the datasets is called <code>trees</code>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">trees</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Girth Height Volume
+1   8.3     70   10.3
+2   8.6     65   10.3
+3   8.8     63   10.2
+4  10.5     72   16.4
+5  10.7     81   18.8
+6  10.8     83   19.7</code></pre>
+</div>
+</div>
+<p>There are 31 total observations in this dataset. Variables measured are the Girth (actually the diameter measured at 54 in. off the ground), the Height, and the Volume of timber from each black cherry tree.</p>
+<p>Suppose we want to predict Volume from Girth.</p>
+<p>Again, we plot the data with red lines representing <span class="math inline">\(\bar{x}\)</span> and <span class="math inline">\(\bar{y}\)</span>.</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">xbar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">Girth</span><span class="op">)</span></span>
+<span><span class="va">ybar</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">Volume</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">ybar</span>,col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">xbar</span>, col<span class="op">=</span><span class="st">"red"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="05_Correlation_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">x</span> <span class="op">=</span> <span class="va">trees</span><span class="op">$</span><span class="va">Girth</span></span>
+<span><span class="va">y</span> <span class="op">=</span> <span class="va">trees</span><span class="op">$</span><span class="va">Volume</span></span>
+<span></span>
+<span><span class="va">dev_x</span> <span class="op">=</span> <span class="va">x</span><span class="op">-</span><span class="va">xbar</span></span>
+<span><span class="va">dev_y</span> <span class="op">=</span> <span class="va">y</span><span class="op">-</span><span class="va">ybar</span></span>
+<span></span>
+<span><span class="va">dev_xy</span> <span class="op">=</span> <span class="va">dev_x</span><span class="op">*</span><span class="va">dev_y</span></span>
+<span></span>
+<span></span>
+<span><span class="va">dat1</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">x</span>,<span class="va">y</span>,<span class="va">dev_x</span><span class="op">^</span><span class="fl">2</span>,<span class="va">dev_y</span><span class="op">^</span><span class="fl">2</span>,<span class="va">dev_xy</span><span class="op">)</span></span>
+<span><span class="va">dat1</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span>n<span class="op">=</span><span class="fl">31</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 31 × 5
+       x     y `dev_x^2` `dev_y^2`  dev_xy
+   &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+ 1   8.3  10.3  24.5        395.    98.3  
+ 2   8.6  10.3  21.6        395.    92.4  
+ 3   8.8  10.2  19.8        399.    88.8  
+ 4  10.5  16.4   7.55       190.    37.8  
+ 5  10.7  18.8   6.49       129.    29.0  
+ 6  10.8  19.7   5.99       110.    25.6  
+ 7  11    15.6   5.06       212.    32.8  
+ 8  11    18.2   5.06       143.    26.9  
+ 9  11.1  22.6   4.62        57.3   16.3  
+10  11.2  19.9   4.20       105.    21.0  
+11  11.3  24.2   3.80        35.7   11.6  
+12  11.4  21     3.42        84.1   17.0  
+13  11.4  21.4   3.42        76.9   16.2  
+14  11.7  21.3   2.40        78.7   13.7  
+15  12    19.1   1.56       123.    13.8  
+16  12.9  22.2   0.121       63.5    2.78 
+17  12.9  33.8   0.121       13.2   -1.26 
+18  13.3  27.4   0.00266      7.68  -0.143
+19  13.7  25.7   0.204       20.0   -2.02 
+20  13.8  24.9   0.304       27.8   -2.91 
+21  14    34.5   0.565       18.7    3.25 
+22  14.2  31.7   0.906        2.34   1.46 
+23  14.5  36.3   1.57        37.6    7.67 
+24  16    38.3   7.57        66.1   22.4  
+25  16.3  42.6   9.31       154.    37.9  
+26  17.3  55.4  16.4        637.   102.   
+27  17.5  55.7  18.1        652.   109.   
+28  17.9  58.3  21.6        791.   131.   
+29  18    51.5  22.6        455.   101.   
+30  18    51    22.6        434.    99.0  
+31  20.6  77    54.0       2193.   344.   </code></pre>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_XX</span></span>
+<span><span class="va">dev_x</span><span class="op">^</span><span class="fl">2</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 295.4374</code></pre>
+</div>
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_YY</span></span>
+<span><span class="va">dev_y</span><span class="op">^</span><span class="fl">2</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 8106.084</code></pre>
+</div>
+<div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#SS_XY</span></span>
+<span><span class="va">dev_xy</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1496.644</code></pre>
+</div>
+</div>
+<p>In this example, most of the observations have <span class="math inline">\((x-\bar{x})(y-\bar{y})\)</span> that are positive. This is because these observations have values of <span class="math inline">\(x\)</span> that are below <span class="math inline">\(\bar{x}\)</span> and values of <span class="math inline">\(y\)</span> that are below <span class="math inline">\(\bar{y}\)</span>, or values of <span class="math inline">\(x\)</span> that are above <span class="math inline">\(\bar{x}\)</span> and values of <span class="math inline">\(y\)</span> that are above <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>There are four observations that have a negative value of <span class="math inline">\((x-\bar{x})(y-\bar{y})\)</span>. Although they are negative, the value of <span class="math inline">\(SS_{xy}\)</span> is positive due to all the observations with positive values of <span class="math inline">\((x-\bar{x})(y-\bar{y})\)</span>. Therefore, we say if <span class="math inline">\(SS_{xy}\)</span> is <em>positive</em>, then <span class="math inline">\(y\)</span> tends to increase as <span class="math inline">\(x\)</span> increases. Likewise, if <span class="math inline">\(SS_{xy}\)</span> is <em>negative</em>, then <span class="math inline">\(y\)</span> tends to decrease as <span class="math inline">\(x\)</span> increases.</p>
+<p>If <span class="math inline">\(SS_{xy}\)</span> is zero (or close to zero), then we say <span class="math inline">\(y\)</span> does not tend to change as <span class="math inline">\(x\)</span> increases.</p>
+</div>
+<section id="defining-the-correlation-coefficient" class="level3" data-number="5.1.1"><h3 data-number="5.1.1" class="anchored" data-anchor-id="defining-the-correlation-coefficient">
+<span class="header-section-number">5.1.1</span> Defining the Correlation Coefficient</h3>
+<p>We first note that <span class="math inline">\(SS_{xy}\)</span> cannot be greater in absolute value than the quantity <span class="math display">\[
+\sqrt{SS_{xx}SS_{yy}}
+\]</span> We will not prove this here, but it is a direct application of the Cauchy-Schwarz inequality .</p>
+<p>We define the <em>linear</em> <em>correlation</em> coefficient as <span id="eq-w2_13"><span class="math display">\[
+\begin{align}
+    r=\frac{SS_{xy}}{\sqrt{SS_{xx}SS_{yy}}}
+\end{align}
+\tag{5.1}\]</span></span></p>
+<p><span class="math inline">\(r\)</span> is also called the <em>Pearson</em> correlation coefficient.</p>
+<p>We note that <span class="math display">\[
+-1\le r \le 1
+\]</span></p>
+<p>If <span class="math inline">\(r=0\)</span>, then there is no linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>If <span class="math inline">\(r\)</span> is positive, then the slope of the linear relationship is positive. If <span class="math inline">\(r\)</span> is negative, then the slope of the linear relationship is negative.</p>
+<p>The closer <span class="math inline">\(r\)</span> is to one in absolute value, the stronger the linear relationship is between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+</section><section id="some-examples-of-r" class="level3" data-number="5.1.2"><h3 data-number="5.1.2" class="anchored" data-anchor-id="some-examples-of-r">
+<span class="header-section-number">5.1.2</span> Some Examples of <span class="math inline">\(r\)</span>
+</h3>
+<p>The best way to grasp correlation is to see examples. In <a href="#fig-05_01">Figure&nbsp;<span>5.1</span></a>, scatterplots of 200 observations are shown with a least squares line.</p>
+<div id="fig-05_01" class="quarto-layout-panel">
+<figure class="figure"><div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-05_01a" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="fig_02_04_01a.png" class="img-fluid figure-img" data-ref-parent="fig-05_01"></p>
+<figcaption class="figure-caption">(a) <span class="math inline">\(r=-0.079\)</span></figcaption></figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-05_01b" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="fig_02_04_01b.png" class="img-fluid figure-img" data-ref-parent="fig-05_01"></p>
+<figcaption class="figure-caption">(b) <span class="math inline">\(r=-0.672\)</span></figcaption></figure>
+</div>
+</div>
+</div>
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-05_01c" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="fig_02_04_01c.png" class="img-fluid figure-img" data-ref-parent="fig-05_01"></p>
+<figcaption class="figure-caption">(c) <span class="math inline">\(r=0.723\)</span></figcaption></figure>
+</div>
+</div>
+<div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
+<div id="fig-05_01d" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure"><p><img src="fig_02_04_01d.png" class="img-fluid figure-img" data-ref-parent="fig-05_01"></p>
+<figcaption class="figure-caption">(d) <span class="math inline">\(r=0.524\)</span></figcaption></figure>
+</div>
+</div>
+</div>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.1: Examples of correlation</figcaption><p></p>
+</figure>
+</div>
+<p>Note how the value of <span class="math inline">\(r\)</span> relates to how spread out the points are from the line as well as to the slope of the line.</p>
+<p>The correlation coefficient, <span class="math inline">\(r\)</span>, quantifies the <em>strength</em> of the <em>linear</em> relationship between two variables, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, similar to the way the least squares slope, <span class="math inline">\(b_1\)</span>, does. However, unlike the slope, the correlation coefficient is <em>scaleless</em>. This means that the value of <span class="math inline">\(r\)</span> always falls between <span class="math inline">\(\pm 1\)</span>, regardless of the units used for <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>The calculation of <span class="math inline">\(r\)</span> uses the same data that is used to fit the least squares line. Given that both <span class="math inline">\(r\)</span> and <span class="math inline">\(b_1\)</span> offer insight into the utility of the model, it’s not surprising that their computational formulas are related.</p>
+<p>It’s also important to remember that a high correlation does not imply <em>causality</em>. If a high positive or negative value of <span class="math inline">\(r\)</span> is observed, this does not mean that changes in <span class="math inline">\(x\)</span> <em>cause</em> changes in <span class="math inline">\(y\)</span>. The only valid conclusion is that there may be a <em>linear</em> relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+</section><section id="the-population-correlation-coefficient" class="level3" data-number="5.1.3"><h3 data-number="5.1.3" class="anchored" data-anchor-id="the-population-correlation-coefficient">
+<span class="header-section-number">5.1.3</span> The Population Correlation Coefficient</h3>
+<p>The correlation <span class="math inline">\(r\)</span> is for the observed data which is usually from a sample. Thus, <span class="math inline">\(r\)</span> is the <em>sample</em> correlation coefficient.</p>
+<p>We could make a hypothesis about the correlation of the <em>population</em> based on the sample. We will denote the population correlation with <span class="math inline">\(\rho\)</span>. The hypothesis we will want to test is <span class="math display">\[\begin{align*}
+  H_0:\rho = 0\\
+H_a:\rho \ne 0
+\end{align*}\]</span></p>
+<p>Recall the hypothesis test for the slope in <a href="04_Sampling.html#sec-modelutility"><span>Section&nbsp;4.6</span></a>.</p>
+<p>If we test <span class="math display">\[\begin{align*}
+H_{0}: &amp; \beta_{1}=0\\
+H_{a}: &amp; \beta_{1}\ne0
+\end{align*}\]</span> then this is equivalent to testing<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> <span class="math display">\[\begin{align*}
+H_{0}: &amp; \rho=0\\
+H_{a}: &amp; \rho\ne0
+\end{align*}\]</span> since both hypotheses test to see of there is a linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
+<p>Now note, using <a href="02_Fitting.html#eq-w1_4">Equation&nbsp;<span>2.5</span></a>, that <span class="math inline">\(b_1\)</span> can be rewritten as <span id="eq-w2_14"><span class="math display">\[
+\begin{align}
+b_1 &amp; =\frac{\sum\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
+&amp; =\frac{SS_{xy}}{SS_{xx}}\\
+&amp; =\frac{rSS_{xy}}{rSS_{xx}}\\
+&amp; =\frac{rSS_{xy}}{\frac{SS_{xy}}{\sqrt{SS_{xx}SS_{yy}}}SS_{xx}}\\
+&amp; =\frac{r\sqrt{SS_{xx}SS_{yy}}}{SS_{xx}}\\
+&amp; =r\frac{\sqrt{\frac{SS_{xx}}{n-1}\frac{SS_{yy}}{n-1}}}{\frac{SS_{xx}}{n-1}}\\
+&amp; =r\frac{s_{X}s_{Y}}{s_{X}^{2}}\\
+&amp; =r\frac{s_{y}}{s_{X}}
+\end{align}
+\tag{5.2}\]</span></span> where <span class="math inline">\(s_{y}\)</span> and <span class="math inline">\(s_{x}\)</span> are the sample standard deviation of <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>, respectively.</p>
+<p>The test statistic is <span id="eq-w2_16"><span class="math display">\[
+\begin{align}
+t &amp; =\frac{r\sqrt{\left(n-2\right)}}{\sqrt{1-r^{2}}}
+\end{align}
+\tag{5.3}\]</span></span></p>
+<p>If <span class="math inline">\(H_0\)</span> is true, then <span class="math inline">\(t\)</span> will have a Student’s <span class="math inline">\(t\)</span>-distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
+<p>The only real difference between the least squares slope <span class="math inline">\(b_1\)</span> and the coefficient of correlation <span class="math inline">\(r\)</span> is the measurement scale<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Therefore, the information they provide about the utility of the least squares model is to some extent redundant.</p>
+<p>Furthermore, the slope <span class="math inline">\(b_1\)</span> gives us additional information on the amount of increase (or decrease) in <span class="math inline">\(y\)</span> for every 1-unit increase in <span class="math inline">\(x\)</span>.</p>
+<p>For this reason, the slope is recommended for making inferences about the existence of a positive or negative linear relationship between two variables.</p>
+</section></section><section id="the-coefficient-of-determination" class="level2" data-number="5.2"><h2 data-number="5.2" class="anchored" data-anchor-id="the-coefficient-of-determination">
+<span class="header-section-number">5.2</span> The Coefficient of Determination</h2>
+<p>The second measure of how well the model fits the data involves measuring the amount of <em>variability</em> in <span class="math inline">\(y\)</span> that is explained by the model using <span class="math inline">\(x\)</span>.</p>
+<p>We start by examining the variability of the variable we want to learn about. We want to learn about the response variable <span class="math inline">\(y\)</span>. One way to measure the variability of <span class="math inline">\(y\)</span> is with <span class="math display">\[
+SS_{yy} = \sum\left(y_i-\bar{y}\right)^2
+\]</span></p>
+<p>Note that <span class="math inline">\(SS_{yy}\)</span> does not include the model or <span class="math inline">\(x\)</span>. It is just a measure of how <span class="math inline">\(y\)</span> deviates from its mean <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>We also have the variability of the points about the <em>line</em>. We can measure this with the sum of squares error <span class="math display">\[
+SSE = \sum \left(y_i - \hat{y}_i\right)^2
+\]</span></p>
+<p>Note that SSE does include <span class="math inline">\(x\)</span>. This is because the fitted line <span class="math inline">\(\hat{y}\)</span> is a function of <span class="math inline">\(x\)</span>.</p>
+<p>Here are a couple of key points regarding sums of squares:</p>
+<ul>
+<li>If <span class="math inline">\(x\)</span> provides little to no useful information for predicting <span class="math inline">\(y\)</span>, then <span class="math inline">\(SS_{yy}\)</span> and <span class="math inline">\(SSE\)</span> will be nearly <em>equal</em>.</li>
+<li>If <span class="math inline">\(x\)</span> does provide valuable information for predicting <span class="math inline">\(y\)</span>, then <span class="math inline">\(SSE\)</span> will be <em>smaller</em> than <span class="math inline">\(SS_{yy}\)</span>.</li>
+<li>In the extreme case where all points lie exactly on the least squares line, <span class="math inline">\(SSE = 0\)</span>.</li>
+</ul>
+<p>Here’s an example to illustrate:</p>
+<p>Suppose we have data for two variables, hours studied (x) and test scores (y). If studying time doesn’t help predict the test score, the variation in test scores (measured by <span class="math inline">\(SS_{yy}\)</span>) will be similar to the error in the prediction (measured by <span class="math inline">\(SSE\)</span>). However, if studying time is a good predictor, the prediction errors will be much smaller, making <span class="math inline">\(SSE\)</span> significantly smaller than <span class="math inline">\(SS_{yy}\)</span>. If the relationship between study time and test scores is perfect, then the error would be zero, resulting in <span class="math inline">\(SSE = 0\)</span>.</p>
+<section id="proportion-of-variation-explained" class="level3" data-number="5.2.1"><h3 data-number="5.2.1" class="anchored" data-anchor-id="proportion-of-variation-explained">
+<span class="header-section-number">5.2.1</span> Proportion of Variation Explained</h3>
+<p>We want to explain as much of the variation of <span class="math inline">\(y\)</span> as possible. So we want to know just how much of that variation is explained by using linear regression model with <span class="math inline">\(x\)</span>. We can quantify this variation explained by taking the difference <span id="eq-w2_17"><span class="math display">\[
+\begin{align}
+    SSR = SS_{yy}-SSE
+\end{align}
+\tag{5.4}\]</span></span></p>
+<p>SSR is called the sum of squares <em>regression</em>.</p>
+<p>We calculate the <em>proportion</em> of the variation of <span class="math inline">\(y\)</span> explained by the regression model using <span class="math inline">\(x\)</span> by calculating<a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> <span id="eq-w2_18"><span class="math display">\[
+\begin{align}
+    r^2 = \frac{SSR}{SS_{yy}}\label{eq:w2_18}
+\end{align}
+\tag{5.5}\]</span></span></p>
+<p><span class="math inline">\(r^2\)</span> is called the coefficient of <em>determination</em><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a></p>
+<p>Practical Interpretation:</p>
+<p>About <span class="math inline">\(100(r^2)\%\)</span> of the sample variation in <span class="math inline">\(y\)</span> (measured by the total sum of squares of deviations of the sample <span class="math inline">\(y\)</span>-values about their mean <span class="math inline">\(\bar{y}\)</span>) can be explained by (or attributed to) using <span class="math inline">\(x\)</span> to predict <span class="math inline">\(y\)</span> in the straight-line model.</p>
+<div id="exm-5_3" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.3 (<a href="#exm-5_2">Example&nbsp;<span>5.2</span></a> revisited) </strong></span>We can find the coefficient of determination using the <code>summary</code> function with an <code>lm</code> object.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Volume</span><span class="op">~</span><span class="va">Girth</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+lm(formula = Volume ~ Girth, data = trees)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-8.065 -3.107  0.152  3.495  9.587 
+
+Coefficients:
+            Estimate Std. Error t value Pr(&gt;|t|)    
+(Intercept) -36.9435     3.3651  -10.98 7.62e-12 ***
+Girth         5.0659     0.2474   20.48  &lt; 2e-16 ***
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+Residual standard error: 4.252 on 29 degrees of freedom
+Multiple R-squared:  0.9353,    Adjusted R-squared:  0.9331 
+F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
+</div>
+</div>
+<p>We see that 93.53% of the variability in the volume of the trees can be explained by the linear model using girth to predict the volume.</p>
+<p>If we want to find the correlation coefficient, we can just use the <code>cor</code> function on the dataframe. This will find the correlation coefficient for each pair of variables in the dataframe. Note that there can only be quantitative variables in the dataframe in order this function to work.</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">trees</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           Girth    Height    Volume
+Girth  1.0000000 0.5192801 0.9671194
+Height 0.5192801 1.0000000 0.5982497
+Volume 0.9671194 0.5982497 1.0000000</code></pre>
+</div>
+</div>
+<p>So the correlation between <code>Girth</code> and <code>Volume</code> is 0.9671.</p>
+</div>
+
+
+</section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p><strong>Note</strong>: The two tests are equivalent in simple linear regression only.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>The estimated slope is measured in the same units as <span class="math inline">\(y\)</span>. However, the correlation coefficient <span class="math inline">\(r\)</span> is independent of scale.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>In simple linear regression, it can be shown that this quantity is equal to the square of the simple linear coefficient of correlation <span class="math inline">\(r\)</span>.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Note that some software will denote the coefficient of determination as <span class="math inline">\(R^2\)</span>.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+      <a href="./04_Sampling.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+</body></html>
