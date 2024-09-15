@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 7&nbsp; Checking the Linearity and Constant Variance Assumptions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./06_Using.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./07_Checking.html"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#residual-diagnostics" id="toc-residual-diagnostics" class="nav-link active" data-scroll-target="#residual-diagnostics"><span class="header-section-number">7.1</span> Residual Diagnostics</a>
+  <ul class="collapse">
+  <li><a href="#model-assumptions" id="toc-model-assumptions" class="nav-link" data-scroll-target="#model-assumptions"><span class="header-section-number">7.1.1</span> Model Assumptions</a></li>
+  <li><a href="#residuals" id="toc-residuals" class="nav-link" data-scroll-target="#residuals"><span class="header-section-number">7.1.2</span> Residuals</a></li>
+  <li><a href="#properties-of-residuals" id="toc-properties-of-residuals" class="nav-link" data-scroll-target="#properties-of-residuals"><span class="header-section-number">7.1.3</span> Properties of Residuals</a></li>
+  <li><a href="#semistudentized-residuals" id="toc-semistudentized-residuals" class="nav-link" data-scroll-target="#semistudentized-residuals"><span class="header-section-number">7.1.4</span> Semistudentized Residuals</a></li>
+  </ul></li>
+  <li><a href="#the-linearity-assumption" id="toc-the-linearity-assumption" class="nav-link" data-scroll-target="#the-linearity-assumption"><span class="header-section-number">7.2</span> The Linearity Assumption</a>
+  <ul class="collapse">
+  <li><a href="#residual-plots" id="toc-residual-plots" class="nav-link" data-scroll-target="#residual-plots"><span class="header-section-number">7.2.1</span> Residual Plots</a></li>
+  <li><a href="#plotting-against-predictor-variable-or-fitted-values" id="toc-plotting-against-predictor-variable-or-fitted-values" class="nav-link" data-scroll-target="#plotting-against-predictor-variable-or-fitted-values"><span class="header-section-number">7.2.2</span> Plotting against Predictor Variable or Fitted Values</a></li>
+  <li><a href="#data-transformation-for-linearity" id="toc-data-transformation-for-linearity" class="nav-link" data-scroll-target="#data-transformation-for-linearity"><span class="header-section-number">7.2.3</span> Data Transformation for Linearity</a></li>
+  <li><a href="#transforming-x" id="toc-transforming-x" class="nav-link" data-scroll-target="#transforming-x"><span class="header-section-number">7.2.4</span> Transforming <span class="math inline">\(x\)</span></a></li>
+  </ul></li>
+  <li><a href="#homogeneity-of-variance" id="toc-homogeneity-of-variance" class="nav-link" data-scroll-target="#homogeneity-of-variance"><span class="header-section-number">7.3</span> Homogeneity of Variance</a>
+  <ul class="collapse">
+  <li><a href="#residual-plots-1" id="toc-residual-plots-1" class="nav-link" data-scroll-target="#residual-plots-1"><span class="header-section-number">7.3.1</span> Residual Plots</a></li>
+  <li><a href="#absolute-residuals-and-squared-residuals" id="toc-absolute-residuals-and-squared-residuals" class="nav-link" data-scroll-target="#absolute-residuals-and-squared-residuals"><span class="header-section-number">7.3.2</span> Absolute Residuals and Squared Residuals</a></li>
+  <li><a href="#tests-for-heteroscedasticity" id="toc-tests-for-heteroscedasticity" class="nav-link" data-scroll-target="#tests-for-heteroscedasticity"><span class="header-section-number">7.3.3</span> Tests for Heteroscedasticity</a></li>
+  <li><a href="#levenes-test-and-brown-forsythe-test" id="toc-levenes-test-and-brown-forsythe-test" class="nav-link" data-scroll-target="#levenes-test-and-brown-forsythe-test"><span class="header-section-number">7.3.4</span> Levene’s Test and Brown-Forsythe Test</a></li>
+  <li><a href="#breusch-pagan-test" id="toc-breusch-pagan-test" class="nav-link" data-scroll-target="#breusch-pagan-test"><span class="header-section-number">7.3.5</span> Breusch-Pagan Test</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“…the statistician knows…that in nature there never was a normal distribution, there never was a straight line, yet with normal and linear assumptions, known to be false, he can often derive results which match, to a useful approximation, those found in the real world.” - George Box</p>
+</blockquote>
+<section id="residual-diagnostics" class="level2" data-number="7.1">
+<h2 data-number="7.1" class="anchored" data-anchor-id="residual-diagnostics"><span class="header-section-number">7.1</span> Residual Diagnostics</h2>
+<section id="model-assumptions" class="level3" data-number="7.1.1">
+<h3 data-number="7.1.1" class="anchored" data-anchor-id="model-assumptions"><span class="header-section-number">7.1.1</span> Model Assumptions</h3>
+<p>Let’s review the assumptions for the simple linear regression model:</p>
+<ol type="1">
+<li>The <em>mean</em> of the probability distribution of <span class="math inline">\(\varepsilon\)</span> is 0.</li>
+<li>The <em>variance</em> of the probability distribution of <span class="math inline">\(\varepsilon\)</span> is <em>constant</em> for all settings of the independent variable <span class="math inline">\(x\)</span>.</li>
+<li>The probability distribution of <span class="math inline">\(\varepsilon\)</span> is <em>normal</em>.</li>
+<li>The errors associated with any two different observations are <em>independent</em>.</li>
+</ol>
+<p>After fitting the model, we will need to check these assumptions.</p>
+</section>
+<section id="residuals" class="level3" data-number="7.1.2">
+<h3 data-number="7.1.2" class="anchored" data-anchor-id="residuals"><span class="header-section-number">7.1.2</span> Residuals</h3>
+<p>We check the assumptions of the model by examining the residuals: <span id="eq-w1_19"><span class="math display">\[
+\begin{align}
+{e_{i}  =y_{i}-\hat{y}_{i}}
+\end{align}
+\tag{7.1}\]</span></span></p>
+<p>We do this since the assumptions, with the exception of the linearity assumption, are based on the error terms <span class="math inline">\(\varepsilon_i\)</span>. We can think of <span class="math inline">\(e_i\)</span> as an observed value of <span class="math inline">\(\varepsilon_i\)</span>.</p>
+</section>
+<section id="properties-of-residuals" class="level3" data-number="7.1.3">
+<h3 data-number="7.1.3" class="anchored" data-anchor-id="properties-of-residuals"><span class="header-section-number">7.1.3</span> Properties of Residuals</h3>
+<p>Below are some properties of the residuals: <span id="eq-w1_20-23"><span class="math display">\[
+\begin{align}
+\sum e_{i} &amp; =0\\
+\sum x_{i}e_{i} &amp; =0\\
+\sum\hat{y}_{i}e_{i} &amp; =0 \\
+\sum y_{i} &amp; =\sum\hat{y}_{i}
+\end{align}
+\tag{7.2}\]</span></span></p>
+<p>Clearly, from <a href="#eq-w1_20-23">Equation&nbsp;<span>7.2</span></a>, the mean of the residuals is <span id="eq-w3_1"><span class="math display">\[
+\begin{align}
+    \bar{e}_i=0
+\end{align}
+\tag{7.3}\]</span></span></p>
+<p>The variance of all <span class="math inline">\(n\)</span> residuals, <span class="math inline">\(e_1,\ldots,e_n\)</span> is <span id="eq-w3_2"><span class="math display">\[
+\begin{align}
+\frac{\sum\left(e_{i}-\bar{e}\right)^{2}}{n-2} &amp; =\frac{\sum e_{i}^{2}}{n-2}\\
+&amp; =\frac{SSE}{n-2}\\
+&amp; =MSE\\
+&amp; =s^{2}
+\end{align}
+\tag{7.4}\]</span></span></p>
+</section>
+<section id="semistudentized-residuals" class="level3" data-number="7.1.4">
+<h3 data-number="7.1.4" class="anchored" data-anchor-id="semistudentized-residuals"><span class="header-section-number">7.1.4</span> Semistudentized Residuals</h3>
+<p>It will be helpful to <em>studentize</em> each residuals. As always, we do this by subtracting off the mean, <span class="math inline">\(\bar{e}_{i}\)</span>, and dividing by the standard error of <span class="math inline">\(e_{i}\)</span>.</p>
+<p>We know by <a href="#eq-w3_1">Equation&nbsp;<span>7.3</span></a> that <span class="math inline">\(\bar{e}_{i}=0\)</span>.</p>
+<p>In <a href="#eq-w3_2">Equation&nbsp;<span>7.4</span></a>, we said the variance of the sample of the <span class="math inline">\(e_{i}\)</span>’s is MSE. For each individual <span class="math inline">\(e_{i}\)</span>, the standard error is not quite <span class="math inline">\(\sqrt{MSE}\)</span>. The actual standard error is dependent on the predictor variable(s). We will discuss this more in multiple regression.</p>
+<p>For now, we will use the approximation <span class="math inline">\(\sqrt{MSE}\)</span> and calculate <span class="math display">\[\begin{align*}
+e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
+&amp; =\frac{e_{i}}{\sqrt{MSE}}
+\end{align*}\]</span> We call <span class="math inline">\(e_{i}^{*}\)</span> the <em>semistudentized</em> residual since the standard error is an approximation.</p>
+</section>
+</section>
+<section id="the-linearity-assumption" class="level2" data-number="7.2">
+<h2 data-number="7.2" class="anchored" data-anchor-id="the-linearity-assumption"><span class="header-section-number">7.2</span> The Linearity Assumption</h2>
+<section id="residual-plots" class="level3" data-number="7.2.1">
+<h3 data-number="7.2.1" class="anchored" data-anchor-id="residual-plots"><span class="header-section-number">7.2.1</span> Residual Plots</h3>
+<p>We can check the linearity assumption by plotting the residuals vs the <em>predictor</em> variable or plotting the residuals vs the <em>fitted</em> values.</p>
+<p>We usually examine a <em>scatterplot</em> to determine if a linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is appropriate. There are times when the scatterplot makes it difficult to see if a nonlinear relationship exists. This may be the case if the observed <span class="math inline">\(y\)</span> are close to the fitted line <span class="math inline">\(\hat{y}_i\)</span>. This usually means the slope is steep.</p>
+<div id="exm-7_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 7.1 (Weight and Height Data) </strong></span>In this example, we will consider the weights (in kg) and heights (in m) of 16 women ages 30-39. The dataset is from kaggle.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"Weight_Height.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>Weight, <span class="at">y=</span>Height))<span class="sc">+</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(Weight<span class="sc">~</span>Height, <span class="at">data=</span>dat)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#plot with regression line</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>Weight, <span class="at">y=</span>Height))<span class="sc">+</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">formula=</span>y<span class="sc">~</span>x, <span class="at">se=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#make dataset with Weight, the fitted values, and residuals</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dat2 <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">x =</span> dat<span class="sc">$</span>Weight, </span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>              <span class="at">yhat =</span> fit<span class="sc">$</span>fitted.values, </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>              <span class="at">e =</span> fit<span class="sc">$</span>residuals)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#plot x by residuals</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat2, <span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>e))<span class="sc">+</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-1-3.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot fitted values by residuals</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat2, <span class="fu">aes</span>(<span class="at">x=</span>yhat, <span class="at">y=</span>e))<span class="sc">+</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="dv">0</span>, <span class="at">col=</span><span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-1-4.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-against-predictor-variable-or-fitted-values" class="level3" data-number="7.2.2">
+<h3 data-number="7.2.2" class="anchored" data-anchor-id="plotting-against-predictor-variable-or-fitted-values"><span class="header-section-number">7.2.2</span> Plotting against Predictor Variable or Fitted Values</h3>
+<p>Plotting the residuals against <span class="math inline">\(x\)</span> will provide the same information as plotting the residuals against <span class="math inline">\(\hat{y}\)</span> for the simple linear regression model.</p>
+<p>When more predictor variables are considered, then plotting against the <span class="math inline">\(x\)</span> variables and plotting against <span class="math inline">\(\hat{y}\)</span> may provide different information. It is usually helpful to plot both in that case.</p>
+</section>
+<section id="data-transformation-for-linearity" class="level3" data-number="7.2.3">
+<h3 data-number="7.2.3" class="anchored" data-anchor-id="data-transformation-for-linearity"><span class="header-section-number">7.2.3</span> Data Transformation for Linearity</h3>
+<p>When the linearity assumption does not hold (as seen in the residual plots), then a <em>nonlinear</em> model may be considered or a <em>transformation</em> on either <span class="math inline">\(x\)</span> or <span class="math inline">\(y\)</span> can be attempted to make the relationship linear.</p>
+</section>
+<section id="transforming-x" class="level3" data-number="7.2.4">
+<h3 data-number="7.2.4" class="anchored" data-anchor-id="transforming-x"><span class="header-section-number">7.2.4</span> Transforming <span class="math inline">\(x\)</span></h3>
+<p>Transforming the response variable <span class="math inline">\(y\)</span> may lead to issues with other assumptions such as the <em>constant variance</em> assumption or the <em>normality</em> of <span class="math inline">\(\varepsilon\)</span> assumption.</p>
+<p>If our only concern is the linearity assumption, then transforming <span class="math inline">\(x\)</span> will be the best option. This transformation may be a square root transformation <span class="math inline">\(\sqrt{X}\)</span>, a log transformation <span class="math inline">\(\log{X}\)</span>, or some power transformation <span class="math inline">\(X^{p}\)</span> were <span class="math inline">\(p\)</span> is some real number.</p>
+<p>Sometimes a transformation of <span class="math inline">\(x\)</span> will not be enough to satisfy the linearity assumption. In that case, the simple linear regression model should be abandoned in favor of a nonlinear model.</p>
+</section>
+</section>
+<section id="homogeneity-of-variance" class="level2" data-number="7.3">
+<h2 data-number="7.3" class="anchored" data-anchor-id="homogeneity-of-variance"><span class="header-section-number">7.3</span> Homogeneity of Variance</h2>
+<section id="residual-plots-1" class="level3" data-number="7.3.1">
+<h3 data-number="7.3.1" class="anchored" data-anchor-id="residual-plots-1"><span class="header-section-number">7.3.1</span> Residual Plots</h3>
+<p>As we did previously, we can plot the residuals against the predictor variable <span class="math inline">\(x\)</span> or against the fitted values <span class="math inline">\(\hat{y}\)</span> to help determine whether the variance of the error term <span class="math inline">\(\varepsilon\)</span> is <em>constant</em>.</p>
+<p>When the variance is constant, we say the model has <em>homoscedasticity</em>. When the variance is nonconstant, we say the model has <em>heteroscedasticity</em>.</p>
+</section>
+<section id="absolute-residuals-and-squared-residuals" class="level3" data-number="7.3.2">
+<h3 data-number="7.3.2" class="anchored" data-anchor-id="absolute-residuals-and-squared-residuals"><span class="header-section-number">7.3.2</span> Absolute Residuals and Squared Residuals</h3>
+<p>When examining a residual plot for non-constant variance, we look for any clear changes in the spread of the residuals. One common clear pattern seen when heteroscedasticity is present is a <em>cone</em> pattern.</p>
+<p>We are usually not concerned about the sign of the residual when examining for heteroscedasticity. Thus, it is common to plot the <em>absolute</em> residuals or the <em>squared</em> residuals vs the predictor variable or fitted values.</p>
+<p>Usually a least squares line is then fit to the absolute residual or squared residuals plot. If this line has a significant slope, then this gives evidence that the variance is nonconstant.</p>
+<div id="exm-w3_3_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 7.2 (Diastolic Blood Pressure Data) </strong></span>We will model the diastolic blood pressure by the age of 54 healthy adult women. The data are found in Kutner et al<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"bloodpressure.txt"</span>, <span class="at">header=</span>T)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(dbp<span class="sc">~</span>age, <span class="at">data=</span>dat)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co">#add the fit line without using geom_smooth</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>dbp))<span class="sc">+</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> fit<span class="sc">$</span>coefficients[<span class="dv">2</span>],</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>              <span class="at">intercept =</span> fit<span class="sc">$</span>coefficients[<span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>By examining the scatterplot of dbp vs age, we already see evidence of nonconstant variance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>e <span class="ot">=</span> fit <span class="sc">|&gt;</span> <span class="fu">resid</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>yhat <span class="ot">=</span> fit <span class="sc">|&gt;</span> <span class="fu">fitted</span>()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co">#use the geom_smooth function to add a least squares line</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">#for the residuals, the least squares line will always be #horizontal at 0</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>e))<span class="sc">+</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot the squared residuals and add least squares line</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span>e<span class="sc">^</span><span class="dv">2</span>))<span class="sc">+</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-3-2.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#plot the squared residuals and add least squares line</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>age, <span class="at">y=</span><span class="fu">abs</span>(e)))<span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>,<span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="07_Checking_files/figure-html/unnamed-chunk-3-3.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>In any of the residual plots we examine, we see the “cone” shape of the residuals which indicates the variance is nonconstant.</p>
+</div>
+</section>
+<section id="tests-for-heteroscedasticity" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="tests-for-heteroscedasticity"><span class="header-section-number">7.3.3</span> Tests for Heteroscedasticity</h3>
+<p>We can set up a hypothesis test for heteroscedasticity: <span class="math display">\[\begin{align*}
+H_0:&amp;\text{ the variance is constant}\\
+H_a:&amp;\text{ the variance is non-constant}
+\end{align*}\]</span></p>
+<p>The procedures we will use usually test for variance that increases or decreases over the values of <span class="math inline">\(x\)</span>. That is, the spread of the points about the line is a cone shape.</p>
+</section>
+<section id="levenes-test-and-brown-forsythe-test" class="level3" data-number="7.3.4">
+<h3 data-number="7.3.4" class="anchored" data-anchor-id="levenes-test-and-brown-forsythe-test"><span class="header-section-number">7.3.4</span> Levene’s Test and Brown-Forsythe Test</h3>
+<p>The <em>Levene test</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> starts by dividing the range of the predictor variable <span class="math inline">\(x\)</span> into <span class="math inline">\(k\)</span> intervals. For each of the intervals, calculate the mean of the residuals in that interval <span class="math inline">\(\bar{e}_{j}\)</span> where <span class="math inline">\(j\)</span> denotes the <span class="math inline">\(j\)</span>th interval.</p>
+<p>Now, define the absolute deviation from the mean <span class="math display">\[
+d_{ik}=|e_{ik}-\bar{e}_{j}|
+\]</span></p>
+<p>An ANOVA F-test is then performed on the <span class="math inline">\(k\)</span> groups. The ANOVA F-test will be discussed more later in the course. A small p-value is evidence that the variance is non-constant over the values of <span class="math inline">\(x\)</span>.</p>
+<p>The <em>Brown-Forsythe test</em><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a> is a modification of the Levene test in which the median <span class="math inline">\(\tilde{e}_k\)</span> is used instead of the mean <span class="math inline">\(\bar{e}_l\)</span>. This test is robust against nonnormal errors.</p>
+</section>
+<section id="breusch-pagan-test" class="level3" data-number="7.3.5">
+<h3 data-number="7.3.5" class="anchored" data-anchor-id="breusch-pagan-test"><span class="header-section-number">7.3.5</span> Breusch-Pagan Test</h3>
+<p>A second test for non-constant variance is the <em>Breusch-Pagan</em> test<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. This test assumes the variance for each <span class="math inline">\(\varepsilon_i\)</span> is related to the values of <span class="math inline">\(x\)</span> in the following way: <span class="math display">\[
+\ln \sigma^2_i = \gamma_0 + \gamma_1 X_i
+\]</span> Hence, a linear regression is assumed between <span class="math inline">\(\sigma^2\)</span> and <span class="math inline">\(x\)</span>. We can fit the line by squaring the residuals and regressing on <span class="math inline">\(x\)</span>. The third plot in example above shows the squared residuals plotted against <span class="math inline">\(x\)</span> and the fitted line.</p>
+<p>If the variance is non-constant, then the slope of this line will be non-zero. Thus, a test for the slope is conducted. A small p-value is evidence that the variance is non-constant.</p>
+<p>Because it is testing the slope, the Brown-Forsythe test assumes the error terms are independent and normally distributed.</p>
+<div id="exm-w3_3_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 7.3 (<a href="#exm-w3_3_1">Example&nbsp;<span>7.2</span></a> revisited) </strong></span>Let’s examine the blood pressure data from <a href="#exm-w3_3_1">Example&nbsp;<span>7.2</span></a> again.</p>
+<p>If you want the Brown-Forsythe test, then you will need to determine the <span class="math inline">\(k\)</span> groups yourself and then use the <code>bf.test</code> function in <code>onewaytests</code> package.</p>
+<p>In the <code>lmtest</code> package, the Breusch-Pagan test can be conducted by using the <code>bptest</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"bloodpressure.txt"</span>, <span class="at">header=</span>T)</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(dbp<span class="sc">~</span>age, <span class="at">data=</span>dat)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#Breusch-Pagan test</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">bptest</span>(dbp<span class="sc">~</span>age, <span class="at">data=</span>dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    studentized Breusch-Pagan test
+
+data:  dbp ~ age
+BP = 12.541, df = 1, p-value = 0.0003981</code></pre>
+</div>
+</div>
+<p>Since the p-value is low, then there is sufficient evidence to conclude the variance is not constant through different values of <span class="math inline">\(x\)</span>.</p>
+</div>
+
+
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Levene, H. (1960) Robust Tests for Equality of Variances. In: Olkin, I., Ed., <em>Contributions to Probability and Statistics</em>, Stanford University Press, Palo Alto, 278-292.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>Brown, M. B., &amp; Forsythe, A. B. (1974). Robust tests for the equality of variances. <em>Journal of the American statistical association</em>, 69(346), 364-367.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>Breusch, T. S., &amp; Pagan, A. R. (1979). A simple test for heteroscedasticity and random coefficient variation. <em>Econometrica: Journal of the econometric society</em>, 1287-1294.<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./06_Using.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

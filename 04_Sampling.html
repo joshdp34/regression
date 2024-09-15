@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.3.433">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>STA 3386 Regression Analysis - 4&nbsp; Sampling Distribution of the Least Squares Estimators and Testing the Slope</title>
 <style>
 code{white-space: pre-wrap;}
@@ -53,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -70,7 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -89,12 +94,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><link rel="stylesheet" href="styles.css">
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -105,9 +118,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./"></a> 
     </div>
@@ -119,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
@@ -161,45 +178,49 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#properties-of-the-constants-k_i-and-c_i" id="toc-properties-of-the-constants-k_i-and-c_i" class="nav-link active" data-scroll-target="#properties-of-the-constants-k_i-and-c_i"><span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span></a></li>
-  <li>
-<a href="#expected-values-of-b_0-and-b_1" id="toc-expected-values-of-b_0-and-b_1" class="nav-link" data-scroll-target="#expected-values-of-b_0-and-b_1"><span class="header-section-number">4.2</span> Expected Values of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></a>
+  <li><a href="#properties-of-the-constants-k_i-and-c_i" id="toc-properties-of-the-constants-k_i-and-c_i" class="nav-link active" data-scroll-target="#properties-of-the-constants-k_i-and-c_i"><span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span></a></li>
+  <li><a href="#expected-values-of-b_0-and-b_1" id="toc-expected-values-of-b_0-and-b_1" class="nav-link" data-scroll-target="#expected-values-of-b_0-and-b_1"><span class="header-section-number">4.2</span> Expected Values of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></a>
   <ul class="collapse">
-<li><a href="#expected-value-of-b_1" id="toc-expected-value-of-b_1" class="nav-link" data-scroll-target="#expected-value-of-b_1"><span class="header-section-number">4.2.1</span> Expected Value of <span class="math inline">\(b_1\)</span></a></li>
+  <li><a href="#expected-value-of-b_1" id="toc-expected-value-of-b_1" class="nav-link" data-scroll-target="#expected-value-of-b_1"><span class="header-section-number">4.2.1</span> Expected Value of <span class="math inline">\(b_1\)</span></a></li>
   <li><a href="#expected-value-of-b_0" id="toc-expected-value-of-b_0" class="nav-link" data-scroll-target="#expected-value-of-b_0"><span class="header-section-number">4.2.2</span> Expected Value of <span class="math inline">\(b_0\)</span></a></li>
-  </ul>
-</li>
-  <li>
-<a href="#variances-of-b_0-and-b_1" id="toc-variances-of-b_0-and-b_1" class="nav-link" data-scroll-target="#variances-of-b_0-and-b_1"><span class="header-section-number">4.3</span> Variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></a>
+  </ul></li>
+  <li><a href="#variances-of-b_0-and-b_1" id="toc-variances-of-b_0-and-b_1" class="nav-link" data-scroll-target="#variances-of-b_0-and-b_1"><span class="header-section-number">4.3</span> Variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></a>
   <ul class="collapse">
-<li><a href="#variance-of-b_1" id="toc-variance-of-b_1" class="nav-link" data-scroll-target="#variance-of-b_1"><span class="header-section-number">4.3.1</span> Variance of <span class="math inline">\(b_1\)</span></a></li>
+  <li><a href="#variance-of-b_1" id="toc-variance-of-b_1" class="nav-link" data-scroll-target="#variance-of-b_1"><span class="header-section-number">4.3.1</span> Variance of <span class="math inline">\(b_1\)</span></a></li>
   <li><a href="#variance-of-b_0" id="toc-variance-of-b_0" class="nav-link" data-scroll-target="#variance-of-b_0"><span class="header-section-number">4.3.2</span> Variance of <span class="math inline">\(b_0\)</span></a></li>
-  </ul>
-</li>
+  </ul></li>
   <li><a href="#best-linear-unbiased-estimators-blues" id="toc-best-linear-unbiased-estimators-blues" class="nav-link" data-scroll-target="#best-linear-unbiased-estimators-blues"><span class="header-section-number">4.4</span> Best Linear Unbiased Estimators (BLUEs)</a></li>
-  <li>
-<a href="#sampling-distribution-for-b_1" id="toc-sampling-distribution-for-b_1" class="nav-link" data-scroll-target="#sampling-distribution-for-b_1"><span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span></a>
+  <li><a href="#sampling-distribution-for-b_1" id="toc-sampling-distribution-for-b_1" class="nav-link" data-scroll-target="#sampling-distribution-for-b_1"><span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span></a>
   <ul class="collapse">
-<li><a href="#standardized-score" id="toc-standardized-score" class="nav-link" data-scroll-target="#standardized-score"><span class="header-section-number">4.5.1</span> Standardized Score</a></li>
+  <li><a href="#standardized-score" id="toc-standardized-score" class="nav-link" data-scroll-target="#standardized-score"><span class="header-section-number">4.5.1</span> Standardized Score</a></li>
   <li><a href="#studentized-score" id="toc-studentized-score" class="nav-link" data-scroll-target="#studentized-score"><span class="header-section-number">4.5.2</span> Studentized Score</a></li>
-  </ul>
-</li>
+  </ul></li>
   <li><a href="#sec-modelutility" id="toc-sec-modelutility" class="nav-link" data-scroll-target="#sec-modelutility"><span class="header-section-number">4.6</span> Assessing the Utility of the Model: Making Inferences About the Slope</a></li>
-  </ul></nav>
+  </ul>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span>
-</h1>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></h1>
 </div>
 
 
@@ -212,12 +233,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><blockquote class="blockquote">
+</header>
+
+<blockquote class="blockquote">
 <p>“If you do not know how to ask the right question, you discover nothing.” - W. E. Demining</p>
 </blockquote>
-<section id="properties-of-the-constants-k_i-and-c_i" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="properties-of-the-constants-k_i-and-c_i">
-<span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span>
-</h2>
+<section id="properties-of-the-constants-k_i-and-c_i" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="properties-of-the-constants-k_i-and-c_i"><span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span></h2>
 <p>In the previous section, we examined how the least squares estimators are linear combinations of the response variable <span class="math inline">\(y\)</span>. Let’s know look at the properties of the coefficients in <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6">Equation&nbsp;<span>3.2</span></a>. We will not present the proofs in this course but they are not complicated.</p>
 <p>The coefficients <span class="math inline">\(k_{i}\)</span> have the following properties: <span id="eq-w1_7"><span class="math display">\[
 \begin{align}
@@ -264,13 +286,12 @@ E(aY+b)=aE(Y)+b
 \]</span> where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants.</p>
 </div>
 </div>
-</section><section id="expected-values-of-b_0-and-b_1" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="expected-values-of-b_0-and-b_1">
-<span class="header-section-number">4.2</span> Expected Values of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>
-</h2>
+</section>
+<section id="expected-values-of-b_0-and-b_1" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="expected-values-of-b_0-and-b_1"><span class="header-section-number">4.2</span> Expected Values of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></h2>
 <p>Before finding the expectations, recall <span class="math inline">\(E\left(y_i\right)=\beta_{0}+\beta_{1}x_i\)</span>.</p>
-<section id="expected-value-of-b_1" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="expected-value-of-b_1">
-<span class="header-section-number">4.2.1</span> Expected Value of <span class="math inline">\(b_1\)</span>
-</h3>
+<section id="expected-value-of-b_1" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="expected-value-of-b_1"><span class="header-section-number">4.2.1</span> Expected Value of <span class="math inline">\(b_1\)</span></h3>
 <p>The expected value of <span class="math inline">\(b_1\)</span> is <span class="math display">\[
 \begin{align*}
 E\left[b_1\right] &amp; =E\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
@@ -279,9 +300,9 @@ E\left[b_1\right] &amp; =E\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
 &amp; =\beta_{1}
 \end{align*}
 \]</span></p>
-</section><section id="expected-value-of-b_0" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="expected-value-of-b_0">
-<span class="header-section-number">4.2.2</span> Expected Value of <span class="math inline">\(b_0\)</span>
-</h3>
+</section>
+<section id="expected-value-of-b_0" class="level3" data-number="4.2.2">
+<h3 data-number="4.2.2" class="anchored" data-anchor-id="expected-value-of-b_0"><span class="header-section-number">4.2.2</span> Expected Value of <span class="math inline">\(b_0\)</span></h3>
 <p>The expected value of <span class="math inline">\(b_0\)</span> is <span class="math display">\[
 \begin{align*}
 E\left[b_0\right] &amp; =E\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\\
@@ -304,9 +325,10 @@ Review: Unbiased Estimator
 <p>Recall that an unbiased estimator for some parameter is an estimator that has an expected value equal to that parameter.</p>
 </div>
 </div>
-</section></section><section id="variances-of-b_0-and-b_1" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="variances-of-b_0-and-b_1">
-<span class="header-section-number">4.3</span> Variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>
-</h2>
+</section>
+</section>
+<section id="variances-of-b_0-and-b_1" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="variances-of-b_0-and-b_1"><span class="header-section-number">4.3</span> Variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span></h2>
 <p>To find the variances, we will use a result from mathematical statistics: Let <span class="math inline">\(Y_{1},\ldots,Y_{n}\)</span> be uncorrelated random variables and let <span class="math inline">\(a_{1},\ldots,a_{n}\)</span> be constants. Then <span id="eq-w1_13"><span class="math display">\[
 \begin{align}
 Var\left[\sum a_{i}Y_i\right] &amp; =\sum a_{i}^{2}Var\left[Y_i\right]
@@ -321,9 +343,8 @@ Var\left[\sum a_{i}Y_i\right] &amp; =\sum a_{i}^{2}Var\left[Y_i\right]
     &amp; = \sigma^2
 \end{align*}
 \]</span></p>
-<section id="variance-of-b_1" class="level3" data-number="4.3.1"><h3 data-number="4.3.1" class="anchored" data-anchor-id="variance-of-b_1">
-<span class="header-section-number">4.3.1</span> Variance of <span class="math inline">\(b_1\)</span>
-</h3>
+<section id="variance-of-b_1" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="variance-of-b_1"><span class="header-section-number">4.3.1</span> Variance of <span class="math inline">\(b_1\)</span></h3>
 <p>The variance of <span class="math inline">\(b_1\)</span> is <span id="eq-w1_14"><span class="math display">\[
 \begin{align}
 Var\left[b_1\right] &amp; =Var\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
@@ -331,9 +352,9 @@ Var\left[b_1\right] &amp; =Var\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
 &amp; =\frac{\sigma^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
 \end{align}
 \tag{4.8}\]</span></span></p>
-</section><section id="variance-of-b_0" class="level3" data-number="4.3.2"><h3 data-number="4.3.2" class="anchored" data-anchor-id="variance-of-b_0">
-<span class="header-section-number">4.3.2</span> Variance of <span class="math inline">\(b_0\)</span>
-</h3>
+</section>
+<section id="variance-of-b_0" class="level3" data-number="4.3.2">
+<h3 data-number="4.3.2" class="anchored" data-anchor-id="variance-of-b_0"><span class="header-section-number">4.3.2</span> Variance of <span class="math inline">\(b_0\)</span></h3>
 <p>The variance of <span class="math inline">\(b_0\)</span> is <span id="eq-w1_15"><span class="math display">\[
 \begin{align}
 Var\left[b_0\right] &amp; =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\nonumber\\
@@ -341,8 +362,10 @@ Var\left[b_0\right] &amp; =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\no
 &amp; =\sigma^{2}\left[\frac{1}{n}+\frac{\left(\bar{x}\right)^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}\right]
 \end{align}
 \tag{4.9}\]</span></span></p>
-</section></section><section id="best-linear-unbiased-estimators-blues" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="best-linear-unbiased-estimators-blues">
-<span class="header-section-number">4.4</span> Best Linear Unbiased Estimators (BLUEs)</h2>
+</section>
+</section>
+<section id="best-linear-unbiased-estimators-blues" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="best-linear-unbiased-estimators-blues"><span class="header-section-number">4.4</span> Best Linear Unbiased Estimators (BLUEs)</h2>
 <p>We see from <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6">Equation&nbsp;<span>3.2</span></a> that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are <em>linear</em> estimators.</p>
 <p>Any estimator for <span class="math inline">\(\beta_{1}\)</span>, which we will denote as <span class="math inline">\(\hat{\beta}_{0}\)</span>, that takes the form <span class="math display">\[
 \begin{align*}
@@ -419,9 +442,9 @@ Var\left[\hat{\beta}_{1}\right] &amp; =Var\left[b_1\right]+\sigma^{2}\sum d_{i}^
 </div>
 </div>
 </div>
-</section><section id="sampling-distribution-for-b_1" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="sampling-distribution-for-b_1">
-<span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span>
-</h2>
+</section>
+<section id="sampling-distribution-for-b_1" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="sampling-distribution-for-b_1"><span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span></h2>
 <p>Now that we see that the least squares estimator <span class="math inline">\(b_1\)</span> is the BLUE for <span class="math inline">\(\beta_{1}\)</span>, we will now examine the sampling distribution for <span class="math inline">\(b_1\)</span>.</p>
 <p>We previously discussed that the mean of the sampling distribution of <span class="math inline">\(b_1\)</span> is <span class="math display">\[
 E[b_1]=\beta_1
@@ -456,16 +479,17 @@ Y+c\sim N\left(\mu+c,\sigma^2\right)
 b_1 &amp; \sim N\left(\beta_{1},\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}\right)
 \end{align}
 \tag{4.12}\]</span></span></p>
-<section id="standardized-score" class="level3" data-number="4.5.1"><h3 data-number="4.5.1" class="anchored" data-anchor-id="standardized-score">
-<span class="header-section-number">4.5.1</span> Standardized Score</h3>
+<section id="standardized-score" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="standardized-score"><span class="header-section-number">4.5.1</span> Standardized Score</h3>
 <p>Since <span class="math inline">\(b_1\)</span> is normally distributed, we can <em>standardize</em> it so that the resulting statistic will have a standard normal distribution.</p>
 <p>Therefore, we have <span id="eq-w2_4"><span class="math display">\[
 \begin{align}
 z=\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} &amp; \sim N\left(0,1\right)
 \end{align}
 \tag{4.13}\]</span></span></p>
-</section><section id="studentized-score" class="level3" data-number="4.5.2"><h3 data-number="4.5.2" class="anchored" data-anchor-id="studentized-score">
-<span class="header-section-number">4.5.2</span> Studentized Score</h3>
+</section>
+<section id="studentized-score" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="studentized-score"><span class="header-section-number">4.5.2</span> Studentized Score</h3>
 <p>In practice, the standardized score <span class="math inline">\(z\)</span> is not useful since we do not know the value of <span class="math inline">\(\sigma^{2}\)</span>. We can estimate <span class="math inline">\(\sigma^{2}\)</span> with the statistic <span class="math display">\[
 s^2 = \frac{SSE}{n-2}
 \]</span></p>
@@ -511,8 +535,10 @@ t &amp; =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overl
 </div>
 </div>
 </div>
-</section></section><section id="sec-modelutility" class="level2" data-number="4.6"><h2 data-number="4.6" class="anchored" data-anchor-id="sec-modelutility">
-<span class="header-section-number">4.6</span> Assessing the Utility of the Model: Making Inferences About the Slope</h2>
+</section>
+</section>
+<section id="sec-modelutility" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="sec-modelutility"><span class="header-section-number">4.6</span> Assessing the Utility of the Model: Making Inferences About the Slope</h2>
 <p>Suppose that the independent variable <span class="math inline">\(x\)</span> is completely unrelated to the dependent variable <span class="math inline">\(y\)</span>.</p>
 <p>What could be said about the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> in the hypothesized probabilistic model <span class="math display">\[\begin{align*}
     y = \beta_0 +\beta_1 x + \varepsilon
@@ -542,13 +568,13 @@ t &amp; =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overl
 <div id="exm-4_1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 4.1 (<a href="03_Properties.html#exm-3_1">Example&nbsp;<span>3.1</span></a> - revisited) </strong></span>&nbsp;</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">~</span><span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt, <span class="at">data =</span> mtcars)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We find the least squares estimates as</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -573,7 +599,7 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 <p>From the output, we see the p-value is <span class="math inline">\(1.29\times 10^{-10}\)</span>. So we have sufficient evidence to conclude that the true population slope is different than zero.</p>
 <p>To find the confidence interval, we can use the <code>confint</code> function with the <code>lm</code> object.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html">confint</a></span><span class="op">(</span><span class="va">fit</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">confint</span>(fit, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                2.5 %    97.5 %
 (Intercept) 33.450500 41.119753
@@ -584,7 +610,10 @@ wt          -6.486308 -4.202635</code></pre>
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -816,7 +845,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./03_Properties.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span>
       </a>          
@@ -828,7 +859,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">STA 3386</div>   
     <div class="nav-footer-center">
       &nbsp;
@@ -836,6 +868,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">Fall 2024</div>
   </div>
 </footer>
+
 
 
 </body></html>
