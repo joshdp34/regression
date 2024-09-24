@@ -185,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
   </ul></li>
   <li><a href="#estimating-the-multiple-regression-model" id="toc-estimating-the-multiple-regression-model" class="nav-link" data-scroll-target="#estimating-the-multiple-regression-model"><span class="header-section-number">10.3</span> Estimating the Multiple Regression Model</a>
   <ul class="collapse">
-  <li><a href="#minimizing-the-sse" id="toc-minimizing-the-sse" class="nav-link" data-scroll-target="#minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE}</a></li>
+  <li><a href="#minimizing-the-sse" id="toc-minimizing-the-sse" class="nav-link" data-scroll-target="#minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE</a></li>
   <li><a href="#case-with-two-predictor-variables" id="toc-case-with-two-predictor-variables" class="nav-link" data-scroll-target="#case-with-two-predictor-variables"><span class="header-section-number">10.3.2</span> Case with Two Predictor Variables</a></li>
   <li><a href="#the-normal-equations" id="toc-the-normal-equations" class="nav-link" data-scroll-target="#the-normal-equations"><span class="header-section-number">10.3.3</span> The Normal Equations</a></li>
   <li><a href="#the-least-squares-estimators" id="toc-the-least-squares-estimators" class="nav-link" data-scroll-target="#the-least-squares-estimators"><span class="header-section-number">10.3.4</span> The Least Squares Estimators</a></li>
@@ -284,13 +284,13 @@ y_{i}= &amp; \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\cdots+\beta_{p-1}x_{i,p-
 <section id="estimating-the-multiple-regression-model" class="level2" data-number="10.3">
 <h2 data-number="10.3" class="anchored" data-anchor-id="estimating-the-multiple-regression-model"><span class="header-section-number">10.3</span> Estimating the Multiple Regression Model</h2>
 <section id="minimizing-the-sse" class="level3" data-number="10.3.1">
-<h3 data-number="10.3.1" class="anchored" data-anchor-id="minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE}</h3>
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE</h3>
 <p>As we did in the simple linear regression case, we want to fit model <a href="#eq-w4_1">Equation&nbsp;<span>10.1</span></a> to the observed data.</p>
 <p>The fitted line in the multiple regression case is <span id="eq-w4_2"><span class="math display">\[
 \begin{align}
 \hat{y}_i = b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}
 \end{align}
-\tag{10.2}\]</span></span> The estimates <span class="math inline">\(\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_{p-1}\)</span> are found by minimizing the <em>squared</em> <em>distances</em> between the observed values <span class="math inline">\(y_i\)</span> and the fitted values <span class="math inline">\(\hat{y}_i\)</span>. The sum of the squared distances is now <span id="eq-w4_3"><span class="math display">\[
+\tag{10.2}\]</span></span> The estimates <span class="math inline">\(b_0,b_1,\ldots,b_{p-1}\)</span> are found by minimizing the <em>squared</em> <em>distances</em> between the observed values <span class="math inline">\(y_i\)</span> and the fitted values <span class="math inline">\(\hat{y}_i\)</span>. The sum of the squared distances is now <span id="eq-w4_3"><span class="math display">\[
 \begin{align}
 Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\right)\right)^2\
 \end{align}
@@ -311,15 +311,15 @@ Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\ri
 <h3 data-number="10.3.3" class="anchored" data-anchor-id="the-normal-equations"><span class="header-section-number">10.3.3</span> The Normal Equations</h3>
 <p>Setting the partial derivative equal to zero and rearranging the terms lead us to the <em>normal</em> equations <span id="eq-w4_5"><span class="math display">\[
 \begin{align}
-\sum y_{i} &amp; =n\hat{\beta}_{0}\sum x_{i1}+\hat{\beta}_{2}\sum x_{i2}\\
-\sum x_{i1}y_{i} &amp; =\hat{\beta}_{0}\sum x_{i1}+\hat{\beta}_{1}\sum x_{i1}^{2}+\hat{\beta}_{2}\sum x_{i1}x_{i2}\\
-\sum x_{i2}y_{i} &amp; =\hat{\beta}_{0}\sum x_{i2}+\hat{\beta}_{1}\sum x_{i1}x_{i2}+\hat{\beta}_{2}\sum x_{i2}^{2}
+\sum y_{i} &amp; =nb_{0}\sum x_{i1}+b_{2}\sum x_{i2}\\
+\sum x_{i1}y_{i} &amp; =b_{0}\sum x_{i1}+b_{1}\sum x_{i1}^{2}+b_{2}\sum x_{i1}x_{i2}\\
+\sum x_{i2}y_{i} &amp; =b_{0}\sum x_{i2}+b_{1}\sum x_{i1}x_{i2}+b_{2}\sum x_{i2}^{2}
 \end{align}
 \tag{10.5}\]</span></span></p>
 </section>
 <section id="the-least-squares-estimators" class="level3" data-number="10.3.4">
 <h3 data-number="10.3.4" class="anchored" data-anchor-id="the-least-squares-estimators"><span class="header-section-number">10.3.4</span> The Least Squares Estimators</h3>
-<p>Solving the normal equations for <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, and <span class="math inline">\(\hat{\beta}_2\)</span> gives use the <em>least</em> <em>squares</em> estimators <span id="eq-w4_6"><span class="math display">\[
+<p>Solving the normal equations for <span class="math inline">\(b_0\)</span>, <span class="math inline">\(b_1\)</span>, and <span class="math inline">\(b_2\)</span> gives use the <em>least</em> <em>squares</em> estimators <span id="eq-w4_6"><span class="math display">\[
 \begin{align}
 b_{1} &amp; =\frac{\left(\sum x_{i2}^{2}\right)\left(\sum x_{i1}y_{i}\right)-\left(\sum x_{i1}x_{i2}\right)\left(\sum x_{i2}y_{i}\right)}{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}^{2}\right)-\left(\sum x_{i1}x_{i2}\right)^{2}}\\
 b_{2} &amp; =\frac{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}y_{i}\right)-\left(\sum x_{i1}x_{i2}\right)\left(\sum x_{i1}y_{i}\right)}{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}^{2}\right)-\left(\sum x_{i1}x_{i2}\right)^{2}}\\
