@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.433">
-
+<meta name="generator" content="quarto-1.3.450">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>STA 3386 Regression Analysis - 6&nbsp; Using the Simple Linear Model</title>
 <style>
 code{white-space: pre-wrap;}
@@ -56,7 +53,6 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
-
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -74,8 +70,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -94,20 +89,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<link rel="stylesheet" href="styles.css">
+}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><link rel="stylesheet" href="styles.css">
 </head>
-
 <body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -118,13 +105,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./"></a> 
     </div>
@@ -136,7 +119,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
@@ -196,41 +179,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#using-the-model-for-estimation-and-prediction" id="toc-using-the-model-for-estimation-and-prediction" class="nav-link active" data-scroll-target="#using-the-model-for-estimation-and-prediction"><span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</a>
+<li>
+<a href="#using-the-model-for-estimation-and-prediction" id="toc-using-the-model-for-estimation-and-prediction" class="nav-link active" data-scroll-target="#using-the-model-for-estimation-and-prediction"><span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</a>
   <ul class="collapse">
-  <li><a href="#the-sampling-distribution-of-haty" id="toc-the-sampling-distribution-of-haty" class="nav-link" data-scroll-target="#the-sampling-distribution-of-haty"><span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span></a></li>
+<li><a href="#the-sampling-distribution-of-haty" id="toc-the-sampling-distribution-of-haty" class="nav-link" data-scroll-target="#the-sampling-distribution-of-haty"><span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span></a></li>
   <li><a href="#linear-combination-of-y" id="toc-linear-combination-of-y" class="nav-link" data-scroll-target="#linear-combination-of-y"><span class="header-section-number">6.1.2</span> Linear Combination of <span class="math inline">\(y\)</span></a></li>
   <li><a href="#the-mean-of-haty_h" id="toc-the-mean-of-haty_h" class="nav-link" data-scroll-target="#the-mean-of-haty_h"><span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span></a></li>
   <li><a href="#the-variance-of-haty_h" id="toc-the-variance-of-haty_h" class="nav-link" data-scroll-target="#the-variance-of-haty_h"><span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span></a></li>
   <li><a href="#confidence-interval-for-the-mean-response" id="toc-confidence-interval-for-the-mean-response" class="nav-link" data-scroll-target="#confidence-interval-for-the-mean-response"><span class="header-section-number">6.1.5</span> Confidence Interval for the Mean Response</a></li>
-  </ul></li>
-  <li><a href="#predicting-the-response" id="toc-predicting-the-response" class="nav-link" data-scroll-target="#predicting-the-response"><span class="header-section-number">6.2</span> Predicting the Response</a>
+  </ul>
+</li>
+  <li>
+<a href="#predicting-the-response" id="toc-predicting-the-response" class="nav-link" data-scroll-target="#predicting-the-response"><span class="header-section-number">6.2</span> Predicting the Response</a>
   <ul class="collapse">
-  <li><a href="#the-predicted-response" id="toc-the-predicted-response" class="nav-link" data-scroll-target="#the-predicted-response"><span class="header-section-number">6.2.1</span> The Predicted Response</a></li>
+<li><a href="#the-predicted-response" id="toc-the-predicted-response" class="nav-link" data-scroll-target="#the-predicted-response"><span class="header-section-number">6.2.1</span> The Predicted Response</a></li>
   <li><a href="#prediction-when-the-true-line-is-known" id="toc-prediction-when-the-true-line-is-known" class="nav-link" data-scroll-target="#prediction-when-the-true-line-is-known"><span class="header-section-number">6.2.2</span> Prediction When the True Line is Known</a></li>
   <li><a href="#predicting-when-the-true-line-is-unknown" id="toc-predicting-when-the-true-line-is-unknown" class="nav-link" data-scroll-target="#predicting-when-the-true-line-is-unknown"><span class="header-section-number">6.2.3</span> Predicting When the True Line is Unknown</a></li>
   <li><a href="#the-variance-of-the-predicted-response" id="toc-the-variance-of-the-predicted-response" class="nav-link" data-scroll-target="#the-variance-of-the-predicted-response"><span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</a></li>
   <li><a href="#extrapolation-and-precision" id="toc-extrapolation-and-precision" class="nav-link" data-scroll-target="#extrapolation-and-precision"><span class="header-section-number">6.2.5</span> Extrapolation and Precision</a></li>
-  </ul></li>
   </ul>
-</nav>
+</li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span>
+</h1>
 </div>
 
 
@@ -243,15 +232,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header>
-
-<blockquote class="blockquote">
+</header><blockquote class="blockquote">
 <p>“I try not to get involved in the business of prediction. It’s a quick way to look like an idiot.” - Warren Ellis</p>
 </blockquote>
-<section id="using-the-model-for-estimation-and-prediction" class="level2" data-number="6.1">
-<h2 data-number="6.1" class="anchored" data-anchor-id="using-the-model-for-estimation-and-prediction"><span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</h2>
-<p>Now that we have fit the model<br>
-<span class="math display">\[
+<section id="using-the-model-for-estimation-and-prediction" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="using-the-model-for-estimation-and-prediction">
+<span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</h2>
+<p>Now that we have fit the model<br><span class="math display">\[
 y = {\beta}_0 + {\beta}_1 x + \varepsilon
 \]</span> and assessed how good of fit the model is, we can now use the model <em>estimation</em> and <em>prediction</em>.</p>
 <p>Recall that the mean of <span class="math inline">\(y_{i}\)</span> for some value of <span class="math inline">\(x_{i}\)</span> is the population line <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span> evaluated at <span class="math inline">\(x_{i}\)</span>.</p>
@@ -259,13 +245,14 @@ y = {\beta}_0 + {\beta}_1 x + \varepsilon
 \hat{y}_{i} &amp; =b_0+b_1x_{i}
 \end{align*}\]</span></p>
 <p>We say <span class="math inline">\(\hat{y}_{i}\)</span> is a <em>point estimator</em> for the population mean <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span>.</p>
-<section id="the-sampling-distribution-of-haty" class="level3" data-number="6.1.1">
-<h3 data-number="6.1.1" class="anchored" data-anchor-id="the-sampling-distribution-of-haty"><span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span></h3>
+<section id="the-sampling-distribution-of-haty" class="level3" data-number="6.1.1"><h3 data-number="6.1.1" class="anchored" data-anchor-id="the-sampling-distribution-of-haty">
+<span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span>
+</h3>
 <p>We will want to make an inference for the population mean response at some value of the predictor variable <span class="math inline">\(x_{i}\)</span>.</p>
 <p>We have a point estimator <span class="math inline">\(\hat{y}_{i}\)</span>. We will now examine the <em>sampling distribution</em> of <span class="math inline">\(\hat{y}_{i}\)</span> and use it to make a confidence interval for the mean response <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span>.</p>
-</section>
-<section id="linear-combination-of-y" class="level3" data-number="6.1.2">
-<h3 data-number="6.1.2" class="anchored" data-anchor-id="linear-combination-of-y"><span class="header-section-number">6.1.2</span> Linear Combination of <span class="math inline">\(y\)</span></h3>
+</section><section id="linear-combination-of-y" class="level3" data-number="6.1.2"><h3 data-number="6.1.2" class="anchored" data-anchor-id="linear-combination-of-y">
+<span class="header-section-number">6.1.2</span> Linear Combination of <span class="math inline">\(y\)</span>
+</h3>
 <p>We will denote the value of <span class="math inline">\(x\)</span> at which we want to estimate the mean response as <span class="math inline">\(x_{h}\)</span>. So the value of <span class="math inline">\(y\)</span> at <span class="math inline">\(x_{h}\)</span> will be <span class="math inline">\(y_{h}\)</span></p>
 <p>We write <span class="math inline">\(\hat{y}_{h}\)</span> as <span class="math display">\[\begin{align*}
 \hat{y}_{h} &amp; =\underbrace{b_0}_{(3.2)}+\underbrace{b_1}_{(3.1)}x_{h}\\
@@ -273,16 +260,16 @@ y = {\beta}_0 + {\beta}_1 x + \varepsilon
 &amp; =\sum\left(c_{i}+k_{i}x_{h}\right)y_{h}
 \end{align*}\]</span></p>
 <p>Thus, <span class="math inline">\(\hat{y}_{j}\)</span> is a linear combination of the observed <span class="math inline">\(y_{i}\)</span> which are normally distributed. Then by <a href="04_Sampling.html#thm-4_1">Theorem&nbsp;<span>4.2</span></a>, <span class="math inline">\(\hat{y}_{j}\)</span> is normally distributed.</p>
-</section>
-<section id="the-mean-of-haty_h" class="level3" data-number="6.1.3">
-<h3 data-number="6.1.3" class="anchored" data-anchor-id="the-mean-of-haty_h"><span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span></h3>
+</section><section id="the-mean-of-haty_h" class="level3" data-number="6.1.3"><h3 data-number="6.1.3" class="anchored" data-anchor-id="the-mean-of-haty_h">
+<span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span>
+</h3>
 <p>Using <a href="04_Sampling.html#thm-4_1">Theorem&nbsp;<span>4.2</span></a>, we have the mean as <span class="math display">\[\begin{align*}
 \sum\left(c_{i}+k_{i}x_{h}\right)E\left[y_{h}\right] &amp; =\left(\underbrace{\sum c_{i}}_{=1}+x_{h}\underbrace{\sum k_{i}}_{=0}\right)\left(\beta_{0}+\beta_{1}x_{h}\right)\\
 &amp; =\beta_{0}+\beta_{1}x_{h}
 \end{align*}\]</span></p>
-</section>
-<section id="the-variance-of-haty_h" class="level3" data-number="6.1.4">
-<h3 data-number="6.1.4" class="anchored" data-anchor-id="the-variance-of-haty_h"><span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span></h3>
+</section><section id="the-variance-of-haty_h" class="level3" data-number="6.1.4"><h3 data-number="6.1.4" class="anchored" data-anchor-id="the-variance-of-haty_h">
+<span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span>
+</h3>
 <p>Using <a href="04_Sampling.html#thm-4_2">Theorem&nbsp;<span>4.3</span></a>, we have the variance as <span class="math display">\[\begin{align*}
 Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
 \end{align*}\]</span></p>
@@ -315,25 +302,21 @@ Var\left[\hat{y}_{h}\right] &amp; =\sum\left(c_{i}+k_{i}x_{h}\right)^{2}{Var\lef
 \end{align}
 \tag{6.1}\]</span></span></p>
 <p>We will need to estimate <span class="math inline">\(\sigma^{2}\)</span> with <span class="math inline">\(s^{2}\)</span>. This will mean that the confidence interval is a <span class="math inline">\(t\)</span> interval.</p>
-</section>
-<section id="confidence-interval-for-the-mean-response" class="level3" data-number="6.1.5">
-<h3 data-number="6.1.5" class="anchored" data-anchor-id="confidence-interval-for-the-mean-response"><span class="header-section-number">6.1.5</span> Confidence Interval for the Mean Response</h3>
+</section><section id="confidence-interval-for-the-mean-response" class="level3" data-number="6.1.5"><h3 data-number="6.1.5" class="anchored" data-anchor-id="confidence-interval-for-the-mean-response">
+<span class="header-section-number">6.1.5</span> Confidence Interval for the Mean Response</h3>
 <p>A <span class="math inline">\(\left(100-\alpha\right)100\%\)</span> confidence interval for the mean response is <span id="eq-w2_20"><span class="math display">\[
 \begin{align}
 \hat{y}_{h} \pm t_{\alpha/2}\sqrt{s^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)}
 \end{align}
 \tag{6.2}\]</span></span></p>
-</section>
-</section>
-<section id="predicting-the-response" class="level2" data-number="6.2">
-<h2 data-number="6.2" class="anchored" data-anchor-id="predicting-the-response"><span class="header-section-number">6.2</span> Predicting the Response</h2>
-<section id="the-predicted-response" class="level3" data-number="6.2.1">
-<h3 data-number="6.2.1" class="anchored" data-anchor-id="the-predicted-response"><span class="header-section-number">6.2.1</span> The Predicted Response</h3>
+</section></section><section id="predicting-the-response" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="predicting-the-response">
+<span class="header-section-number">6.2</span> Predicting the Response</h2>
+<section id="the-predicted-response" class="level3" data-number="6.2.1"><h3 data-number="6.2.1" class="anchored" data-anchor-id="the-predicted-response">
+<span class="header-section-number">6.2.1</span> The Predicted Response</h3>
 <p>Previously, we <em>estimated</em> the mean of all <span class="math inline">\(y\)</span>s for some value of <span class="math inline">\(x_{h}\)</span>.</p>
 <p>Suppose we want to <em>predict</em> one value of the response variable <span class="math inline">\(y\)</span> for some value of <span class="math inline">\(x_{h}\)</span>. We will denote this predicted value as <span class="math inline">\(y_{h\left(pred\right)}\)</span>.</p>
-</section>
-<section id="prediction-when-the-true-line-is-known" class="level3" data-number="6.2.2">
-<h3 data-number="6.2.2" class="anchored" data-anchor-id="prediction-when-the-true-line-is-known"><span class="header-section-number">6.2.2</span> Prediction When the True Line is Known</h3>
+</section><section id="prediction-when-the-true-line-is-known" class="level3" data-number="6.2.2"><h3 data-number="6.2.2" class="anchored" data-anchor-id="prediction-when-the-true-line-is-known">
+<span class="header-section-number">6.2.2</span> Prediction When the True Line is Known</h3>
 <p>Our best point predictor will be the mean (since it is the most likely value). If we knew the the true regression line, then we could predict at <span class="math display">\[\begin{align*}
 y_{h\left(pred\right)} &amp; =\beta_{0}+\beta_{1}x_{h}
 \end{align*}\]</span></p>
@@ -346,16 +329,14 @@ z_{\alpha/2}\sigma
 <p>If we don’t know <span class="math inline">\(\sigma\)</span>, then we could estimate it with <span class="math inline">\(s\)</span> and we can be <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> confident that the predicted value <span class="math inline">\(y_{h\left(pred\right)}\)</span> is <span class="math display">\[\begin{align*}
 t_{\alpha/2}s
 \end{align*}\]</span> units away from the line.</p>
-</section>
-<section id="predicting-when-the-true-line-is-unknown" class="level3" data-number="6.2.3">
-<h3 data-number="6.2.3" class="anchored" data-anchor-id="predicting-when-the-true-line-is-unknown"><span class="header-section-number">6.2.3</span> Predicting When the True Line is Unknown</h3>
+</section><section id="predicting-when-the-true-line-is-unknown" class="level3" data-number="6.2.3"><h3 data-number="6.2.3" class="anchored" data-anchor-id="predicting-when-the-true-line-is-unknown">
+<span class="header-section-number">6.2.3</span> Predicting When the True Line is Unknown</h3>
 <p>Of course, we do not know the true regression line. We will need to estimate it first.</p>
 <p>Using the least squares estimators, we will predict at <span class="math display">\[\begin{align*}
 \hat{y}_{h} &amp; =b_0+b_1x_{h}
 \end{align*}\]</span></p>
-</section>
-<section id="the-variance-of-the-predicted-response" class="level3" data-number="6.2.4">
-<h3 data-number="6.2.4" class="anchored" data-anchor-id="the-variance-of-the-predicted-response"><span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</h3>
+</section><section id="the-variance-of-the-predicted-response" class="level3" data-number="6.2.4"><h3 data-number="6.2.4" class="anchored" data-anchor-id="the-variance-of-the-predicted-response">
+<span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</h3>
 <p>Since <span class="math inline">\(\hat{y}_{h}\)</span> is a random variable, it will have a sampling distribution. From <a href="#eq-w2_19">Equation&nbsp;<span>6.1</span></a>, that sampling distribution has a variance of <span class="math display">\[\begin{align*}
 Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
 \end{align*}\]</span></p>
@@ -377,17 +358,17 @@ Var\left[y_{h\left(pred\right)}\right] &amp; =\sigma^{2}+\sigma^{2}\left(\frac{1
 <p><span class="theorem-title"><strong>Example 6.1 (<a href="05_Correlation.html#exm-5_2">Example&nbsp;<span>5.2</span></a> revisited) </strong></span>Let’s examine the <code>trees</code> data from <a href="05_Correlation.html#exm-5_2">Example&nbsp;<span>5.2</span></a>.</p>
 <p>Recall the least squares fit:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datasets)</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>trees, <span class="fu">aes</span>(<span class="at">x=</span>Girth, <span class="at">y=</span>Volume))<span class="sc">+</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>,<span class="at">formula=</span>y<span class="sc">~</span>x,<span class="at">se =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>,se <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06_Using_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
 </div>
-<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(Volume<span class="sc">~</span>Girth, <span class="at">data=</span>trees)</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>fit</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Volume</span><span class="op">~</span><span class="va">Girth</span>, data<span class="op">=</span><span class="va">trees</span><span class="op">)</span></span>
+<span><span class="va">fit</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -401,18 +382,18 @@ Coefficients:
 <p>To find the confidence and prediction intervals, we must construct a new data frame with the value of <span class="math inline">\(X_h\)</span>. This value is then used, along with the <code>lm</code> object, to the <code>predict</code> function. If no value of <span class="math inline">\(X_h\)</span> is provided, then <code>predict</code> will provide intervals for all values of <span class="math inline">\(x\)</span> found in the data used in <code>lm</code>.</p>
 <p>Recall the least squares fit:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get a 95% confidence interval for the mean Volume</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="co"># when girth is 16</span></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>xh<span class="ot">=</span><span class="fu">data.frame</span>(<span class="at">Girth=</span><span class="dv">16</span>)</span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">predict</span>(xh,<span class="at">interval=</span><span class="st">"confidence"</span>,<span class="at">level=</span><span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># get a 95% confidence interval for the mean Volume</span></span>
+<span><span class="co"># when girth is 16</span></span>
+<span><span class="va">xh</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Girth<span class="op">=</span><span class="fl">16</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">xh</span>,interval<span class="op">=</span><span class="st">"confidence"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       fit      lwr      upr
 1 44.11024 42.01796 46.20252</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 95% prediction interval for one value of Volume when</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="co"># girth is 16</span></span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">predict</span>(xh,<span class="at">interval=</span><span class="st">"prediction"</span>,<span class="at">level=</span><span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 95% prediction interval for one value of Volume when</span></span>
+<span><span class="co"># girth is 16</span></span>
+<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">xh</span>,interval<span class="op">=</span><span class="st">"prediction"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>       fit     lwr      upr
 1 44.11024 35.1658 53.05469</code></pre>
@@ -420,33 +401,32 @@ Coefficients:
 </div>
 <p>We can plot the confidence interval for all values of <span class="math inline">\(x\)</span> by using the <code>geom_smooth</code> command in <code>ggplot</code>:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>trees, <span class="fu">aes</span>(<span class="at">x=</span>Girth, <span class="at">y=</span>Volume)) <span class="sc">+</span> </span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span> </span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>,<span class="at">formula=</span>y<span class="sc">~</span>x)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06_Using_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>We can plot prediction intervals by adding them manually:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pred_int <span class="ot">=</span> fit <span class="sc">|&gt;</span> <span class="fu">predict</span>(<span class="at">interval=</span><span class="st">"prediction"</span>,<span class="at">level=</span><span class="fl">0.95</span>) <span class="sc">|&gt;</span> <span class="fu">as.data.frame</span>()</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">cbind</span>(trees, pred_int)</span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data=</span>dat, <span class="fu">aes</span>(<span class="at">x=</span>Girth, <span class="at">y=</span>Volume)) <span class="sc">+</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">'lm'</span>,<span class="at">formula=</span>y<span class="sc">~</span>x) <span class="sc">+</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>lwr), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="fu">aes</span>(<span class="at">y=</span>upr), <span class="at">color =</span> <span class="st">"red"</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>) <span class="sc">+</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span>lm, <span class="at">se=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pred_int</span> <span class="op">=</span> <span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>interval<span class="op">=</span><span class="st">"prediction"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">trees</span>, <span class="va">pred_int</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">lwr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">upr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="va">lm</span>, se<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="06_Using_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>Note that the prediction interval (the red dashed lines) is wider than the prediction interval. This is because the prediction interval has the extra source of variability.</p>
 </div>
-</section>
-<section id="extrapolation-and-precision" class="level3" data-number="6.2.5">
-<h3 data-number="6.2.5" class="anchored" data-anchor-id="extrapolation-and-precision"><span class="header-section-number">6.2.5</span> Extrapolation and Precision</h3>
+</section><section id="extrapolation-and-precision" class="level3" data-number="6.2.5"><h3 data-number="6.2.5" class="anchored" data-anchor-id="extrapolation-and-precision">
+<span class="header-section-number">6.2.5</span> Extrapolation and Precision</h3>
 <p>When using the least squares prediction equation to estimate the mean value of <span class="math inline">\(y\)</span> or to predict a particular value of <span class="math inline">\(y\)</span> for values of <span class="math inline">\(x\)</span> outside the range of your sample data, you may encounter much larger errors than expected. This practice is known as <em>extrapolation</em>.</p>
 <p>Even though the least squares model might fit the data well within the range of sample <span class="math inline">\(x\)</span> values, it can poorly represent the true model for values of <span class="math inline">\(x\)</span> outside this range.</p>
 <p>As the sample size <span class="math inline">\(n\)</span> increases, the width of the confidence interval decreases. In theory, you can achieve as precise an estimate of the mean value of <span class="math inline">\(y\)</span> as desired for any given <span class="math inline">\(x\)</span> by selecting a large enough sample.</p>
@@ -457,11 +437,7 @@ Coefficients:
 <p>This means that no matter how large the sample, the interval can’t shrink below a certain size unless you reduce the standard deviation of the regression model, <span class="math inline">\(\sigma\)</span>. To make more accurate predictions for new values of <span class="math inline">\(y\)</span>, you must improve the model—either by using a curvilinear relationship with <span class="math inline">\(x\)</span>, adding new independent variables, or both.</p>
 
 
-</section>
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -693,9 +669,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./05_Correlation.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span>
       </a>          
@@ -707,8 +681,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">STA 3386</div>   
     <div class="nav-footer-center">
       &nbsp;
@@ -716,7 +689,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">Fall 2024</div>
   </div>
 </footer>
-
 
 
 </body></html>

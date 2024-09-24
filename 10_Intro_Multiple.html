@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 10&nbsp; An Intro to Multiple Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./09_Tidymodels.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./10_Intro_Multiple.html"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#types-of-models" id="toc-types-of-models" class="nav-link active" data-scroll-target="#types-of-models"><span class="header-section-number">10.1</span> Types of Models</a></li>
+  <li><a href="#multiple-predictor-variables" id="toc-multiple-predictor-variables" class="nav-link" data-scroll-target="#multiple-predictor-variables"><span class="header-section-number">10.2</span> Multiple Predictor Variables</a>
+  <ul class="collapse">
+  <li><a href="#the-multiple-regression-model" id="toc-the-multiple-regression-model" class="nav-link" data-scroll-target="#the-multiple-regression-model"><span class="header-section-number">10.2.1</span> The Multiple Regression Model</a></li>
+  <li><a href="#assumptions-about-the-predictor-variables" id="toc-assumptions-about-the-predictor-variables" class="nav-link" data-scroll-target="#assumptions-about-the-predictor-variables"><span class="header-section-number">10.2.2</span> Assumptions About the Predictor Variables</a></li>
+  </ul></li>
+  <li><a href="#estimating-the-multiple-regression-model" id="toc-estimating-the-multiple-regression-model" class="nav-link" data-scroll-target="#estimating-the-multiple-regression-model"><span class="header-section-number">10.3</span> Estimating the Multiple Regression Model</a>
+  <ul class="collapse">
+  <li><a href="#minimizing-the-sse" id="toc-minimizing-the-sse" class="nav-link" data-scroll-target="#minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE}</a></li>
+  <li><a href="#case-with-two-predictor-variables" id="toc-case-with-two-predictor-variables" class="nav-link" data-scroll-target="#case-with-two-predictor-variables"><span class="header-section-number">10.3.2</span> Case with Two Predictor Variables</a></li>
+  <li><a href="#the-normal-equations" id="toc-the-normal-equations" class="nav-link" data-scroll-target="#the-normal-equations"><span class="header-section-number">10.3.3</span> The Normal Equations</a></li>
+  <li><a href="#the-least-squares-estimators" id="toc-the-least-squares-estimators" class="nav-link" data-scroll-target="#the-least-squares-estimators"><span class="header-section-number">10.3.4</span> The Least Squares Estimators</a></li>
+  </ul></li>
+  <li><a href="#a-primer-on-matrices" id="toc-a-primer-on-matrices" class="nav-link" data-scroll-target="#a-primer-on-matrices"><span class="header-section-number">10.4</span> A Primer on Matrices</a>
+  <ul class="collapse">
+  <li><a href="#matrices" id="toc-matrices" class="nav-link" data-scroll-target="#matrices"><span class="header-section-number">10.4.1</span> Matrices</a></li>
+  <li><a href="#notation" id="toc-notation" class="nav-link" data-scroll-target="#notation"><span class="header-section-number">10.4.2</span> Notation</a></li>
+  <li><a href="#matrix-dimensions" id="toc-matrix-dimensions" class="nav-link" data-scroll-target="#matrix-dimensions"><span class="header-section-number">10.4.3</span> Matrix Dimensions</a></li>
+  <li><a href="#square-matrices" id="toc-square-matrices" class="nav-link" data-scroll-target="#square-matrices"><span class="header-section-number">10.4.4</span> Square Matrices</a></li>
+  <li><a href="#vectors" id="toc-vectors" class="nav-link" data-scroll-target="#vectors"><span class="header-section-number">10.4.5</span> Vectors</a></li>
+  <li><a href="#transpose" id="toc-transpose" class="nav-link" data-scroll-target="#transpose"><span class="header-section-number">10.4.6</span> Transpose</a></li>
+  <li><a href="#symmetric-matrices" id="toc-symmetric-matrices" class="nav-link" data-scroll-target="#symmetric-matrices"><span class="header-section-number">10.4.7</span> Symmetric Matrices</a></li>
+  <li><a href="#diagonal-matrices" id="toc-diagonal-matrices" class="nav-link" data-scroll-target="#diagonal-matrices"><span class="header-section-number">10.4.8</span> Diagonal Matrices}</a></li>
+  <li><a href="#indentity-matrix" id="toc-indentity-matrix" class="nav-link" data-scroll-target="#indentity-matrix"><span class="header-section-number">10.4.9</span> Indentity Matrix</a></li>
+  <li><a href="#matrices-and-vectors-of-ones-and-zeros" id="toc-matrices-and-vectors-of-ones-and-zeros" class="nav-link" data-scroll-target="#matrices-and-vectors-of-ones-and-zeros"><span class="header-section-number">10.4.10</span> Matrices and Vectors of Ones and Zeros</a></li>
+  <li><a href="#matrix-addition-and-subtraction" id="toc-matrix-addition-and-subtraction" class="nav-link" data-scroll-target="#matrix-addition-and-subtraction"><span class="header-section-number">10.4.11</span> Matrix Addition and Subtraction</a></li>
+  <li><a href="#matrix-multiplication" id="toc-matrix-multiplication" class="nav-link" data-scroll-target="#matrix-multiplication"><span class="header-section-number">10.4.12</span> Matrix Multiplication</a></li>
+  <li><a href="#basic-matrix-results" id="toc-basic-matrix-results" class="nav-link" data-scroll-target="#basic-matrix-results"><span class="header-section-number">10.4.13</span> Basic Matrix Results</a></li>
+  <li><a href="#matrix-differentiation" id="toc-matrix-differentiation" class="nav-link" data-scroll-target="#matrix-differentiation"><span class="header-section-number">10.4.14</span> Matrix Differentiation</a></li>
+  <li><a href="#random-matrices" id="toc-random-matrices" class="nav-link" data-scroll-target="#random-matrices"><span class="header-section-number">10.4.15</span> Random Matrices</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“Statisticians, like artists, have the bad habit of falling in love with their models.” - George Box</p>
+</blockquote>
+<section id="types-of-models" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="types-of-models"><span class="header-section-number">10.1</span> Types of Models</h2>
+<p>When we discuss the simple linear regression model <span class="math display">\[
+\begin{align*}
+    y = \beta_0 + \beta_1 x +\varepsilon
+\end{align*}
+\]</span> stated previously that it is “simple” because there is only one predictor variable.</p>
+<p>The model is “<em>linear in the parameters</em>” because every parameter is only to the first power and is not multiplied or divided by another parameter.</p>
+<p>The model is also “<em>linear in the predictor variable</em>” because <span class="math inline">\(x\)</span> appears only with an exponent of one (instead of <span class="math inline">\(x^2\)</span>, <span class="math inline">\(x^{1/2}\)</span>, etc.).</p>
+<p>A “linear model” means it is linear in the parameters (not necessarily linear in the predictor variables). A model that is linear in both the parameters and the predictor variables is called a <em>first-order model</em>.</p>
+</section>
+<section id="multiple-predictor-variables" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="multiple-predictor-variables"><span class="header-section-number">10.2</span> Multiple Predictor Variables</h2>
+<p>Often when modeling some response variable <span class="math inline">\(y\)</span>, one predictor variable may not be adequate. Thus, more multiple predictor variable can be used to model <span class="math inline">\(y\)</span>.</p>
+<p>As in simple linear regression, we will assume models that are <em>linear</em> in the parameters.</p>
+<p>We will present the multiple linear regression model that is linear in the parameters but not necessarily linear in the predictor variables. This type of model is called the <em>general</em> linear regression model.</p>
+<section id="the-multiple-regression-model" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="the-multiple-regression-model"><span class="header-section-number">10.2.1</span> The Multiple Regression Model</h3>
+<p>The general model is <span id="eq-w4_1"><span class="math display">\[
+\begin{align}
+y_{i}= &amp; \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\cdots+\beta_{p-1}x_{i,p-1}+\varepsilon_{i}\\
+= &amp; \beta_{0}+\sum_{k=1}^{p-1}\beta_{k}x_{ik}+\varepsilon_{i}\\
+&amp; \varepsilon\overset{iid}{\sim}N\left(0,\sigma^{2}\right)
+\end{align}
+\tag{10.1}\]</span></span> where <span class="math display">\[
+\begin{align*}
+&amp; \beta_{0},\beta_{1},\ldots,\beta_{p-1}\text{ are parameters}\\
+&amp; x_{i1},\ldots,x_{i,p-1}\text{ are known constants}\\
+&amp; i=1,\ldots,n
+\end{align*}
+\]</span></p>
+<p>The predictor variable <span class="math inline">\(x_{k}\)</span> can be raised to some power or transformed in some other way. Also, the predictor variable can be the product of two variables. When this is the case, we say the term is an <em>interaction</em> term. We will discuss these more later.</p>
+</section>
+<section id="assumptions-about-the-predictor-variables" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="assumptions-about-the-predictor-variables"><span class="header-section-number">10.2.2</span> Assumptions About the Predictor Variables</h3>
+<p>In multiple regression, we are interested in how the predictor variables relate to the response variable. In particular, we want to know:</p>
+<ol type="1">
+<li>How <em>important</em> are the difference predictor variables in modeling <span class="math inline">\(y\)</span>?</li>
+<li>What is the <em>effect</em> of a given predictor variable on predicting <span class="math inline">\(y\)</span>?</li>
+<li>Are any of the predictor variables <em>unnecessary</em> in modeling <span class="math inline">\(y\)</span> and therefore be dropped from the model?</li>
+<li>Are there any predictor variables not <em>included</em> in the model that should be included?</li>
+</ol>
+<p>Theses questions are relatively simple to answer if the predictor variables are <em>uncorrelated</em> among themselves.</p>
+<p>Unfortunately, in real world application, especially for observational studies, the predictor variables tend to be correlated among themselves. When this is the case, we say that <em>multicollinearity</em> exists.</p>
+<p>Just due to chance, there will always be some correlation among the predictor variables. In general, we will assume the correlation among the predictor variables is low. If the correlation is high, then this may present problems in the analyses. As we discuss the inferences and assumptions going further, we will discuss the problem of multicollinearity in more detail.</p>
+</section>
+</section>
+<section id="estimating-the-multiple-regression-model" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="estimating-the-multiple-regression-model"><span class="header-section-number">10.3</span> Estimating the Multiple Regression Model</h2>
+<section id="minimizing-the-sse" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE}</h3>
+<p>As we did in the simple linear regression case, we want to fit model <a href="#eq-w4_1">Equation&nbsp;<span>10.1</span></a> to the observed data.</p>
+<p>The fitted line in the multiple regression case is <span id="eq-w4_2"><span class="math display">\[
+\begin{align}
+\hat{y}_i = b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}
+\end{align}
+\tag{10.2}\]</span></span> The estimates <span class="math inline">\(\hat{\beta}_0,\hat{\beta}_1,\ldots,\hat{\beta}_{p-1}\)</span> are found by minimizing the <em>squared</em> <em>distances</em> between the observed values <span class="math inline">\(y_i\)</span> and the fitted values <span class="math inline">\(\hat{y}_i\)</span>. The sum of the squared distances is now <span id="eq-w4_3"><span class="math display">\[
+\begin{align}
+Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\right)\right)^2\
+\end{align}
+\tag{10.3}\]</span></span> in the multiple regression case.</p>
+<p>Note that model <a href="#eq-w4_1">Equation&nbsp;<span>10.1</span></a> is no longer a line. It is a <em>plane</em> when <span class="math inline">\(p=3\)</span> and a <em>hyperplane</em> when <span class="math inline">\(p&gt;3\)</span>.</p>
+</section>
+<section id="case-with-two-predictor-variables" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="case-with-two-predictor-variables"><span class="header-section-number">10.3.2</span> Case with Two Predictor Variables</h3>
+<p>When there are two predictor variables (<span class="math inline">\(p=3\)</span>), we will take three partial derivatives of <a href="#eq-w4_3">Equation&nbsp;<span>10.3</span></a> with respect to <span class="math inline">\(b_0\)</span>, <span class="math inline">\(b_1\)</span>, and <span class="math inline">\(b_2\)</span>. This leads us to <span id="eq-w4_4"><span class="math display">\[
+\begin{align}
+\frac{\partial Q}{\partial b_{0}} &amp; =-2\sum\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\
+\frac{\partial Q}{\partial b_{1}} &amp; =-2\sum x_{i1}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\
+\frac{\partial Q}{\partial b_{2}} &amp; =-2\sum x_{i2}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)
+\end{align}
+\tag{10.4}\]</span></span></p>
+</section>
+<section id="the-normal-equations" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="the-normal-equations"><span class="header-section-number">10.3.3</span> The Normal Equations</h3>
+<p>Setting the partial derivative equal to zero and rearranging the terms lead us to the <em>normal</em> equations <span id="eq-w4_5"><span class="math display">\[
+\begin{align}
+\sum y_{i} &amp; =n\hat{\beta}_{0}\sum x_{i1}+\hat{\beta}_{2}\sum x_{i2}\\
+\sum x_{i1}y_{i} &amp; =\hat{\beta}_{0}\sum x_{i1}+\hat{\beta}_{1}\sum x_{i1}^{2}+\hat{\beta}_{2}\sum x_{i1}x_{i2}\\
+\sum x_{i2}y_{i} &amp; =\hat{\beta}_{0}\sum x_{i2}+\hat{\beta}_{1}\sum x_{i1}x_{i2}+\hat{\beta}_{2}\sum x_{i2}^{2}
+\end{align}
+\tag{10.5}\]</span></span></p>
+</section>
+<section id="the-least-squares-estimators" class="level3" data-number="10.3.4">
+<h3 data-number="10.3.4" class="anchored" data-anchor-id="the-least-squares-estimators"><span class="header-section-number">10.3.4</span> The Least Squares Estimators</h3>
+<p>Solving the normal equations for <span class="math inline">\(\hat{\beta}_0\)</span>, <span class="math inline">\(\hat{\beta}_1\)</span>, and <span class="math inline">\(\hat{\beta}_2\)</span> gives use the <em>least</em> <em>squares</em> estimators <span id="eq-w4_6"><span class="math display">\[
+\begin{align}
+b_{1} &amp; =\frac{\left(\sum x_{i2}^{2}\right)\left(\sum x_{i1}y_{i}\right)-\left(\sum x_{i1}x_{i2}\right)\left(\sum x_{i2}y_{i}\right)}{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}^{2}\right)-\left(\sum x_{i1}x_{i2}\right)^{2}}\\
+b_{2} &amp; =\frac{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}y_{i}\right)-\left(\sum x_{i1}x_{i2}\right)\left(\sum x_{i1}y_{i}\right)}{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}^{2}\right)-\left(\sum x_{i1}x_{i2}\right)^{2}}\\
+b_{0} &amp; =\bar{Y}-b_{1}\bar{X}_{1}-b_{2}\bar{X}_{2}
+\end{align}
+\tag{10.6}\]</span></span></p>
+<p>We see that the expression for the least squares estimators become cumbersome even for <span class="math inline">\(p=3\)</span>. As more variables are added to the model, the equations become even more cumbersome.</p>
+<p>We can simplify notation by utilizing <em>matrices</em> to represent the model. We will present some basic notation and operations for matrices and then present the model using matrices.</p>
+</section>
+</section>
+<section id="a-primer-on-matrices" class="level2" data-number="10.4">
+<h2 data-number="10.4" class="anchored" data-anchor-id="a-primer-on-matrices"><span class="header-section-number">10.4</span> A Primer on Matrices</h2>
+<section id="matrices" class="level3" data-number="10.4.1">
+<h3 data-number="10.4.1" class="anchored" data-anchor-id="matrices"><span class="header-section-number">10.4.1</span> Matrices</h3>
+<p>A <em>matrix</em> is a rectangular array of elements arranged in rows and columns.</p>
+<p>An example of a matrix is: <span class="math display">\[\begin{align*}
+\left[\begin{array}{ccc}
+8.3 &amp; 70 &amp; 10.3\\
+8.6 &amp; 65 &amp; 10.3\\
+8.8 &amp; 63 &amp; 10.2\\
+10.5 &amp; 72 &amp; 16.4\\
+\end{array}\right]
+\end{align*}\]</span></p>
+<p>This matrix represents some of the data from the dataset. The values in the first column represents Girth, the second column represents Height, and the third column represents Volume.</p>
+<p>Each row corresponds to a tree. The first row represents the values for the first tree. It has 8.3 for Girth, 70 for Height, and 10.3 for Volume.</p>
+<p>So this matrix gives the values of three variables for four trees.</p>
+</section>
+<section id="notation" class="level3" data-number="10.4.2">
+<h3 data-number="10.4.2" class="anchored" data-anchor-id="notation"><span class="header-section-number">10.4.2</span> Notation</h3>
+<p>Each value of the matrix is called an <em>element</em> of that matrix. We denote the elements as <span class="math inline">\(a_{ij}\)</span> for the element in the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column. Note that the first subscript identifies the row number and the second the column number.</p>
+<p>So for the matrix above, the elements can be denotes as <span class="math display">\[
+\begin{align*}
+\left[\begin{array}{ccc}
+a_{11} &amp; a_{12} &amp; a_{13}\\
+a_{21} &amp; a_{22} &amp; a_{23}\\
+a_{31} &amp; a_{32} &amp; a_{33}\\
+a_{41} &amp; a_{42} &amp; a_{43}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>A matrix may be denoted by a symbol such as <span class="math inline">\(\bf{A}\)</span>, <span class="math inline">\(\bf{X}\)</span>, or <span class="math inline">\(\bf{Z}\)</span>. The matrix could also be a greek symbol such as <span class="math inline">\(\bf{\Omega}\)</span>. The symbol is in boldface to identify that it refers to a matrix.</p>
+<p>Thus, we might define for the above matrix; <span class="math display">\[
+\begin{align*}
+\bf{A} =\left[\begin{array}{ccc}
+a_{11} &amp; a_{12} &amp; a_{13}\\
+a_{21} &amp; a_{22} &amp; a_{23}\\
+a_{31} &amp; a_{32} &amp; a_{33}\\
+a_{41} &amp; a_{42} &amp; a_{43}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Another notation we could use is: <span class="math display">\[
+\textbf{A}=\left[a_{ij}\right]\qquad i=1,\ldots,4; j=1,2,3
+\]</span></p>
+<p>This notation avoids the need for writing out all elements of the matrix by stating only the general element.</p>
+<p>Sometimes we will specify the matrix with the dimension below the matrix symbol. For example, a <span class="math inline">\(r\)</span> x <span class="math inline">\(c\)</span> matrix can be expressed as</p>
+</section>
+<section id="matrix-dimensions" class="level3" data-number="10.4.3">
+<h3 data-number="10.4.3" class="anchored" data-anchor-id="matrix-dimensions"><span class="header-section-number">10.4.3</span> Matrix Dimensions</h3>
+<p>The <em>dimension</em> of the matrix above is 4 x 3, since there are four rows and three columns.</p>
+<p>Recall that the <code>trees</code> dataset has 31 observations. So a matrix representing the full dataset would be 31 x 3.</p>
+<p>Note that in giving the dimension of a matrix, we always specify the number of <em>rows</em> first and then the number of <em>columns</em>.</p>
+<p>So a <span class="math inline">\(r\)</span> x <span class="math inline">\(c\)</span> matrix can be expressed as <span class="math display">\[
+\begin{align*}
+\underset{r\times c}{{\bf A}} &amp; =\left[\begin{array}{cccc}
+a_{11} &amp; a_{12} &amp; \cdots &amp; a_{1c}\\
+a_{21} &amp; a_{22} &amp; \cdots &amp; a_{2c}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+a_{r1} &amp; a_{r2} &amp; \cdots &amp; a_{rc}
+\end{array}\right]
+\end{align*}
+\]</span> or in the compact form <span class="math display">\[
+\begin{align*}
+\underset{r\times c}{{\bf A}} &amp; =\left[a_{ij}\right]\qquad i=1,\ldots,r;j=1,\ldots,c
+\end{align*}
+\]</span> Again, the dimensions may or may not be given under the matrix symbol.</p>
+</section>
+<section id="square-matrices" class="level3" data-number="10.4.4">
+<h3 data-number="10.4.4" class="anchored" data-anchor-id="square-matrices"><span class="header-section-number">10.4.4</span> Square Matrices</h3>
+<p>A matrix is said to be <em>square</em> if the number of rows equals the number of columns. For example, the matrices <span class="math display">\[
+\begin{align*}
+\left[\begin{array}{cc}
+a_{11} &amp; a_{12}\\
+a_{21} &amp; a_{22}
+\end{array}\right]
+\end{align*}
+\]</span> and<br>
+<span class="math display">\[
+\begin{align*}
+\left[\begin{array}{ccc}
+a_{11} &amp; a_{12} &amp; a_{13}\\
+a_{21} &amp; a_{22} &amp; a_{23}\\
+a_{31} &amp; a_{32} &amp; a_{33}\\
+\end{array}\right]
+\end{align*}
+\]</span> are both square matrices.</p>
+</section>
+<section id="vectors" class="level3" data-number="10.4.5">
+<h3 data-number="10.4.5" class="anchored" data-anchor-id="vectors"><span class="header-section-number">10.4.5</span> Vectors</h3>
+<p>A matrix containing only one column is called a <em>column</em> <em>vector</em> or simply a <em>vector</em>.</p>
+<p>Two examples are: <span class="math display">\[
+\begin{align*}
+\textbf{A}=\left[\begin{array}{c}
+1\\
+20\\
+7
+\end{array}\right] &amp; \qquad\textbf{B}=\left[\begin{array}{c}
+b_{1}\\
+b_{2}\\
+b_{3}\\
+b_{4}\\
+b_{5}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Note that the elements only have one subscript in <span class="math inline">\(\bf{B}\)</span> since there is only one column. The subscript indicates only the row.</p>
+<p>A matrix containing only one row is called a <em>row vector</em>.</p>
+<p>Two examples are: <span class="math display">\[
+\begin{align*}
+\textbf{B}^{\prime}=\left[\begin{array}{ccc}
+15 &amp; 25 &amp; 50\end{array}\right] &amp; \qquad\boldsymbol{\delta}^{\prime}=\left[\begin{array}{cc}
+\delta_{1} &amp; \delta_{2}\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>We use the prime (<span class="math inline">\({}^\prime\)</span>) symbol for row vectors for reasons to be seen next.</p>
+</section>
+<section id="transpose" class="level3" data-number="10.4.6">
+<h3 data-number="10.4.6" class="anchored" data-anchor-id="transpose"><span class="header-section-number">10.4.6</span> Transpose</h3>
+<p>The transpose of a matrix <span class="math inline">\(\bf{A}\)</span> is another matrix, denoted by <span class="math inline">\(\textbf{A}^{\prime}\)</span>, that is obtained by interchanging corresponding columns and rows of the matrix <span class="math inline">\(\bf{A}\)</span>.</p>
+<p>For example, if: <span class="math display">\[
+\begin{align*}
+\underset{3\times2}{\textbf{A}}=\left[\begin{array}{cc}
+1 &amp; 7\\
+12 &amp; 4\\
+5 &amp; 9
+\end{array}\right]
+\end{align*}
+\]</span> then the transpose <span class="math inline">\(\bf{A}^\prime\)</span> is: <span class="math display">\[
+\begin{align*}
+\underset{2\times3}{\textbf{A}^{\prime}}=\left[\begin{array}{ccc}
+1 &amp; 12 &amp; 5\\
+7 &amp; 4 &amp; 9
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Note that the first column of <span class="math inline">\(\bf{A}\)</span> is the first row of <span class="math inline">\(\bf{A}^\prime\)</span>, and similarly the second column of <span class="math inline">\(\bf{A}\)</span> is the second row of <span class="math inline">\(\bf{A}^\prime\)</span>.</p>
+<p>Note that the dimension of <span class="math inline">\(\bf{A}\)</span> becomes reversed for the dimension of <span class="math inline">\(\bf{A}^\prime\)</span>.</p>
+<p>Note that the transpose of a column vector is a <em>row vector</em>, and vice versa.</p>
+<p>This is the reason why we used the symbol <span class="math inline">\(\bf{B}^\prime\)</span> earlier to identify a row vector, since it may be thought of as the transpose of a column vector <span class="math inline">\(\bf{B}\)</span>.</p>
+</section>
+<section id="symmetric-matrices" class="level3" data-number="10.4.7">
+<h3 data-number="10.4.7" class="anchored" data-anchor-id="symmetric-matrices"><span class="header-section-number">10.4.7</span> Symmetric Matrices</h3>
+<p>A matrix is said to be <em>symmetric</em> if <span class="math inline">\(\bf{A}=\bf{A}^\prime\)</span>.</p>
+<p>A symmetric matrix <span class="math inline">\(\bf{A}\)</span> has elements <span class="math inline">\(a_{ij}=a_{ji}\)</span>. Clearly, a symmetric matrix must be a square matrix.</p>
+</section>
+<section id="diagonal-matrices" class="level3" data-number="10.4.8">
+<h3 data-number="10.4.8" class="anchored" data-anchor-id="diagonal-matrices"><span class="header-section-number">10.4.8</span> Diagonal Matrices}</h3>
+<p>A square matrix is said to be <em>diagonal</em> if all of the off-diagonal elements are zero.</p>
+<p>For example <span class="math display">\[
+\begin{align*}
+{\bf A} &amp; =\left[\begin{array}{cccc}
+a_{11} &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; a_{22} &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; a_{33} &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; a_{44}
+\end{array}\right]
+\end{align*}
+\]</span> is a diagonal matrix.</p>
+</section>
+<section id="indentity-matrix" class="level3" data-number="10.4.9">
+<h3 data-number="10.4.9" class="anchored" data-anchor-id="indentity-matrix"><span class="header-section-number">10.4.9</span> Indentity Matrix</h3>
+<p>The <em>identity</em> matrix is a diagonal matrix with ones for all the diagonal elements. The identity matrix is denoted with with <span class="math inline">\(\bf{I}\)</span>.</p>
+<p>For Example <span class="math display">\[
+\begin{align*}
+{\bf I} &amp; =\left[\begin{array}{cccc}
+1 &amp; 0 &amp; 0 &amp; 0\\
+0 &amp; 1 &amp; 0 &amp; 0\\
+0 &amp; 0 &amp; 1 &amp; 0\\
+0 &amp; 0 &amp; 0 &amp; 1
+\end{array}\right]
+\end{align*}
+\]</span> is a 4 x 4 identity matrix.</p>
+</section>
+<section id="matrices-and-vectors-of-ones-and-zeros" class="level3" data-number="10.4.10">
+<h3 data-number="10.4.10" class="anchored" data-anchor-id="matrices-and-vectors-of-ones-and-zeros"><span class="header-section-number">10.4.10</span> Matrices and Vectors of Ones and Zeros</h3>
+<p>A matrix of with ones for all the elements is denoted as <span class="math display">\[
+\begin{align*}
+{\bf J} &amp; =\left[\begin{array}{cccc}
+1 &amp; 1 &amp; \cdots &amp; 1\\
+1 &amp; 1 &amp; \cdots &amp; 1\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+1 &amp; 1 &amp; \cdots &amp; 1
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>A vector with ones for all the elements is denoted as <span class="math display">\[
+\begin{align*}
+{\bf 1} &amp; =\left[\begin{array}{c}
+1\\
+1\\
+\vdots\\
+1
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Likewise a vector of zeros is denoted as <span class="math display">\[
+\begin{align*}
+{\bf 0} &amp; =\left[\begin{array}{c}
+0\\
+0\\
+\vdots\\
+0
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="matrix-addition-and-subtraction" class="level3" data-number="10.4.11">
+<h3 data-number="10.4.11" class="anchored" data-anchor-id="matrix-addition-and-subtraction"><span class="header-section-number">10.4.11</span> Matrix Addition and Subtraction</h3>
+<p>Adding or subtracting two matrices requires that they have the same <em>dimension</em>.</p>
+<p>The sum, or difference, of two matrices is another matrix whose elements each consist of the sum, or difference, of the corresponding elements of the two matrices.</p>
+<p>Suppose: <span class="math display">\[
+\begin{align*}
+\underset{3\times2}{\textbf{A}}=\left[\begin{array}{cc}
+1 &amp; 4\\
+2 &amp; 5\\
+3 &amp; 6
+\end{array}\right] &amp; \qquad\underset{3\times2}{\textbf{B}}=\left[\begin{array}{cc}
+1 &amp; 2\\
+2 &amp; 3\\
+3 &amp; 4
+\end{array}\right]
+\end{align*}
+\]</span> then <span class="math display">\[
+\begin{align*}
+\underset{3\times2}{\textbf{A}+\textbf{B}=} &amp; \left[\begin{array}{cc}
+1+1 &amp; 4+2\\
+2+2 &amp; 5+3\\
+3+3 &amp; 6+4
+\end{array}\right]=\left[\begin{array}{cc}
+2 &amp; 6\\
+4 &amp; 8\\
+6 &amp; 10
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Similarly: <span class="math display">\[
+\begin{align*}
+\underset{3\times2}{\textbf{A}-\textbf{B}=} &amp; \left[\begin{array}{cc}
+1-1 &amp; 4-2\\
+2-2 &amp; 5-3\\
+3-3 &amp; 6-4
+\end{array}\right]=\left[\begin{array}{cc}
+0 &amp; 2\\
+0 &amp; 2\\
+0 &amp; 2
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="matrix-multiplication" class="level3" data-number="10.4.12">
+<h3 data-number="10.4.12" class="anchored" data-anchor-id="matrix-multiplication"><span class="header-section-number">10.4.12</span> Matrix Multiplication</h3>
+<p>The addition and subtraction rules discussed above are fairly straight forward and similar to addition and subtraction of (non-matrix) numbers.</p>
+<p>Multiplication of matrices are not as straight forward as multiplication of (non-matrix) numbers.</p>
+<section id="multiplication-of-a-matrix-by-a-scalar" class="level4">
+<h4 class="anchored" data-anchor-id="multiplication-of-a-matrix-by-a-scalar">Multiplication of a Matrix by a Scalar</h4>
+<p>A <em>scalar</em> is an ordinary number or a symbol representing a number.</p>
+<p>In multiplication of a matrix by a scalar, every element of the matrix is multiplied by the scalar.</p>
+<p>For example, suppose the matrix <span class="math inline">\(\textbf{A}\)</span> is given by <span class="math display">\[
+\begin{align*}
+\textbf{A}=\left[\begin{array}{cc}
+1 &amp; 3\\
+5 &amp; 7
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Then <span class="math inline">\(2\textbf{A}\)</span>, where 2 is the scalar, equals <span class="math display">\[
+\begin{align*}
+2\textbf{A}=2\left[\begin{array}{cc}
+1 &amp; 3\\
+5 &amp; 7
+\end{array}\right] &amp; =\left[\begin{array}{cc}
+2 &amp; 6\\
+10 &amp; 14
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="multiplication-of-a-matrix-by-a-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="multiplication-of-a-matrix-by-a-matrix">Multiplication of a Matrix by a Matrix</h4>
+<p>Consider the two matrices: <span class="math display">\[
+\begin{align*}
+\underset{2\times2}{\textbf{A}}=\left[\begin{array}{cc}
+1 &amp; 2\\
+3 &amp; 4
+\end{array}\right] &amp; \qquad\underset{2\times2}{\textbf{B}}=\left[\begin{array}{cc}
+5 &amp; 6\\
+7 &amp; 8
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Multiplying <span class="math inline">\(\bf{A}\)</span> by <span class="math inline">\(\bf{B}\)</span> is found by a multiplying the elements of each <em>row</em> vector by the elements of each each <em>column</em> vector and then summing the products.</p>
+<p>For example, to find the element in the first row and the first column of the product <span class="math inline">\(\textbf{AB}\)</span>, we work with the first row of <span class="math inline">\(\textbf{A}\)</span> and the first column of <span class="math inline">\(\textbf{B}\)</span>: <span class="math display">\[
+\begin{align*}
+\begin{array}{cc}
+&amp; \textbf{A}\\
+&amp; \left[\begin{array}{cc}
+{\color{red}1} &amp; {\color{red}2}\\
+3 &amp; 4
+\end{array}\right]\\
+\\
+\end{array}\begin{array}{c}
+\textbf{B}\\
+\left[\begin{array}{cc}
+{\color{red}5} &amp; 6\\
+{\color{red}7} &amp; 8
+\end{array}\right]\\
+\begin{array}{cc}
+&amp; \end{array}
+\end{array} &amp; =\begin{array}{cc}
+&amp; \textbf{AB}\\
+&amp;  \left[\begin{array}{cc}
+\color{red}{\left(1\right)\left(5\right)+\left(2\right)\left(7\right)} &amp;\\
+\\
+\end{array}\right]\\
+\\
+\end{array}\\
+&amp; = \begin{array}{cc}
+&amp; \textbf{AB}\\
+&amp;  \left[\begin{array}{cc}
+\color{red}{19} &amp;\\
+\\
+\end{array}\right]\\
+\\
+\end{array}
+\end{align*}
+\]</span></p>
+<p>To find the element in the first row and second column of <span class="math inline">\(\textbf{AB}\)</span>: <span class="math display">\[
+\begin{align*}
+\begin{array}{cc}
+&amp; \textbf{A}\\
+&amp; \left[\begin{array}{cc}
+{\color{red}1} &amp; {\color{red}2}\\
+3 &amp; 4
+\end{array}\right]\\
+\\
+\end{array}\begin{array}{c}
+\textbf{B}\\
+\left[\begin{array}{cc}
+5 &amp; \color{red}{6}\\
+7 &amp; \color{red}{8}
+\end{array}\right]\\
+\begin{array}{cc}
+&amp; \end{array}
+\end{array} &amp; =\begin{array}{cc}
+&amp; \textbf{AB}\\
+&amp;  \left[\begin{array}{cc}
+33&amp;
+\color{red}{\left(1\right)\left(6\right)+\left(2\right)\left(8\right)} \\
+\\
+\end{array}\right]\\
+\\
+\end{array}\\
+&amp; = \begin{array}{cc}
+&amp; \textbf{AB}\\
+&amp;  \left[\begin{array}{cc}
+33 &amp; \color{red}{22}\\
+\\
+\end{array}\right]\\
+\\
+\end{array}
+\end{align*}
+\]</span></p>
+<p>Continuing this process we get <span class="math display">\[
+\begin{align*}
+\underset{2\times2}{\textbf{AB}} &amp; =\left[\begin{array}{cc}
+\left(1\right)\left(5\right)+\left(2\right)\left(7\right) &amp; \left(1\right)\left(6\right)+\left(2\right)\left(8\right)\\
+\left(3\right)\left(5\right)+\left(4\right)\left(7\right) &amp; \left(3\right)\left(6\right)+\left(4\right)\left(8\right)
+\end{array}\right]=\left[\begin{array}{cc}
+19 &amp; 22\\
+43 &amp; 50
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Note that the order in matrix multiplication is important. In general, <span class="math inline">\(\textbf{AB} \ne \textbf{BA}\)</span>. In fact, even though the product <span class="math inline">\(\textbf{AB}\)</span> may be defined, the product <span class="math inline">\(\textbf{BA}\)</span> may not be defined at all.</p>
+<p>In general, the product <span class="math inline">\(\textbf{AB}\)</span> is defined only when the number of columns in <span class="math inline">\(\textbf{A}\)</span> equals the number of rows in <span class="math inline">\(\textbf{B}\)</span>.</p>
+<p>For example: <span class="math display">\[
+\begin{align*}
+\underset{{\color{red}2}\times{\color{blue}3}}{\textbf{A}} &amp; \quad\underset{{\color{blue}3}\times{\color{red}1}}{\textbf{B}}=\underset{{\color{red}2}\times{\color{red}1}}{\textbf{AB}}
+\end{align*}
+\]</span> is defined since the number of columns of <span class="math inline">\(\textbf{A}\)</span> (3) is equal to the number of rows of <span class="math inline">\(\textbf{B}\)</span> (3).</p>
+<p>However, note that <span class="math display">\[
+\begin{align*}
+\underset{{\color{blue}3}\times{\color{red}1}}{\textbf{B}}\quad\underset{{\color{red}2}\times{\color{blue}3}}{\textbf{A}}
+\end{align*}
+\]</span> is not defined since the number of columns of <span class="math inline">\(\textbf{B}\)</span> (1) is not equal to the number of rows of <span class="math inline">\(\textbf{A}\)</span> (2).</p>
+<p>When obtaining the product <span class="math inline">\(\textbf{AB}\)</span>, we say that <span class="math inline">\(\textbf{A}\)</span> is <em>postmultiplied</em> by <span class="math inline">\(\textbf{B}\)</span> or <span class="math inline">\(\textbf{B}\)</span> is <em>premultiplied</em> by <span class="math inline">\(\textbf{A}\)</span>.</p>
+</section>
+<section id="inverse-of-a-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="inverse-of-a-matrix">Inverse of a Matrix</h4>
+<p>For ordinary (non-matrix) numbers, the inverse of a number is its reciprocal. Thus, the inverse of 2 is <span class="math inline">\(\frac{1}{2}\)</span></p>
+<p>A number multiplied by its inverse always equals 1: <span class="math display">\[
+\begin{align*}
+&amp;2\cdot\frac{1}{2}=\frac{1}{2}\cdot2=1
+\end{align*}
+\]</span></p>
+<p>In matrix algebra, the inverse of a matrix <span class="math inline">\(\textbf{A}\)</span> is another matrix, denoted by <span class="math inline">\(\textbf{A}^{-1}\)</span>, such that: <span class="math display">\[
+\textbf{A}^{-1}\textbf{A}=\textbf{A}\textbf{A}^{-1}=\textbf{I}
+\]</span> where <span class="math inline">\(\textbf{I}\)</span> is the identity matrix.</p>
+<p>Thus, the identity matrix <span class="math inline">\(\textbf{I}\)</span> plays the same role as the number 1 in ordinary algebra.</p>
+<p>An inverse of a matrix is defined only for <em>square matrices</em>.</p>
+<p>Even so, many square matrices do not have inverses.</p>
+<p>If a square matrix does have an inverse, the inverse is unique.</p>
+<p>If a the inverse of a matrix does not exist, then we say the matrix is <em>singular</em>. If the inverse does exist, then we say the matrix is <em>nonsingular</em>.</p>
+</section>
+</section>
+<section id="basic-matrix-results" class="level3" data-number="10.4.13">
+<h3 data-number="10.4.13" class="anchored" data-anchor-id="basic-matrix-results"><span class="header-section-number">10.4.13</span> Basic Matrix Results</h3>
+<p>Below are some basic results for matrices presented without proof. They will be useful as we use matrices in regression. <span class="math display">\[
+\begin{align}
+\textbf{A}+\textbf{B} &amp; =\textbf{B}+\textbf{A} &amp;\\
+\left(\textbf{A}+\textbf{B}\right)+\textbf{C} &amp; =\textbf{A}+\left(\textbf{B}+\textbf{C}\right) &amp;\\
+\left(\textbf{A}\textbf{B}\right)\textbf{C} &amp; =\textbf{A}\left(\textbf{B}\textbf{C}\right)&amp;\\
+\textbf{C}\left(\textbf{A}+\textbf{B}\right) &amp; =\textbf{C}\textbf{A}+\textbf{C}\textbf{B}&amp;\\
+k\left(\textbf{A}+\textbf{B}\right) &amp; =k\textbf{A}+k\textbf{B}&amp;\\
+\left(\textbf{A}^{\prime}\right)^{\prime} &amp; =\textbf{A}&amp;\\
+\left(\textbf{A}+\textbf{B}\right)^{\prime} &amp; =\textbf{A}^{\prime}+\textbf{B}^{\prime}&amp;\\
+\left(\textbf{A}\textbf{B}\right)^{\prime} &amp; =\textbf{B}^{\prime}\textbf{A}^{\prime}&amp;\\
+\left(\textbf{A}\textbf{B}\textbf{C}\right)^{\prime} &amp; =\textbf{C}^{\prime}\textbf{B}^{\prime}\textbf{A}^{\prime}&amp;\\
+\left(\textbf{A}^{-1}\right)^{-1} &amp; =\textbf{A}&amp;\\
+\left(\textbf{A}^{\prime}\right)^{-1} &amp; =\left(\textbf{A}^{-1}\right)^{\prime}&amp;
+\end{align}
+\]</span></p>
+</section>
+<section id="matrix-differentiation" class="level3" data-number="10.4.14">
+<h3 data-number="10.4.14" class="anchored" data-anchor-id="matrix-differentiation"><span class="header-section-number">10.4.14</span> Matrix Differentiation</h3>
+<p>There are a number of results when using matrix calculus which are beyond the scope of this course. We will present a few results for matrix differentiation that will be useful in multiple regression.</p>
+<p>It is important to note that matrix calculus can be confusing due to notational conventions that are used in various fields. There are two main conventions (although the two are sometimes mixed by some authors) that are based how to take a derivative with respect to a vector. One convention is the <em>numerator</em> layout and the other is the <em>denominator</em> layout. Below, we will present the results using numerator layout.</p>
+<p>In all the results that follow, let <span class="math inline">\(d\)</span> be a scalar, <span class="math inline">\({\bf A}\)</span> be a <span class="math inline">\(n\times1\)</span> vector with elements <span class="math inline">\([a_{i}]\)</span>, <span class="math inline">\({\bf B}\)</span> be a <span class="math inline">\(m\times1\)</span> vector with elements <span class="math inline">\([b_{i}]\)</span>, and <span class="math inline">\({\bf C}\)</span> be a <span class="math inline">\(p\times q\)</span> matrix with elements <span class="math inline">\([c_{ij}]\)</span>.</p>
+<section id="vector-by-a-scalar" class="level4">
+<h4 class="anchored" data-anchor-id="vector-by-a-scalar">Vector by a Scalar</h4>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial{\bf A}}{\partial d} &amp; =\left[\begin{array}{c}
+\frac{\partial a_{1}}{\partial d}\\
+\frac{\partial a_{2}}{\partial d}\\
+\vdots\\
+\frac{\partial a_{n}}{\partial d}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="scalar-by-a-vector" class="level4">
+<h4 class="anchored" data-anchor-id="scalar-by-a-vector">Scalar by a Vector</h4>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial d}{\partial{\bf A}}  =\left[\begin{array}{cccc}
+\frac{\partial d}{\partial a_{1}} &amp; \frac{\partial d}{\partial a_{2}} &amp; \cdots &amp; \frac{\partial d}{\partial a_{n}}\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="vector-by-a-vector" class="level4">
+<h4 class="anchored" data-anchor-id="vector-by-a-vector">Vector by a Vector</h4>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial{\bf A}}{\partial{\bf B}} &amp; =\left[\begin{array}{cccc}
+\frac{\partial a_{1}}{\partial b_{1}} &amp; \frac{\partial a_{1}}{\partial b_{2}} &amp; \cdots &amp; \frac{\partial a_{1}}{\partial b_{m}}\\
+\frac{\partial a_{2}}{\partial b_{1}} &amp; \frac{\partial a_{2}}{\partial b_{2}} &amp; \cdots &amp; \frac{\partial a_{2}}{\partial b_{m}}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+\frac{\partial a_{n}}{\partial b_{1}} &amp; \frac{\partial a_{n}}{\partial b_{2}} &amp; \cdots &amp; \frac{\partial a_{n}}{\partial b_{m}}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="matrix-by-a-scalar" class="level4">
+<h4 class="anchored" data-anchor-id="matrix-by-a-scalar">Matrix by a Scalar</h4>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial{\bf C}}{\partial d} &amp; =\left[\begin{array}{cccc}
+\frac{\partial c_{11}}{\partial d} &amp; \frac{\partial c_{12}}{\partial d} &amp; \cdots &amp; \frac{\partial c_{1q}}{\partial d}\\
+\frac{\partial c_{21}}{\partial d} &amp; \frac{\partial c_{22}}{\partial d} &amp; \cdots &amp; \frac{\partial c_{2q}}{\partial d}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+\frac{\partial c_{p1}}{\partial d} &amp; \frac{\partial c_{p2}}{\partial d} &amp; \cdots &amp; \frac{\partial c_{pq}}{\partial d}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="scalar-by-a-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="scalar-by-a-matrix">Scalar by a Matrix</h4>
+<p><span class="math display">\[
+\begin{align*}
+\frac{\partial d}{\partial{\bf C}} &amp; =\left[\begin{array}{cccc}
+\frac{\partial d}{\partial c_{11}} &amp; \frac{\partial d}{\partial c_{21}} &amp; \cdots &amp; \frac{\partial d}{\partial c_{p1}}\\
+\frac{\partial d}{\partial c_{12}} &amp; \frac{\partial d}{\partial c_{22}} &amp; \cdots &amp; \frac{\partial d}{\partial c_{p2}}\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+\frac{\partial d}{\partial c_{1q}} &amp; \frac{\partial d}{\partial c_{2q}} &amp; \cdots &amp; \frac{\partial d}{\partial c_{pq}}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="common-derivatives-involving-matrices" class="level4">
+<h4 class="anchored" data-anchor-id="common-derivatives-involving-matrices">Common Derivatives Involving Matrices</h4>
+<p><span class="math display">\[4
+\begin{align*}
+&amp; \frac{\partial{\bf A}^{\prime}{\bf A}}{\partial{\bf A}}=2{\bf A}^{\prime}\\
+&amp; \frac{\partial{\bf A}^{\prime}{\bf B}}{\partial{\bf B}}=\frac{\partial{\bf B}^{\prime}{\bf A}}{\partial{\bf B}}={\bf A}^{\prime} &amp;  &amp; \text{(provided }m=n)\\
+&amp; \frac{\partial{\bf \left({\bf A}^{\prime}{\bf B}\right)^{2}}}{\partial{\bf A}}=2{\bf A}^{\prime}{\bf B}{\bf B}^{\prime} &amp;  &amp; \text{(provided }m=n)\\
+&amp; \frac{\partial{\bf C}{\bf A}}{\partial{\bf A}}={\bf C} &amp;  &amp; \text{(provided }q=n)\\
+&amp; \frac{\partial{\bf A}^{\prime}{\bf C}}{\partial{\bf A}}={\bf C}^{\prime} &amp;  &amp; \text{(provided }p=n)\\
+&amp; \frac{\partial{\bf A}^{\prime}{\bf C}{\bf A}}{\partial{\bf A}}={\bf A}^{\prime}\left({\bf C}+{\bf C}^{\prime}\right) &amp;  &amp; \text{(provided }n=p=q)
+\end{align*}
+\]</span></p>
+</section>
+</section>
+<section id="random-matrices" class="level3" data-number="10.4.15">
+<h3 data-number="10.4.15" class="anchored" data-anchor-id="random-matrices"><span class="header-section-number">10.4.15</span> Random Matrices</h3>
+<p>A <em>random matrix</em> contains elements that are random variables.</p>
+<p>Thus, the vector of the response vector <span class="math display">\[
+\begin{align*}
+{\bf Y} &amp; =\left[\begin{array}{c}
+Y_{1}\\
+Y_{2}\\
+\vdots\\
+Y_{n}
+\end{array}\right]
+\end{align*}
+\]</span> is a random vector since the <span class="math inline">\(Y_i\)</span> elements are random variables.</p>
+<section id="expected-value" class="level4">
+<h4 class="anchored" data-anchor-id="expected-value">Expected Value</h4>
+<p>The <em>expected</em> <em>value</em> of <span class="math inline">\({\bf Y}\)</span> is a matrix (or vector) that has elements that are the expected values of the elements of <span class="math inline">\({\bf Y}\)</span>. Thus, <span class="math display">\[
+\begin{align*}
+{\bf E}\left[{\bf Y}\right] &amp; =\left[\begin{array}{c}
+E\left[Y_{1}\right]\\
+E\left[Y_{2}\right]\\
+\vdots\\
+E\left[Y_{n}\right]
+\end{array}\right]
+\end{align*}
+\]</span></p>
+</section>
+<section id="variance-covariance-matrix" class="level4">
+<h4 class="anchored" data-anchor-id="variance-covariance-matrix">Variance-Covariance Matrix</h4>
+<p>When working with random vectors, we will be interested in the variance of the individual elements <span class="math display">\[
+\begin{align*}
+Var\left[Y_{i}\right]
+\end{align*}
+\]</span> along with the covariance between pairs of elements <span class="math display">\[
+\begin{align*}
+Cov\left[Y_{i},Y_{j}\right] &amp; \text{ }i\ne j.
+\end{align*}
+\]</span></p>
+<p>All of these variances and covariances are given in the <em>variance</em>-<em>covariance</em> matrix or simply <em>covariance</em> matrix: <span class="math display">\[
+\begin{align*}
+{\bf Cov}\left[{\bf Y}\right] &amp; =\left[\begin{array}{cccc}
+Var\left[Y_{1}\right] &amp; Cov\left[Y_{1},Y_{2}\right] &amp; \cdots &amp; Cov\left[Y_{1},Y_{n}\right]\\
+Cov\left[Y_{2},Y_{1}\right] &amp; Var\left[Y_{2}\right] &amp; \cdots &amp; Cov\left[Y_{2},Y_{n}\right]\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+Cov\left[Y_{n},Y_{1}\right] &amp; Cov\left[Y_{n},Y_{2}\right] &amp; \cdots &amp; Var\left[Y_{n}\right]
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>Note that <span class="math inline">\({\bf Cov}\left[{\bf Y}\right]\)</span> is a symmetric matrix since <span class="math inline">\(Cov\left[Y_{i},Y_{j}\right]=Cov\left[Y_{j},Y_{i}\right]\)</span>.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./09_Tidymodels.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>
