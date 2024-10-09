@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 12&nbsp; Model Assumptions and the ANOVA F-test</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./11_Regression_Matrix.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_ANOVA.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#model-assumptions" id="toc-model-assumptions" class="nav-link active" data-scroll-target="#model-assumptions"><span class="header-section-number">12.1</span> Model Assumptions</a></li>
+  <li><a href="#a-first-order-model-with-quantitative-predictors" id="toc-a-first-order-model-with-quantitative-predictors" class="nav-link" data-scroll-target="#a-first-order-model-with-quantitative-predictors"><span class="header-section-number">12.2</span> A First-Order Model with Quantitative Predictors</a></li>
+  <li><a href="#testing-the-utility-of-a-model-the-analysis-of-variance-f-test" id="toc-testing-the-utility-of-a-model-the-analysis-of-variance-f-test" class="nav-link" data-scroll-target="#testing-the-utility-of-a-model-the-analysis-of-variance-f-test"><span class="header-section-number">12.3</span> Testing the Utility of a Model: The Analysis of Variance <span class="math inline">\(F\)</span>-Test</a>
+  <ul class="collapse">
+  <li><a href="#partitioning-the-sum-of-squares" id="toc-partitioning-the-sum-of-squares" class="nav-link" data-scroll-target="#partitioning-the-sum-of-squares"><span class="header-section-number">12.3.1</span> Partitioning the Sum of Squares</a></li>
+  <li><a href="#the-analysis-of-variance-anova-table" id="toc-the-analysis-of-variance-anova-table" class="nav-link" data-scroll-target="#the-analysis-of-variance-anova-table"><span class="header-section-number">12.3.2</span> The Analysis of Variance (ANOVA) Table</a></li>
+  <li><a href="#the-anova-f-test" id="toc-the-anova-f-test" class="nav-link" data-scroll-target="#the-anova-f-test"><span class="header-section-number">12.3.3</span> The ANOVA F-test</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“Regression analysis is the hydrogen bomb of the statistics arsenal.” - Charles Wheelan</p>
+</blockquote>
+<p>The steps we followed in developing a simple linear model are applicable to the multiple regression model.</p>
+<p><strong>Analyzing a Multiple Regression Model</strong></p>
+<ol type="1">
+<li>Collect the <em>sample data</em> (i.e., the value of <span class="math inline">\(y\)</span>, <span class="math inline">\(x_1\)</span>, <span class="math inline">\(x_2\)</span>, …, <span class="math inline">\(x_k\)</span>) for each unit in the sample.</li>
+<li>Hypothesize the <em>form</em> of the model (i.e., the deterministic component), <span class="math inline">\(E(y)\)</span>. This involves choosing which independent variables to include in the model.</li>
+<li>Use the method of least squares to <em>estimate</em> the unknown <em>parameters</em>.</li>
+<li>Specify the probability distribution of the random error component <span class="math inline">\(\varepsilon\)</span> and estimate its <em>variance</em> <span class="math inline">\(\sigma^2\)</span>.</li>
+<li>Statistically evaluate the <em>utility</em> of the model.</li>
+<li>Check that the <em>assumptions</em> on <span class="math inline">\(\varepsilon\)</span> are satisfied and make model modifications, if necessary.</li>
+<li>Finally, if the model is deemed adequate, use the fitted model to estimate the <em>mean</em> value of <span class="math inline">\(y\)</span> or to <em>predict</em> a particular value of <span class="math inline">\(y\)</span> for given values of the independent variables, and to make other inferences.</li>
+</ol>
+<p>We will first assume the model is known and the assumptions hold. We will then come back to step 2 and step 6 later. Let’s first discuss what the assumptions are.</p>
+<section id="model-assumptions" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="model-assumptions"><span class="header-section-number">12.1</span> Model Assumptions</h2>
+<p>The assumptions for the multiple regression model are the same as the simple linear model. That is,</p>
+<ul>
+<li><em>Linearity</em> - We assume the model is linear in the <em>parameters</em> but not necessarily linear in the <em>predictor</em> variables. Thus, some of the predictor variables may need to be transformed.</li>
+<li><em>constant</em> <em>variance</em></li>
+<li><em>normality</em></li>
+<li><em>independence</em></li>
+</ul>
+<p>The inferences on the multiple regression model will depend on these assumptions holding. We will discuss how to check these later.</p>
+</section>
+<section id="a-first-order-model-with-quantitative-predictors" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="a-first-order-model-with-quantitative-predictors"><span class="header-section-number">12.2</span> A First-Order Model with Quantitative Predictors</h2>
+<p>Recall that a <em>first-order</em> model means that none of the predictor variables are functions of any other predictor variables.</p>
+<p>When the independent variables are quantitative, the <span class="math inline">\(\beta\)</span> parameters in the first-order model have similar interpretations as the simple regression model. The difference is that when we interpret the <span class="math inline">\(\beta\)</span> that multiplies one of the variables (e.g., <span class="math inline">\(x_1\)</span>), we must be certain to hold the values of the remaining independent variables (e.g., <span class="math inline">\(x_2\)</span>, <span class="math inline">\(x_3\)</span>) <em>fixed</em>.</p>
+</section>
+<section id="testing-the-utility-of-a-model-the-analysis-of-variance-f-test" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="testing-the-utility-of-a-model-the-analysis-of-variance-f-test"><span class="header-section-number">12.3</span> Testing the Utility of a Model: The Analysis of Variance <span class="math inline">\(F\)</span>-Test</h2>
+<p>The objective of step 5 in a multiple regression analysis is to conduct a test of the <em>utility</em> of the model—that is, a test to determine whether the model is adequate for predicting <span class="math inline">\(y\)</span>.</p>
+<p>Later, we will examine how to conduct <span class="math inline">\(t\)</span>-tests on each <span class="math inline">\(\beta\)</span> parameter in a model, where <span class="math display">\[
+\begin{align*}
+    H_0: \beta_j = 0, \qquad j=1, 2, \ldots, p-1
+\end{align*}
+\]</span></p>
+<p>However, this approach is generally not a good way to determine whether the <em>overall</em> model is contributing information for the prediction of <span class="math inline">\(y\)</span>. If we were to conduct a series of <span class="math inline">\(t\)</span>-tests to determine whether the independent variables are contributing to the predictive relationship, we would be very likely to make one or more errors in deciding which terms to retain in the model and which to exclude.</p>
+<p>Suppose you fit a first-order model with 10 quantitative independent variables, <span class="math inline">\(x_1, x_2,..., x_{10}\)</span>, and decide to conduct <span class="math inline">\(t\)</span>-tests on all 10 individual <span class="math inline">\(\beta\)</span>’s in the model, each at <span class="math inline">\(\alpha = .05\)</span>.</p>
+<p>For any one test, the probability of making a type I error is 0.05: <span class="math display">\[
+\begin{align*}
+    P(\text{Reject } H_0|\beta_j=0) &amp;= {0.05}\\
+    &amp; {= 1 - 0.95}
+\end{align*}
+\]</span> If we were to do ten of these tests (one for each predictor variable), then the probability that at least one is a type I error is <span class="math display">\[
+\begin{align*}
+    P(\text{Reject at least one } H_0|\beta_1=\beta_2=\cdots=\beta_{p-1}=0)
+    &amp; = 1-[(1-\alpha)^{10}]\\
+    &amp; {= 1-(0.95)^{10}}\\
+    &amp;{ = 0.401}
+\end{align*}
+\]</span></p>
+<p>Even if all the <span class="math inline">\(\beta\)</span> parameters (except <span class="math inline">\(\beta_0\)</span>) in the model are equal to 0, approximately 40% of the time you will incorrectly reject the null hypothesis at least once and conclude that some <span class="math inline">\(\beta\)</span> parameter is nonzero. In other words, the overall Type I error is about .40, not .05.</p>
+<p>To illustrate this inflated type I error, let’s look at the following example.</p>
+<div id="exm-12_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.1 </strong></span>We will simulate a sample of size 200 with a response variable <span class="math inline">\(y\)</span> and ten predictor variables <span class="math inline">\(x_1, x_2, \ldots, x_{10}\)</span>. The random error term <span class="math inline">\(\varepsilon\)</span> will be a standard normal random variable.</p>
+<p>The true model will have each coefficient <span class="math inline">\(\beta\)</span> set to 0, with the exception of <span class="math inline">\(\beta_0\)</span> which will be 20. We will conduct a <span class="math inline">\(t\)</span>-test for each coefficient (except <span class="math inline">\(\beta_0\)</span>). Since the true coefficient is 0, we expect to see p-values greater than 0.05 for each coefficient.</p>
+<p>We will fit the model and test the coefficients 1000 times. We will count the number of times at least one of the coefficients was less than 0.05 (which would lead to a Type I error).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">3430</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">200</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>type1error <span class="ot">=</span> <span class="fu">numeric</span>(<span class="dv">1000</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">1000</span>){</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">=</span> <span class="fu">runif</span>(n<span class="sc">*</span><span class="dv">10</span>) <span class="sc">|&gt;</span> <span class="fu">matrix</span>(<span class="at">ncol =</span> <span class="dv">10</span>)</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  eps <span class="ot">=</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">=</span> <span class="dv">20</span> <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">1</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">2</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">3</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">4</span>] <span class="sc">+</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">5</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">6</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">7</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">8</span>] <span class="sc">+</span> <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">9</span>] <span class="sc">+</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    <span class="dv">0</span><span class="sc">*</span>x[,<span class="dv">10</span>] <span class="sc">+</span> eps</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  dat <span class="ot">=</span> <span class="fu">tibble</span>(y, <span class="at">x1 =</span> x[,<span class="dv">1</span>], <span class="at">x2 =</span> x[,<span class="dv">2</span>], <span class="at">x3 =</span> x[,<span class="dv">3</span>],</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>               <span class="at">x4 =</span> x[,<span class="dv">4</span>], <span class="at">x5 =</span> x[,<span class="dv">5</span>], <span class="at">x6 =</span> x[,<span class="dv">6</span>], <span class="at">x7 =</span> x[,<span class="dv">7</span>],</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>               <span class="at">x8 =</span> x[,<span class="dv">8</span>], <span class="at">x9 =</span> x[,<span class="dv">9</span>], <span class="at">x10 =</span> x[,<span class="dv">10</span>],)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>., <span class="at">data =</span> dat)</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  type1error[i] <span class="ot">=</span> <span class="fu">any</span>(<span class="fu">summary</span>(fit)<span class="sc">$</span>coefficients[<span class="sc">-</span><span class="dv">1</span>,<span class="dv">4</span>] <span class="sc">&lt;</span> <span class="fl">0.05</span>)</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(type1error)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.414</code></pre>
+</div>
+</div>
+<p>We see that 41.4% of the time, we had at least one coefficient have a p-value smaller than 0.05. This corresponds to the probability of at least one Type I error of around 0.401.</p>
+</div>
+<p>In multiple regression models for which a large number of independent variables are being considered, conducting a series of <span class="math inline">\(t\)</span>-tests may cause the experimenter to include a large number of insignificant variables and exclude some useful ones. If we want to test the utility of a multiple regression model, we will need a <em>global</em> <em>test</em> (one that encompasses all the <span class="math inline">\(\beta\)</span> parameters).</p>
+<section id="partitioning-the-sum-of-squares" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="partitioning-the-sum-of-squares"><span class="header-section-number">12.3.1</span> Partitioning the Sum of Squares</h3>
+<p>Recall when we discussed the coefficient of determination that we used <span class="math inline">\(SS_{yy}\)</span> to denote the variability of the response variable <span class="math inline">\(y\)</span> from its mean <span class="math inline">\(\bar y\)</span> (without regard to the model involving <span class="math inline">\(x\)</span>).</p>
+<p>Another name for <span class="math inline">\(SS_{yy}\)</span> is the <em>sum of squares total</em> (SSTO). We call it this since it gives us a measure of total variability in <span class="math inline">\(y\)</span>.</p>
+<p>In multiple regression, SSTO is still the same as <span class="math inline">\(SS_{yy}\)</span>. In matrix notation this can be expressed as <span id="eq-w4-34"><span class="math display">\[
+\begin{align}
+SSTO &amp; ={\bf Y}^{\prime}{\bf Y}-\left(\frac{1}{n}\right){\bf Y}^{\prime}{\bf J}{\bf Y}
+\end{align}
+\tag{12.1}\]</span></span></p>
+<section id="sum-of-square-error-sse" class="level4">
+<h4 class="anchored" data-anchor-id="sum-of-square-error-sse">Sum of Square Error (SSE)</h4>
+<p>Also recall the variability of <span class="math inline">\(y\)</span> about the regression line (in simple linear regression) was expressed by SSE. We can think of this as the variability of <span class="math inline">\(y\)</span> remaining after exampling some of the variability with the regression model.</p>
+<p>In multiple regression, SSE is still the sum of the square distances between the response <span class="math inline">\(y\)</span> and the fitted model <span class="math inline">\(\hat{y}\)</span>. Now, the fitted model is the fitted <em>hyperplane</em> instead of a line.</p>
+<p>The SSE can be expressed in matrix terms as <span id="eq-w3_35"><span class="math display">\[
+\begin{align}
+SSE &amp; =\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)\\
+&amp; ={\bf Y}^{\prime}{\bf Y}-{\bf b}^{\prime}{\bf X}^{\prime}{\bf Y}
+\end{align}
+\tag{12.2}\]</span></span></p>
+</section>
+<section id="sum-of-square-regression-ssr" class="level4">
+<h4 class="anchored" data-anchor-id="sum-of-square-regression-ssr">Sum of Square Regression (SSR)</h4>
+<p>If SSTO is the total variability of <span class="math inline">\(y\)</span> (without of regard to the predictor variables), and SSE is the variability of <span class="math inline">\(y\)</span> left over after explaining the variability of <span class="math inline">\(y\)</span> with the model (including the predictor variables), we might want to know the variability of <span class="math inline">\(y\)</span> explained by the model.</p>
+<p>We call the variability explained by the regression model the <em>sum of squares regression</em> (SSR).</p>
+<p>We will show below that SSR can be expressed as <span id="eq-w4_36"><span class="math display">\[
+\begin{align}
+SSR &amp; =\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}
+\end{align}
+\tag{12.3}\]</span></span> which can be expressed in matrix terms as <span id="eq-w4_37"><span class="math display">\[
+\begin{align}
+SSR &amp; ={\bf b}^{\prime}{\bf X}^{\prime}{\bf Y}-\left(\frac{1}{n}\right){\bf Y}^{\prime}{\bf J}{\bf Y}
+\end{align}
+\tag{12.4}\]</span></span></p>
+</section>
+<section id="components-of-ssto" class="level4">
+<h4 class="anchored" data-anchor-id="components-of-ssto">Components of SSTO</h4>
+<p>To see how SSTO, SSR, and SSE relate to each other, consider how SSTO is a sum of squares of <span class="math inline">\(y\)</span> from its mean <span class="math inline">\(\bar{y}\)</span>: <span class="math display">\[
+\begin{align*}
+y_{i}-\bar{y}
+\end{align*}
+\]</span></p>
+<p>We can add and subtract the fitted value <span class="math inline">\(\hat{y}_{i}\)</span> to get <span class="math display">\[
+\begin{align*}
+y_{i}-\bar{y} &amp; =y_{i}-\hat{y}_{i}+\hat{y}_{i}-\bar{y}\\
+&amp; =\left(y_{i}-\hat{y}_{i}\right)+\left(\hat{y}_{i}-\bar{y}\right)
+\end{align*}
+\]</span></p>
+<p>Squaring both sides gives us <span class="math display">\[
+\begin{align*}
+\left(y_{i}-\bar{y}\right)^{2} &amp; =\left[\left(y_{i}-\hat{y}_{i}\right)+\left(\hat{y}_{i}-\bar{y}\right)\right]^{2}\\
+&amp; =\left(y_{i}-\hat{y}_{i}\right)^{2}+\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\left(y_{i}-\hat{y}_{i}\right)\left(\hat{y}_{i}-\bar{y}\right)
+\end{align*}
+\]</span></p>
+<p>Summing both sides gives us <span class="math display">\[
+\begin{align*}
+\sum\left(y_{i}-\bar{y}\right)^{2} &amp; =\sum\left(y_{i}-\hat{y}_{i}\right)^{2}+\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\sum\left(y_{i}-\hat{y}_{i}\right)\left(\hat{y}_{i}-\bar{y}\right)\\
+&amp; =\sum\left(y_{i}-\hat{y}_{i}\right)^{2}+\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\sum\hat{y}_{i}e_{i}-2\bar{y}\sum e_{i}
+\end{align*}
+\]</span></p>
+<p>Note that <span class="math inline">\(\sum\hat{y}_{i}e_{i}=0\)</span> from {<span class="quarto-unresolved-ref">?eq-w1_22</span>} and <span class="math inline">\(\sum e_{i}=0\)</span> from {<span class="quarto-unresolved-ref">?eq-w1_20</span>}.</p>
+<p>Therefore, we have <span id="eq-4_38"><span class="math display">\[
+\begin{align*}
+\sum\left(y_{i}-\bar{y}\right)^{2} &amp; =\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+\sum\left(y_{i}-\hat{y}_{i}\right)^{2}\\
+SSTO &amp; =SSR+SSE
+\end{align*}
+\tag{12.5}\]</span></span></p>
+<p>We call this the <em>decomposition</em> of SSTO.</p>
+</section>
+<section id="degrees-of-freedom" class="level4">
+<h4 class="anchored" data-anchor-id="degrees-of-freedom">Degrees of Freedom</h4>
+<p>The degrees of freedom can be decomposed as well. Note that the degrees of freedom for SSTO is <span class="math display">\[
+\begin{align*}
+df_{SSTO} &amp; =n-1
+\end{align*}
+\]</span> since the mean of <span class="math inline">\(y\)</span> is needed to be estimated with <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>The degrees of freedom for SSE is <span class="math display">\[
+\begin{align*}
+df_{SSE} &amp; =n-p
+\end{align*}
+\]</span> since the <span class="math inline">\(p\)</span> coefficients <span class="math inline">\(\beta_{0},\ldots,\beta_{p-1}\)</span> need to be estimated with <span class="math inline">\(\hat{\beta}_{0},\ldots,\hat{\beta}_{p-1}.\)</span></p>
+<p>For SSR, the degrees of freedom is <span class="math display">\[
+\begin{align*}
+df_{SSR} &amp; =p-1
+\end{align*}
+\]</span> since there are <span class="math inline">\(p\)</span> estimated coefficients <span class="math inline">\(\hat{\beta}_{0},\ldots,\hat{\beta}_{p-1}\)</span> but need to estimate the mean of <span class="math inline">\(y\)</span> with <span class="math inline">\(\bar{y}\)</span>.</p>
+<p>Decomposing the degrees of freedom give us <span id="eq-w4_29"><span class="math display">\[
+\begin{align}
+n-1 &amp; =p-1+n-p\\
+df_{SSTO} &amp; =df_{SSR}+df_{SSE}
+\end{align}
+\tag{12.6}\]</span></span></p>
+</section>
+</section>
+<section id="the-analysis-of-variance-anova-table" class="level3" data-number="12.3.2">
+<h3 data-number="12.3.2" class="anchored" data-anchor-id="the-analysis-of-variance-anova-table"><span class="header-section-number">12.3.2</span> The Analysis of Variance (ANOVA) Table</h3>
+<p>The sums of squares and degrees of freedom are commonly displayed in an analysis of variance (ANOVA) table:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: center;">SS</th>
+<th style="text-align: center;">MS</th>
+<th style="text-align: center;">F</th>
+<th style="text-align: center;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Regression</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSR}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSR\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Error</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSE}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSE\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSTO}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSTO\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<section id="mean-squares" class="level4">
+<h4 class="anchored" data-anchor-id="mean-squares">Mean Squares</h4>
+<p>Recall that if we divide SSE by its degrees of freedom, we obtain the mean square error: <span id="eq-w4_40"><span class="math display">\[
+\begin{align}
+MSE &amp; =\frac{SSE}{n-p}
+\end{align}
+\tag{12.7}\]</span></span></p>
+<p>Likewise, if we divide SSR by its degrees of freedom, we obtain the <em>mean square regression</em>: <span id="eq-w4_41"><span class="math display">\[
+\begin{align}
+MSR &amp; =\frac{SSR}{p-1}
+\end{align}
+\tag{12.8}\]</span></span></p>
+<p>These values are also included in the ANOVA table:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th style="text-align: center;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: center;">SS</th>
+<th style="text-align: center;">MS</th>
+<th style="text-align: center;">F</th>
+<th style="text-align: center;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Regression</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSR}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSR\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSR\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Error</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSE}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSE\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSE\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSTO}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSTO\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<p>Note that although the sum of squares and degrees of freedom decompose, the mean squares do not. That is <span class="math display">\[
+\begin{align*}
+\frac{SSTO}{n-1} &amp; \ne MSR+MSE
+\end{align*}
+\]</span></p>
+<p>In fact, the mean square for the total (<span class="math inline">\(SSTO/n-1\)</span>) does not usually show up on the ANOVA table.</p>
+</section>
+</section>
+<section id="the-anova-f-test" class="level3" data-number="12.3.3">
+<h3 data-number="12.3.3" class="anchored" data-anchor-id="the-anova-f-test"><span class="header-section-number">12.3.3</span> The ANOVA F-test</h3>
+<p>We tested the slope in simple regression to see if there is a significant linear relationship between <span class="math inline">\(X\)</span> and <span class="math inline">\(Y\)</span>.</p>
+<p>In multiple regression, we will want to see if there is any significant linear relationship between any of the <span class="math inline">\(x\)</span>s and <span class="math inline">\(y\)</span>. Thus, we want to test the hypotheses <span class="math display">\[
+\begin{align*}
+H_{0}: &amp; \beta_{1}=\beta_{2}=\cdots=\beta_{p-1}=0\\
+H_{a}: &amp; \text{at least one } \beta \text{ is not equal to zero}
+\end{align*}
+\]</span></p>
+<p>To construct a test statistic, we first note that <span class="math display">\[
+\begin{align*}
+\frac{SSE}{\sigma^{2}} &amp; \sim\chi^{2}\left(n-p\right)
+\end{align*}
+\]</span> Also, if <span class="math inline">\(H_{0}\)</span> is true, then <span class="math display">\[
+\begin{align*}
+\frac{SSR}{\sigma^{2}} &amp; \sim\chi^{2}\left(p-1\right)
+\end{align*}
+\]</span></p>
+<p>The ratio of two independent chi-square random variables divided by their degrees of freedom give a statistic that follows a F-distribution.</p>
+<p>Since <span class="math inline">\(SSE/\sigma^{2}\)</span> and <span class="math inline">\(SSR/\sigma^{2}\)</span> are independent (proof not give here), then under <span class="math inline">\(H_{0}\)</span>, we can construct a test statistic as <span id="eq-w4_42"><span class="math display">\[
+\begin{align}
+F^{*} &amp; =\left(\frac{\frac{SSR}{\sigma^{2}}}{p-1}\right)\div\left(\frac{\frac{SSE}{\sigma^{2}}}{n-p}\right)\\
+&amp; =\left(\frac{SSR}{p-1}\right)\div\left(\frac{SSE}{n-p}\right)\\
+&amp; =\frac{MSR}{MSE}
+\end{align}
+\tag{12.9}\]</span></span></p>
+<p>Large values of <span class="math inline">\(F^{*}\)</span> indicate evidence for <span class="math inline">\(H_{a}\)</span>.</p>
+<p>The test statistic and p-value are the last two components of the ANOVA table:</p>
+<table class="table">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 25%">
+<col style="width: 15%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 17%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Source</th>
+<th style="text-align: center;">df</th>
+<th style="text-align: center;">SS</th>
+<th style="text-align: center;">MS</th>
+<th style="text-align: center;">F</th>
+<th style="text-align: center;">p-value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">Regression</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSR}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSR\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSR\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(F^{*}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(P\left(Z\ge Z^{*}\right)\)</span></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">Error</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSE}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSE\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(MSE\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">Total</td>
+<td style="text-align: center;"><span class="math inline">\(df_{SSTO}\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(SSTO\)</span></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+</tbody>
+</table>
+<div id="exm-12_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.2 </strong></span>We will fit a multiple regression model to the <code>trees</code> dataset. The tidymodels framework will be used.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(trees)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare data</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(Volume <span class="sc">~</span> Girth <span class="sc">+</span> Height, <span class="at">data =</span> trees) </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#setup model</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> trees)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="co">#to get the coefficients</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)  -58.0       8.64      -6.71 2.75e- 7
+2 Girth          4.71      0.264     17.8  8.22e-17
+3 Height         0.339     0.130      2.61 1.45e- 2</code></pre>
+</div>
+</div>
+<p>The fitted model is <span class="math display">\[
+\hat{y} = -57.988 + 4.708x_1 + 0.339x_2
+\]</span> For every one inch increase in Girth, the average Volume increases by 4.708 cubit ft, keeping Height fixed.</p>
+<p>For every one ft increase in Height, the average Volume increases by 0.339 cubit ft, keeping Girth fixed.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#to get the global F-test p-value</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.948         0.944  3.88      255. 1.07e-18     2  -84.5  177.  183.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#To get the ANOVA table</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co">#Note that SSR is split into individual predictors</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">anova</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Response: ..y
+          Df Sum Sq Mean Sq  F value  Pr(&gt;F)    
+Girth      1 7581.8  7581.8 503.1503 &lt; 2e-16 ***
+Height     1  102.4   102.4   6.7943 0.01449 *  
+Residuals 28  421.9    15.1                     
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
+</div>
+</div>
+<p>Since the p-value of <span class="math inline">\(1.071\times 10^{-18}\)</span> is less than 0.05, there is sufficient evidence to conclude that at least one of the coefficients is not zero.</p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./11_Regression_Matrix.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

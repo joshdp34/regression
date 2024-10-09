@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.3.433">
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
 <title>STA 3386 Regression Analysis - 8&nbsp; Checking the Normality and Independence Assumptions and Outliers</title>
 <style>
 code{white-space: pre-wrap;}
@@ -53,6 +56,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }
 </style>
 
+
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
@@ -70,7 +74,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -89,12 +94,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><link rel="stylesheet" href="styles.css">
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
 </head>
+
 <body class="nav-sidebar docked">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -105,9 +118,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./"></a> 
     </div>
@@ -119,7 +136,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-<li class="sidebar-item">
+        <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
@@ -191,50 +208,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
     </ul>
-</div>
-</nav><div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li>
-<a href="#checking-for-outliers" id="toc-checking-for-outliers" class="nav-link active" data-scroll-target="#checking-for-outliers"><span class="header-section-number">8.1</span> Checking for Outliers</a>
+  <li><a href="#checking-for-outliers" id="toc-checking-for-outliers" class="nav-link active" data-scroll-target="#checking-for-outliers"><span class="header-section-number">8.1</span> Checking for Outliers</a>
   <ul class="collapse">
-<li><a href="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable" id="toc-outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="nav-link" data-scroll-target="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable"><span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</a></li>
+  <li><a href="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable" id="toc-outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="nav-link" data-scroll-target="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable"><span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</a></li>
   <li><a href="#effect-on-the-fitted-line" id="toc-effect-on-the-fitted-line" class="nav-link" data-scroll-target="#effect-on-the-fitted-line"><span class="header-section-number">8.1.2</span> Effect on the Fitted Line</a></li>
   <li><a href="#detecting-outliers-with-semistudentized-residual-plots" id="toc-detecting-outliers-with-semistudentized-residual-plots" class="nav-link" data-scroll-target="#detecting-outliers-with-semistudentized-residual-plots"><span class="header-section-number">8.1.3</span> Detecting Outliers with Semistudentized Residual Plots</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#correlated-error-terms" id="toc-correlated-error-terms" class="nav-link" data-scroll-target="#correlated-error-terms"><span class="header-section-number">8.2</span> Correlated Error Terms</a>
+  </ul></li>
+  <li><a href="#correlated-error-terms" id="toc-correlated-error-terms" class="nav-link" data-scroll-target="#correlated-error-terms"><span class="header-section-number">8.2</span> Correlated Error Terms</a>
   <ul class="collapse">
-<li><a href="#assumption-of-independence" id="toc-assumption-of-independence" class="nav-link" data-scroll-target="#assumption-of-independence"><span class="header-section-number">8.2.1</span> Assumption of Independence</a></li>
+  <li><a href="#assumption-of-independence" id="toc-assumption-of-independence" class="nav-link" data-scroll-target="#assumption-of-independence"><span class="header-section-number">8.2.1</span> Assumption of Independence</a></li>
   <li><a href="#residual-sequence-plots" id="toc-residual-sequence-plots" class="nav-link" data-scroll-target="#residual-sequence-plots"><span class="header-section-number">8.2.2</span> Residual Sequence Plots</a></li>
   <li><a href="#autocorrelation-function-plot" id="toc-autocorrelation-function-plot" class="nav-link" data-scroll-target="#autocorrelation-function-plot"><span class="header-section-number">8.2.3</span> Autocorrelation Function Plot</a></li>
   <li><a href="#tests-for-autocorrelation" id="toc-tests-for-autocorrelation" class="nav-link" data-scroll-target="#tests-for-autocorrelation"><span class="header-section-number">8.2.4</span> Tests for Autocorrelation</a></li>
   <li><a href="#durbin-watson-test" id="toc-durbin-watson-test" class="nav-link" data-scroll-target="#durbin-watson-test"><span class="header-section-number">8.2.5</span> Durbin-Watson Test</a></li>
   <li><a href="#ljung-box-test" id="toc-ljung-box-test" class="nav-link" data-scroll-target="#ljung-box-test"><span class="header-section-number">8.2.6</span> Ljung-Box Test</a></li>
   <li><a href="#breusch-godfrey-test" id="toc-breusch-godfrey-test" class="nav-link" data-scroll-target="#breusch-godfrey-test"><span class="header-section-number">8.2.7</span> Breusch-Godfrey Test</a></li>
-  </ul>
-</li>
-  <li>
-<a href="#normality-of-the-residuals" id="toc-normality-of-the-residuals" class="nav-link" data-scroll-target="#normality-of-the-residuals"><span class="header-section-number">8.3</span> Normality of the Residuals</a>
+  </ul></li>
+  <li><a href="#normality-of-the-residuals" id="toc-normality-of-the-residuals" class="nav-link" data-scroll-target="#normality-of-the-residuals"><span class="header-section-number">8.3</span> Normality of the Residuals</a>
   <ul class="collapse">
-<li><a href="#the-normality-assumption" id="toc-the-normality-assumption" class="nav-link" data-scroll-target="#the-normality-assumption"><span class="header-section-number">8.3.1</span> The Normality Assumption</a></li>
+  <li><a href="#the-normality-assumption" id="toc-the-normality-assumption" class="nav-link" data-scroll-target="#the-normality-assumption"><span class="header-section-number">8.3.1</span> The Normality Assumption</a></li>
   <li><a href="#graphically-checking-normality" id="toc-graphically-checking-normality" class="nav-link" data-scroll-target="#graphically-checking-normality"><span class="header-section-number">8.3.2</span> Graphically Checking Normality</a></li>
   <li><a href="#examples-of-qq-plots" id="toc-examples-of-qq-plots" class="nav-link" data-scroll-target="#examples-of-qq-plots"><span class="header-section-number">8.3.3</span> Examples of QQ-plots</a></li>
   <li><a href="#the-shapiro-wilk-test" id="toc-the-shapiro-wilk-test" class="nav-link" data-scroll-target="#the-shapiro-wilk-test"><span class="header-section-number">8.3.4</span> The Shapiro-Wilk Test</a></li>
+  </ul></li>
   </ul>
-</li>
-  </ul></nav>
+</nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<h1 class="title">
-<span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span>
-</h1>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></h1>
 </div>
 
 
@@ -247,21 +268,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
-</header><blockquote class="blockquote">
+</header>
+
+<blockquote class="blockquote">
 <p>“If it’s green or wriggles, it’s biology. If it stinks, it’s chemistry. If it doesn’t work, it’s physics or engineering. If it’s green and wiggles and stinks and still doesn’t work, it’s psychology. If it’s incomprehensible, it’s mathematics. If it puts you to sleep, it’s statistics.” - Anonymous (in <em>Journal of the South African Institute of Mining and Metallurgy</em> (1978))</p>
 </blockquote>
-<section id="checking-for-outliers" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="checking-for-outliers">
-<span class="header-section-number">8.1</span> Checking for Outliers</h2>
-<section id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="level3" data-number="8.1.1"><h3 data-number="8.1.1" class="anchored" data-anchor-id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable">
-<span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</h3>
+<section id="checking-for-outliers" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="checking-for-outliers"><span class="header-section-number">8.1</span> Checking for Outliers</h2>
+<section id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="level3" data-number="8.1.1">
+<h3 data-number="8.1.1" class="anchored" data-anchor-id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable"><span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</h3>
 <p>When checking for <em>outliers</em>, we must think in terms of two dimensions since we have two variables, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
 <p>Since we are interested in modeling the response variable <span class="math inline">\(y\)</span> in the model, we will mainly be concerned with outliers with respect to <span class="math inline">\(y\)</span>. However, outliers with respect to <span class="math inline">\(x\)</span> may also be of concern if it affects the fitted line.</p>
-</section><section id="effect-on-the-fitted-line" class="level3" data-number="8.1.2"><h3 data-number="8.1.2" class="anchored" data-anchor-id="effect-on-the-fitted-line">
-<span class="header-section-number">8.1.2</span> Effect on the Fitted Line</h3>
+</section>
+<section id="effect-on-the-fitted-line" class="level3" data-number="8.1.2">
+<h3 data-number="8.1.2" class="anchored" data-anchor-id="effect-on-the-fitted-line"><span class="header-section-number">8.1.2</span> Effect on the Fitted Line</h3>
 <p>A demonstration on the effect of outliers on the fitted line can be found at <a href="http://www.jpstats.org/Regression/ch_03_04.html#sub1_1">http://www.jpstats.org/Regression/ch_03_04.html#sub1_1</a></p>
 <iframe width="900" height="500" object-position="right top" src="http://www.jpstats.org/Regression/ch_03_04.html#sub1_1" title=""></iframe>
-</section><section id="detecting-outliers-with-semistudentized-residual-plots" class="level3" data-number="8.1.3"><h3 data-number="8.1.3" class="anchored" data-anchor-id="detecting-outliers-with-semistudentized-residual-plots">
-<span class="header-section-number">8.1.3</span> Detecting Outliers with Semistudentized Residual Plots</h3>
+</section>
+<section id="detecting-outliers-with-semistudentized-residual-plots" class="level3" data-number="8.1.3">
+<h3 data-number="8.1.3" class="anchored" data-anchor-id="detecting-outliers-with-semistudentized-residual-plots"><span class="header-section-number">8.1.3</span> Detecting Outliers with Semistudentized Residual Plots</h3>
 <p>Since the effect on the fitted line is determined mainly by how far the point is from the line, we will identify outliers by examining the residuals, in particular, the semistudentized residuals <span class="math display">\[\begin{align*}
 e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
 &amp; =\frac{e_{i}}{\sqrt{MSE}}
@@ -271,26 +296,26 @@ e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
 <div id="exm-8_1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 8.1 (Calculating Semistudentized Residuals) </strong></span>Let’s examine 50 observations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"example_08_01.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"example_08_01.csv"</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>x,<span class="at">y=</span>y))<span class="sc">+</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method =</span> <span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_Checking2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
 </div>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>, data<span class="op">=</span><span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#calculate semistudentized residuals</span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>e.star <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">residuals</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>, y<span class="op">=</span><span class="va">e.star</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(y<span class="sc">~</span>x, <span class="at">data=</span>dat)</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co">#calculate semistudentized residuals</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">e.star =</span> fit<span class="sc">$</span>residuals <span class="sc">/</span> <span class="fu">summary</span>(fit)<span class="sc">$</span>sigma)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>x, <span class="at">y=</span>e.star))<span class="sc">+</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_Checking2_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="576"></p>
 </div>
@@ -298,17 +323,21 @@ e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
 <p>We can see from the semistudentized plot that there is one observation with a value of <span class="math inline">\(e^*\)</span> below -3. Although this is not below the rule of thumb of -4, we note that our sample size <span class="math inline">\(n\)</span> is only moderate and not large. So we may want to investigate an observation with a value of <span class="math inline">\(e^*\)</span> below -3.</p>
 </div>
 <p>Once we see there is a potential outlier, we must investigate <em>why</em> it is an outlier. If the observation is unusually small or large due to a data recording error, then perhaps the value can be corrected or just deleted from the dataset. If we cannot determine this is the cause of the outlier for certain, then we should not remove the observation. This observation could be unusual just due to chance.</p>
-</section></section><section id="correlated-error-terms" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="correlated-error-terms">
-<span class="header-section-number">8.2</span> Correlated Error Terms</h2>
-<section id="assumption-of-independence" class="level3" data-number="8.2.1"><h3 data-number="8.2.1" class="anchored" data-anchor-id="assumption-of-independence">
-<span class="header-section-number">8.2.1</span> Assumption of Independence</h3>
+</section>
+</section>
+<section id="correlated-error-terms" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="correlated-error-terms"><span class="header-section-number">8.2</span> Correlated Error Terms</h2>
+<section id="assumption-of-independence" class="level3" data-number="8.2.1">
+<h3 data-number="8.2.1" class="anchored" data-anchor-id="assumption-of-independence"><span class="header-section-number">8.2.1</span> Assumption of Independence</h3>
 <p>Since we are assuming the random error term <span class="math inline">\(\varepsilon\)</span> are <em>normal</em>, we want to check to see the uncorrelated errors assumption. If there is no correlation between the residuals, then we can assume <em>independence</em>.</p>
-</section><section id="residual-sequence-plots" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="residual-sequence-plots">
-<span class="header-section-number">8.2.2</span> Residual Sequence Plots</h3>
+</section>
+<section id="residual-sequence-plots" class="level3" data-number="8.2.2">
+<h3 data-number="8.2.2" class="anchored" data-anchor-id="residual-sequence-plots"><span class="header-section-number">8.2.2</span> Residual Sequence Plots</h3>
 <p>The usual cause of correlation in the residuals is data taken in some type of sequence such as <em>time</em> or <em>space</em>. When the error terms are correlated over time or some other sequence, we say they are <em>serially</em> correlated or <em>autocorrelated</em>.</p>
 <p>When the data are taken in some sequence, a <em>sequence plot</em> of the residuals may show a pattern indicating autocorrelation. In a sequence plot, the residuals are plotted against the observation index <span class="math inline">\(i\)</span>. If there is no autocorrelation, then the residuals should be “randomly” spread about zero. If there is a pattern, then there is evidence of autocorrelation.</p>
-</section><section id="autocorrelation-function-plot" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="autocorrelation-function-plot">
-<span class="header-section-number">8.2.3</span> Autocorrelation Function Plot</h3>
+</section>
+<section id="autocorrelation-function-plot" class="level3" data-number="8.2.3">
+<h3 data-number="8.2.3" class="anchored" data-anchor-id="autocorrelation-function-plot"><span class="header-section-number">8.2.3</span> Autocorrelation Function Plot</h3>
 <p>Sometime a residual sequence plot may not show an obvious pattern but autocorrelation may still exist.</p>
 <p>Another plot that helps examine correlation that may not be visible in the sequence plot is the <em>autocorrelation</em> <em>function</em> plot (ACF).</p>
 <p>In the ACF plot, correlations are calculated between residuals some <span class="math inline">\(k\)</span> index away. That is, <span id="eq-w3_4"><span class="math display">\[
@@ -318,42 +347,46 @@ r_{k} &amp; =\widehat{Cor}\left[e_{i},e_{i+k}\right]\\
 \end{align}
 \tag{8.1}\]</span></span></p>
 <p>In an ACF plot, <span class="math inline">\(r_k\)</span> is plotted for varying values of <span class="math inline">\(k\)</span>. If the value of <span class="math inline">\(r_k\)</span> is larger in magnitude than some threshold shown on the plot (usually a 95% confidence interval), then we consider this evidence of autocorrelation.</p>
-</section><section id="tests-for-autocorrelation" class="level3" data-number="8.2.4"><h3 data-number="8.2.4" class="anchored" data-anchor-id="tests-for-autocorrelation">
-<span class="header-section-number">8.2.4</span> Tests for Autocorrelation</h3>
+</section>
+<section id="tests-for-autocorrelation" class="level3" data-number="8.2.4">
+<h3 data-number="8.2.4" class="anchored" data-anchor-id="tests-for-autocorrelation"><span class="header-section-number">8.2.4</span> Tests for Autocorrelation</h3>
 <p>In addition to examining serial plots and ACF plots, tests can be conducted for significant autocorrelation. In each of these tests, the null hypothesis is there is no autocorrelation.</p>
-</section><section id="durbin-watson-test" class="level3" data-number="8.2.5"><h3 data-number="8.2.5" class="anchored" data-anchor-id="durbin-watson-test">
-<span class="header-section-number">8.2.5</span> Durbin-Watson Test</h3>
+</section>
+<section id="durbin-watson-test" class="level3" data-number="8.2.5">
+<h3 data-number="8.2.5" class="anchored" data-anchor-id="durbin-watson-test"><span class="header-section-number">8.2.5</span> Durbin-Watson Test</h3>
 <p>The <em>Durbin-Watson</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> test is for autocorrelation at <span class="math inline">\(k=1\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span>8.1</span></a>. That is, it tests for correlation one index (one time point) away.</p>
 <p>The Durbin-Watson test can be conducted in R with the <code>dwtest</code> function in the <code>lmtest</code> package.</p>
-</section><section id="ljung-box-test" class="level3" data-number="8.2.6"><h3 data-number="8.2.6" class="anchored" data-anchor-id="ljung-box-test">
-<span class="header-section-number">8.2.6</span> Ljung-Box Test</h3>
+</section>
+<section id="ljung-box-test" class="level3" data-number="8.2.6">
+<h3 data-number="8.2.6" class="anchored" data-anchor-id="ljung-box-test"><span class="header-section-number">8.2.6</span> Ljung-Box Test</h3>
 <p>The <em>Ljung-Box</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> test differs from the Durbin-Watson test in that it tests for <em>overall</em> correlation over all lags up to <span class="math inline">\(k\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span>8.1</span></a>. For example, if <span class="math inline">\(k=4\)</span> then the Ljung-Box test is for significant autocorrelation over all lags up to <span class="math inline">\(k=4\)</span>.</p>
 <p>The Ljung-Box test can be conducted in <code>R</code> with the <code>Box.test</code> function with the argument <code>type=("Ljung")</code>. This function is in base <code>R</code>.</p>
-</section><section id="breusch-godfrey-test" class="level3" data-number="8.2.7"><h3 data-number="8.2.7" class="anchored" data-anchor-id="breusch-godfrey-test">
-<span class="header-section-number">8.2.7</span> Breusch-Godfrey Test</h3>
+</section>
+<section id="breusch-godfrey-test" class="level3" data-number="8.2.7">
+<h3 data-number="8.2.7" class="anchored" data-anchor-id="breusch-godfrey-test"><span class="header-section-number">8.2.7</span> Breusch-Godfrey Test</h3>
 <p>The <em>Breusch-Godfrey</em><a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a><a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a> test is similar to the Ljung-Box test in that it tests for overall correlation over all lags up to <span class="math inline">\(k\)</span>. The difference between the two test is not of concern in the regression models we will examine in this course. When using time series models, then the Breusch-Godfrey test is preferred over the Ljung-Box test due to asymptotic justification.</p>
 <p>The Breusch-Godfrey test can be conducted in R with the <code>bgtest</code> function in the <code>lmtest</code> package.</p>
 <div id="exm-8_1" class="theorem example">
 <p><span class="theorem-title"><strong>Example 8.2 (Portland Crime Data) </strong></span>Let’s look at data collected on the mean temperature for each day in Portland, OR, and the number of non-violent crimes reported that day. The crime data was part of a public database gathered from www.portlandoregon.gov. The data are presented in order by day. The variable <span class="math inline">\(x\)</span> in the dataset is the day index number.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">lmtest</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"PortlandWeatherCrime.csv"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#the file does not have a name for the index variable</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"day"</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Mean_Temp</span>, y<span class="op">=</span><span class="va">Num_Total_Crimes</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(lmtest)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(forecast)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"PortlandWeatherCrime.csv"</span>)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">#the file does not have a name for the index variable</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat)[<span class="dv">1</span>] <span class="ot">=</span> <span class="st">"day"</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Mean_Temp, <span class="at">y=</span>Num_Total_Crimes))<span class="sc">+</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_Checking2_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="576"></p>
 </div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Num_Total_Crimes</span><span class="op">~</span><span class="va">Mean_Temp</span>, data<span class="op">=</span><span class="va">dat</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(Num_Total_Crimes<span class="sc">~</span>Mean_Temp, <span class="at">data=</span>dat)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">summary</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
@@ -374,17 +407,17 @@ Residual standard error: 55.69 on 1765 degrees of freedom
 Multiple R-squared:  0.4576,    Adjusted R-squared:  0.4573 
 F-statistic:  1489 on 1 and 1765 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">res</span> <span class="op">=</span> <span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>, y<span class="op">=</span><span class="va">res</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>dat<span class="sc">$</span>res <span class="ot">=</span> fit <span class="sc">|&gt;</span> <span class="fu">resid</span>()</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(dat, <span class="fu">aes</span>(<span class="at">x=</span>day, <span class="at">y=</span>res))<span class="sc">+</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_Checking2_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>We can see that the residuals have a pattern where the values at the lower levels of the index tend to be below zero whereas the values at the higher levels of the index tend to be above zero. This is evidence of autocorrelation in the residuals.</p>
 <div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">res</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggAcf</span>(dat<span class="sc">$</span>res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="08_Checking2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid" width="576"></p>
 </div>
@@ -392,7 +425,7 @@ F-statistic:  1489 on 1 and 1765 DF,  p-value: &lt; 2.2e-16</code></pre>
 <p>The values of the ACF at all lags are beyond the blue guideline for significant autocorreleation.</p>
 <p>Note that in the Ljung-Box test and the Breusch-Godfrey test below, we tested up to lag 7. We chose this lag since the data was taken over time and it would make sense for values at seven days apart to be similar. That is, we expect the number of crimes on Mondays to be similar, the number of crimes on Tuesdays to be similar, etc.</p>
 <div class="cell">
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dwtest</span>(fit)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Durbin-Watson test
@@ -401,7 +434,7 @@ data:  fit
 DW = 0.66764, p-value &lt; 2.2e-16
 alternative hypothesis: true autocorrelation is greater than 0</code></pre>
 </div>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/box.test.html">Box.test</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">res</span>, lag<span class="op">=</span><span class="fl">7</span>,type<span class="op">=</span><span class="st">"Ljung"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">Box.test</span>(dat<span class="sc">$</span>res, <span class="at">lag=</span><span class="dv">7</span>,<span class="at">type=</span><span class="st">"Ljung"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Box-Ljung test
@@ -409,7 +442,7 @@ alternative hypothesis: true autocorrelation is greater than 0</code></pre>
 data:  dat$res
 X-squared = 3865, df = 7, p-value &lt; 2.2e-16</code></pre>
 </div>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/bgtest.html">bgtest</a></span><span class="op">(</span><span class="va">fit</span>, order<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">bgtest</span>(fit, <span class="at">order=</span><span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Breusch-Godfrey test for serial correlation of order up to 7
@@ -422,120 +455,153 @@ LM test = 977.84, df = 7, p-value &lt; 2.2e-16</code></pre>
 <p>When the assumption of independence is violated, then a <em>difference</em> in the <span class="math inline">\(y\)</span> values could help remove the autocorrelation. This difference is <span class="math display">\[
 y^{\prime} = y_i - y_{i-k}
 \]</span> where <span class="math inline">\(k\)</span> is some max lag where autocorrelation is significant. This difference <span class="math inline">\(Y^{\prime}\)</span> is then regressed on <span class="math inline">\(x\)</span>. This difference may not help, in which case a time series model would be necessary.</p>
-</section></section><section id="normality-of-the-residuals" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="normality-of-the-residuals">
-<span class="header-section-number">8.3</span> Normality of the Residuals</h2>
-<section id="the-normality-assumption" class="level3" data-number="8.3.1"><h3 data-number="8.3.1" class="anchored" data-anchor-id="the-normality-assumption">
-<span class="header-section-number">8.3.1</span> The Normality Assumption</h3>
+</section>
+</section>
+<section id="normality-of-the-residuals" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="normality-of-the-residuals"><span class="header-section-number">8.3</span> Normality of the Residuals</h2>
+<section id="the-normality-assumption" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="the-normality-assumption"><span class="header-section-number">8.3.1</span> The Normality Assumption</h3>
 <p>If we do not have normality of the error terms, then the <em>t-tests</em> and <em>t-intervals</em> for <span class="math inline">\({\beta}_0\)</span> and <span class="math inline">\({\beta}_1\)</span> would not be valid.</p>
 <p>Furthermore, the confidence interval for the <em>mean</em> response and the <em>prediction</em> interval for the response would not be valid.</p>
 <p>We can check the normality of error terms by examining the residuals of the fitted line.</p>
-</section><section id="graphically-checking-normality" class="level3" data-number="8.3.2"><h3 data-number="8.3.2" class="anchored" data-anchor-id="graphically-checking-normality">
-<span class="header-section-number">8.3.2</span> Graphically Checking Normality</h3>
+</section>
+<section id="graphically-checking-normality" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="graphically-checking-normality"><span class="header-section-number">8.3.2</span> Graphically Checking Normality</h3>
 <p>We can graphically check the distribution of the residuals. The two most common ways to do this is with a <em>histogram</em> or with a <em>normal</em> <em>probability</em> plot.</p>
 <p>Another (more general) name for a normal probability plot is a normal <em>quantile</em>-<em>quantile</em> (QQ) plot.</p>
 <p>For a histogram, we check to see if the shape is approximately close to that of a normal distribution.</p>
 <p>For a QQ plot, we check to see if the points approximately follow a straight line. Major departures from a straight line indicates <em>nonnormality</em>.</p>
 <p>It is important to note that we will never see an exact normal distribution is real-world data. Thus, we will always look for approximate normality in the residuals.</p>
 <p>The inferences discussed previously are still valid for small departure of normality. However, major departures from normality will lead to incorrect <em>p-values</em> in the hypothesis tests and incorrect <em>coverages</em> in the intervals.</p>
-</section><section id="examples-of-qq-plots" class="level3" data-number="8.3.3"><h3 data-number="8.3.3" class="anchored" data-anchor-id="examples-of-qq-plots">
-<span class="header-section-number">8.3.3</span> Examples of QQ-plots</h3>
+</section>
+<section id="examples-of-qq-plots" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="examples-of-qq-plots"><span class="header-section-number">8.3.3</span> Examples of QQ-plots</h3>
 <p>Below are some examples of histograms and QQ-plots for some simulated datasets.</p>
 <div id="fig-08_01" class="quarto-layout-panel">
-<figure class="figure"><div class="quarto-layout-row quarto-layout-valign-top">
+<figure class="figure">
+<div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01a" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig01a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(a) Normal - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig01a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(a) Normal - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01b" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig01b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(b) Normal - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig01b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(b) Normal - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01c" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig02a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(c) Right skewed - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig02a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(c) Right skewed - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01d" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig02b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(d) Right skewed - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig02b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(d) Right skewed - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01e" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig03a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(e) Heavy right skewed - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig03a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(e) Heavy right skewed - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01f" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig03b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(f) Heavy right skewed - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig03b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(f) Heavy right skewed - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01g" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig04a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(g) Left skewed - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig04a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(g) Left skewed - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01h" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig04b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(h) Left skewed - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig04b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(h) Left skewed - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01i" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig05a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(i) Heavy tails - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig05a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(i) Heavy tails - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01j" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig05b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(j) Heavy tails - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig05b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(j) Heavy tails - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <div class="quarto-layout-row quarto-layout-valign-top">
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01k" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig06a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(k) No tails - Histogram</figcaption></figure>
+<figure class="figure">
+<p><img src="fig06a.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(k) No tails - Histogram</figcaption>
+</figure>
 </div>
 </div>
 <div class="quarto-layout-cell quarto-layout-cell-subref" style="flex-basis: 50.0%;justify-content: center;">
 <div id="fig-08_01l" class="quarto-figure quarto-figure-center anchored">
-<figure class="figure"><p><img src="fig06b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
-<figcaption class="figure-caption">(l) No tails - QQ plot</figcaption></figure>
+<figure class="figure">
+<p><img src="fig06b.png" class="img-fluid figure-img" data-ref-parent="fig-08_01"></p>
+<figcaption class="figure-caption">(l) No tails - QQ plot</figcaption>
+</figure>
 </div>
 </div>
 </div>
 <p></p><figcaption class="figure-caption">Figure&nbsp;8.1: Examples of QQ-Plots</figcaption><p></p>
 </figure>
 </div>
-</section><section id="the-shapiro-wilk-test" class="level3" data-number="8.3.4"><h3 data-number="8.3.4" class="anchored" data-anchor-id="the-shapiro-wilk-test">
-<span class="header-section-number">8.3.4</span> The Shapiro-Wilk Test</h3>
+</section>
+<section id="the-shapiro-wilk-test" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="the-shapiro-wilk-test"><span class="header-section-number">8.3.4</span> The Shapiro-Wilk Test</h3>
 <p>There are a number of hypothesis test for normality. The most popular test is the <em>Shapiro-Wilk</em><a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a> test. This test has been found to have the most power among many of the other tests for normality<a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
 <p>In the Shapiro-Wilk test, the null hypothesis is that the data are normally distributed and the alternative is that the data are not normally distributed.</p>
 <p>This test can be conducted using the <code>shapiro.test</code> function in base R.</p>
 
 
-</section></section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
 <ol>
 <li id="fn1"><p>Durbin, J., &amp; Watson, G. S. (1951). Testing for Serial Correlation in Least Squares Regression. II. <em>Biometrika</em>. Vol 38. (pp.&nbsp;159-177).<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn2"><p>Ljung, G. M., &amp; Box, G. E. (1978). On a measure of lack of fit in time series models. <em>Biometrika</em>, 65(2), 297-303.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
@@ -543,7 +609,11 @@ y^{\prime} = y_i - y_{i-k}
 <li id="fn4"><p>Godfrey, L. G. (1978). Testing Against General Autoregressive and Moving Average Error Models when the Regressors Include Lagged Dependent Variables. <em>Econometrica</em>. 46: 1293–1301<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn5"><p>Shapiro, S. S., &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3-4), 591-611.<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
 <li id="fn6"><p>Razali, N. M., &amp; Wah, Y. B. (2011). Power comparisons of shapiro-wilk, kolmogorov-smirnov, lilliefors and anderson-darling tests. <em>Journal of statistical modeling and analytics</em>, 2(1), 21-33.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
-</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -775,7 +845,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
       <a href="./07_Checking.html" class="pagination-link">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span>
       </a>          
@@ -787,7 +859,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
+<footer class="footer">
+  <div class="nav-footer">
     <div class="nav-footer-left">STA 3386</div>   
     <div class="nav-footer-center">
       &nbsp;
@@ -795,6 +868,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     <div class="nav-footer-right">Fall 2024</div>
   </div>
 </footer>
+
 
 
 </body></html>
