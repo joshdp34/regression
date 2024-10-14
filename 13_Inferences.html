@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 13&nbsp; Model Inferences and Second-Order Models</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./12_ANOVA.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./13_Inferences.html"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#inferences-for-the-parameters" id="toc-inferences-for-the-parameters" class="nav-link active" data-scroll-target="#inferences-for-the-parameters"><span class="header-section-number">13.1</span> Inferences for the Parameters</a>
+  <ul class="collapse">
+  <li><a href="#confidence-intervals-for-the-coefficients" id="toc-confidence-intervals-for-the-coefficients" class="nav-link" data-scroll-target="#confidence-intervals-for-the-coefficients"><span class="header-section-number">13.1.1</span> Confidence Intervals for the Coefficients</a></li>
+  <li><a href="#tests-for-the-coefficients" id="toc-tests-for-the-coefficients" class="nav-link" data-scroll-target="#tests-for-the-coefficients"><span class="header-section-number">13.1.2</span> Tests for the Coefficients</a></li>
+  </ul></li>
+  <li><a href="#coefficient-of-multiple-determination" id="toc-coefficient-of-multiple-determination" class="nav-link" data-scroll-target="#coefficient-of-multiple-determination"><span class="header-section-number">13.2</span> Coefficient of Multiple Determination</a>
+  <ul class="collapse">
+  <li><a href="#adjusted-coefficient-of-determination" id="toc-adjusted-coefficient-of-determination" class="nav-link" data-scroll-target="#adjusted-coefficient-of-determination"><span class="header-section-number">13.2.1</span> Adjusted Coefficient of Determination</a></li>
+  </ul></li>
+  <li><a href="#estimation-and-prediction-of-the-response" id="toc-estimation-and-prediction-of-the-response" class="nav-link" data-scroll-target="#estimation-and-prediction-of-the-response"><span class="header-section-number">13.3</span> Estimation and Prediction of the Response</a>
+  <ul class="collapse">
+  <li><a href="#estimating-the-mean-response" id="toc-estimating-the-mean-response" class="nav-link" data-scroll-target="#estimating-the-mean-response"><span class="header-section-number">13.3.1</span> Estimating the Mean Response</a></li>
+  <li><a href="#predicting-the-response" id="toc-predicting-the-response" class="nav-link" data-scroll-target="#predicting-the-response"><span class="header-section-number">13.3.2</span> Predicting the Response</a></li>
+  </ul></li>
+  <li><a href="#second-order-models" id="toc-second-order-models" class="nav-link" data-scroll-target="#second-order-models"><span class="header-section-number">13.4</span> Second-Order Models</a>
+  <ul class="collapse">
+  <li><a href="#simulating-data-in-r" id="toc-simulating-data-in-r" class="nav-link" data-scroll-target="#simulating-data-in-r"><span class="header-section-number">13.4.1</span> Simulating data in R</a></li>
+  <li><a href="#simulating-a-regression-model" id="toc-simulating-a-regression-model" class="nav-link" data-scroll-target="#simulating-a-regression-model"><span class="header-section-number">13.4.2</span> Simulating a regression model</a></li>
+  <li><a href="#an-interaction-model-with-quantitative-predictors" id="toc-an-interaction-model-with-quantitative-predictors" class="nav-link" data-scroll-target="#an-interaction-model-with-quantitative-predictors"><span class="header-section-number">13.4.3</span> An Interaction Model with Quantitative Predictors</a></li>
+  <li><a href="#a-quadratic-second-order-model-with-a-quantitative-predictor" id="toc-a-quadratic-second-order-model-with-a-quantitative-predictor" class="nav-link" data-scroll-target="#a-quadratic-second-order-model-with-a-quantitative-predictor"><span class="header-section-number">13.4.4</span> A Quadratic (Second-Order) Model with a Quantitative Predictor</a></li>
+  </ul></li>
+  <li><a href="#a-test-for-comparing-nested-models" id="toc-a-test-for-comparing-nested-models" class="nav-link" data-scroll-target="#a-test-for-comparing-nested-models"><span class="header-section-number">13.5</span> A Test for Comparing Nested Models</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p><img src="happy.jpg" class="img-fluid"></p>
+</blockquote>
+<section id="inferences-for-the-parameters" class="level2" data-number="13.1">
+<h2 data-number="13.1" class="anchored" data-anchor-id="inferences-for-the-parameters"><span class="header-section-number">13.1</span> Inferences for the Parameters</h2>
+<p>As they were in the simple regression case, the least squares estimators <span class="math inline">\({\bf b}\)</span> are unbiased <span id="eq-w4_29"><span class="math display">\[
+\begin{align}
+{\bf E}\left[{\bf b}\right] &amp; =\boldsymbol{\beta}
+\end{align}
+\tag{13.1}\]</span></span></p>
+<p>The <span class="math inline">\(p\times p\)</span> covariance matrix is <span id="eq-w4_30"><span class="math display">\[
+\begin{align}
+{\bf Cov}\left[{\bf b}\right] &amp; =\sigma^{2}\left({\bf X}^{\prime}{\bf X}\right)^{-1}
+\end{align}
+\tag{13.2}\]</span></span></p>
+<p>We can estimate the covariance matrix by using MSE as an estimate for <span class="math inline">\(\sigma^{2}\)</span>. We will denote this estimated covariance matrix as <span id="eq-w4_31"><span class="math display">\[
+\begin{align}
+{\bf s}^{2}\left[{\bf b}\right] &amp; =MSE\left({\bf X}^{\prime}{\bf X}\right)^{-1}
+\end{align}
+\tag{13.3}\]</span></span></p>
+<p>From <span class="math inline">\({\bf s}^{2}\left[{\bf b}\right]\)</span>, we can obtain <span class="math inline">\(s^{2}\left[b_{0}\right]\)</span>, <span class="math inline">\(s^{2}\left[b_{1}\right]\)</span>, or the variance for any other coefficient to use in the confidence intervals and hypothesis tests.</p>
+<section id="confidence-intervals-for-the-coefficients" class="level3" data-number="13.1.1">
+<h3 data-number="13.1.1" class="anchored" data-anchor-id="confidence-intervals-for-the-coefficients"><span class="header-section-number">13.1.1</span> Confidence Intervals for the Coefficients</h3>
+<p>A <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> confidence interval for the parameter <span class="math inline">\(\beta_{k}\)</span> is <span id="eq-w4_32"><span class="math display">\[
+\begin{align}
+b_{k} &amp; \pm t_{\alpha/2,n-p}s\left[b_{k}\right]
+\end{align}
+\tag{13.4}\]</span></span></p>
+</section>
+<section id="tests-for-the-coefficients" class="level3" data-number="13.1.2">
+<h3 data-number="13.1.2" class="anchored" data-anchor-id="tests-for-the-coefficients"><span class="header-section-number">13.1.2</span> Tests for the Coefficients</h3>
+<p>We can test the hypothesis <span class="math display">\[
+\begin{align*}
+H_{0}: &amp; \beta_{k}=0\\
+H_{a}: &amp; \beta_{k}\ne0
+\end{align*}
+\]</span> with the test statistic <span id="eq-w4_33"><span class="math display">\[
+\begin{align}
+t^{*} &amp; =\frac{b_{k}}{s\left[b_{k}\right]}
+\end{align}
+\tag{13.5}\]</span></span> where <span class="math inline">\(t^{*}\sim t\left(n-p\right)\)</span>.</p>
+<div id="exm-13_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 13.1 (<code>bodyfat</code> data from Kutner<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>) </strong></span>In this dataset the bodyfat, tricep skinfold thickness, thigh circumference, and midarm circumference are found for 20 healthy females 25-34 years old. We want to model bodyfat based on the other three variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_table</span>(<span class="st">"BodyFat.txt"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare data</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> tri <span class="sc">+</span> thigh <span class="sc">+</span> midarm, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> dat) </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">#setup model</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">#to get the coefficients and CIs</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">conf.int =</span> <span class="cn">TRUE</span>, <span class="at">conf.level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 7
+  term        estimate std.error statistic p.value conf.low conf.high
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept)   117.       99.8       1.17   0.258   -94.4     329.  
+2 tri             4.33      3.02      1.44   0.170    -2.06     10.7 
+3 thigh          -2.86      2.58     -1.11   0.285    -8.33      2.62
+4 midarm         -2.19      1.60     -1.37   0.190    -5.57      1.20</code></pre>
+</div>
+</div>
+<p>Note that each coefficient is insignificant when tested individually. Let’s use the global F-test to see if the model is useful.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.801         0.764  2.48      21.5 0.00000734     3  -44.3  98.6  104.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>The global F-test is significant. The reason for the contradiction between the t-tests and the F-test will be discussed when we examine the correlation between predictor variables.</p>
+</div>
+<section id="recommendation-for-checking-the-utility-of-a-multiple-regression-model" class="level4">
+<h4 class="anchored" data-anchor-id="recommendation-for-checking-the-utility-of-a-multiple-regression-model">Recommendation for Checking the Utility of a Multiple Regression Model</h4>
+<ol type="1">
+<li><p>First, conduct a test of <em>overall</em> model adequacy using the F-test.</p>
+<p>If the model is deemed adequate (i.e., if you reject <span class="math inline">\(H_0\)</span>), then proceed to step 2. Otherwise, you should hypothesize and fit another model. The new model may include more independent variables or higher-order terms.</p></li>
+<li><p>Conduct <em><span class="math inline">\(t\)</span>-tests</em> on those <span class="math inline">\(\beta\)</span> parameters in which you are particularly interested (i.e., the “most important” <span class="math inline">\(\beta\)</span>’s). It is safe practice to limit the number of <span class="math inline">\(\beta\)</span>’s that are tested. Conducting a series of <span class="math inline">\(t\)</span>-tests leads to a high overall Type I error rate.</p></li>
+</ol>
+<p>Extreme care should be exercised when conducting <span class="math inline">\(t\)</span>-tests on the individual <span class="math inline">\(\beta\)</span> parameters in a first-order linear model for the purpose of determining which independent variables are useful for predicting <span class="math inline">\(y\)</span> and which are not.</p>
+<p>If you fail to reject <span class="math inline">\(H_0: \beta_j = 0\)</span>, several conclusions are possible:</p>
+<ol type="1">
+<li><p>There is <em>no</em> relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_j\)</span>.</p></li>
+<li><p>A straight-line relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_j\)</span> exists (holding the other <span class="math inline">\(x\)</span>’s in the model fixed), but a <em>Type II error</em> occurred.</p></li>
+<li><p>A relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_j\)</span> (holding the other <span class="math inline">\(x\)</span>’s in the model fixed) exists, but is more complex than a straight-line relationship (e.g., a curvilinear relationship may be appropriate). The most you can say about a <span class="math inline">\(\beta\)</span> parameter test is that there is either sufficient (if you reject <span class="math inline">\(H_0: \beta_j=0\)</span>) or insufficient (if you do not reject <span class="math inline">\(H_0: \beta_j=0\)</span>) evidence of a <em>linear</em> (straight-line) relationship between <span class="math inline">\(y\)</span> and <span class="math inline">\(x_j\)</span>.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="coefficient-of-multiple-determination" class="level2" data-number="13.2">
+<h2 data-number="13.2" class="anchored" data-anchor-id="coefficient-of-multiple-determination"><span class="header-section-number">13.2</span> Coefficient of Multiple Determination</h2>
+<p>As was the case with the simple regression model, the coefficient of determination for the multiple regression model (or the <em>coefficient of multiple determination</em>) is <span id="eq-w4_43"><span class="math display">\[
+\begin{align}
+R^{2} &amp; ={\frac{SSR}{SSTO}}\\
+&amp; {=1-\frac{SSE}{SSTO}}
+\end{align}
+\tag{13.6}\]</span></span></p>
+<p>The interpretation is still the same: it gives the proportion of the variation in <span class="math inline">\(y\)</span> explained by the model using the predictor variables.</p>
+<section id="adjusted-coefficient-of-determination" class="level3" data-number="13.2.1">
+<h3 data-number="13.2.1" class="anchored" data-anchor-id="adjusted-coefficient-of-determination"><span class="header-section-number">13.2.1</span> Adjusted Coefficient of Determination</h3>
+<p>It is of importance to note that <span class="math inline">\(R^{2}\)</span> cannot decrease when adding another <span class="math inline">\(x\)</span> to the model. It can either <em>increase</em> (if the new <span class="math inline">\(x\)</span> explains more of the variability of <span class="math inline">\(y\)</span>) or stay the <em>same</em> (if the new <span class="math inline">\(x\)</span> does not explain more of the variability of <span class="math inline">\(y\)</span>). This can be seen in <a href="#eq-w4_43">Equation&nbsp;<span>13.6</span></a> by noting that SSE cannot become larger by including more <span class="math inline">\(X\)</span> variables and SSTO stays the same regardless of which <span class="math inline">\(X\)</span> variables are used.</p>
+<p>Because of this, <span class="math inline">\(R^{2}\)</span> cannot be used for comparing the fit of models with different subsets of the <span class="math inline">\(x\)</span> variables.</p>
+<p>A modified version of the <span class="math inline">\(R^{2}\)</span> could be used that adjusts for the number of <span class="math inline">\(X\)</span> variables. It is called the <em>adjusted</em> coefficient of determination denoted as <span class="math inline">\(R_{a}^{2}\)</span>.</p>
+<p>In <span class="math inline">\(R_{a}^{2}\)</span>, SSE and SSTO are divided by their respective degrees of freedom: <span id="eq-w4_44"><span class="math display">\[
+\begin{align}
+R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
+&amp; =1-\left(\frac{n-1}{n-p}\right)\frac{SSE}{SSTO}
+\end{align}
+\tag{13.7}\]</span></span></p>
+<p>The value of <span class="math inline">\(R_{a}^{2}\)</span> can decrease when another <span class="math inline">\(x\)</span> is included in the model because any decrease in SSE may be more than offset by the loss of a <em>degree of freedom</em> of SSE (<span class="math inline">\(n-p\)</span>).</p>
+</section>
+</section>
+<section id="estimation-and-prediction-of-the-response" class="level2" data-number="13.3">
+<h2 data-number="13.3" class="anchored" data-anchor-id="estimation-and-prediction-of-the-response"><span class="header-section-number">13.3</span> Estimation and Prediction of the Response</h2>
+<section id="estimating-the-mean-response" class="level3" data-number="13.3.1">
+<h3 data-number="13.3.1" class="anchored" data-anchor-id="estimating-the-mean-response"><span class="header-section-number">13.3.1</span> Estimating the Mean Response</h3>
+<p>We estimate the mean response as we did in the simple linear case except now we will estimate at a vector of values: <span class="math display">\[
+\begin{align*}
+{\bf X}_{h} &amp; =\left[\begin{array}{c}
+1\\
+x_{h1}\\
+x_{h2}\\
+\vdots\\
+x_{h,p-1}
+\end{array}\right]
+\end{align*}
+\]</span></p>
+<p>So the estimated mean response will be the regression function evaluated at <span class="math inline">\({\bf X}_{h}\)</span>: <span id="eq-w4_45"><span class="math display">\[
+\begin{align}
+\hat{Y}_{h} &amp; ={\bf X}_{h}{\bf b}
+\end{align}
+\tag{13.8}\]</span></span> The variance of the estimated mean response is <span id="eq-w4_46"><span class="math display">\[
+\begin{align}
+Var\left[\hat{Y}_{h}\right] &amp; =\sigma^{2}{\bf X}_{h}^{\prime}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}_{h}
+\end{align}
+\tag{13.9}\]</span></span></p>
+<p>We can estimate the variance as <span id="eq-w4_47"><span class="math display">\[
+\begin{align}
+s^{2}\left[\hat{Y}_{h}\right] &amp; =MSE{\bf X}_{h}^{\prime}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}_{h}
+\end{align}
+\tag{13.10}\]</span></span></p>
+<p>We can then obtain a <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> confidence interval for the mean response at <span class="math inline">\({\bf X}_{h}\)</span> as <span id="eq-w4_48"><span class="math display">\[
+\begin{align}
+\hat{Y}_{h} &amp; \pm t_{\alpha/2}s\left[\hat{Y}_{h}\right]
+\end{align}
+\tag{13.11}\]</span></span> where <span class="math inline">\(t_{\alpha/2}\)</span> has <span class="math inline">\(n-p\)</span> degrees of freedom.</p>
+</section>
+<section id="predicting-the-response" class="level3" data-number="13.3.2">
+<h3 data-number="13.3.2" class="anchored" data-anchor-id="predicting-the-response"><span class="header-section-number">13.3.2</span> Predicting the Response</h3>
+<p>We can predict a new response <span class="math inline">\(Y_{h\left(new\right)}\)</span> at some <span class="math inline">\({\bf X}_{h}\)</span> with a <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> prediction interval <span id="eq-w4_49"><span class="math display">\[
+\begin{align}
+\hat{Y}_{h} &amp; \pm t_{\alpha/2}s\left[Y_{h\left(pred\right)}\right]
+\end{align}
+\tag{13.12}\]</span></span> where <span id="eq-w4_50"><span class="math display">\[
+\begin{align}
+s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}_{h}\right)
+\end{align}
+\tag{13.13}\]</span></span></p>
+<div id="exm-13_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 13.2 (<a href="#exm-13_1">Example&nbsp;<span>13.1</span></a> revisited) </strong></span>For the bodyfat data, suppose we want to predict and estimate at <code>tri=25</code>, <code>thigh=51.2</code>, and <code>midarm=24.9</code>. We will use the <code>predict</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>new_dat <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">tri=</span><span class="dv">25</span>, <span class="at">thigh=</span><span class="fl">51.2</span>, <span class="at">midarm =</span> <span class="fl">24.9</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#confidence interval for mean response</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">predict</span>(new_dat, <span class="at">type =</span> <span class="st">"conf_int"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  .pred_lower .pred_upper
+        &lt;dbl&gt;       &lt;dbl&gt;
+1        17.5        31.9</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#prediction interval</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">predict</span>(new_dat, <span class="at">type =</span> <span class="st">"pred_int"</span>, <span class="at">level =</span> <span class="fl">0.95</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  .pred_lower .pred_upper
+        &lt;dbl&gt;       &lt;dbl&gt;
+1        15.8        33.6</code></pre>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="second-order-models" class="level2" data-number="13.4">
+<h2 data-number="13.4" class="anchored" data-anchor-id="second-order-models"><span class="header-section-number">13.4</span> Second-Order Models</h2>
+<section id="simulating-data-in-r" class="level3" data-number="13.4.1">
+<h3 data-number="13.4.1" class="anchored" data-anchor-id="simulating-data-in-r"><span class="header-section-number">13.4.1</span> Simulating data in R</h3>
+<p>In R, there are a number of functions involving probability distributions. Each available distribution will have some functions that can be utilized. For the normal distribution, we can access the functions</p>
+<ul>
+<li><code>dnorm</code> - gives the <em>density</em> (pdf) of the distribution</li>
+<li><code>pnorm</code> - gives the <em>cumulative</em> distribution function (cdf)</li>
+<li><code>qnorm</code> - gives the <em>quantile</em> of the distribution</li>
+<li><code>rnorm</code> - gives a <em>random sample</em> from the distribution</li>
+</ul>
+<p>Different distributions will have the same four functions with the starting letter above. For example, if we want to use the binomial distribution, we can use the functions <code>dbinom</code>, <code>pbinom</code>, <code>qbinom</code>, and <code>rbinom</code>.</p>
+<p>If we use the following code:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">34</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>x <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">100</span>)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(<span class="at">data =</span> <span class="fu">data.frame</span>(x))<span class="sc">+</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x=</span>x)<span class="sc">+</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">bins =</span> <span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="13_Inferences_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Note that the histogram is shown for <em>one</em> random sample. If you were to run the code again, it would give you a <em>different</em> sample and a different histogram.</p>
+<p>If we would like to simulate from a normal distribution with mean 10 and standard deviation of 5, we would use the code <code>rnorm(100, mean = 10, sd = 5)</code></p>
+</section>
+<section id="simulating-a-regression-model" class="level3" data-number="13.4.2">
+<h3 data-number="13.4.2" class="anchored" data-anchor-id="simulating-a-regression-model"><span class="header-section-number">13.4.2</span> Simulating a regression model</h3>
+<p>Suppose we had the regression model <span class="math display">\[
+\begin{align*}
+    y =&amp; 1+2x_1 - x_2 + \varepsilon\\
+    &amp;\varepsilon \sim N(0, 0.1)
+\end{align*}
+\]</span></p>
+<p>We can use the <code>rnorm</code> function to obtain a sample of the error terms.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">100</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">=</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We now will obtain some values of the <span class="math inline">\(x\)</span>s. Let’s make the values of <span class="math inline">\(x_1\)</span> be values from 0 to 3. The values of <span class="math inline">\(x_2\)</span> will be only the values 0, 1, 2. Thus, both predictors are <em>quantitative</em> but <span class="math inline">\(x_2\)</span> is discrete.</p>
+<p>We can simulate from the model by:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">300</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>x1values <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="at">length =</span> n<span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>x2values <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>values <span class="ot">=</span> <span class="fu">expand.grid</span>(x1values, x2values)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> values[,<span class="dv">1</span>]</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> values[,<span class="dv">2</span>]</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1<span class="sc">-</span> x2 <span class="sc">+</span> eps</span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x1 =</span> x1, <span class="at">x2 =</span> <span class="fu">factor</span>(x2))</span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df)<span class="sc">+</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> y, <span class="at">color =</span> x2)<span class="sc">+</span></span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="13_Inferences_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+</section>
+<section id="an-interaction-model-with-quantitative-predictors" class="level3" data-number="13.4.3">
+<h3 data-number="13.4.3" class="anchored" data-anchor-id="an-interaction-model-with-quantitative-predictors"><span class="header-section-number">13.4.3</span> An Interaction Model with Quantitative Predictors</h3>
+<p>When <span class="math inline">\(E(y)\)</span> is graphed against any one variable (say, <span class="math inline">\(x_1\)</span>) for <em>fixed</em> values of the other variables, the result is a set of <em>parallel</em> straight lines (like the plot above).</p>
+<p>When this situation occurs (as it always does for a first-order model), we say that the relationship between <span class="math inline">\(E(y)\)</span> and any one independent variable does not <em>depend</em> on the values of the other independent variables in the model.</p>
+<p>However, if the relationship between <span class="math inline">\(E(y)\)</span> and <span class="math inline">\(x_1\)</span> does, in fact, depend on the values of the remaining <span class="math inline">\(x\)</span>’s held fixed, then the first- order model is not appropriate for predicting <span class="math inline">\(y\)</span>. In this case, we need another model that will take into account this dependence. Such a model includes the cross products of two or more <span class="math inline">\(x\)</span>’s.</p>
+<p>For example, suppose that the mean value <span class="math inline">\(E(y)\)</span> of a response <span class="math inline">\(y\)</span> is related to two quantitative independent variables, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, by the model <span class="math display">\[
+\begin{align*}
+    E(y) = 1+2x_1-x_2+x_1x_2
+\end{align*}
+\]</span></p>
+<p>Let’s simulate from this model and construct a scatterplot of <span class="math inline">\(y\)</span> versus <span class="math inline">\(x_1\)</span> again:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>n <span class="ot">=</span> <span class="dv">300</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>eps <span class="ot">=</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">0</span>, <span class="at">sd =</span> <span class="fl">0.1</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>x1values <span class="ot">=</span> <span class="fu">seq</span>(<span class="dv">0</span>, <span class="dv">3</span>, <span class="at">length =</span> n<span class="sc">/</span><span class="dv">3</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>x2values <span class="ot">=</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>values <span class="ot">=</span> <span class="fu">expand.grid</span>(x1values, x2values)</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>x1 <span class="ot">=</span> values[,<span class="dv">1</span>]</span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>x2 <span class="ot">=</span> values[,<span class="dv">2</span>]</span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>y <span class="ot">=</span> <span class="dv">1</span> <span class="sc">+</span> <span class="dv">2</span><span class="sc">*</span>x1<span class="sc">-</span> x2 <span class="sc">+</span> x1<span class="sc">*</span>x2<span class="sc">+</span> eps</span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">y =</span> y, <span class="at">x1 =</span> x1, <span class="at">x2 =</span> <span class="fu">factor</span>(x2))</span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(df)<span class="sc">+</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">aes</span>(<span class="at">x =</span> x1, <span class="at">y =</span> y, <span class="at">color =</span> x2)<span class="sc">+</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="13_Inferences_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Note that the graph shows three <em>nonparallel</em> lines. You can verify that the slopes of the lines differ by substituting each of the values <span class="math inline">\(x_2 = 0, 1\)</span>, and 2 into the equation.</p>
+<p>For <span class="math inline">\(x_2 = 0\)</span>: <span class="math display">\[
+\begin{align*}
+    E(y) &amp;= 1+2x_1 - (0) + x_1(0)\\
+    &amp; = 1+2x_1
+\end{align*}
+\]</span></p>
+<p>For <span class="math inline">\(x_2 =1\)</span>: <span class="math display">\[
+\begin{align*}
+    E(y) &amp;= 1+2x_1 - (1) + x_1(1)\\
+    &amp; = 3x_1
+\end{align*}
+\]</span></p>
+<p>For <span class="math inline">\(x_2 = 2\)</span>: <span class="math display">\[
+\begin{align*}
+    E(y) &amp;= 1+2x_1 - (2) + x_1(2)\\
+    &amp; = -1 + 4x_1
+\end{align*}
+\]</span></p>
+<p>Note that the slope of each line is represented by <span class="math display">\[
+\begin{align*}
+    \beta_1 + \beta_2 x_2 =  2+x_2
+\end{align*}
+\]</span> Thus, the effect on <span class="math inline">\(E(y)\)</span> of a change in <span class="math inline">\(x_1\)</span> (i.e., the slope) now depends on the value of <span class="math inline">\(x_2\)</span>. When this situation occurs, we say that <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> <em>interact</em>.</p>
+<p>The cross-product term, <span class="math inline">\(x_1x_2\)</span>, is called an <em>interaction term</em>, and the model called an interaction <em>model</em> with two quantitative variables.</p>
+<p>Note an important point about conducting <span class="math inline">\(t\)</span>-tests on the <span class="math inline">\(\beta\)</span> parameters in the interaction model.</p>
+<p>The “most important” <span class="math inline">\(\beta\)</span> parameter in this model is the interaction term, <span class="math inline">\(\beta_3\)</span>.</p>
+<p>Consequently, we will want to test <span class="math inline">\(H_0: \beta_3 = 0\)</span> after we have determined that the overall model is useful for predicting <span class="math inline">\(y\)</span>. Once interaction is detected tests on the first-order terms <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> should not be conducted since they are <em>meaningless</em> tests; the presence of interaction implies that both <span class="math inline">\(x\)</span>’s are important.</p>
+</section>
+<section id="a-quadratic-second-order-model-with-a-quantitative-predictor" class="level3" data-number="13.4.4">
+<h3 data-number="13.4.4" class="anchored" data-anchor-id="a-quadratic-second-order-model-with-a-quantitative-predictor"><span class="header-section-number">13.4.4</span> A Quadratic (Second-Order) Model with a Quantitative Predictor</h3>
+<p>All of the models discussed thus far proposed straight-line relationships between <span class="math inline">\(E(y)\)</span> and each of the independent variables in the model.</p>
+<p>We now consider a model that allows for <em>curvature</em> in the relationship.</p>
+<p>This model is a <em>second-order</em> model because it will include an <span class="math inline">\(x^2\)</span> term<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>.</p>
+<p>Here, we consider a model that includes only one independent variable <span class="math inline">\(x\)</span>. The form of this model, called the <em>quadratic</em> model, is <span class="math display">\[
+\begin{align*}
+    y = \beta_0 + \beta_1 x + \beta_2 x^2 + \varepsilon
+\end{align*}
+\]</span></p>
+</section>
+</section>
+<section id="a-test-for-comparing-nested-models" class="level2" data-number="13.5">
+<h2 data-number="13.5" class="anchored" data-anchor-id="a-test-for-comparing-nested-models"><span class="header-section-number">13.5</span> A Test for Comparing Nested Models</h2>
+<p>In regression analysis, we often want to determine (with a high degree of confidence) which one among a set of <em>candidate models</em> best fits the data.</p>
+<p>We present such a method for <em>nested</em> models.</p>
+<p>Two models are nested if one model contains all the terms of the second model and at least one additional term. The more complex of the two models is called the <em>complete</em> (or <em>full</em>) model. The simpler of the two models is called the <em>reduced</em> (or <em>restricted</em>) model.</p>
+<p>To illustrate, suppose you have collected data on a response, <span class="math inline">\(y\)</span>, and two quantitative independent variables, <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>, and you are considering the use of either a straight-line interaction model or a curvilinear model to relate <span class="math inline">\(E(y)\)</span> to <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span>.</p>
+<p>Will the curvilinear model provide better predictions of <span class="math inline">\(y\)</span> than the straight-line model?</p>
+<p>To answer this question, examine the two models, and note that the curvilinear model contains all the terms in the straight-line interaction model plus two additional terms—those involving <span class="math inline">\(\beta_4\)</span> and <span class="math inline">\(\beta_5\)</span>: <span class="math display">\[
+\begin{align*}
+    E(y) &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2 &amp;\quad \text{Straight-line with interaction}\\
+    E(y) &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2+ \beta_4 x^2_1 +\beta_5 x_2^2&amp;\quad \text{Curvillinear model}
+\end{align*}
+\]</span></p>
+<p>Consequently, these are nested models. Since the straight-line model is the simpler of the two, we say that the straight-line model is nested within the more complex curvilinear model.</p>
+<p>Also, the straight-line model is called the reduced model while the curvilinear model is called the complete (or full) model.</p>
+<p>Asking whether the curvilinear (or complete) model contributes more information for the prediction of <span class="math inline">\(y\)</span> than the straight-line (or reduced) model is equivalent to asking whether at least one of the parameters, <span class="math inline">\(\beta_4\)</span> or <span class="math inline">\(\beta_5\)</span>, differs from 0. Therefore, to test whether the quadratic terms should be included in the model, we test the null hypothesis <span class="math display">\[
+\begin{align*}
+    H_0: \beta_4 = \beta_5 = 0
+\end{align*}
+\]</span> (i.e., the quadratic terms do not contribute information for the prediction of <span class="math inline">\(y\)</span>) against the alternative hypothesis <span class="math display">\[
+\begin{align*}
+    H_a: \text{At least one of the parameters, }\beta_4 \text{ or } \beta_5, \text{differ from 0}
+\end{align*}
+\]</span> (i.e., at least one of the quadratic terms contributes information for the prediction of <span class="math inline">\(y\)</span>).</p>
+<p>The procedure for conducting this test is intuitive. First, we use the method of least squares to fit the reduced model and calculate the corresponding sum of squares for error, <span class="math display">\[
+SSE_R
+\]</span> Next, we fit the complete model and calculate its sum of squares for error, <span class="math display">\[
+SSE_C
+\]</span></p>
+<p>Then, we compare <span class="math inline">\(SSE_R\)</span> to <span class="math inline">\(SSE_C\)</span> by calculating the difference, <span class="math display">\[
+SSE_R - SSE_C
+\]</span> If the quadratic terms contribute to the model, then <span class="math inline">\(SSE_C\)</span> should be much smaller than <span class="math inline">\(SSE_R\)</span>, and the difference will be large. The larger the difference, the greater the weight of evidence that the complete model provides better predictions of <span class="math inline">\(y\)</span> than does the reduced model.</p>
+<p>The sum of squares for error will always decrease when new terms are added to the model. The question is whether this decrease is large enough to conclude that it is due to more than just an increase in the number of model terms and to chance.</p>
+<p>To test the null hypothesis that the curvature coefficients simultaneously equal 0, we use an F statistic. For our example, this F statistic is: <span class="math display">\[
+\begin{align*}
+    F = \frac{\frac{(SSE_R - SSE_C)}{\text{Number of parameters beging tested}}}{\frac{SSE_C}{n-p}}
+\end{align*}
+\]</span></p>
+<p>When the candidate models in model building are nested models, the <span class="math inline">\(F\)</span>-Test is the appropriate procedure to apply to compare the models. However, if the models are not nested, this <span class="math inline">\(F\)</span>-Test is not applicable. In this situation, the analyst must base the choice of the best model on statistics such as <span class="math inline">\(R^2_a\)</span>. It is important to remember that decisions based on these and other numerical descriptive measures of model adequacy cannot be supported with a measure of reliability and are often very subjective in nature.</p>
+<div id="exm-13_3" class="theorem example">
+<p><span class="theorem-title"><strong>Example 13.3 (<a href="#exm-13_1">Example&nbsp;<span>13.1</span></a> revisited - Nested F-test) </strong></span>Suppose, for some reason, we were to hypothesize that model needed the term <code>midarm^2</code>. Let’s conduct a nested F-test to see if this extra term is significant.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare data for the complete model</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> tri <span class="sc">+</span> thigh <span class="sc">+</span> midarm , </span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> dat) <span class="sc">|&gt;</span> </span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_poly</span>(midarm, <span class="at">degree =</span> <span class="dv">2</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#setup model</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow for complete model</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the complete model</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>lm_fit_C <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow for reduced model</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>lm_workflow_R <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span> </span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_recipe</span>(</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    dat_recipe <span class="sc">|&gt;</span> <span class="fu">step_rm</span>(midarm_poly_2)</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the reduced model</span></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>lm_fit_R <span class="ot">=</span> lm_workflow_R <span class="sc">|&gt;</span></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="co">#extract the models and conduct nested F-test</span></span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>model_C <span class="ot">=</span> lm_fit_C <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>model_R <span class="ot">=</span> lm_fit_R <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="fu">anova</span>(model_R, model_C)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Analysis of Variance Table
+
+Model 1: ..y ~ tri + thigh + midarm_poly_1
+Model 2: ..y ~ tri + thigh + midarm_poly_1 + midarm_poly_2
+  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
+1     16 98.405                           
+2     15 90.397  1     8.008 1.3288 0.2671</code></pre>
+</div>
+</div>
+<p>Since the p-value is greater than 0.05, there is not enough evidence to conclude that the quadratic term coefficient is different than 0.</p>
+</div>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Note: the interaction model is also second-order since it has two <span class="math inline">\(x\)</span>s multiplied.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./12_ANOVA.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

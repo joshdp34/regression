@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./13_Inferences.html" rel="next">
 <link href="./11_Regression_Matrix.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -211,6 +212,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
   </div>
 </li>
     </ul>
@@ -409,7 +416,7 @@ y_{i}-\bar{y} &amp; =y_{i}-\hat{y}_{i}+\hat{y}_{i}-\bar{y}\\
 &amp; =\sum\left(y_{i}-\hat{y}_{i}\right)^{2}+\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\sum\hat{y}_{i}e_{i}-2\bar{y}\sum e_{i}
 \end{align*}
 \]</span></p>
-<p>Note that <span class="math inline">\(\sum\hat{y}_{i}e_{i}=0\)</span> from {<span class="quarto-unresolved-ref">?eq-w1_22</span>} and <span class="math inline">\(\sum e_{i}=0\)</span> from {<span class="quarto-unresolved-ref">?eq-w1_20</span>}.</p>
+<p>Note that <span class="math inline">\(\sum\hat{y}_{i}e_{i}=0\)</span> <!-- from @eq-w1_22  --> and <span class="math inline">\(\sum e_{i}=0\)</span>. <!-- from @eq-w1_20. --></p>
 <p>Therefore, we have <span id="eq-4_38"><span class="math display">\[
 \begin{align*}
 \sum\left(y_{i}-\bar{y}\right)^{2} &amp; =\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+\sum\left(y_{i}-\hat{y}_{i}\right)^{2}\\
@@ -929,6 +936,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./13_Inferences.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
