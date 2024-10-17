@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 14&nbsp; Multicollinearity and Principal Component Regression</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./13_Inferences.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./14_Multicollinearity.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Multicollinearity.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#multicollinearity" id="toc-multicollinearity" class="nav-link active" data-scroll-target="#multicollinearity"><span class="header-section-number">14.1</span> Multicollinearity</a>
+  <ul class="collapse">
+  <li><a href="#variance-inflation-factors" id="toc-variance-inflation-factors" class="nav-link" data-scroll-target="#variance-inflation-factors"><span class="header-section-number">14.1.1</span> Variance Inflation Factors</a></li>
+  <li><a href="#effects-on-inferences" id="toc-effects-on-inferences" class="nav-link" data-scroll-target="#effects-on-inferences"><span class="header-section-number">14.1.2</span> Effects on Inferences</a></li>
+  <li><a href="#effects-on-ci-and-pi-for-the-response" id="toc-effects-on-ci-and-pi-for-the-response" class="nav-link" data-scroll-target="#effects-on-ci-and-pi-for-the-response"><span class="header-section-number">14.1.3</span> Effects on CI and PI for the Response</a></li>
+  </ul></li>
+  <li><a href="#standardizing-predictor-variables" id="toc-standardizing-predictor-variables" class="nav-link" data-scroll-target="#standardizing-predictor-variables"><span class="header-section-number">14.2</span> Standardizing Predictor Variables</a>
+  <ul class="collapse">
+  <li><a href="#standardization-vs.-normalization" id="toc-standardization-vs.-normalization" class="nav-link" data-scroll-target="#standardization-vs.-normalization"><span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;Normalization</a></li>
+  <li><a href="#why-tidymodels-uses-the-term-normalize" id="toc-why-tidymodels-uses-the-term-normalize" class="nav-link" data-scroll-target="#why-tidymodels-uses-the-term-normalize"><span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> Uses the Term “Normalize”</a></li>
+  <li><a href="#standardization-and-multicollinearity" id="toc-standardization-and-multicollinearity" class="nav-link" data-scroll-target="#standardization-and-multicollinearity"><span class="header-section-number">14.2.3</span> Standardization and Multicollinearity</a></li>
+  </ul></li>
+  <li><a href="#principal-component-regression" id="toc-principal-component-regression" class="nav-link" data-scroll-target="#principal-component-regression"><span class="header-section-number">14.3</span> Principal Component Regression</a>
+  <ul class="collapse">
+  <li><a href="#introduction-to-principal-component-analysis-pca" id="toc-introduction-to-principal-component-analysis-pca" class="nav-link" data-scroll-target="#introduction-to-principal-component-analysis-pca"><span class="header-section-number">14.3.1</span> Introduction to Principal Component Analysis (PCA)</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“The greatest value of a picture is when it forces us to notice what we never expected to see.” - John Tukey</p>
+</blockquote>
+<section id="multicollinearity" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="multicollinearity"><span class="header-section-number">14.1</span> Multicollinearity</h2>
+<p>Often, two or more of the independent variables used in the model for <span class="math inline">\(E(y)\)</span> will contribute redundant information. That is, the independent variables will be <em>correlated</em> with each other.</p>
+<p>For example, suppose we want to construct a model to predict the gasoline mileage rating, <span class="math inline">\(y\)</span>, of a truck as a function of its load, <span class="math inline">\(x_1\)</span>, and the horsepower, <span class="math inline">\(x_2\)</span>, of its engine.</p>
+<p>In general, you would expect heavier loads to require greater horsepower and to result in lower mileage ratings.</p>
+<p>Thus, although both <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> contribute information for the prediction of mileage rating, some of the information is overlapping, because <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> are correlated.</p>
+<p>When the independent variables are correlated, we say that <em>multicollinearity</em> exists.</p>
+<p>The ability to obtain a good fit or to make inferences on the <em>mean response</em> or to <em>predict</em> the response are not affected by multicollinearity. However, inferences for the <em>coefficients</em> (the <span class="math inline">\(\beta\)</span>s) and for the model <em>variance</em> (<span class="math inline">\(\sigma^2\)</span>) are affected by large correlation among the predictor variables.</p>
+<p>Another effect of multicollinearity is the interpretation of the estimated coefficients. In multiple regression, we interpret the coefficient as the average change in <span class="math inline">\(y\)</span> when <span class="math inline">\(x\)</span> is increased by one unit <strong>when all other predictor variables are held constant</strong>.</p>
+<p>If <span class="math inline">\(x\)</span> is highly correlated with one or more of the other predictor variables, then it may not be feasible to think of varying <span class="math inline">\(x\)</span> when the others are constant.</p>
+<section id="variance-inflation-factors" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="variance-inflation-factors"><span class="header-section-number">14.1.1</span> Variance Inflation Factors</h3>
+<p>We can see evidence of multicollinearity by examining the <em>scatterplot matrix</em> since this will give us a plot of each pair of predictor variables. If there are pairs that appear to be highly correlated (<code>ggpairs</code> in R will give the correlation value as well) then multicollinearity will be present.</p>
+<p>We could also examine <span class="math inline">\(R_{a}^{2}\)</span> for models with and without certain pairs of variables. If <span class="math inline">\(R_{a}^{2}\)</span> decreases when a particular <span class="math inline">\(x\)</span> variable is added but it appears to have a strong linear relationship with <span class="math inline">\(y\)</span> in the scatterplot matrix, then this is evidence of multicollinearity.</p>
+<p>A more convenient way to examine multicollinearity is through the use of the <em>variance inflation factors</em> (VIF).</p>
+<p>Each predictor variable will have a VIF. Suppose we are interested in the VIF for <span class="math inline">\(x_{1}\)</span>. We start by regression <span class="math inline">\(x_{1}\)</span> on all the other predictor variables. Thus, we fit the model <span class="math display">\[
+\begin{align*}
+x_{i1} &amp; =\alpha_{0}+\alpha_{2}x_{i2}+\alpha_{3}x_{i3}+\cdots+\alpha_{p-1}x_{i,p-1}+\epsilon
+\end{align*}
+\]</span> where the <span class="math inline">\(\alpha\)</span>’s are the coefficients and <span class="math inline">\(\epsilon\)</span> is the random error term.</p>
+<p>Now find the coefficient of multiple determination for this model which we will denote as <span class="math inline">\(R_{1}^{2}\)</span>. The VIF for <span class="math inline">\(x_{1}\)</span> is then <span class="math display">\[
+\begin{align*}
+VIF_{1} &amp; =\frac{1}{1-R_{1}^{2}}.
+\end{align*}
+\]</span> We can do this for any <span class="math inline">\(i\)</span>th predictor variable so that the VIF for that variable is <span id="eq-w5_1"><span class="math display">\[
+\begin{align}
+VIF_{i} &amp; =\frac{1}{1-R_{i}^{2}}
+\end{align}
+\tag{14.1}\]</span></span> where <span class="math inline">\(R_{i}^{2}\)</span> is the coefficient of multiple determination for the regression fit of <span class="math inline">\(x_{i}\)</span> on all the other predictor variables.</p>
+<p>A rule of thumb is that a VIF greater than 10 is evidence that multicollinearity is high when that variable is added to the model. Some use a cutoff of 5 instead of 10.</p>
+<div id="exm-14_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.1 (<code>UN98</code> data) </strong></span>One approach to seeing which variables are correlated with each other is to remove a variable with a large VIF and see which variables had the largest change in their VIF.</p>
+<p>We will illustrate this process with the dataset from the library. We will not use the and variables for this example.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#explore correlation and scatterplots between pairs of variables</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>UN98 <span class="sc">|&gt;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>region, <span class="sc">-</span>GDPperCapita) <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggpairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(infantMortality <span class="sc">~</span> ., </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> UN98) <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_rm</span>(region, GDPperCapita)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">#setup model</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> UN98)</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 11 × 5
+   term                   estimate std.error statistic p.value
+   &lt;chr&gt;                     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+ 1 (Intercept)            111.        48.9       2.27  0.0309 
+ 2 tfr                     12.0        3.87      3.11  0.00423
+ 3 contraception           -0.0709     0.137    -0.517 0.609  
+ 4 educationMale            5.98       3.11      1.92  0.0647 
+ 5 educationFemale         -6.41       2.76     -2.32  0.0278 
+ 6 lifeMale                -0.405      1.11     -0.365 0.718  
+ 7 lifeFemale              -0.757      1.32     -0.575 0.570  
+ 8 economicActivityMale    -0.383      0.264    -1.45  0.158  
+ 9 economicActivityFemale   0.172      0.128     1.34  0.190  
+10 illiteracyMale          -0.544      0.392    -1.39  0.176  
+11 illiteracyFemale         0.321      0.313     1.03  0.314  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.944         0.924  9.40      47.5 6.75e-15    10  -136.  296.  316.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get the VIFs</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   tfr          contraception          educationMale 
+             14.319844               3.331552              23.833590 
+       educationFemale               lifeMale             lifeFemale 
+             27.561149              42.279211              74.707620 
+  economicActivityMale economicActivityFemale         illiteracyMale 
+              2.059083               2.049210              17.476821 
+      illiteracyFemale 
+             24.355614 </code></pre>
+</div>
+</div>
+<p>We see that there are a number of variables with high VIF. The highest is <code>lifeFemale</code>. If we remove this variable, what happens to the VIFs of the other variables?</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#take out the lifeFemale variable</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>lm_workflow2<span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span> </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_recipe</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    dat_recipe <span class="sc">|&gt;</span> <span class="fu">step_rm</span>(lifeFemale)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>lm_fit2 <span class="ot">=</span> lm_workflow2 <span class="sc">|&gt;</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> UN98)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#get the VIFs</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>lm_fit2 <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   tfr          contraception          educationMale 
+              7.650182               3.151511              23.768388 
+       educationFemale               lifeMale   economicActivityMale 
+             27.547206               6.053211               2.040815 
+economicActivityFemale         illiteracyMale       illiteracyFemale 
+              1.989025              15.271120              20.160209 </code></pre>
+</div>
+</div>
+<p>We see that removing <code>lifeFemale</code> leads to a couple of the variable to have a substantial decrease in their VIfs. The variables <code>tfr</code> and <code>lifeMale</code> both decrease by more than five points when <code>lifeFemale</code> is removed. From the scatterplot matrix above, we see that <code>tfr</code> and <code>lifeMale</code> have the highest correlation with <code>lifeFemale</code>. If we are deciding whether to keep <code>lifeFemale</code> in the model, then we can do so with a practical reason. Are any of the variables that are highly correlated with <code>lifeFemale</code> easier to obtain? If so, we should keep that variable and remove the other.</p>
+<p>Let’s now look at the next highest VIF: <code>educationFemale</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">#take out the educationFemale variable</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>lm_workflow3<span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span> </span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_recipe</span>(</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    dat_recipe <span class="sc">|&gt;</span> <span class="fu">step_rm</span>(educationFemale)</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>lm_fit3 <span class="ot">=</span> lm_workflow3 <span class="sc">|&gt;</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> UN98)</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co">#get the VIFs</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>lm_fit3 <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                   tfr          contraception          educationMale 
+             14.173794               3.303755               3.425892 
+              lifeMale             lifeFemale   economicActivityMale 
+             42.269363              74.669828               1.898826 
+economicActivityFemale         illiteracyMale       illiteracyFemale 
+              2.000282              15.192202              18.021121 </code></pre>
+</div>
+</div>
+<p>We see that <code>educationMale</code> has dropped substantially when <code>educationFemale</code> was removed. Again, deciding which variable to remove from the model is a practical one.</p>
+<p>We can continue this process of identifying which variables are highly correlate with other variables.</p>
+</div>
+</section>
+<section id="effects-on-inferences" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="effects-on-inferences"><span class="header-section-number">14.1.2</span> Effects on Inferences</h3>
+<p>Recall from <a href="13_Inferences.html#eq-w4_31">Equation&nbsp;<span>13.3</span></a> that we can obtain the variance of the least squares estimators with the diagonal of <span class="math inline">\({\bf s}^{2}\left[{\bf b}\right]\)</span>.</p>
+<p>It can be shown that this variance can be expressed in terms of VIF. So the variance of <span class="math inline">\(b_{j}\)</span> can be expressed as <span id="eq-w5_2"><span class="math display">\[
+\begin{align}
+s^{2}\left[b_{j}\right] &amp; =MSE\frac{VIF_{j}}{\left(n-1\right)\widehat{Var}\left[x_{j}\right]}
+\end{align}
+\tag{14.2}\]</span></span> where <span class="math inline">\(\widehat{Var}\left[x_{j}\right]\)</span> is the sample variance of <span class="math inline">\(x_j\)</span>.</p>
+<p>So we see that if <span class="math inline">\(VIF_{j}\)</span> is large (meaning there is multicollinearity when <span class="math inline">\(x_{j}\)</span> is included in the model) then the standard error will be larger.</p>
+<p>Noting that the test statistic for testing <span class="math inline">\(\beta_{j}=0\)</span> in <a href="13_Inferences.html#eq-w4_33">Equation&nbsp;<span>13.5</span></a> is <span class="math display">\[
+\begin{align*}
+t^{*} &amp; =\frac{b_{j}}{s\left[b_{j}\right]}
+\end{align*}
+\]</span></p>
+<p>So an inflated standard error <span class="math inline">\(s\left[b_{j}\right]\)</span> will lead to a smaller <span class="math inline">\(t\)</span> and thus a larger p-value. This will cause us to conclude there is not enough evidence for the alternative hypothesis when in fact <span class="math inline">\(\beta_{j}\ne0\)</span>.</p>
+</section>
+<section id="effects-on-ci-and-pi-for-the-response" class="level3" data-number="14.1.3">
+<h3 data-number="14.1.3" class="anchored" data-anchor-id="effects-on-ci-and-pi-for-the-response"><span class="header-section-number">14.1.3</span> Effects on CI and PI for the Response</h3>
+<p>As stated above, multicollinearity does not affect the confidence interval for the mean response or the prediction interval.</p>
+<p>We will illustrate this with the <code>bodyfat</code> data below.</p>
+<div id="exm-14_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.2 (<code>bodyfat</code> data) </strong></span>&nbsp;</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(car)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_table</span>(<span class="st">"BodyFat.txt"</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#examine the scatterplot matrix</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We see from this scatterplot matrix, that the predictor variables have some high correlation between them. Thus, we already see that there will be a problem with multicollinearity.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#prepare data</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> tri <span class="sc">+</span> thigh <span class="sc">+</span> midarm, </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> dat) </span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#setup model</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#setup the workflow</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>fit_full <span class="ot">=</span> lm_fit <span class="sc">|&gt;</span>  <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a>fit_full <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     tri    thigh   midarm 
+708.8429 564.3434 104.6060 </code></pre>
+</div>
+</div>
+<p>From VIFs, we see that there is clear multicollinearity between all three variables.</p>
+<p>The highest VIF is <code>tri</code>. From the scatterplot matrix above, we see <code>tri</code> is most correlated with <code>thigh</code>. Let’s remove <code>tri</code> and see what happens.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>lm_workflow_no_tri<span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span> </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">update_recipe</span>(</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>    dat_recipe <span class="sc">|&gt;</span> <span class="fu">step_rm</span>(tri)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a><span class="co">#fit the model</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>lm_fit_no_tri <span class="ot">=</span> lm_workflow_no_tri <span class="sc">|&gt;</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>fit_no_tri<span class="ot">=</span> lm_fit_no_tri <span class="sc">|&gt;</span>  <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a>fit_no_tri <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  thigh  midarm 
+1.00722 1.00722 </code></pre>
+</div>
+</div>
+<p>We see that once <code>tri</code> is removed, the remaining variables have small VIFs.</p>
+<p>We are not suggesting that <code>tri</code> should definitely be removed. It may still be the best predictor of <code>bfat</code>. There are other ways to determine if only having <code>tri</code> is preferred over a model with just the other two variables. We will discuss those methods later. For now, we do see that multicollinearity will be an issue for these three variables.</p>
+<p>To see the effect on the estimated coefficients, let’s look at the standard errors for the model with all three variables and the model without <code>tri</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit_full <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 5
+  term        estimate std.error statistic p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;
+1 (Intercept)   117.       99.8       1.17   0.258
+2 tri             4.33      3.02      1.44   0.170
+3 thigh          -2.86      2.58     -1.11   0.285
+4 midarm         -2.19      1.60     -1.37   0.190</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>fit_no_tri <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic     p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt;
+1 (Intercept) -26.0        7.00     -3.72  0.00172    
+2 thigh         0.851      0.112     7.57  0.000000772
+3 midarm        0.0960     0.161     0.595 0.560      </code></pre>
+</div>
+</div>
+<p>Note how much larger the standard errors are for the full model (with multicollinearity) than the model without <code>tri</code> (no multicollinearity).</p>
+<p>Larger standard errors will lead to smaller <span class="math inline">\(t\)</span> statistics and thus larger p-values. So multicollinearity will make variables look like they are insignificant but they really are significant.</p>
+<p>Let’s now look at the RMSE (<code>sigma</code> in the <code>glance()</code> function output) which is used in the confidence interval of the mean response and prediction interval formulas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fit_full <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.801         0.764  2.48      21.5 0.00000734     3  -44.3  98.6  104.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fit_no_tri <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.776         0.749  2.56      29.4 0.00000303     2  -45.5  99.1  103.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Note that RMSE is not much different between the two models. It is not affected by multicollinearity. So if all we want to use our model for are estimation of the mean and predictions, then multicollinearity is not an issue. If, however, we want to also determine which variables are important in the estimation and prediction, then multicollinearity is an issue.</p>
+</div>
+</section>
+</section>
+<section id="standardizing-predictor-variables" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="standardizing-predictor-variables"><span class="header-section-number">14.2</span> Standardizing Predictor Variables</h2>
+<p>In linear regression, predictor variables are often transformed to ensure that they are on a comparable scale. This is especially important when predictors have vastly different units or magnitudes, as it can influence the stability and interpretability of the model.</p>
+<p>A common technique for transforming predictors is <strong>standardization</strong>, where each predictor variable is rescaled to have a mean of 0 and a standard deviation of 1. This section will explore the concept of <em>standardization</em>, how it differs from <em>normalization</em>, and the implications for model performance, especially in the context of multicollinearity.</p>
+<section id="standardization-vs.-normalization" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="standardization-vs.-normalization"><span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;Normalization</h3>
+<p>While the terms “standardization” and “normalization” are sometimes used interchangeably, they describe distinct mathematical operations. Standardization transforms a variable <span class="math inline">\(X\)</span> to have a mean of 0 and a standard deviation of 1, using the following formula:</p>
+<p><span class="math display">\[
+z_i = \frac{x_i - \bar{x}}{s_x}
+\]</span></p>
+<p>where <span class="math inline">\(z_i\)</span> is the standardized value, <span class="math inline">\(x_i\)</span> is the original value, <span class="math inline">\(\bar{x}\)</span> is the mean of the variable, and <span class="math inline">\(s_x\)</span> is its standard deviation. This process ensures that the transformed variable has a standard normal distribution with mean 0 and standard deviation 1.</p>
+<p>Normalization, on the other hand, typically refers to scaling the data to a specific range, such as [0, 1]. This is done using the formula:</p>
+<p><span class="math display">\[
+x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
+\]</span></p>
+<p>Normalization is most useful when the range of the variables needs to be constrained for certain algorithms, such as in neural networks. In contrast, standardization is generally preferred in linear models, where the focus is on centering and rescaling predictors to ensure interpretability of coefficients.</p>
+</section>
+<section id="why-tidymodels-uses-the-term-normalize" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="why-tidymodels-uses-the-term-normalize"><span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> Uses the Term “Normalize”</h3>
+<p>In the <code>tidymodels</code> framework in R, the term “normalize” is used to describe what is technically a standardization process. For example, when creating a preprocessing recipe with the <code>recipe()</code> function, the step called <code>step_normalize()</code> computes the mean and standard deviation of each predictor and scales it accordingly. Although the terminology might be confusing, this usage reflects a common convention in some statistical software where both standardization and normalization are loosely referred to as normalization.</p>
+</section>
+<section id="standardization-and-multicollinearity" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="standardization-and-multicollinearity"><span class="header-section-number">14.2.3</span> Standardization and Multicollinearity</h3>
+<p>By scaling all predictors to a common variance, the impact of large magnitude differences between variables is reduced, leading to more stable coefficient estimates. Standardization alone does not reduce correlations between variables. However, it provides numerical stability when using methods other than least squares, making it easier to detect and address multicollinearity issues. When multicollinearity is severe, other techniques, such as principal component regression, may be necessary.</p>
+</section>
+</section>
+<section id="principal-component-regression" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="principal-component-regression"><span class="header-section-number">14.3</span> Principal Component Regression</h2>
+<p>One effective method for addressing multicollinearity is <em>Principal Component Regression (PCR)</em>, which combines <em>Principal Component Analysis (PCA)</em> and linear regression. The key idea behind PCR is to transform the original predictor variables into a smaller set of uncorrelated variables, called <strong>principal components (PCs)</strong>, which capture the most variance in the data.</p>
+<section id="introduction-to-principal-component-analysis-pca" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="introduction-to-principal-component-analysis-pca"><span class="header-section-number">14.3.1</span> Introduction to Principal Component Analysis (PCA)</h3>
+<p>PCA is a <em>dimensionality reduction</em> technique that identifies the directions (called <em>principal components</em>) along which the variation in the data is maximized. These directions are orthogonal to each other and ranked by the amount of variance they capture. The first principal component explains the largest amount of variance in the data, followed by the second principal component, and so on. Each principal component is a linear combination of the original predictor variables.</p>
+<p>In practical terms, PCA helps to reduce the dimensionality of the data, making it more manageable without losing too much information. This is particularly useful in cases where the number of predictors is large, and some of them are highly correlated.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+For those who want to see the math:
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Principal components (PCs) are linear transformations of the original predictor variables that aim to capture the maximum variance in the data. Here is a mathematical summary of how these components are computed:</p>
+<ol type="1">
+<li><strong>Standardizing the Data</strong> Given a dataset with <span class="math inline">\(p\)</span> predictors <span class="math inline">\(x_1, x_2, \dots, x_p\)</span> and <span class="math inline">\(n\)</span> observations, we first standardize each predictor variable to have mean 0 and standard deviation 1:</li>
+</ol>
+<p><span class="math display">\[
+z_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j}
+\]</span></p>
+<p>where: - <span class="math inline">\(z_{ij}\)</span> is the standardized value of the <span class="math inline">\(j\)</span>-th predictor for the <span class="math inline">\(i\)</span>-th observation. - <span class="math inline">\(\bar{x}_j\)</span> is the mean of the <span class="math inline">\(j\)</span>-th predictor. - <span class="math inline">\(s_j\)</span> is the standard deviation of the <span class="math inline">\(j\)</span>-th predictor.</p>
+<p>This step ensures that all variables are on the same scale, which is necessary for PCA.</p>
+<ol start="2" type="1">
+<li><strong>Computing the Covariance Matrix</strong> Once the data is standardized, we compute the covariance matrix <span class="math inline">\(\mathbf{S}\)</span> of the standardized predictors:</li>
+</ol>
+<p><span class="math display">\[
+\mathbf{S} = \frac{1}{n-1} \mathbf{Z}^T \mathbf{Z}
+\]</span></p>
+<p>where <span class="math inline">\(\mathbf{Z}\)</span> is the matrix of standardized data with <span class="math inline">\(n\)</span> rows (observations) and <span class="math inline">\(p\)</span> columns (predictors).</p>
+<ol start="3" type="1">
+<li><strong>Finding Eigenvalues and Eigenvectors</strong> We solve the following eigenvalue problem for the covariance matrix <span class="math inline">\(\mathbf{S}\)</span>:</li>
+</ol>
+<p><span class="math display">\[
+\mathbf{S} \mathbf{v}_j = \lambda_j \mathbf{v}_j
+\]</span></p>
+<p>where: - <span class="math inline">\(\lambda_j\)</span> is the <span class="math inline">\(j\)</span>-th eigenvalue of the covariance matrix. - <span class="math inline">\(\mathbf{v}_j\)</span> is the corresponding eigenvector (also called the loading vector) associated with <span class="math inline">\(\lambda_j\)</span>.</p>
+<p>The eigenvalues <span class="math inline">\(\lambda_1, \lambda_2, \dots, \lambda_p\)</span> represent the amount of variance explained by each principal component. The eigenvectors define the direction of the new coordinate axes (principal components).</p>
+<ol start="4" type="1">
+<li><strong>Constructing the Principal Components</strong> The <span class="math inline">\(j\)</span>-th principal component <span class="math inline">\(PC_j\)</span> is a linear combination of the original standardized variables:</li>
+</ol>
+<p><span class="math display">\[
+PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
+\]</span></p>
+<p>where <span class="math inline">\(v_{jk}\)</span> is the <span class="math inline">\(k\)</span>-th element of the eigenvector <span class="math inline">\(\mathbf{v}_j\)</span>.</p>
+<p>Each principal component is uncorrelated with the others and explains a decreasing amount of variance. Specifically:</p>
+<ul>
+<li><strong>PC1</strong> (the first principal component) explains the largest possible variance.</li>
+<li><strong>PC2</strong> explains the largest remaining variance subject to being orthogonal to <strong>PC1</strong>.</li>
+<li>This process continues for all <span class="math inline">\(p\)</span> components.</li>
+</ul>
+<ol start="5" type="1">
+<li><strong>Explained Variance</strong> The proportion of the total variance explained by the <span class="math inline">\(j\)</span>-th principal component is:</li>
+</ol>
+<p><span class="math display">\[
+\text{Explained Variance of } PC_j = \frac{\lambda_j}{\sum_{k=1}^p \lambda_k}
+\]</span></p>
+<p>The cumulative variance explained by the first <span class="math inline">\(m\)</span> components is:</p>
+<p><span class="math display">\[
+\text{Cumulative Explained Variance} = \frac{\sum_{j=1}^m \lambda_j}{\sum_{k=1}^p \lambda_k}
+\]</span></p>
+</div>
+</div>
+</div>
+<p>In the context of regression, instead of regressing the response variable on the original set of predictors, we use the principal components as the new predictors. By selecting a subset of the principal components, we can retain most of the variability in the predictors while reducing multicollinearity.</p>
+<div id="exm-14_3" class="theorem example">
+<p><span class="theorem-title"><strong>Example 14.3 (<code>bodyfat</code> data again) </strong></span>The following steps will illustrate how to apply PCA to the predictors and then use the principal components in a regression model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">3</span>)</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="co">#determine the parameters for any of the steps in the recipe</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a><span class="co">#in this case, we need the mean and std dev of each variable</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a><span class="co">#along with the values for principal components</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>prepped <span class="ot">=</span> recipe <span class="sc">|&gt;</span> <span class="fu">prep</span>()</span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a><span class="co">#apply the steps (with the prepared parameters found in prep)</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a><span class="co">#to the data</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a>pca_data <span class="ot">=</span> prepped <span class="sc">|&gt;</span> <span class="fu">bake</span>(dat)</span>
+<span id="cb25-13"><a href="#cb25-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-14"><a href="#cb25-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Print the principal components</span></span>
+<span id="cb25-15"><a href="#cb25-15" aria-hidden="true" tabindex="-1"></a>pca_data</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 20 × 4
+    bfat      PC1     PC2       PC3
+   &lt;dbl&gt;    &lt;dbl&gt;   &lt;dbl&gt;     &lt;dbl&gt;
+ 1  11.9 -1.63     1.10    0.0463  
+ 2  22.8 -0.193    0.264   0.0375  
+ 3  18.7  1.73     2.19   -0.0245  
+ 4  20.1  1.33     0.547  -0.00257 
+ 5  12.9 -1.62     1.62   -0.0363  
+ 6  21.7 -0.00515 -1.20    0.00331 
+ 7  27.1  1.72    -0.683  -0.0242  
+ 8  25.4  0.755    0.628   0.0327  
+ 9  21.3 -1.02    -0.947   0.0301  
+10  19.3  0.0379  -0.891  -0.0448  
+11  25.4  1.68     0.0702 -0.0153  
+12  27.2  1.43    -0.349   0.000371
+13  11.7 -1.92    -0.677  -0.0247  
+14  17.8 -1.52     0.883  -0.0221  
+15  12.8 -3.10    -0.734  -0.0177  
+16  23.9  1.21     0.296   0.0176  
+17  22.6  0.645   -0.843  -0.0184  
+18  25.4  1.28    -1.42    0.0179  
+19  14.8 -0.767    0.148   0.0302  
+20  21.1 -0.0464  -0.0141  0.0148  </code></pre>
+</div>
+</div>
+<p>The following code provides the principal components derived from the predictors in the <code>BodyFat</code> dataset. Each principal component is a linear combination of the original predictors (<code>tri</code>, <code>thigh</code>, <code>midarm</code>), and they explain the maximum variance in the data.</p>
+<p>To visualize how PCA works and to understand the contribution of each principal component, let’s examine the explained variance.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract the PCA results</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>pca_results <span class="ot">=</span> prepped <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">number =</span> <span class="dv">2</span>, <span class="at">type=</span><span class="st">"variance"</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>pca_results</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 12 × 4
+   terms                            value component id       
+   &lt;chr&gt;                            &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;    
+ 1 variance                      2.07             1 pca_AC2n6
+ 2 variance                      0.933            2 pca_AC2n6
+ 3 variance                      0.000727         3 pca_AC2n6
+ 4 cumulative variance           2.07             1 pca_AC2n6
+ 5 cumulative variance           3.00             2 pca_AC2n6
+ 6 cumulative variance           3                3 pca_AC2n6
+ 7 percent variance             68.9              1 pca_AC2n6
+ 8 percent variance             31.1              2 pca_AC2n6
+ 9 percent variance              0.0242           3 pca_AC2n6
+10 cumulative percent variance  68.9              1 pca_AC2n6
+11 cumulative percent variance 100.               2 pca_AC2n6
+12 cumulative percent variance 100                3 pca_AC2n6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the explained variance</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>pca_results <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(terms <span class="sc">==</span> <span class="st">"percent variance"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> component, <span class="at">y =</span> value)) <span class="sc">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_bar</span>(<span class="at">stat =</span> <span class="st">"identity"</span>) <span class="sc">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Explained Variance by Principal Component"</span>, </span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Principal Components"</span>, </span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Proportion of Variance Explained"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>In this plot, we observe the proportion of variance explained by each principal component. The first principal component typically explains the most variance, followed by the second, and so on. Depending on the cumulative proportion of variance explained, we can select an appropriate number of components for our regression model.</p>
+<p>Let’s now look at the scatterplot matrix of the PCA data. Note how the correlations between the PCs are zero.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(pca_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in geom_point(): All aesthetics have length 1, but the data has 16 rows.
+ℹ Please consider using `annotate()` or provide this layer with data containing
+  a single row.</code></pre>
+</div>
+<div class="cell-output-display">
+<p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Principal Component Regression is just using these PCs as the predictor variables. We see from above that the third PC does not explain much variability. Thus, we can just use the first two PCs and save a degree of freedom since we will be using one less coefficient in the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">2</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)    20.2      0.566     35.7  1.98e-17
+2 PC1             2.94     0.404      7.27 1.30e- 6
+3 PC2            -1.65     0.601     -2.75 1.38e- 2</code></pre>
+</div>
+</div>
+<p>Note how small the standard errors are for the coefficients now that we no longer have multicollinearity. Let’s verify that there is no multicollinearity by examining the VIFs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> lm_fit <span class="sc">|&gt;</span>  <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>PC1 PC2 
+  1   1 </code></pre>
+</div>
+</div>
+<p>Both VIFs are exactly one indicating no multicollinearity.</p>
+</div>
+<p>PCR gives us the ability to still fit the regression model even in the presence of extreme multicollinearity. Another benefit of PCR is that you can also reduce dimensionality by only using the PCs that explain most of the variability. Note that you still need all the original predictor variables since the PCs are linear combinations of these variables. Thus, this is not a method for removing predictor variables. So if our goal is to determine if a variable (that may be difficult or expensive to obtain) can be dropped, then PCR is not the tool we want to use. In addition, in PCR we lose interpretability of the coefficients.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./13_Inferences.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>
