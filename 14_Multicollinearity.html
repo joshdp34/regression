@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./15_Indicator.html" rel="next">
 <link href="./13_Inferences.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -223,6 +224,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <div class="sidebar-item-container"> 
   <a href="./14_Multicollinearity.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Indicator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
     </ul>
@@ -714,18 +721,18 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <pre><code># A tibble: 12 × 4
    terms                            value component id       
    &lt;chr&gt;                            &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;    
- 1 variance                      2.07             1 pca_AC2n6
- 2 variance                      0.933            2 pca_AC2n6
- 3 variance                      0.000727         3 pca_AC2n6
- 4 cumulative variance           2.07             1 pca_AC2n6
- 5 cumulative variance           3.00             2 pca_AC2n6
- 6 cumulative variance           3                3 pca_AC2n6
- 7 percent variance             68.9              1 pca_AC2n6
- 8 percent variance             31.1              2 pca_AC2n6
- 9 percent variance              0.0242           3 pca_AC2n6
-10 cumulative percent variance  68.9              1 pca_AC2n6
-11 cumulative percent variance 100.               2 pca_AC2n6
-12 cumulative percent variance 100                3 pca_AC2n6</code></pre>
+ 1 variance                      2.07             1 pca_ZryjT
+ 2 variance                      0.933            2 pca_ZryjT
+ 3 variance                      0.000727         3 pca_ZryjT
+ 4 cumulative variance           2.07             1 pca_ZryjT
+ 5 cumulative variance           3.00             2 pca_ZryjT
+ 6 cumulative variance           3                3 pca_ZryjT
+ 7 percent variance             68.9              1 pca_ZryjT
+ 8 percent variance             31.1              2 pca_ZryjT
+ 9 percent variance              0.0242           3 pca_ZryjT
+10 cumulative percent variance  68.9              1 pca_ZryjT
+11 cumulative percent variance 100.               2 pca_ZryjT
+12 cumulative percent variance 100                3 pca_ZryjT</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the explained variance</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>pca_results <span class="sc">|&gt;</span></span>
@@ -743,32 +750,27 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <p>Let’s now look at the scatterplot matrix of the PCA data. Note how the correlations between the PCs are zero.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(pca_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Warning in geom_point(): All aesthetics have length 1, but the data has 16 rows.
-ℹ Please consider using `annotate()` or provide this layer with data containing
-  a single row.</code></pre>
-</div>
 <div class="cell-output-display">
 <p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
 </div>
 </div>
 <p>Principal Component Regression is just using these PCs as the predictor variables. We see from above that the third PC does not explain much variability. Thus, we can just use the first two PCs and save a degree of freedom since we will be using one less coefficient in the model.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">2</span>)</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
-<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
-<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
-<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
-<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
-<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(bfat <span class="sc">~</span> ., <span class="at">data =</span> dat) <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_normalize</span>(<span class="fu">all_predictors</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_pca</span>(<span class="fu">all_predictors</span>(), <span class="at">num_comp =</span> <span class="dv">2</span>)</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 5
   term        estimate std.error statistic  p.value
@@ -780,9 +782,9 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 <p>Note how small the standard errors are for the coefficients now that we no longer have multicollinearity. Let’s verify that there is no multicollinearity by examining the VIFs.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> lm_fit <span class="sc">|&gt;</span>  <span class="fu">extract_fit_engine</span>()</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> lm_fit <span class="sc">|&gt;</span>  <span class="fu">extract_fit_engine</span>()</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">vif</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>PC1 PC2 
   1   1 </code></pre>
@@ -1037,6 +1039,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./15_Indicator.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->
