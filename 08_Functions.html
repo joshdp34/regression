@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 8&nbsp; Functions</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./09_Libraries.html" rel="next">
+<link href="./07_Loops.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./08_Functions.html"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#defining-a-function" id="toc-defining-a-function" class="nav-link active" data-scroll-target="#defining-a-function"><span class="header-section-number">8.1</span> Defining a Function</a></li>
+  <li><a href="#calling-a-function" id="toc-calling-a-function" class="nav-link" data-scroll-target="#calling-a-function"><span class="header-section-number">8.2</span> Calling a Function</a></li>
+  <li><a href="#function-arguments" id="toc-function-arguments" class="nav-link" data-scroll-target="#function-arguments"><span class="header-section-number">8.3</span> Function Arguments</a>
+  <ul class="collapse">
+  <li><a href="#positional-arguments" id="toc-positional-arguments" class="nav-link" data-scroll-target="#positional-arguments"><span class="header-section-number">8.3.1</span> Positional Arguments</a></li>
+  <li><a href="#keyword-arguments" id="toc-keyword-arguments" class="nav-link" data-scroll-target="#keyword-arguments"><span class="header-section-number">8.3.2</span> Keyword Arguments</a></li>
+  <li><a href="#default-arguments" id="toc-default-arguments" class="nav-link" data-scroll-target="#default-arguments"><span class="header-section-number">8.3.3</span> Default Arguments</a></li>
+  <li><a href="#sec-functions_kargs" id="toc-sec-functions_kargs" class="nav-link" data-scroll-target="#sec-functions_kargs"><span class="header-section-number">8.3.4</span> Variable-Length Arguments</a></li>
+  </ul></li>
+  <li><a href="#return-values" id="toc-return-values" class="nav-link" data-scroll-target="#return-values"><span class="header-section-number">8.4</span> Return Values</a>
+  <ul class="collapse">
+  <li><a href="#returning-multiple-values" id="toc-returning-multiple-values" class="nav-link" data-scroll-target="#returning-multiple-values"><span class="header-section-number">8.4.1</span> Returning Multiple Values</a></li>
+  </ul></li>
+  <li><a href="#best-practices-in-function-design" id="toc-best-practices-in-function-design" class="nav-link" data-scroll-target="#best-practices-in-function-design"><span class="header-section-number">8.5</span> Best Practices in Function Design</a></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">8.6</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-functions" class="quarto-section-identifier"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Functions are integral to Python programming, and their importance cannot be overstated. At their core, functions encapsulate a specific block of code that performs a well-defined task. By isolating this task within a function, it can be easily reused, tested, and modified without affecting other parts of the program. This modular approach to programming offers several significant benefits, particularly in the context of writing efficient and maintainable code.</p>
+<section id="reusability" class="level4">
+<h4 class="anchored" data-anchor-id="reusability">Reusability</h4>
+<p>One of the most compelling reasons to use functions is their ability to promote code reusability. Consider a scenario where you need to perform the same calculation at multiple points in your program. Without functions, you would have to write the same code multiple times, leading to redundancy and increased chances of errors. By defining a function, you can write the code once and reuse it wherever needed, thereby reducing duplication and ensuring consistency.</p>
+</section>
+<section id="modularity" class="level4">
+<h4 class="anchored" data-anchor-id="modularity">Modularity</h4>
+<p>Functions play a crucial role in breaking down complex problems into smaller, more manageable parts, a concept known as modularity. This makes it easier to develop, understand, and maintain your code. Each function is responsible for a specific task, allowing you to focus on one part of the problem at a time. This modular approach is particularly valuable in large programs, where managing the entire codebase as a single monolithic block would be overwhelming.</p>
+</section>
+<section id="abstraction" class="level4">
+<h4 class="anchored" data-anchor-id="abstraction">Abstraction</h4>
+<p>Functions enable abstraction by hiding the complexity of certain operations behind a simple interface. When you call a function, you don’t need to know the intricate details of how it works—only what it does. This abstraction allows you to use complex operations without being bogged down by their implementation details.</p>
+<p><strong>Example:</strong> When you use Python’s built-in <code>print()</code> function, you don’t need to know how Python interacts with the system’s output stream to display text on the screen. You just need to know that calling <code>print("Hello, World!")</code> will display the text. Similarly, when you write your own functions, you can encapsulate complex logic and expose a simple interface to the rest of your program.</p>
+</section>
+<section id="maintainability" class="level4">
+<h4 class="anchored" data-anchor-id="maintainability">Maintainability</h4>
+<p>As software evolves, maintaining and updating code becomes increasingly important. Functions contribute to maintainability by isolating specific pieces of logic, making it easier to update or fix bugs in one part of the code without affecting others. When a function’s logic needs to be updated, you only need to modify the function itself, rather than search through the entire codebase for instances where that logic was used.</p>
+</section>
+<section id="testing-and-debugging" class="level4">
+<h4 class="anchored" data-anchor-id="testing-and-debugging">Testing and Debugging</h4>
+<p>Functions simplify the testing and debugging process. Since functions are self-contained blocks of code, they can be tested independently of the rest of the program. This allows you to isolate and fix issues more efficiently. Additionally, functions with well-defined inputs and outputs are easier to verify for correctness.</p>
+</section>
+<section id="defining-a-function" class="level2" data-number="8.1">
+<h2 data-number="8.1" class="anchored" data-anchor-id="defining-a-function"><span class="header-section-number">8.1</span> Defining a Function</h2>
+<p>To define a function in Python, you use the <code>def</code> keyword, followed by the function name, parentheses <code>()</code>, and a colon <code>:</code>. The function body, which contains the code to be executed, is indented beneath the function definition.</p>
+<p><strong>Syntax:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> function_name(parameters):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Function body</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    statement(s)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet():</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Hello, World!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the function <code>greet()</code> is defined to print the message “Hello, World!” when called.</p>
+</section>
+<section id="calling-a-function" class="level2" data-number="8.2">
+<h2 data-number="8.2" class="anchored" data-anchor-id="calling-a-function"><span class="header-section-number">8.2</span> Calling a Function</h2>
+<p>Once a function is defined, it can be called by using its name followed by parentheses <code>()</code>.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>greet() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, World!</code></pre>
+</div>
+</div>
+<p>Here, the <code>greet()</code> function is invoked, and the message is displayed.</p>
+</section>
+<section id="function-arguments" class="level2" data-number="8.3">
+<h2 data-number="8.3" class="anchored" data-anchor-id="function-arguments"><span class="header-section-number">8.3</span> Function Arguments</h2>
+<p>Functions can accept input values called arguments or parameters, allowing them to perform operations based on the input provided. These arguments are specified within the parentheses when defining the function.</p>
+<section id="positional-arguments" class="level3" data-number="8.3.1">
+<h3 data-number="8.3.1" class="anchored" data-anchor-id="positional-arguments"><span class="header-section-number">8.3.1</span> Positional Arguments</h3>
+<p>Positional arguments are the most straightforward type of arguments. They are assigned to parameters based on their position in the function call.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet(name):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Hello, </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">!"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>greet(<span class="st">"Alice"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, Alice!</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+f-strings
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The argument in the <code>print()</code> function above is called an f-string. An f-string, introduced in Python 3.6, is a way to embed expressions inside string literals using curly braces <code>{}</code>. The <code>f</code> or <code>F</code> before the opening quote of the string indicates that it is an f-string. This allows you to include variables or expressions directly within the string, making string formatting more concise and readable.</p>
+</div>
+</div>
+<p>Positional arguments are assigned to function parameters by their order of appearance. This means the first argument in the function call is passed to the first parameter, the second argument to the second parameter, and so on.</p>
+<p><strong>Example:</strong> Consider the following function definition:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> describe_person(name, age, city):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>name<span class="sc">}</span><span class="ss"> is </span><span class="sc">{</span>age<span class="sc">}</span><span class="ss"> years old and lives in </span><span class="sc">{</span>city<span class="sc">}</span><span class="ss">."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If you call this function with the following positional arguments:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>describe_person(<span class="st">"Alice"</span>, <span class="dv">30</span>, <span class="st">"New York"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The function execution will map the arguments as follows:</p>
+<ul>
+<li><code>name</code> will be assigned the value <code>"Alice"</code></li>
+<li><code>age</code> will be assigned the value <code>30</code></li>
+<li><code>city</code> will be assigned the value <code>"New York"</code></li>
+</ul>
+<p>The output will be:</p>
+<pre><code>Alice is 30 years old and lives in New York.</code></pre>
+<section id="importance-of-order" class="level4">
+<h4 class="anchored" data-anchor-id="importance-of-order">Importance of Order</h4>
+<p>Since positional arguments rely on the order in which they are passed, swapping the order can lead to incorrect or unintended results.</p>
+<p><strong>Example of Incorrect Order:</strong></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>describe_person(<span class="dv">30</span>, <span class="st">"Alice"</span>, <span class="st">"New York"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case:</p>
+<ul>
+<li><code>name</code> will be assigned <code>30</code></li>
+<li><code>age</code> will be assigned <code>"Alice"</code></li>
+<li><code>city</code> will be assigned <code>"New York"</code></li>
+</ul>
+<p>This will produce the incorrect output:</p>
+<pre><code>30 is Alice years old and lives in New York.</code></pre>
+</section>
+</section>
+<section id="keyword-arguments" class="level3" data-number="8.3.2">
+<h3 data-number="8.3.2" class="anchored" data-anchor-id="keyword-arguments"><span class="header-section-number">8.3.2</span> Keyword Arguments</h3>
+<p>Keyword arguments allow you to specify the values for parameters by explicitly naming them in the function call, regardless of their order.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet(name, message):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>message<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">!"</span>)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>greet(name<span class="op">=</span><span class="st">"Bob"</span>, message<span class="op">=</span><span class="st">"Good morning"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Good morning, Bob!</code></pre>
+</div>
+</div>
+<p>The function can also be called with the order swapped but with the correct names.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>greet(message<span class="op">=</span><span class="st">"Good morning"</span>, name<span class="op">=</span><span class="st">"Bob"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Good morning, Bob!</code></pre>
+</div>
+</div>
+<p>Here, the arguments are passed by specifying the parameter names, providing flexibility in the order of arguments.</p>
+<section id="combining-positional-and-keyword-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="combining-positional-and-keyword-arguments">Combining Positional and Keyword Arguments</h4>
+<p>Positional arguments can be combined with keyword arguments. However, when mixing them, positional arguments must always come before keyword arguments.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>describe_person(<span class="st">"Alice"</span>, age<span class="op">=</span><span class="dv">30</span>, city<span class="op">=</span><span class="st">"New York"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alice is 30 years old and lives in New York.</code></pre>
+</div>
+</div>
+<p>This call is valid and will produce the correct output, as the positional argument <code>"Alice"</code> is followed by keyword arguments for <code>age</code> and <code>city</code>.</p>
+</section>
+</section>
+<section id="default-arguments" class="level3" data-number="8.3.3">
+<h3 data-number="8.3.3" class="anchored" data-anchor-id="default-arguments"><span class="header-section-number">8.3.3</span> Default Arguments</h3>
+<p>Default arguments allow you to define a function with default values for certain parameters. If no argument is provided for a parameter with a default value, the default is used.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet(name, message<span class="op">=</span><span class="st">"Hello"</span>):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>message<span class="sc">}</span><span class="ss">, </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">!"</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>greet(<span class="st">"Charlie"</span>)  </span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>greet(<span class="st">"Charlie"</span>, <span class="st">"Goodbye"</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, Charlie!
+Goodbye, Charlie!</code></pre>
+</div>
+</div>
+<p>In this example, the <code>message</code> parameter has a default value of <code>"Hello"</code>, which is used when no other value is provided.</p>
+</section>
+<section id="sec-functions_kargs" class="level3" data-number="8.3.4">
+<h3 data-number="8.3.4" class="anchored" data-anchor-id="sec-functions_kargs"><span class="header-section-number">8.3.4</span> Variable-Length Arguments</h3>
+<p>In Python, functions are not limited to accepting a fixed number of arguments. You can design functions to accept a variable number of arguments, allowing for greater flexibility and adaptability in different scenarios. Python provides two special types of arguments for this purpose: <code>*args</code> for positional arguments and <code>**kwargs</code> for keyword arguments. We will discuss <code>*args</code> here and come back to <code>**kwargs</code> later in <a href="#sec-data2"><span class="quarto-unresolved-ref">sec-data2</span></a> after we discuss dictionaries.</p>
+<section id="args-variable-length-positional-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="args-variable-length-positional-arguments"><code>*args</code> – Variable-Length Positional Arguments</h4>
+<p>The <code>*args</code> syntax allows a function to accept any number of positional arguments. When you use <code>*args</code> in a function definition, Python collects all the positional arguments passed into the function and stores them in a tuple, which is an ordered and immutable collection of items (discussed in <a href="#sec-data1"><span class="quarto-unresolved-ref">sec-data1</span></a>). When you define a function with <code>*args</code>, it can handle calls with any number of positional arguments—from zero to many.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> greet(<span class="op">*</span>names):</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> name <span class="kw">in</span> names:</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Hello, </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s how this function works:</p>
+<ul>
+<li>If you call <code>greet("Alice", "Bob", "Charlie")</code>, the function will receive <code>names</code> as a tuple containing <code>("Alice", "Bob", "Charlie")</code>.</li>
+<li>The function will then iterate over the tuple and print a greeting for each name.</li>
+</ul>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>greet(<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Hello, Alice!
+Hello, Bob!
+Hello, Charlie!</code></pre>
+</div>
+</div>
+<section id="when-to-use-args" class="level5">
+<h5 class="anchored" data-anchor-id="when-to-use-args">When to Use <code>*args</code></h5>
+<ul>
+<li><strong>When the number of inputs is unknown:</strong> If you’re writing a function that might need to handle a varying number of inputs, <code>*args</code> is ideal.</li>
+<li><strong>For flexible APIs:</strong> In some cases, you want to provide a flexible API that allows users to pass in any number of arguments without enforcing a strict parameter count.</li>
+</ul>
+<p><strong>Example:</strong> Imagine a function that calculates the total sum of an arbitrary number of numbers:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_sum(<span class="op">*</span>numbers):</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>        total <span class="op">+=</span> number</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> total</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calculate_sum(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)) </span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calculate_sum(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>6
+50</code></pre>
+</div>
+</div>
+<p>This function can sum any number of integers or floats, demonstrating how <code>*args</code> enables flexible input handling.</p>
+</section>
+</section>
+</section>
+</section>
+<section id="return-values" class="level2" data-number="8.4">
+<h2 data-number="8.4" class="anchored" data-anchor-id="return-values"><span class="header-section-number">8.4</span> Return Values</h2>
+<p>Functions can return values using the <code>return</code> statement. The value returned can be assigned to a variable for further use in the program.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> add(<span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>7</code></pre>
+</div>
+</div>
+<p>Here, the <code>add</code> function returns the sum of <code>a</code> and <code>b</code>, which is then stored in the variable <code>result</code>.</p>
+<section id="returning-multiple-values" class="level3" data-number="8.4.1">
+<h3 data-number="8.4.1" class="anchored" data-anchor-id="returning-multiple-values"><span class="header-section-number">8.4.1</span> Returning Multiple Values</h3>
+<p>In Python, a function can return more than one value at a time, which is a feature that adds considerable flexibility to the way functions are used. When a function returns multiple values, it does so by returning a tuple. This allows you to return several related pieces of data from a single function call, without the need to explicitly create and manage a complex data structure.</p>
+<section id="how-multiple-return-values-work" class="level4">
+<h4 class="anchored" data-anchor-id="how-multiple-return-values-work">How Multiple Return Values Work</h4>
+<p>When a function is designed to return multiple values, it simply lists the values after the <code>return</code> keyword, separated by commas. Python automatically packages these values into a tuple. The caller of the function can then unpack this tuple (see <a href="#sec-data1"><span class="quarto-unresolved-ref">sec-data1</span></a>) into separate variables, each receiving one of the returned values.</p>
+<p><strong>Example:</strong></p>
+<p>Consider the following example:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_subtract(a, b):</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b, a <span class="op">-</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this function:</p>
+<ul>
+<li><code>a + b</code> computes the sum of the two arguments <code>a</code> and <code>b</code>.</li>
+<li><code>a - b</code> computes the difference between <code>a</code> and <code>b</code>.</li>
+<li>Both values are returned together as a tuple.</li>
+</ul>
+<p>When this function is called:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>sum_result, diff_result <span class="op">=</span> add_subtract(<span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sum_result)  </span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(diff_result)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>15
+5</code></pre>
+</div>
+</div>
+<p>Here, the tuple <code>(15, 5)</code> is returned, and it is immediately unpacked into the variables <code>sum_result</code> and <code>diff_result</code>. This allows the caller to easily access each result separately.</p>
+</section>
+<section id="benefits-of-returning-multiple-values" class="level4">
+<h4 class="anchored" data-anchor-id="benefits-of-returning-multiple-values">Benefits of Returning Multiple Values</h4>
+<p>Returning multiple values from a function is particularly advantageous in situations where a single calculation or process naturally produces more than one result.</p>
+<p><strong>Example 1: Mathematical Operations</strong></p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_area_perimeter(length, width):</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>    area <span class="op">=</span> length <span class="op">*</span> width</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>    perimeter <span class="op">=</span> <span class="dv">2</span> <span class="op">*</span> (length <span class="op">+</span> width)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> area, perimeter</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>area, perimeter <span class="op">=</span> calculate_area_perimeter(<span class="dv">5</span>, <span class="dv">3</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Area: </span><span class="sc">{</span>area<span class="sc">}</span><span class="ss">, Perimeter: </span><span class="sc">{</span>perimeter<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Area: 15, Perimeter: 16</code></pre>
+</div>
+</div>
+<p>In this example, the function <code>calculate_area_perimeter</code> returns both the area and perimeter of a rectangle. This allows the caller to retrieve and use both pieces of information with a single function call.</p>
+<p><strong>Example 2: Finding Extremes</strong></p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> find_extremes(numbers):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">max</span>(numbers), <span class="bu">min</span>(numbers)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>maximum, minimum <span class="op">=</span> find_extremes([<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">5</span>, <span class="dv">30</span>, <span class="dv">15</span>])</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Maximum: </span><span class="sc">{</span>maximum<span class="sc">}</span><span class="ss">, Minimum: </span><span class="sc">{</span>minimum<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Maximum: 30, Minimum: 5</code></pre>
+</div>
+</div>
+<p>Here, the function <code>find_extremes</code> computes and returns both the maximum and minimum values from a list of numbers, making it easy to handle both results simultaneously.</p>
+</section>
+<section id="unpacking-returned-values" class="level4">
+<h4 class="anchored" data-anchor-id="unpacking-returned-values">Unpacking Returned Values</h4>
+<p>When a function returns multiple values, the caller can unpack these values into individual variables. This is done by assigning the function call to a tuple of variables corresponding to the number of values returned.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>sum_result, diff_result <span class="op">=</span> add_subtract(<span class="dv">10</span>, <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this case, the returned tuple <code>(15, 5)</code> is unpacked into <code>sum_result</code> and <code>diff_result</code>, making the individual results accessible immediately.</p>
+</section>
+<section id="single-return-value-with-a-tuple" class="level4">
+<h4 class="anchored" data-anchor-id="single-return-value-with-a-tuple">Single Return Value with a Tuple</h4>
+<p>If needed, the function can return a tuple directly without unpacking it in the calling code. This can be useful when the function’s result is intended to be passed around or used as a single entity.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> add_subtract(<span class="dv">10</span>, <span class="dv">5</span>)</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>(15, 5)</code></pre>
+</div>
+</div>
+<p>Here, the entire tuple <code>(15, 5)</code> is returned as a single object and can be used as such.</p>
+</section>
+</section>
+</section>
+<section id="best-practices-in-function-design" class="level2" data-number="8.5">
+<h2 data-number="8.5" class="anchored" data-anchor-id="best-practices-in-function-design"><span class="header-section-number">8.5</span> Best Practices in Function Design</h2>
+<p>Designing functions effectively is crucial for writing clean, maintainable, and efficient code. Well-designed functions not only make your code easier to understand and use but also reduce the likelihood of bugs and make it easier to extend and modify your programs. Below are some best practices to follow when designing functions in Python.</p>
+<section id="use-descriptive-names" class="level4">
+<h4 class="anchored" data-anchor-id="use-descriptive-names">Use Descriptive Names</h4>
+<p>A function’s name should clearly and concisely describe what the function does. Descriptive names make the code more readable and self-documenting, allowing others (and your future self) to understand the purpose of the function without needing extensive comments or external documentation.</p>
+<p><strong>Example:</strong></p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_average(scores):</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(scores) <span class="op">/</span> <span class="bu">len</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the function name <code>calculate_average</code> clearly indicates that the function computes the average of a list of scores. Anyone reading the code can immediately grasp the function’s purpose without needing to examine its implementation.</p>
+<p><strong>Why This Matters:</strong></p>
+<ul>
+<li><strong>Readability:</strong> Descriptive names make your code easier to read and understand.</li>
+<li><strong>Maintainability:</strong> When functions are clearly named, it’s easier to locate and update the appropriate function when changes are needed.</li>
+<li><strong>Collaboration:</strong> In team settings, clear function names help other developers understand and use your code correctly, reducing the potential for errors.</li>
+</ul>
+</section>
+<section id="keep-functions-focused" class="level4">
+<h4 class="anchored" data-anchor-id="keep-functions-focused">Keep Functions Focused</h4>
+<p>A well-designed function should perform a single, clearly defined task or a set of closely related tasks. This practice, often referred to as the “Single Responsibility Principle,” ensures that your functions are simple, modular, and reusable.</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> read_file(file_path):</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Processing logic here</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> process_data(data):</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Processing logic here</span></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-9"><a href="#cb38-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> write_file(file_path, data):</span>
+<span id="cb38-10"><a href="#cb38-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Processing logic here</span></span>
+<span id="cb38-11"><a href="#cb38-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<code>pass</code>
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In Python, the <code>pass</code> keyword is used as a placeholder in your code. It allows you to write syntactically correct code blocks where no action is required. Essentially, <code>pass</code> does nothing when executed. It’s particularly useful in situations where you have a code structure that requires a statement, but you haven’t decided what the specific code should be yet.</p>
+<p>Think of <code>pass</code> as a placeholder in your code that let you outline the structure of your program without having to fill in the details immediately. This can be very helpful during the initial stages of writing or when planning out complex code.</p>
+</div>
+</div>
+<p>In this example, each function is focused on a specific task: reading a file, processing data, and writing to a file. By keeping each function focused, the code becomes more modular and easier to maintain.</p>
+<p><strong>Why This Matters:</strong></p>
+<ul>
+<li><strong>Simplicity:</strong> Functions that do one thing are easier to understand, test, and debug.</li>
+<li><strong>Reusability:</strong> Focused functions are more likely to be reusable in different parts of your program or even in other projects.</li>
+<li><strong>Maintainability:</strong> When functions are responsible for a single task, changes to one part of the code are less likely to have unintended side effects on other parts.</li>
+</ul>
+</section>
+<section id="avoid-side-effects" class="level4">
+<h4 class="anchored" data-anchor-id="avoid-side-effects">Avoid Side Effects</h4>
+<p>Side effects occur when a function modifies some state or interacts with outside elements like global variables, files, or databases, which are not directly related to its inputs and outputs. While side effects are sometimes necessary, minimizing them helps ensure that functions are predictable and easier to test.</p>
+<p>Recall that global and local variables were first discussed in <a href="#sec-names"><span class="quarto-unresolved-ref">sec-names</span></a>.</p>
+<p><strong>Example of a Function with Side Effects:</strong></p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add_to_total(amount):</span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">global</span> total</span>
+<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a>    total <span class="op">+=</span> amount</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the function <code>add_to_total</code> modifies the global variable <code>total</code>, which is a side effect. This can lead to unpredictable behavior, especially in larger programs where the global state is modified by multiple functions.</p>
+<p><strong>Better Approach:</strong></p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_new_total(current_total, amount):</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> current_total <span class="op">+</span> amount</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this revised example, the function <code>calculate_new_total</code> returns a new total based on the inputs without modifying any external state. The function is now pure, meaning its output depends only on its inputs and has no side effects.</p>
+<p><strong>Why This Matters:</strong></p>
+<ul>
+<li><strong>Predictability:</strong> Functions without side effects are easier to reason about because they produce the same output for the same input every time.</li>
+<li><strong>Testability:</strong> Pure functions are easier to test since you don’t need to set up or tear down any external state.</li>
+<li><strong>Debugging:</strong> Functions that don’t cause side effects are less likely to introduce hidden bugs related to state changes elsewhere in the program.</li>
+</ul>
+</section>
+<section id="document-your-functions" class="level4">
+<h4 class="anchored" data-anchor-id="document-your-functions">Document Your Functions</h4>
+<p>Even with descriptive names, adding docstrings to your functions is a good practice. A docstring provides a description of the function’s purpose, parameters, and return values, making it easier for others to use your function correctly.</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_average(scores):</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Calculates the average of a list of scores.</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters:</span></span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a><span class="co">    scores (list of int/float): A list of numeric scores.</span></span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="co">    float: The average of the scores.</span></span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(scores) <span class="op">/</span> <span class="bu">len</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Why This Matters:</strong></p>
+<ul>
+<li><strong>Clarity:</strong> Docstrings clarify how to use the function, what inputs it expects, and what outputs it provides.</li>
+<li><strong>Collaboration:</strong> Docstrings make it easier for others to understand and use your code.</li>
+<li><strong>Self-Documentation:</strong> Well-documented functions serve as a form of in-code documentation, reducing the need for external documentation.</li>
+</ul>
+<p>By following these best practices in function design—using descriptive names, keeping functions focused, avoiding side effects, and documenting your functions—you can create Python code that is easier to read, maintain, and extend. These practices not only improve the quality of your code but also make it more robust and reliable, facilitating collaboration and reducing the likelihood of bugs.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="8.6">
+<h2 data-number="8.6" class="anchored" data-anchor-id="exercises"><span class="header-section-number">8.6</span> Exercises</h2>
+<section id="exercise-1-simple-greeting-function" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-simple-greeting-function">Exercise 1: Simple Greeting Function</h4>
+<p>Write a function <code>greet_user</code> that takes a user’s name as input and prints a greeting message.</p>
+</section>
+<section id="exercise-2-arithmetic-function" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-arithmetic-function">Exercise 2: Arithmetic Function</h4>
+<p>Write a function <code>calculate</code> that takes two numbers and returns their sum, difference, product, and quotient.</p>
+</section>
+<section id="exercise-3-temperature-conversion" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-temperature-conversion">Exercise 3: Temperature Conversion</h4>
+<p>Write a function <code>convert_temperature</code> that converts a temperature from Celsius to Fahrenheit.</p>
+</section>
+<section id="exercise-4-flexible-function" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-flexible-function">Exercise 4: Flexible Function</h4>
+<p>Write a function <code>summarize</code> that can take any number of numerical arguments and returns their sum and average.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./07_Loops.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./09_Libraries.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

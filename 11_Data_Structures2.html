@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 11&nbsp; Data Structures: Dictionaries and Sets</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./12_JSON.html" rel="next">
+<link href="./10_Data_Structures1.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./11_Data_Structures2.html"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#dictionaries" id="toc-dictionaries" class="nav-link active" data-scroll-target="#dictionaries"><span class="header-section-number">11.1</span> Dictionaries</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-dictionary" id="toc-creating-a-dictionary" class="nav-link" data-scroll-target="#creating-a-dictionary"><span class="header-section-number">11.1.1</span> Creating a Dictionary</a></li>
+  <li><a href="#accessing-values" id="toc-accessing-values" class="nav-link" data-scroll-target="#accessing-values"><span class="header-section-number">11.1.2</span> Accessing Values</a></li>
+  <li><a href="#adding-and-modifying-entries" id="toc-adding-and-modifying-entries" class="nav-link" data-scroll-target="#adding-and-modifying-entries"><span class="header-section-number">11.1.3</span> Adding and Modifying Entries</a></li>
+  <li><a href="#deleting-key-value-pairs" id="toc-deleting-key-value-pairs" class="nav-link" data-scroll-target="#deleting-key-value-pairs"><span class="header-section-number">11.1.4</span> Deleting Key-Value Pairs</a></li>
+  <li><a href="#dictionary-methods" id="toc-dictionary-methods" class="nav-link" data-scroll-target="#dictionary-methods"><span class="header-section-number">11.1.5</span> Dictionary Methods</a></li>
+  <li><a href="#iterating-over-dictionaries" id="toc-iterating-over-dictionaries" class="nav-link" data-scroll-target="#iterating-over-dictionaries"><span class="header-section-number">11.1.6</span> Iterating Over Dictionaries</a></li>
+  <li><a href="#dictionary-comprehension" id="toc-dictionary-comprehension" class="nav-link" data-scroll-target="#dictionary-comprehension"><span class="header-section-number">11.1.7</span> Dictionary Comprehension</a></li>
+  <li><a href="#practical-applications-of-dictionaries" id="toc-practical-applications-of-dictionaries" class="nav-link" data-scroll-target="#practical-applications-of-dictionaries"><span class="header-section-number">11.1.8</span> Practical Applications of Dictionaries</a></li>
+  <li><a href="#using-kwargs-in-functions" id="toc-using-kwargs-in-functions" class="nav-link" data-scroll-target="#using-kwargs-in-functions"><span class="header-section-number">11.1.9</span> Using <code>**kwargs</code> in Functions</a></li>
+  </ul></li>
+  <li><a href="#sets" id="toc-sets" class="nav-link" data-scroll-target="#sets"><span class="header-section-number">11.2</span> Sets</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-set" id="toc-creating-a-set" class="nav-link" data-scroll-target="#creating-a-set"><span class="header-section-number">11.2.1</span> Creating a Set</a></li>
+  <li><a href="#adding-and-removing-elements" id="toc-adding-and-removing-elements" class="nav-link" data-scroll-target="#adding-and-removing-elements"><span class="header-section-number">11.2.2</span> Adding and Removing Elements</a></li>
+  <li><a href="#set-operations" id="toc-set-operations" class="nav-link" data-scroll-target="#set-operations"><span class="header-section-number">11.2.3</span> Set Operations</a></li>
+  <li><a href="#checking-for-subsets-and-supersets" id="toc-checking-for-subsets-and-supersets" class="nav-link" data-scroll-target="#checking-for-subsets-and-supersets"><span class="header-section-number">11.2.4</span> Checking for Subsets and Supersets</a></li>
+  <li><a href="#frozen-sets" id="toc-frozen-sets" class="nav-link" data-scroll-target="#frozen-sets"><span class="header-section-number">11.2.5</span> Frozen Sets</a></li>
+  <li><a href="#set-comprehensions" id="toc-set-comprehensions" class="nav-link" data-scroll-target="#set-comprehensions"><span class="header-section-number">11.2.6</span> Set Comprehensions</a></li>
+  <li><a href="#set-best-practices" id="toc-set-best-practices" class="nav-link" data-scroll-target="#set-best-practices"><span class="header-section-number">11.2.7</span> Set Best Practices</a></li>
+  <li><a href="#combining-dictionaries-and-sets" id="toc-combining-dictionaries-and-sets" class="nav-link" data-scroll-target="#combining-dictionaries-and-sets"><span class="header-section-number">11.2.8</span> Combining Dictionaries and Sets</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">11.3</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-data2" class="quarto-section-identifier"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>In the previous chapter, we explored lists and tuples, which are foundational data structures in Python. Now, we turn our attention to two additional data structures: dictionaries and sets. These structures provide efficient ways to store and manipulate data, particularly when managing large or complex datasets.</p>
+<section id="dictionaries" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="dictionaries"><span class="header-section-number">11.1</span> Dictionaries</h2>
+<p>A <strong>dictionary</strong> in Python is a versatile and powerful data structure that stores data in key-value pairs. Unlike lists, which use numerical indices, dictionaries use keys that can be of any immutable data type (e.g., strings, numbers, tuples). This makes dictionaries an ideal structure for tasks that require fast lookups, updates, and association between related pieces of data.</p>
+<section id="creating-a-dictionary" class="level3" data-number="11.1.1">
+<h3 data-number="11.1.1" class="anchored" data-anchor-id="creating-a-dictionary"><span class="header-section-number">11.1.1</span> Creating a Dictionary</h3>
+<p>Dictionaries are created using curly braces <code>{}</code> or the <code>dict()</code> constructor, and key-value pairs are defined using the syntax <code>key: value</code>. Let’s explore various ways to create dictionaries:</p>
+<section id="literal-notation" class="level4">
+<h4 class="anchored" data-anchor-id="literal-notation">Literal Notation</h4>
+<p>The most straightforward way to create a dictionary is by using curly braces:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dictionary with student grades</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>grades <span class="op">=</span> {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"John"</span>: <span class="dv">85</span>,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Alice"</span>: <span class="dv">92</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bob"</span>: <span class="dv">78</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="using-the-dict-constructor" class="level4">
+<h4 class="anchored" data-anchor-id="using-the-dict-constructor">Using the <code>dict()</code> Constructor</h4>
+<p>Alternatively, dictionaries can be created using the <code>dict()</code> constructor, which allows for the creation of dictionaries using keyword arguments or iterables of key-value pairs:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dictionary using keyword arguments</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>grades <span class="op">=</span> <span class="bu">dict</span>(John<span class="op">=</span><span class="dv">85</span>, Alice<span class="op">=</span><span class="dv">92</span>, Bob<span class="op">=</span><span class="dv">78</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dictionary from a list of tuples</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>grades <span class="op">=</span> <span class="bu">dict</span>([(<span class="st">"John"</span>, <span class="dv">85</span>), (<span class="st">"Alice"</span>, <span class="dv">92</span>), (<span class="st">"Bob"</span>, <span class="dv">78</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, both methods create the same dictionary as the one using literal notation.</p>
+</section>
+</section>
+<section id="accessing-values" class="level3" data-number="11.1.2">
+<h3 data-number="11.1.2" class="anchored" data-anchor-id="accessing-values"><span class="header-section-number">11.1.2</span> Accessing Values</h3>
+<p>To access values in a dictionary, you use the key as the index. This allows for quick lookup time, which is one of the key advantages of dictionaries over lists or tuples.</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing the value associated with the key "Alice"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades[<span class="st">"Alice"</span>])  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>92</code></pre>
+</div>
+</div>
+<p>If the key is not found, Python raises a <code>KeyError</code>. To avoid this, you can use the <code>get()</code> method, which returns <code>None</code> or a specified default value if the key does not exist:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Safely accessing a key</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades.get(<span class="st">"David"</span>, <span class="st">"Not Found"</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Not Found</code></pre>
+</div>
+</div>
+<p>Note the second argument for the <code>get</code> method is a value that will be returned if the specified key does not exist. The default is <code>None</code>.</p>
+</section>
+<section id="adding-and-modifying-entries" class="level3" data-number="11.1.3">
+<h3 data-number="11.1.3" class="anchored" data-anchor-id="adding-and-modifying-entries"><span class="header-section-number">11.1.3</span> Adding and Modifying Entries</h3>
+<p>Dictionaries are mutable, meaning you can add or modify key-value pairs after the dictionary has been created.</p>
+<section id="modifying-values" class="level4">
+<h4 class="anchored" data-anchor-id="modifying-values">Modifying Values</h4>
+<p>To modify the value associated with an existing key, simply assign a new value to that key:</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modifying the value associated with "John"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>grades[<span class="st">"John"</span>] <span class="op">=</span> <span class="dv">88</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'John': 88, 'Alice': 92, 'Bob': 78}</code></pre>
+</div>
+</div>
+</section>
+<section id="adding-new-key-value-pairs" class="level4">
+<h4 class="anchored" data-anchor-id="adding-new-key-value-pairs">Adding New Key-Value Pairs</h4>
+<p>To add a new key-value pair, use the same syntax as modifying an existing pair:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding a new key-value pair</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>grades[<span class="st">"David"</span>] <span class="op">=</span> <span class="dv">90</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'John': 88, 'Alice': 92, 'Bob': 78, 'David': 90}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="deleting-key-value-pairs" class="level3" data-number="11.1.4">
+<h3 data-number="11.1.4" class="anchored" data-anchor-id="deleting-key-value-pairs"><span class="header-section-number">11.1.4</span> Deleting Key-Value Pairs</h3>
+<p>There are several ways to remove key-value pairs from a dictionary:</p>
+<section id="using-the-del-statement" class="level4">
+<h4 class="anchored" data-anchor-id="using-the-del-statement">Using the <code>del</code> Statement</h4>
+<p>The <code>del</code> statement removes the key-value pair from the dictionary:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing the key-value pair for "Bob"</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="kw">del</span> grades[<span class="st">"Bob"</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'John': 88, 'Alice': 92, 'David': 90}</code></pre>
+</div>
+</div>
+</section>
+<section id="using-the-pop-method" class="level4">
+<h4 class="anchored" data-anchor-id="using-the-pop-method">Using the <code>pop()</code> Method</h4>
+<p>The <code>pop()</code> method removes a key-value pair and returns the value. If the key is not found, it raises a <code>KeyError</code>, unless a default value is provided.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing and returning the value for "Alice"</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>alice_grade <span class="op">=</span> grades.pop(<span class="st">"Alice"</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(alice_grade)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>92
+{'John': 88, 'David': 90}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="dictionary-methods" class="level3" data-number="11.1.5">
+<h3 data-number="11.1.5" class="anchored" data-anchor-id="dictionary-methods"><span class="header-section-number">11.1.5</span> Dictionary Methods</h3>
+<p>Dictionaries come with a variety of built-in methods that simplify common tasks, such as adding, removing, and checking for keys and values.</p>
+<section id="keys-values-and-items" class="level4">
+<h4 class="anchored" data-anchor-id="keys-values-and-items"><code>keys()</code>, <code>values()</code>, and <code>items()</code></h4>
+<ul>
+<li><code>keys()</code> returns a view of all the keys in the dictionary.</li>
+<li><code>values()</code> returns a view of all the values in the dictionary.</li>
+<li><code>items()</code> returns a view of all key-value pairs as tuples.</li>
+</ul>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades.keys())   </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades.values()) </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades.items()) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dict_keys(['John', 'David'])
+dict_values([88, 90])
+dict_items([('John', 88), ('David', 90)])</code></pre>
+</div>
+</div>
+</section>
+<section id="update" class="level4">
+<h4 class="anchored" data-anchor-id="update"><code>update()</code></h4>
+<p>The <code>update()</code> method allows you to merge two dictionaries or add key-value pairs from another iterable:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging dictionaries</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>extra_grades <span class="op">=</span> {<span class="st">"Eve"</span>: <span class="dv">85</span>, <span class="st">"Charlie"</span>: <span class="dv">79</span>}</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>grades.update(extra_grades)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'John': 88, 'David': 90, 'Eve': 85, 'Charlie': 79}</code></pre>
+</div>
+</div>
+</section>
+<section id="clear" class="level4">
+<h4 class="anchored" data-anchor-id="clear"><code>clear()</code></h4>
+<p>The <code>clear()</code> method removes all key-value pairs from the dictionary:</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>grades.clear()</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grades) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="iterating-over-dictionaries" class="level3" data-number="11.1.6">
+<h3 data-number="11.1.6" class="anchored" data-anchor-id="iterating-over-dictionaries"><span class="header-section-number">11.1.6</span> Iterating Over Dictionaries</h3>
+<p>There are several ways to iterate over dictionaries, depending on whether you need keys, values, or both:</p>
+<section id="iterating-over-keys" class="level4">
+<h4 class="anchored" data-anchor-id="iterating-over-keys">Iterating Over Keys</h4>
+<p>By default, iterating over a dictionary yields its keys:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> student <span class="kw">in</span> grades:</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(student)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="iterating-over-values" class="level4">
+<h4 class="anchored" data-anchor-id="iterating-over-values">Iterating Over Values</h4>
+<p>You can iterate over the values by using the <code>values()</code> method:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> grade <span class="kw">in</span> grades.values():</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(grade)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="iterating-over-key-value-pairs" class="level4">
+<h4 class="anchored" data-anchor-id="iterating-over-key-value-pairs">Iterating Over Key-Value Pairs</h4>
+<p>The <code>items()</code> method allows you to iterate over both keys and values simultaneously:</p>
+<pre class="srsenqgn"><code>for student, grade in grades.items():
+    print(f"{student}: {grade}")</code></pre>
+</section>
+</section>
+<section id="dictionary-comprehension" class="level3" data-number="11.1.7">
+<h3 data-number="11.1.7" class="anchored" data-anchor-id="dictionary-comprehension"><span class="header-section-number">11.1.7</span> Dictionary Comprehension</h3>
+<p>Like list comprehensions, Python also supports <strong>dictionary comprehensions</strong>, which provide a concise way to create dictionaries from iterables.</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dictionary of squares</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> {x: x<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)}</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(squares)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1: 1, 2: 4, 3: 9, 4: 16, 5: 25}</code></pre>
+</div>
+</div>
+</section>
+<section id="practical-applications-of-dictionaries" class="level3" data-number="11.1.8">
+<h3 data-number="11.1.8" class="anchored" data-anchor-id="practical-applications-of-dictionaries"><span class="header-section-number">11.1.8</span> Practical Applications of Dictionaries</h3>
+<p>Dictionaries are used in a variety of real-world applications, particularly where fast lookups or associations between pieces of data are needed.</p>
+<section id="frequency-count" class="level4">
+<h4 class="anchored" data-anchor-id="frequency-count">Frequency Count</h4>
+<p>One common use of dictionaries is counting the frequency of elements in a collection. Here is an example that counts the occurrence of each character in a string:</p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> char_frequency(text):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    freq <span class="op">=</span> {}</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> char <span class="kw">in</span> text:</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> char <span class="kw">in</span> freq:</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>            freq[char] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>            freq[char] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> freq</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"data science"</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(char_frequency(text))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'d': 1, 'a': 2, 't': 1, ' ': 1, 's': 1, 'c': 2, 'i': 1, 'e': 2, 'n': 1}</code></pre>
+</div>
+</div>
+</section>
+<section id="storing-configuration-settings" class="level4">
+<h4 class="anchored" data-anchor-id="storing-configuration-settings">Storing Configuration Settings</h4>
+<p>Dictionaries are often used to store configuration settings because they allow easy lookups by key:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>config <span class="op">=</span> {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"host"</span>: <span class="st">"localhost"</span>,</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"port"</span>: <span class="dv">8080</span>,</span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"debug"</span>: <span class="va">True</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(config[<span class="st">"host"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>localhost</code></pre>
+</div>
+</div>
+</section>
+<section id="caching-computations" class="level4">
+<h4 class="anchored" data-anchor-id="caching-computations">Caching Computations</h4>
+<p>Dictionaries can be used to cache results of expensive computations to avoid recalculating them:</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+cache
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A cache (pronounced “cash”) is memory used to store something, usually data, temporarily in a computing environment.</p>
+</div>
+</div>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>factorial_cache <span class="op">=</span> {}</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> factorial(n):</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="kw">in</span> factorial_cache:</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> factorial_cache[n]</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>        result <span class="op">=</span> n <span class="op">*</span> factorial(n<span class="op">-</span><span class="dv">1</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a>    factorial_cache[n] <span class="op">=</span> result</span>
+<span id="cb30-11"><a href="#cb30-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> result</span>
+<span id="cb30-12"><a href="#cb30-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-13"><a href="#cb30-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial(<span class="dv">5</span>))  </span>
+<span id="cb30-14"><a href="#cb30-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(factorial_cache)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>120
+{0: 1, 1: 1, 2: 2, 3: 6, 4: 24, 5: 120}</code></pre>
+</div>
+</div>
+<p>By caching the results, subsequent calls to <code>factorial(n)</code> for previously computed values are faster, as they avoid redundant calculations.</p>
+</section>
+</section>
+<section id="using-kwargs-in-functions" class="level3" data-number="11.1.9">
+<h3 data-number="11.1.9" class="anchored" data-anchor-id="using-kwargs-in-functions"><span class="header-section-number">11.1.9</span> Using <code>**kwargs</code> in Functions</h3>
+<p>In Python, dictionaries are often used to pass and manage named arguments to functions. One powerful feature that leverages dictionaries is the <code>**kwargs</code> mechanism, which allows functions to accept an arbitrary number of keyword arguments (recall <a href="#sec-functions"><span class="quarto-unresolved-ref">sec-functions</span></a>). These keyword arguments are collected into a dictionary, which provides flexibility when you do not know in advance what arguments might be passed to a function.</p>
+<p>The <code>**kwargs</code> construct is particularly useful when writing functions that need to accept a variable number of named parameters or when extending existing functions with new optional arguments without changing their function signature.</p>
+<section id="how-kwargs-works" class="level4">
+<h4 class="anchored" data-anchor-id="how-kwargs-works">How <code>**kwargs</code> Works</h4>
+<p>The term <code>kwargs</code> stands for “keyword arguments,” and when used with <code>**</code>, it allows you to pass a variable number of named arguments to a function. Inside the function, these keyword arguments are captured as a dictionary.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_student_scores(<span class="op">**</span>kwargs):</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> student, score <span class="kw">in</span> kwargs.items():</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>student<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>score<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Calling the function with multiple keyword arguments</span></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>print_student_scores(John<span class="op">=</span><span class="dv">85</span>, Alice<span class="op">=</span><span class="dv">92</span>, Bob<span class="op">=</span><span class="dv">78</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>John: 85
+Alice: 92
+Bob: 78</code></pre>
+</div>
+</div>
+<p>In the example above, the function <code>print_student_scores()</code> accepts any number of keyword arguments and prints them. The <code>**kwargs</code> parameter collects the keyword arguments as a dictionary, where the keys are the argument names (<code>John</code>, <code>Alice</code>, <code>Bob</code>), and the values are the respective scores.</p>
+</section>
+<section id="accessing-and-using-kwargs" class="level4">
+<h4 class="anchored" data-anchor-id="accessing-and-using-kwargs">Accessing and Using <code>**kwargs</code></h4>
+<p>Once inside the function, <code>**kwargs</code> behaves like a normal dictionary. You can access, iterate over, and modify its elements just as you would with any other dictionary.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_student_grade(<span class="op">**</span>kwargs):</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>    student <span class="op">=</span> kwargs.get(<span class="st">"student"</span>)</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>    grade <span class="op">=</span> kwargs.get(<span class="st">"grade"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> student <span class="kw">and</span> grade:</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>student<span class="sc">}</span><span class="ss">'s grade is </span><span class="sc">{</span>grade<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="st">"Missing student or grade information"</span>)</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Providing student and grade as keyword arguments</span></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>get_student_grade(student<span class="op">=</span><span class="st">"John"</span>, grade<span class="op">=</span><span class="dv">85</span>)</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Missing one argument</span></span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>get_student_grade(student<span class="op">=</span><span class="st">"Alice"</span>)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>John's grade is 85
+Missing student or grade information</code></pre>
+</div>
+</div>
+<p>In this example, the <code>kwargs.get()</code> method is used to safely retrieve values from the <code>kwargs</code> dictionary. If the key does not exist, <code>get()</code> returns <code>None</code>, which prevents the function from throwing a <code>KeyError</code>.</p>
+</section>
+<section id="combining-kwargs-with-regular-and-positional-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="combining-kwargs-with-regular-and-positional-arguments">Combining <code>**kwargs</code> with Regular and Positional Arguments</h4>
+<p>You can combine <code>**kwargs</code> with regular and positional arguments. However, <code>**kwargs</code> must always be placed after regular arguments in the function signature:</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> student_info(course, <span class="op">**</span>kwargs):</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Course: </span><span class="sc">{</span>course<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> key, value <span class="kw">in</span> kwargs.items():</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span>key<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>value<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Calling the function with both positional and keyword arguments</span></span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a>student_info(<span class="st">"Mathematics"</span>, name<span class="op">=</span><span class="st">"John"</span>, grade<span class="op">=</span><span class="dv">90</span>, age<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Course: Mathematics
+name: John
+grade: 90
+age: 20</code></pre>
+</div>
+</div>
+<p>Here, <code>course</code> is a regular argument, and the remaining keyword arguments (e.g., <code>name</code>, <code>grade</code>, and <code>age</code>) are captured into the <code>kwargs</code> dictionary.</p>
+</section>
+<section id="passing-a-dictionary-as-kwargs" class="level4">
+<h4 class="anchored" data-anchor-id="passing-a-dictionary-as-kwargs">Passing a Dictionary as <code>**kwargs</code></h4>
+<p>If you already have a dictionary of key-value pairs, you can pass it to a function using <code>**</code> to unpack the dictionary into keyword arguments.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> print_details(name, age, occupation):</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Name: </span><span class="sc">{</span>name<span class="sc">}</span><span class="ss">, Age: </span><span class="sc">{</span>age<span class="sc">}</span><span class="ss">, Occupation: </span><span class="sc">{</span>occupation<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dictionary of arguments</span></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a>person <span class="op">=</span> {<span class="st">"name"</span>: <span class="st">"Alice"</span>, <span class="st">"age"</span>: <span class="dv">30</span>, <span class="st">"occupation"</span>: <span class="st">"Data Scientist"</span>}</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-7"><a href="#cb38-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Passing the dictionary as keyword arguments</span></span>
+<span id="cb38-8"><a href="#cb38-8" aria-hidden="true" tabindex="-1"></a>print_details(<span class="op">**</span>person)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Name: Alice, Age: 30, Occupation: Data Scientist</code></pre>
+</div>
+</div>
+<p>In this case, the <code>**person</code> syntax unpacks the dictionary into keyword arguments, allowing you to pass the dictionary directly into the function.</p>
+</section>
+<section id="kwargs-and-default-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="kwargs-and-default-arguments"><code>**kwargs</code> and Default Arguments</h4>
+<p>While <code>**kwargs</code> allows for flexible keyword arguments, you can also combine it with default arguments to give function parameters some predefined behavior.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> log_message(level<span class="op">=</span><span class="st">"INFO"</span>, <span class="op">**</span>kwargs):</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    message <span class="op">=</span> kwargs.get(<span class="st">"message"</span>, <span class="st">"No message provided"</span>)</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    timestamp <span class="op">=</span> kwargs.get(<span class="st">"timestamp"</span>, <span class="st">"No timestamp"</span>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"[</span><span class="sc">{</span>level<span class="sc">}</span><span class="ss">] </span><span class="sc">{</span>timestamp<span class="sc">}</span><span class="ss">: </span><span class="sc">{</span>message<span class="sc">}</span><span class="ss">"</span>)</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Logging a message with a default level</span></span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>log_message(message<span class="op">=</span><span class="st">"System started"</span>, timestamp<span class="op">=</span><span class="st">"2023-09-12 10:00:00"</span>)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Overriding the default level</span></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>log_message(level<span class="op">=</span><span class="st">"ERROR"</span>, message<span class="op">=</span><span class="st">"System failure"</span>, timestamp<span class="op">=</span><span class="st">"2023-09-12 10:01:00"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[INFO] 2023-09-12 10:00:00: System started
+[ERROR] 2023-09-12 10:01:00: System failure</code></pre>
+</div>
+</div>
+<p>In this example, the <code>log_message()</code> function uses a default level of “INFO” and then utilizes <code>**kwargs</code> to collect additional information like the message and timestamp.</p>
+</section>
+<section id="summary" class="level4">
+<h4 class="anchored" data-anchor-id="summary">Summary</h4>
+<p>The <code>**kwargs</code> construct provides a flexible way to pass and handle keyword arguments in Python. By collecting all keyword arguments into a dictionary, you gain the ability to write dynamic and adaptable functions. Whether used for configuration settings, logging, or passing optional parameters, <code>**kwargs</code> is a powerful tool that makes functions more reusable and extensible.</p>
+</section>
+</section>
+</section>
+<section id="sets" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="sets"><span class="header-section-number">11.2</span> Sets</h2>
+<p>A <strong>set</strong> in Python is an unordered collection of unique elements. This data structure is useful when you need to store distinct items and perform operations such as union, intersection, difference, or membership testing efficiently. Sets are particularly powerful when handling large datasets where duplication is unnecessary or undesirable.</p>
+<section id="creating-a-set" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="creating-a-set"><span class="header-section-number">11.2.1</span> Creating a Set</h3>
+<p>Sets are created by placing items inside curly braces <code>{}</code> or by using the <code>set()</code> function. Unlike lists or dictionaries, sets do not maintain any order, and duplicate values are automatically removed. Sets can hold items of any immutable data type, such as numbers, strings, or tuples.</p>
+<section id="literal-notation-1" class="level4">
+<h4 class="anchored" data-anchor-id="literal-notation-1">Literal Notation</h4>
+<p>You can create a set directly by enclosing a sequence of values in curly braces:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a set of integers</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>}</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(numbers)  </span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a set of strings</span></span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>fruits <span class="op">=</span> {<span class="st">"apple"</span>, <span class="st">"banana"</span>, <span class="st">"cherry"</span>}</span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1, 2, 3, 4, 5}
+{'apple', 'cherry', 'banana'}</code></pre>
+</div>
+</div>
+</section>
+<section id="using-the-set-function" class="level4">
+<h4 class="anchored" data-anchor-id="using-the-set-function">Using the <code>set()</code> Function</h4>
+<p>The <code>set()</code> function is particularly useful when creating a set from an iterable, such as a list or a string. It automatically removes duplicates:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a set from a list with duplicate values</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>numbers_list <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>unique_numbers <span class="op">=</span> <span class="bu">set</span>(numbers_list)</span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_numbers) </span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a set from a string</span></span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>letters <span class="op">=</span> <span class="bu">set</span>(<span class="st">"hello"</span>)</span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(letters)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1, 2, 3, 4, 5}
+{'l', 'e', 'o', 'h'}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="adding-and-removing-elements" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="adding-and-removing-elements"><span class="header-section-number">11.2.2</span> Adding and Removing Elements</h3>
+<section id="adding-elements" class="level4">
+<h4 class="anchored" data-anchor-id="adding-elements">Adding Elements</h4>
+<p>You can add elements to a set using the <code>add()</code> method. However, since sets do not allow duplicate values, adding an existing element has no effect:</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding elements to a set</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>fruits <span class="op">=</span> {<span class="st">"apple"</span>, <span class="st">"banana"</span>}</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>fruits.add(<span class="st">"cherry"</span>)</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Attempting to add a duplicate element</span></span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>fruits.add(<span class="st">"apple"</span>)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'apple', 'cherry', 'banana'}
+{'apple', 'cherry', 'banana'}</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-elements" class="level4">
+<h4 class="anchored" data-anchor-id="removing-elements">Removing Elements</h4>
+<p>There are multiple ways to remove elements from a set, including the <code>remove()</code>, <code>discard()</code>, and <code>pop()</code> methods:</p>
+<ul>
+<li><strong><code>remove()</code></strong> raises a <code>KeyError</code> if the element does not exist.</li>
+<li><strong><code>discard()</code></strong> does not raise an error if the element is not found.</li>
+<li><strong><code>pop()</code></strong> removes and returns an arbitrary element, as sets are unordered.</li>
+</ul>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing elements using remove()</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>fruits.remove(<span class="st">"banana"</span>)</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Using discard() to remove an element safely</span></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>fruits.discard(<span class="st">"apple"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing a random element with pop()</span></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a>random_fruit <span class="op">=</span> fruits.pop()</span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(random_fruit)  </span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(fruits)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'apple', 'cherry'}
+{'cherry'}
+cherry
+set()</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="set-operations" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="set-operations"><span class="header-section-number">11.2.3</span> Set Operations</h3>
+<p>One of the most powerful features of sets is their support for mathematical operations such as union, intersection, difference, and symmetric difference. These operations are efficient and allow for concise and readable code.</p>
+<section id="union-or-union" class="level4">
+<h4 class="anchored" data-anchor-id="union-or-union">Union (<code>|</code> or <code>union()</code>)</h4>
+<p>The union operation combines all elements from two sets, excluding duplicates. This operation can be performed using the <code>|</code> operator or the <code>union()</code> method.</p>
+<div class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>}</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the | operator</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>union_set <span class="op">=</span> set1 <span class="op">|</span> set2</span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(union_set)  </span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the union() method</span></span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>union_set <span class="op">=</span> set1.union(set2)</span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(union_set)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1, 2, 3, 4, 5}
+{1, 2, 3, 4, 5}</code></pre>
+</div>
+</div>
+</section>
+<section id="intersection-or-intersection" class="level4">
+<h4 class="anchored" data-anchor-id="intersection-or-intersection">Intersection (<code>&amp;</code> or <code>intersection()</code>)</h4>
+<p>The intersection operation returns only the elements that are present in both sets. It can be performed using the <code>&amp;</code> operator or the <code>intersection()</code> method.</p>
+<div class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the &amp; operator</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>intersection_set <span class="op">=</span> set1 <span class="op">&amp;</span> set2</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(intersection_set) </span>
+<span id="cb52-7"><a href="#cb52-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="#cb52-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the intersection() method</span></span>
+<span id="cb52-9"><a href="#cb52-9" aria-hidden="true" tabindex="-1"></a>intersection_set <span class="op">=</span> set1.intersection(set2)</span>
+<span id="cb52-10"><a href="#cb52-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(intersection_set)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{2, 3}
+{2, 3}</code></pre>
+</div>
+</div>
+</section>
+<section id="difference---or-difference" class="level4">
+<h4 class="anchored" data-anchor-id="difference---or-difference">Difference (<code>-</code> or <code>difference()</code>)</h4>
+<p>The difference operation returns the elements that are in the first set but not in the second. This can be done using the <code>-</code> operator or the <code>difference()</code> method.</p>
+<div class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the - operator</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>difference_set <span class="op">=</span> set1 <span class="op">-</span> set2</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(difference_set) </span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the difference() method</span></span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>difference_set <span class="op">=</span> set1.difference(set2)</span>
+<span id="cb54-10"><a href="#cb54-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(difference_set)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1}
+{1}</code></pre>
+</div>
+</div>
+</section>
+<section id="symmetric-difference-or-symmetric_difference" class="level4">
+<h4 class="anchored" data-anchor-id="symmetric-difference-or-symmetric_difference">Symmetric Difference (<code>^</code> or <code>symmetric_difference()</code>)</h4>
+<p>The symmetric difference operation returns elements that are in either of the sets but not in both. This operation can be performed using the <code>^</code> operator or the <code>symmetric_difference()</code> method.</p>
+<div class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the ^ operator</span></span>
+<span id="cb56-5"><a href="#cb56-5" aria-hidden="true" tabindex="-1"></a>sym_diff_set <span class="op">=</span> set1 <span class="op">^</span> set2</span>
+<span id="cb56-6"><a href="#cb56-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sym_diff_set)  </span>
+<span id="cb56-7"><a href="#cb56-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-8"><a href="#cb56-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the symmetric_difference() method</span></span>
+<span id="cb56-9"><a href="#cb56-9" aria-hidden="true" tabindex="-1"></a>sym_diff_set <span class="op">=</span> set1.symmetric_difference(set2)</span>
+<span id="cb56-10"><a href="#cb56-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sym_diff_set)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1, 4}
+{1, 4}</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="checking-for-subsets-and-supersets" class="level3" data-number="11.2.4">
+<h3 data-number="11.2.4" class="anchored" data-anchor-id="checking-for-subsets-and-supersets"><span class="header-section-number">11.2.4</span> Checking for Subsets and Supersets</h3>
+<p>Sets also support operations that allow you to check whether one set is a subset or superset of another. These operations are particularly useful in scenarios where you need to compare sets.</p>
+<section id="subset-or-issubset" class="level4">
+<h4 class="anchored" data-anchor-id="subset-or-issubset">Subset (<code>&lt;=</code> or <code>issubset()</code>)</h4>
+<p>A set <code>A</code> is a subset of set <code>B</code> if all elements of <code>A</code> are also in <code>B</code>. You can check for subsets using the <code>&lt;=</code> operator or the <code>issubset()</code> method.</p>
+<div class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>}</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the &lt;= operator</span></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(set1 <span class="op">&lt;=</span> set2) </span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the issubset() method</span></span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(set1.issubset(set2))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+True</code></pre>
+</div>
+</div>
+</section>
+<section id="superset-or-issuperset" class="level4">
+<h4 class="anchored" data-anchor-id="superset-or-issuperset">Superset (<code>&gt;=</code> or <code>issuperset()</code>)</h4>
+<p>A set <code>A</code> is a superset of set <code>B</code> if all elements of <code>B</code> are also in <code>A</code>. You can check for supersets using the <code>&gt;=</code> operator or the <code>issuperset()</code> method.</p>
+<div class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>set1 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>}</span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>set2 <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>}</span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the &gt;= operator</span></span>
+<span id="cb60-5"><a href="#cb60-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(set1 <span class="op">&gt;=</span> set2)  </span>
+<span id="cb60-6"><a href="#cb60-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb60-7"><a href="#cb60-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Using the issuperset() method</span></span>
+<span id="cb60-8"><a href="#cb60-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(set1.issuperset(set2))  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+True</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="frozen-sets" class="level3" data-number="11.2.5">
+<h3 data-number="11.2.5" class="anchored" data-anchor-id="frozen-sets"><span class="header-section-number">11.2.5</span> Frozen Sets</h3>
+<p>A <strong>frozen set</strong> is an immutable version of a set, meaning that once a frozen set is created, its elements cannot be modified (i.e., you cannot add or remove elements). Frozen sets are useful when you need a collection of unique elements that should remain constant throughout the program. You create a frozen set using the <code>frozenset()</code> function:</p>
+<div class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a frozen set</span></span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>immutable_set <span class="op">=</span> <span class="bu">frozenset</span>([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>])</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(immutable_set)  </span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-5"><a href="#cb62-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Attempting to add an element to a frozen set will raise an error</span></span>
+<span id="cb62-6"><a href="#cb62-6" aria-hidden="true" tabindex="-1"></a><span class="co"># immutable_set.add(5)  # Raises AttributeError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>frozenset({1, 2, 3, 4})</code></pre>
+</div>
+</div>
+</section>
+<section id="set-comprehensions" class="level3" data-number="11.2.6">
+<h3 data-number="11.2.6" class="anchored" data-anchor-id="set-comprehensions"><span class="header-section-number">11.2.6</span> Set Comprehensions</h3>
+<p>Python provides a concise way to create sets using <strong>set comprehensions</strong>, similar to list comprehensions. A set comprehension is written with curly braces <code>{}</code> and allows you to define sets based on existing iterables, often including a filtering condition.</p>
+<div class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a set of squares for numbers 1 to 5</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>squares <span class="op">=</span> {x<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">6</span>)}</span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(squares)  </span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Set comprehension with a condition</span></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a>even_squares <span class="op">=</span> {x<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>) <span class="cf">if</span> x <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>}</span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(even_squares)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{1, 4, 9, 16, 25}
+{64, 100, 4, 36, 16}</code></pre>
+</div>
+</div>
+<p>Set comprehensions are a powerful tool when you need to transform or filter data while maintaining unique elements.</p>
+</section>
+<section id="set-best-practices" class="level3" data-number="11.2.7">
+<h3 data-number="11.2.7" class="anchored" data-anchor-id="set-best-practices"><span class="header-section-number">11.2.7</span> Set Best Practices</h3>
+<p>While sets are efficient for handling unique elements, there are a few best practices to keep in mind when working with sets in Python:</p>
+<ol type="1">
+<li><p><strong>Avoid Unnecessary Duplicates</strong>: Since sets automatically remove duplicates, there’s no need to check for duplicates before adding elements.</p></li>
+<li><p><strong>Use Sets for Membership Testing</strong>: When you need to check if an item exists in a collection and the collection does not need to maintain order or allow duplicates, sets are the best choice due to their O(1) membership testing time complexity.</p></li>
+<li><p><strong>Choose the Right Operation</strong>: Use set operations such as union, intersection, and difference to simplify complex data comparison tasks. These operations are more efficient than writing custom loops to achieve the same results.</p></li>
+</ol>
+<p>Sets are an invaluable data structure for handling collections of unique items. Their efficiency in membership testing, combined with their ability to perform set operations such as union, intersection, and difference, makes them ideal for a wide variety of tasks, from data processing to mathematical computations. With their unordered nature and automatic deduplication, sets help simplify code and ensure efficient performance, especially when working with large datasets.</p>
+</section>
+<section id="combining-dictionaries-and-sets" class="level3" data-number="11.2.8">
+<h3 data-number="11.2.8" class="anchored" data-anchor-id="combining-dictionaries-and-sets"><span class="header-section-number">11.2.8</span> Combining Dictionaries and Sets</h3>
+<p>You can often combine dictionaries and sets in practical applications. For example, to find unique words and their counts from a list of sentences:</p>
+<div class="cell" data-execution_count="35">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> unique_words(sentences):</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a>    word_dict <span class="op">=</span> {}</span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> sentence <span class="kw">in</span> sentences:</span>
+<span id="cb66-4"><a href="#cb66-4" aria-hidden="true" tabindex="-1"></a>        words <span class="op">=</span> <span class="bu">set</span>(sentence.split())  <span class="co"># Use a set to find unique words</span></span>
+<span id="cb66-5"><a href="#cb66-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> word <span class="kw">in</span> words:</span>
+<span id="cb66-6"><a href="#cb66-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> word <span class="kw">in</span> word_dict:</span>
+<span id="cb66-7"><a href="#cb66-7" aria-hidden="true" tabindex="-1"></a>                word_dict[word] <span class="op">+=</span> <span class="dv">1</span></span>
+<span id="cb66-8"><a href="#cb66-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">else</span>:</span>
+<span id="cb66-9"><a href="#cb66-9" aria-hidden="true" tabindex="-1"></a>                word_dict[word] <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb66-10"><a href="#cb66-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> word_dict</span>
+<span id="cb66-11"><a href="#cb66-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-12"><a href="#cb66-12" aria-hidden="true" tabindex="-1"></a>sentences <span class="op">=</span> [<span class="st">"data science is great"</span>, <span class="st">"data science is evolving"</span>]</span>
+<span id="cb66-13"><a href="#cb66-13" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> unique_words(sentences)</span>
+<span id="cb66-14"><a href="#cb66-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)  <span class="co"># Output: {'data': 2, 'science': 2, 'is': 2, 'great': 1, 'evolving': 1}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'data': 2, 'science': 2, 'is': 2, 'great': 1, 'evolving': 1}</code></pre>
+</div>
+</div>
+<p>This function uses sets to ensure that each word in a sentence is only counted once per sentence and then stores the results in a dictionary.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="11.3">
+<h2 data-number="11.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">11.3</span> Exercises</h2>
+<section id="excersice-1-student-grades" class="level4">
+<h4 class="anchored" data-anchor-id="excersice-1-student-grades">Excersice 1: Student Grades</h4>
+<p>Write a function called <code>update_grades()</code> that accepts a dictionary of student names and their grades. The function should accept new student names and grades and update the dictionary. Finally, it should return the updated dictionary.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a>grades <span class="op">=</span> {<span class="st">"John"</span>: <span class="dv">85</span>, <span class="st">"Alice"</span>: <span class="dv">92</span>}</span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a>new_grades <span class="op">=</span> {<span class="st">"Bob"</span>: <span class="dv">78</span>, <span class="st">"Alice"</span>: <span class="dv">95</span>}</span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a>updated_grades <span class="op">=</span> update_grades(grades, <span class="op">**</span>new_grades)</span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(updated_grades)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">"John"</span>: <span class="dv">85</span>, <span class="st">"Alice"</span>: <span class="dv">95</span>, <span class="st">"Bob"</span>: <span class="dv">78</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="excersice-2-word-frequency-counter" class="level4">
+<h4 class="anchored" data-anchor-id="excersice-2-word-frequency-counter">Excersice 2: Word Frequency Counter</h4>
+<p>Write a function <code>word_frequency(text)</code> that takes a string and returns a dictionary with the frequency count of each word in the string.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a>text <span class="op">=</span> <span class="st">"data science is data fun science is fun"</span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> word_frequency(text)</span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">'data'</span>: <span class="dv">2</span>, <span class="st">'science'</span>: <span class="dv">2</span>, <span class="st">'is'</span>: <span class="dv">2</span>, <span class="st">'fun'</span>: <span class="dv">2</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="excersice-3-dictionary-of-squares" class="level4">
+<h4 class="anchored" data-anchor-id="excersice-3-dictionary-of-squares">Excersice 3: Dictionary of Squares</h4>
+<p>Create a function <code>squares_dict(n)</code> that generates a dictionary where the keys are numbers from 1 to <code>n</code> and the values are their corresponding squares.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(squares_dict(<span class="dv">5</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a>{<span class="dv">1</span>: <span class="dv">1</span>, <span class="dv">2</span>: <span class="dv">4</span>, <span class="dv">3</span>: <span class="dv">9</span>, <span class="dv">4</span>: <span class="dv">16</span>, <span class="dv">5</span>: <span class="dv">25</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exercise-4-merge-dictionaries" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-merge-dictionaries">Exercise 4: Merge Dictionaries</h4>
+<p>Write a function <code>merge_dictionaries(*args)</code> that accepts any number of dictionaries and merges them into a single dictionary. If a key is repeated, the value from the last dictionary should be retained.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>dict1 <span class="op">=</span> {<span class="st">"a"</span>: <span class="dv">1</span>, <span class="st">"b"</span>: <span class="dv">2</span>}</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a>dict2 <span class="op">=</span> {<span class="st">"b"</span>: <span class="dv">3</span>, <span class="st">"c"</span>: <span class="dv">4</span>}</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>dict3 <span class="op">=</span> {<span class="st">"d"</span>: <span class="dv">5</span>}</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> merge_dictionaries(dict1, dict2, dict3)</span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">'a'</span>: <span class="dv">1</span>, <span class="st">'b'</span>: <span class="dv">3</span>, <span class="st">'c'</span>: <span class="dv">4</span>, <span class="st">'d'</span>: <span class="dv">5</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exercise-5-remove-duplicates" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-remove-duplicates">Exercise 5: Remove Duplicates</h4>
+<p>Write a function <code>remove_duplicates(lst)</code> that takes a list and returns a new list with all the duplicates removed using a set.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(remove_duplicates(numbers))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exercise-6-set-operations" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-6-set-operations">Exercise 6: Set Operations</h4>
+<p>Given two sets of students enrolled in two different courses, write functions to:</p>
+<ol type="1">
+<li>Find students enrolled in both courses.</li>
+<li>Find students enrolled only in the first course.</li>
+<li>Find students enrolled in either course but not both.</li>
+</ol>
+<p>Example:</p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>course_A <span class="op">=</span> {<span class="st">"Alice"</span>, <span class="st">"Bob"</span>, <span class="st">"Charlie"</span>, <span class="st">"David"</span>}</span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>course_B <span class="op">=</span> {<span class="st">"Charlie"</span>, <span class="st">"David"</span>, <span class="st">"Eve"</span>, <span class="st">"Frank"</span>}</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Students in both courses</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(students_in_both(course_A, course_B))</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Students only in course A</span></span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(only_in_first(course_A, course_B))</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Students in either course but not both</span></span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(either_but_not_both(course_A, course_B))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb79"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>{<span class="st">'Charlie'</span>, <span class="st">'David'</span>}</span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a>{<span class="st">'Alice'</span>, <span class="st">'Bob'</span>}</span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>{<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Eve'</span>, <span class="st">'Frank'</span>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exercise-7-flexible-function-with-kwargs" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-7-flexible-function-with-kwargs">Exercise 7: Flexible Function with <code>**kwargs</code></h4>
+<p>Write a function <code>student_profile(**kwargs)</code> that accepts student information (name, age, grade, etc.) as keyword arguments and prints the information in a readable format.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>student_profile(name<span class="op">=</span><span class="st">"Alice"</span>, age<span class="op">=</span><span class="dv">20</span>, grade<span class="op">=</span><span class="st">"A"</span>, major<span class="op">=</span><span class="st">"Mathematics"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a>Name: Alice</span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>Age: <span class="dv">20</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>Grade: A</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>Major: Mathematics</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="exercise-8-summing-keyword-arguments" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-8-summing-keyword-arguments">Exercise 8: Summing Keyword Arguments</h4>
+<p>Write a function <code>sum_values(**kwargs)</code> that takes any number of keyword arguments where the values are integers and returns their sum.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb82"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a>result <span class="op">=</span> sum_values(a<span class="op">=</span><span class="dv">5</span>, b<span class="op">=</span><span class="dv">10</span>, c<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(result)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Expected Output:</p>
+<div class="sourceCode" id="cb83"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a><span class="dv">18</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./10_Data_Structures1.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./12_JSON.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

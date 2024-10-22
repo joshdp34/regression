@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 17&nbsp; Writing Clear and Effective Documentation and PEP 8</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./16_OOP.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./17_Documentation.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">17.1</span> Introduction</a>
+  <ul class="collapse">
+  <li><a href="#types-of-documentation" id="toc-types-of-documentation" class="nav-link" data-scroll-target="#types-of-documentation"><span class="header-section-number">17.1.1</span> Types of Documentation</a></li>
+  <li><a href="#characteristics-of-good-documentation" id="toc-characteristics-of-good-documentation" class="nav-link" data-scroll-target="#characteristics-of-good-documentation"><span class="header-section-number">17.1.2</span> Characteristics of Good Documentation</a></li>
+  <li><a href="#documentation-vs.-self-documenting-code" id="toc-documentation-vs.-self-documenting-code" class="nav-link" data-scroll-target="#documentation-vs.-self-documenting-code"><span class="header-section-number">17.1.3</span> Documentation vs.&nbsp;Self-Documenting Code</a></li>
+  <li><a href="#the-role-of-documentation-in-collaborative-projects" id="toc-the-role-of-documentation-in-collaborative-projects" class="nav-link" data-scroll-target="#the-role-of-documentation-in-collaborative-projects"><span class="header-section-number">17.1.4</span> The Role of Documentation in Collaborative Projects</a></li>
+  <li><a href="#the-relationship-between-documentation-and-code-quality" id="toc-the-relationship-between-documentation-and-code-quality" class="nav-link" data-scroll-target="#the-relationship-between-documentation-and-code-quality"><span class="header-section-number">17.1.5</span> The Relationship Between Documentation and Code Quality</a></li>
+  </ul></li>
+  <li><a href="#best-practices-for-writing-documentation" id="toc-best-practices-for-writing-documentation" class="nav-link" data-scroll-target="#best-practices-for-writing-documentation"><span class="header-section-number">17.2</span> Best Practices for Writing Documentation</a>
+  <ul class="collapse">
+  <li><a href="#write-meaningful-docstrings" id="toc-write-meaningful-docstrings" class="nav-link" data-scroll-target="#write-meaningful-docstrings"><span class="header-section-number">17.2.1</span> Write Meaningful Docstrings</a></li>
+  <li><a href="#comment-strategically" id="toc-comment-strategically" class="nav-link" data-scroll-target="#comment-strategically"><span class="header-section-number">17.2.2</span> Comment Strategically</a></li>
+  <li><a href="#keep-documentation-up-to-date" id="toc-keep-documentation-up-to-date" class="nav-link" data-scroll-target="#keep-documentation-up-to-date"><span class="header-section-number">17.2.3</span> Keep Documentation Up-to-Date</a></li>
+  <li><a href="#provide-usage-examples" id="toc-provide-usage-examples" class="nav-link" data-scroll-target="#provide-usage-examples"><span class="header-section-number">17.2.4</span> Provide Usage Examples</a></li>
+  <li><a href="#use-consistent-formatting" id="toc-use-consistent-formatting" class="nav-link" data-scroll-target="#use-consistent-formatting"><span class="header-section-number">17.2.5</span> Use Consistent Formatting</a></li>
+  <li><a href="#automate-documentation-generation" id="toc-automate-documentation-generation" class="nav-link" data-scroll-target="#automate-documentation-generation"><span class="header-section-number">17.2.6</span> Automate Documentation Generation</a></li>
+  <li><a href="#include-error-handling-information" id="toc-include-error-handling-information" class="nav-link" data-scroll-target="#include-error-handling-information"><span class="header-section-number">17.2.7</span> Include Error Handling Information</a></li>
+  </ul></li>
+  <li><a href="#understanding-pep-8" id="toc-understanding-pep-8" class="nav-link" data-scroll-target="#understanding-pep-8"><span class="header-section-number">17.3</span> Understanding PEP 8</a>
+  <ul class="collapse">
+  <li><a href="#why-pep-8-matters" id="toc-why-pep-8-matters" class="nav-link" data-scroll-target="#why-pep-8-matters"><span class="header-section-number">17.3.1</span> Why PEP 8 Matters</a></li>
+  <li><a href="#key-pep-8-guidelines" id="toc-key-pep-8-guidelines" class="nav-link" data-scroll-target="#key-pep-8-guidelines"><span class="header-section-number">17.3.2</span> Key PEP 8 Guidelines</a></li>
+  <li><a href="#common-pep-8-pitfalls" id="toc-common-pep-8-pitfalls" class="nav-link" data-scroll-target="#common-pep-8-pitfalls"><span class="header-section-number">17.3.3</span> Common PEP 8 Pitfalls</a></li>
+  <li><a href="#exceptions-to-pep-8" id="toc-exceptions-to-pep-8" class="nav-link" data-scroll-target="#exceptions-to-pep-8"><span class="header-section-number">17.3.4</span> Exceptions to PEP 8</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-doc" class="quarto-section-identifier"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">17.1</span> Introduction</h2>
+<p>Documentation is a vital part of software development, playing a role analogous to that of proofs or derivations in mathematics. It provides the necessary guidance to users and developers on how to understand, maintain, and effectively utilize the code. In the absence of clear documentation, even well-written code can be difficult to interpret, particularly as projects grow in size and complexity.</p>
+<p>Well-documented code acts as a <strong>communication tool</strong> between the original developer, collaborators, and future maintainers. It explains not only what the code does but also provides insights into design decisions and trade-offs made during development. This context helps mitigate common issues in collaborative environments—such as misunderstandings, redundancy, and rework—by making expectations and intentions clear.</p>
+<section id="types-of-documentation" class="level3" data-number="17.1.1">
+<h3 data-number="17.1.1" class="anchored" data-anchor-id="types-of-documentation"><span class="header-section-number">17.1.1</span> Types of Documentation</h3>
+<p>There are multiple levels of documentation that contribute to an effective software development process. These include:</p>
+<ol type="1">
+<li><strong>Inline Documentation (Comments):</strong> Provide localized explanations of code sections that are not self-evident.</li>
+<li><strong>Docstrings:</strong> A form of structured documentation attached to functions, classes, and modules, serving as a reference for users.</li>
+<li><strong>Project-level Documentation:</strong> Includes README files, API references, and manuals, which give users an overview of the system and how to engage with it.</li>
+</ol>
+</section>
+<section id="characteristics-of-good-documentation" class="level3" data-number="17.1.2">
+<h3 data-number="17.1.2" class="anchored" data-anchor-id="characteristics-of-good-documentation"><span class="header-section-number">17.1.2</span> Characteristics of Good Documentation</h3>
+<p>Good documentation shares several key characteristics:</p>
+<ul>
+<li><strong>Clarity:</strong> It must be easy to read and understand, without unnecessary jargon or technical complexity.</li>
+<li><strong>Conciseness:</strong> The documentation should be thorough but not overwhelming—providing the right amount of detail without redundancy.</li>
+<li><strong>Accuracy:</strong> The information provided must match the behavior of the code. Outdated or incorrect documentation can be more harmful than none at all.</li>
+<li><strong>Consistency:</strong> Use a consistent structure and style throughout to ensure readability. Following a standard format (like Google or NumPy style for docstrings) makes it easier for developers to engage with the documentation.</li>
+</ul>
+</section>
+<section id="documentation-vs.-self-documenting-code" class="level3" data-number="17.1.3">
+<h3 data-number="17.1.3" class="anchored" data-anchor-id="documentation-vs.-self-documenting-code"><span class="header-section-number">17.1.3</span> Documentation vs.&nbsp;Self-Documenting Code</h3>
+<p>Although Python encourages readable code, the notion that code can entirely document itself is a myth. While writing “self-documenting code”—that is, code with descriptive names and minimal need for comments—is good practice, <strong>it cannot replace documentation entirely.</strong> Complex algorithms or critical design decisions need explicit explanations.</p>
+<ul>
+<li><strong>When to Write Comments:</strong> Comments are especially useful when you need to explain <em>why</em> a particular approach was chosen or describe non-trivial logic that isn’t immediately apparent from the code.</li>
+<li><strong>When Not to Use Comments:</strong> Avoid commenting on obvious code—such as <code>x = x + 1</code>—where the purpose is clear from context.</li>
+</ul>
+</section>
+<section id="the-role-of-documentation-in-collaborative-projects" class="level3" data-number="17.1.4">
+<h3 data-number="17.1.4" class="anchored" data-anchor-id="the-role-of-documentation-in-collaborative-projects"><span class="header-section-number">17.1.4</span> The Role of Documentation in Collaborative Projects</h3>
+<p>In collaborative environments, documentation plays a pivotal role in:</p>
+<ul>
+<li><strong>Onboarding New Team Members:</strong> Documentation allows new contributors to quickly familiarize themselves with the codebase, tools, and workflows, minimizing onboarding time.</li>
+<li><strong>Version Control Integration:</strong> Documentation updates should accompany code changes in version control systems (e.g., Git). It is essential to document any changes in behavior to keep users informed.</li>
+<li><strong>Knowledge Transfer:</strong> In academia or industry, team members may rotate in and out of projects. Documentation ensures continuity by reducing reliance on individuals for specialized knowledge.</li>
+</ul>
+<p>For example, consider the following scenario: a researcher working on a complex statistical model shares their code with a team. Without clear documentation of assumptions, data preprocessing steps, and expected outputs, other members may struggle to replicate results or extend the model. Proper documentation ensures the reproducibility and scalability of such collaborative efforts.</p>
+</section>
+<section id="the-relationship-between-documentation-and-code-quality" class="level3" data-number="17.1.5">
+<h3 data-number="17.1.5" class="anchored" data-anchor-id="the-relationship-between-documentation-and-code-quality"><span class="header-section-number">17.1.5</span> The Relationship Between Documentation and Code Quality</h3>
+<p>Documentation is a reflection of the quality of your code. Projects with clear, well-organized documentation are perceived as more professional and trustworthy. In academic settings, code accompanied by robust documentation fosters reproducibility, a key principle in scientific research. Likewise, industry projects with well-documented APIs and user guides enhance user satisfaction and reduce support overhead.</p>
+</section>
+</section>
+<section id="best-practices-for-writing-documentation" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="best-practices-for-writing-documentation"><span class="header-section-number">17.2</span> Best Practices for Writing Documentation</h2>
+<p>To write documentation that adds genuine value to your codebase, following established best practices is essential. This section outlines practical strategies to ensure your documentation is clear, concise, and useful to both developers and end-users. By following these guidelines, you can create documentation that evolves seamlessly with your project and remains relevant over time.</p>
+<section id="write-meaningful-docstrings" class="level3" data-number="17.2.1">
+<h3 data-number="17.2.1" class="anchored" data-anchor-id="write-meaningful-docstrings"><span class="header-section-number">17.2.1</span> Write Meaningful Docstrings</h3>
+<p>Docstrings are an integral part of Python’s documentation strategy. They should clearly explain the <em>what</em>, <em>how</em>, and <em>why</em> of your code. Python’s convention is to place a docstring at the beginning of every module, class, and function definition.</p>
+<p><strong>Key elements of good docstrings include:</strong></p>
+<ol type="1">
+<li><strong>Description:</strong> What the function, class, or module does.<br>
+</li>
+<li><strong>Parameters:</strong> List all input arguments with their expected types.<br>
+</li>
+<li><strong>Return Values:</strong> Indicate what the function returns and the data type.<br>
+</li>
+<li><strong>Raises:</strong> Describe exceptions that might be raised, if any.</li>
+</ol>
+<p><strong>Example using Google-style docstring:</strong></p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_mean(data):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Calculate the mean of a list of numbers.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">        data (list of float): A list of numerical values.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The mean of the input list.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">        ValueError: If the input list is empty.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">len</span>(data) <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"The input list must not be empty."</span>)</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(data) <span class="op">/</span> <span class="bu">len</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This docstring provides a clear overview of the function’s behavior, making it easy to understand its purpose and usage.</p>
+</section>
+<section id="comment-strategically" class="level3" data-number="17.2.2">
+<h3 data-number="17.2.2" class="anchored" data-anchor-id="comment-strategically"><span class="header-section-number">17.2.2</span> Comment Strategically</h3>
+<p>While docstrings describe <em>what</em> a function or module does, inline comments provide detailed insights into specific code sections. However, excessive comments can clutter the code, so use them judiciously.</p>
+<p><strong>When to Use Comments:</strong></p>
+<ul>
+<li>To explain <em>why</em> certain design decisions were made.</li>
+<li>To clarify non-obvious logic or algorithms.</li>
+<li>To highlight potential areas of concern or future changes.</li>
+</ul>
+<p><strong>Example of strategic commenting:</strong></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using list comprehension for performance</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>squared_numbers <span class="op">=</span> [x<span class="op">**</span><span class="dv">2</span> <span class="cf">for</span> x <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">100</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>When to Avoid Comments:</strong><br>
+- Avoid restating obvious code logic:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">+</span> <span class="dv">1</span>  <span class="co"># Add 1 to x (unnecessary comment)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>Use meaningful variable names to reduce the need for trivial comments.</li>
+</ul>
+</section>
+<section id="keep-documentation-up-to-date" class="level3" data-number="17.2.3">
+<h3 data-number="17.2.3" class="anchored" data-anchor-id="keep-documentation-up-to-date"><span class="header-section-number">17.2.3</span> Keep Documentation Up-to-Date</h3>
+<p>Outdated documentation can mislead users and developers, creating confusion. Documentation should evolve alongside the code. Consider the following strategies to ensure that your documentation stays relevant:</p>
+<ul>
+<li><strong>Document changes alongside code updates:</strong> Incorporate documentation updates as part of the development workflow, especially when new features are added or APIs change.</li>
+<li><strong>Use version control:</strong> Track changes to documentation using Git or another version control system to ensure consistency and allow for rollbacks if needed. We will discuss Git in a later chapter.</li>
+</ul>
+</section>
+<section id="provide-usage-examples" class="level3" data-number="17.2.4">
+<h3 data-number="17.2.4" class="anchored" data-anchor-id="provide-usage-examples"><span class="header-section-number">17.2.4</span> Provide Usage Examples</h3>
+<p>Including usage examples in your documentation helps readers understand how to use your code in practical scenarios. Examples also demonstrate expected inputs and outputs, which aids in faster comprehension.</p>
+<p><strong>Example with a function usage guide:</strong></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Example usage of calculate_mean()</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>numbers <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>]</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calculate_mean(numbers))  <span class="co"># Output: 25.0</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Usage examples are especially useful in API documentation, where users need quick access to common use cases.</p>
+</section>
+<section id="use-consistent-formatting" class="level3" data-number="17.2.5">
+<h3 data-number="17.2.5" class="anchored" data-anchor-id="use-consistent-formatting"><span class="header-section-number">17.2.5</span> Use Consistent Formatting</h3>
+<p>Consistency enhances readability. Adopting a standard format, such as <strong>Google</strong> or <strong>NumPy style</strong> docstrings, ensures that your documentation looks uniform throughout the codebase.</p>
+<p><strong>Examples of two common formats:</strong></p>
+<ol type="1">
+<li><p><strong>Google-style:</strong></p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> foo(a, b):</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Add two numbers.</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">        a (int): The first number.</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co">        b (int): The second number.</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a><span class="co">        int: The sum of the two numbers.</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+<li><p><strong>NumPy-style:</strong></p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> foo(a, b):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Add two numbers.</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="co">    Parameters</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="co">    ----------</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co">    a : int</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="co">        The first number.</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="co">    b : int</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co">        The second number.</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a><span class="co">    -------</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="co">    int</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a><span class="co">        The sum of the two numbers.</span></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div></li>
+</ol>
+<p>Choose a format and apply it consistently across your project to maintain uniformity and reduce confusion.</p>
+</section>
+<section id="automate-documentation-generation" class="level3" data-number="17.2.6">
+<h3 data-number="17.2.6" class="anchored" data-anchor-id="automate-documentation-generation"><span class="header-section-number">17.2.6</span> Automate Documentation Generation</h3>
+<p>Automation can reduce the effort required to keep documentation consistent and up-to-date. Python offers several tools for generating documentation:</p>
+<ul>
+<li><strong>Sphinx:</strong> Generates HTML and PDF documentation from docstrings and reStructuredText files.</li>
+<li><strong>MkDocs:</strong> A fast, simple tool for generating static websites from Markdown files.</li>
+<li><strong>pydoc:</strong> A built-in Python tool for generating text-based documentation.</li>
+</ul>
+<section id="using-pydoc-for-python-documentation" class="level4">
+<h4 class="anchored" data-anchor-id="using-pydoc-for-python-documentation">Using <code>pydoc</code> for Python Documentation</h4>
+<p><code>pydoc</code> is a built-in Python tool that generates documentation for Python modules, classes, functions, and methods directly from their docstrings. It provides a quick way to view documentation either in the terminal or through a simple web interface.</p>
+</section>
+<section id="viewing-documentation-in-the-terminal" class="level4">
+<h4 class="anchored" data-anchor-id="viewing-documentation-in-the-terminal">Viewing Documentation in the Terminal</h4>
+<p>You can use <code>pydoc</code> from the command line to display documentation about any installed module or function.</p>
+<p><strong>Usage Example:</strong></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydoc</span> math</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This command will display the documentation for the <code>math</code> module directly in the terminal. You can also use it to look up specific functions:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydoc</span> math.sqrt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="generating-html-documentation" class="level4">
+<h4 class="anchored" data-anchor-id="generating-html-documentation">Generating HTML Documentation</h4>
+<p>To generate HTML documentation for a module or package, use the following command:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydoc</span> <span class="at">-w</span> <span class="op">&lt;</span>module_name<span class="op">&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>For example:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydoc</span> <span class="at">-w</span> math</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will create an HTML file (<code>math.html</code>) containing the documentation for the <code>math</code> module.</p>
+<p>You can also do this within a <code>.py</code> script with the command</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pydoc</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>pydoc.writedoc(<span class="st">'math'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="searching-for-modules" class="level4">
+<h4 class="anchored" data-anchor-id="searching-for-modules">Searching for Modules</h4>
+<p>You can use <code>pydoc</code> to search for installed modules on your system:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">pydoc</span> modules</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will list all available modules, helping you discover built-in functionality and installed packages.</p>
+</section>
+</section>
+<section id="include-error-handling-information" class="level3" data-number="17.2.7">
+<h3 data-number="17.2.7" class="anchored" data-anchor-id="include-error-handling-information"><span class="header-section-number">17.2.7</span> Include Error Handling Information</h3>
+<p>Documenting potential exceptions or error conditions ensures that users can handle unexpected situations effectively. In addition to listing exceptions, explain scenarios where the function might raise them.</p>
+<p><strong>Example:</strong></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> divide(a, b):</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Divide two numbers.</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">        a (float): Numerator.</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">        b (float): Denominator.</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">    Returns:</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">        float: The result of the division.</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">    Raises:</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">        ZeroDivisionError: If the denominator is zero.</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> b <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ZeroDivisionError</span>(<span class="st">"Denominator must not be zero."</span>)</span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">/</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="understanding-pep-8" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="understanding-pep-8"><span class="header-section-number">17.3</span> Understanding PEP 8</h2>
+<p><strong>PEP 8</strong>—the Python Enhancement Proposal 8—is the official style guide for Python code. It provides guidelines on code formatting to promote consistency, making code easier to read, maintain, and share across projects. Following PEP 8 ensures that your code adheres to widely accepted best practices, fostering collaboration and professionalism. Just as mathematical notation brings clarity to equations, PEP 8 ensures that Python code is both elegant and accessible.</p>
+<section id="why-pep-8-matters" class="level3" data-number="17.3.1">
+<h3 data-number="17.3.1" class="anchored" data-anchor-id="why-pep-8-matters"><span class="header-section-number">17.3.1</span> Why PEP 8 Matters</h3>
+<p>Consistent style throughout a project enhances readability, reduces cognitive load, and minimizes friction in collaborative efforts. Adopting PEP 8 helps teams:</p>
+<ul>
+<li><strong>Avoid ambiguity</strong> by enforcing clear, logical code structures.</li>
+<li><strong>Improve code reviews</strong> by focusing on logic rather than formatting issues.</li>
+<li><strong>Increase maintainability</strong> by ensuring that code written months later remains understandable.</li>
+</ul>
+<p>PEP 8 is especially important for open-source projects, where contributors need to align their work with community standards.</p>
+</section>
+<section id="key-pep-8-guidelines" class="level3" data-number="17.3.2">
+<h3 data-number="17.3.2" class="anchored" data-anchor-id="key-pep-8-guidelines"><span class="header-section-number">17.3.2</span> Key PEP 8 Guidelines</h3>
+<section id="indentation" class="level4">
+<h4 class="anchored" data-anchor-id="indentation">Indentation</h4>
+<ul>
+<li><p><strong>Use 4 spaces per indentation level.</strong> Avoid using tabs, as mixing tabs and spaces can lead to errors and inconsistencies.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> example_function():</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"This is an example."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Tools like <strong>PyCharm</strong> or <strong>VS Code</strong> allow automatic enforcement of this rule.</p></li>
+</ul>
+</section>
+<section id="line-length" class="level4">
+<h4 class="anchored" data-anchor-id="line-length">Line Length</h4>
+<ul>
+<li><p><strong>Limit lines to 79 characters.</strong> For longer code lines, break them across multiple lines using parentheses or backslashes.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>total <span class="op">=</span> (first_number </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>         <span class="op">+</span> second_number </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>         <span class="op">+</span> third_number)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>For comments and docstrings, the recommended limit is 72 characters.</p></li>
+</ul>
+</section>
+<section id="blank-lines" class="level4">
+<h4 class="anchored" data-anchor-id="blank-lines">Blank Lines</h4>
+<ul>
+<li><p>Use <strong>two blank lines</strong> between top-level functions or class definitions.</p></li>
+<li><p>Use <strong>one blank line</strong> between methods within a class or between sections in a function.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> func1():</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> func2():</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="imports" class="level4">
+<h4 class="anchored" data-anchor-id="imports">Imports</h4>
+<ul>
+<li><p>Place <strong>all imports at the top</strong> of the file.<br>
+</p></li>
+<li><p>Group imports as follows:</p>
+<ol type="1">
+<li><strong>Standard library imports</strong> (e.g., <code>os</code>, <code>sys</code>).</li>
+<li><strong>Third-party imports</strong> (e.g., <code>numpy</code>, <code>pandas</code>).</li>
+<li><strong>Local module imports</strong> (e.g., <code>from my_module import helper</code>).</li>
+</ol>
+<p>Example:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sys</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> my_module <span class="im">import</span> helper_function</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="naming-conventions" class="level4">
+<h4 class="anchored" data-anchor-id="naming-conventions">Naming Conventions</h4>
+<ul>
+<li><p><strong>Variables and functions:</strong> Use <code>lowercase_with_underscores</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> calculate_mean(data):</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">sum</span>(data) <span class="op">/</span> <span class="bu">len</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Classes:</strong> Use <code>CapWords</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> DataFrameHandler:</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Constants:</strong> Use <code>UPPERCASE_WITH_UNDERSCORES</code>.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>MAX_CONNECTIONS <span class="op">=</span> <span class="dv">10</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="whitespace-usage" class="level4">
+<h4 class="anchored" data-anchor-id="whitespace-usage">Whitespace Usage</h4>
+<ul>
+<li><p><strong>Avoid extraneous spaces</strong> around operators, brackets, or commas:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> a <span class="op">+</span> b  <span class="co"># Correct</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>)  <span class="co"># Correct</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p><strong>Incorrect:</strong></p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> a  <span class="op">+</span>  b</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> ( <span class="dv">1</span> , <span class="dv">2</span> )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="inline-comments-and-block-comments" class="level4">
+<h4 class="anchored" data-anchor-id="inline-comments-and-block-comments">Inline Comments and Block Comments</h4>
+<ul>
+<li><p>Use <strong>inline comments</strong> sparingly and only when necessary.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> x <span class="op">*</span> <span class="dv">2</span>  <span class="co"># Doubling the value of x</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Use <strong>block comments</strong> for more detailed explanations.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This section of code handles</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># file input and error checking.</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">'file.txt'</span>, <span class="st">'r'</span>) <span class="im">as</span> f:</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> f.read()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+<section id="docstring-conventions" class="level4">
+<h4 class="anchored" data-anchor-id="docstring-conventions">Docstring Conventions</h4>
+<ul>
+<li><p>Use <strong>triple double quotes</strong> for all docstrings, even for one-liners:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> func():</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""Do nothing."""</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>Multi-line docstrings should have a summary line followed by more details:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> add(a, b):</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""</span></span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a><span class="co">    Add two numbers.</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co">    This function takes two integers and returns their sum.</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a><span class="co">    """</span></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> a <span class="op">+</span> b</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+</section>
+</section>
+<section id="common-pep-8-pitfalls" class="level3" data-number="17.3.3">
+<h3 data-number="17.3.3" class="anchored" data-anchor-id="common-pep-8-pitfalls"><span class="header-section-number">17.3.3</span> Common PEP 8 Pitfalls</h3>
+<ol type="1">
+<li><strong>Inconsistent indentation:</strong> Mixing tabs and spaces can break the code.</li>
+<li><strong>Long lines:</strong> Resist the urge to cram too much logic onto one line.</li>
+<li><strong>Improper import ordering:</strong> Be mindful to separate imports logically.</li>
+<li><strong>Excessive comments:</strong> Comment only when necessary—clear code is better than verbose comments.</li>
+</ol>
+</section>
+<section id="exceptions-to-pep-8" class="level3" data-number="17.3.4">
+<h3 data-number="17.3.4" class="anchored" data-anchor-id="exceptions-to-pep-8"><span class="header-section-number">17.3.4</span> Exceptions to PEP 8</h3>
+<p>While PEP 8 is a valuable guide, it’s not an absolute rule. In certain cases—such as writing complex scientific code or working with third-party libraries—it may be necessary to deviate from PEP 8 for clarity or compatibility. Use discretion when making exceptions, ensuring that the code remains readable and maintainable.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./16_OOP.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

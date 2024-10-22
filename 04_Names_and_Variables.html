@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STA 2450 Computing for Math &amp; Stat</title>
+<title>STA 2450 Computing for Math &amp; Stat - 4&nbsp; Names and Variables</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_Intro_to_Programming.html" rel="next">
+<link href="./05_Data_Types.html" rel="next">
+<link href="./03_Basic_Syntax_and_Expressions.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -74,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./04_Names_and_Variables.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -101,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -125,7 +160,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
   </div>
 </li>
@@ -217,7 +252,15 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#sec-names" id="toc-sec-names" class="nav-link active" data-scroll-target="#sec-names"><span class="header-section-number">4.1</span> Names</a>
+  <ul class="collapse">
+  <li><a href="#rules-for-naming" id="toc-rules-for-naming" class="nav-link" data-scroll-target="#rules-for-naming"><span class="header-section-number">4.1.1</span> Rules for Naming</a></li>
+  </ul></li>
+  <li><a href="#variables" id="toc-variables" class="nav-link" data-scroll-target="#variables"><span class="header-section-number">4.2</span> Variables</a>
+  <ul class="collapse">
+  <li><a href="#examples-and-applications" id="toc-examples-and-applications" class="nav-link" data-scroll-target="#examples-and-applications"><span class="header-section-number">4.2.1</span> Examples and Applications</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">4.3</span> Exercises</a></li>
   </ul>
 </nav>
     </div>
@@ -226,7 +269,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><p>STA 2450 Computing for Math &amp; Stat</p></h1>
+<h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></h1>
 </div>
 
 
@@ -241,13 +284,175 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="introduction" class="level1 unnumbered">
-<h1 class="unnumbered">Introduction</h1>
-<p>These are the lecture notes for STA 2450 - Computing for Math &amp; Stat.</p>
-<p><strong>Prerequisites:</strong> None</p>
-<section id="course-description" class="level4">
-<h4 class="anchored" data-anchor-id="course-description">Course Description:</h4>
-<p>Computer programming for mathematical scientists with emphasis on designing algorithms, problem solving, and coding practices. Topics include development of programs from specifications; appropriate use of data types; functions; modular program organization; documentation and style; and version control and collaborative programming.</p>
+<p>In programming, names and variables are fundamental concepts that form the building blocks of a program. They enable us to store, manipulate, and access data within our code, making it possible to write flexible and efficient programs. This chapter will delve into these essential concepts, exploring their significance and how they are used in Python.</p>
+<section id="sec-names" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="sec-names"><span class="header-section-number">4.1</span> Names</h2>
+<p><strong>Names</strong> in programming are identifiers used to label and reference entities such as variables, functions, classes, and modules. They serve as a means to access stored data and functionality, making code more readable and maintainable. For instance, instead of repeatedly using a complex expression or value, we can assign it a name and refer to it using that name.</p>
+<section id="rules-for-naming" class="level3" data-number="4.1.1">
+<h3 data-number="4.1.1" class="anchored" data-anchor-id="rules-for-naming"><span class="header-section-number">4.1.1</span> Rules for Naming</h3>
+<p>In Python, there are specific rules and conventions for naming identifiers:</p>
+<ol type="1">
+<li><strong>Alphabetic Characters and Underscores</strong>: Names must begin with a letter (a-z, A-Z) or an underscore (_), followed by letters, digits (0-9), or underscores.</li>
+<li><strong>Case Sensitivity</strong>: Names are case-sensitive, meaning <code>Variable</code>, <code>variable</code>, and <code>VARIABLE</code> are distinct identifiers.</li>
+<li><strong>Reserved Keywords</strong>: Names cannot be Python reserved keywords, such as <code>if</code>, <code>else</code>, <code>for</code>, <code>while</code>, <code>class</code>, <code>def</code>, etc.</li>
+</ol>
+</section>
+</section>
+<section id="variables" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="variables"><span class="header-section-number">4.2</span> Variables</h2>
+<p>Variables are names assigned to data values stored in memory. They act as containers holding information that can be manipulated and accessed throughout a program. Variables allow for dynamic and flexible data handling, making it possible to perform computations, store results, and manage state.</p>
+<section id="variable-assignment" class="level4">
+<h4 class="anchored" data-anchor-id="variable-assignment">Variable Assignment</h4>
+<p>In Python, variable assignment is straightforward. Use the assignment operator (<code>=</code>) to assign a value to a variable:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>name <span class="op">=</span> <span class="st">"Alice"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>is_student <span class="op">=</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="variable-scope" class="level4">
+<h4 class="anchored" data-anchor-id="variable-scope">Variable Scope</h4>
+<p>The scope of a variable determines its accessibility within different parts of a program. There are two primary types of scope in Python:</p>
+<ol type="1">
+<li><strong>Global Scope</strong>: Variables defined outside any function (functions will be discussed in <a href="#sec-functions"><span class="quarto-unresolved-ref">sec-functions</span></a>) or block have global scope and can be accessed anywhere in the program.</li>
+<li><strong>Local Scope</strong>: Variables defined within a function or block have local scope and can only be accessed within that function or block.</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>global_var <span class="op">=</span> <span class="st">"I am global"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> my_function():</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    local_var <span class="op">=</span> <span class="st">"I am local"</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(global_var)  <span class="co"># Accessible</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(local_var)  <span class="co"># Accessible</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>my_function()</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(global_var)  <span class="co"># Accessible</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(local_var)  <span class="co"># Error: NameError</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="constants" class="level4">
+<h4 class="anchored" data-anchor-id="constants">Constants</h4>
+<p>Constants are variables whose values are intended to remain unchanged throughout the program. While Python does not have built-in constant types, by convention, we use all uppercase letters to indicate constants:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>PI <span class="op">=</span> <span class="fl">3.14159</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>MAX_STUDENTS <span class="op">=</span> <span class="dv">50</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="examples-and-applications" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="examples-and-applications"><span class="header-section-number">4.2.1</span> Examples and Applications</h3>
+<p>To solidify our understanding of names and variables, let’s explore some practical examples and applications:</p>
+<section id="example-simple-calculator" class="level5">
+<h5 class="anchored" data-anchor-id="example-simple-calculator">Example: Simple Calculator</h5>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Simple Calculator Program</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>num1 <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>num2 <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Performing arithmetic operations</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>sum_result <span class="op">=</span> num1 <span class="op">+</span> num2</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>difference <span class="op">=</span> num1 <span class="op">-</span> num2</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>product <span class="op">=</span> num1 <span class="op">*</span> num2</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>quotient <span class="op">=</span> num1 <span class="op">/</span> num2</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sum:"</span>, sum_result)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Difference:"</span>, difference)</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Product:"</span>, product)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Quotient:"</span>, quotient)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="example-temperature-conversion" class="level5">
+<h5 class="anchored" data-anchor-id="example-temperature-conversion">Example: Temperature Conversion</h5>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Temperature Conversion Program (Celsius to Fahrenheit)</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>celsius <span class="op">=</span> <span class="dv">25</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>fahrenheit <span class="op">=</span> (celsius <span class="op">*</span> <span class="dv">9</span><span class="op">/</span><span class="dv">5</span>) <span class="op">+</span> <span class="dv">32</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(celsius, <span class="st">"Celsius is"</span>, fahrenheit, <span class="st">"Fahrenheit"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Understanding names and variables is crucial for effective programming. Names provide a way to reference and access data, while variables store the data we work with. By adhering to naming conventions and understanding variable scope and types, we can write clearer, more maintainable code. As we progress, these fundamental concepts will underpin more complex programming tasks and techniques.</p>
+</section>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">4.3</span> Exercises</h2>
+<section id="exercise-1-variable-assignment" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-variable-assignment">Exercise 1: Variable Assignment</h4>
+<ol type="a">
+<li>Assign the value <code>50</code> to a variable named <code>my_age</code> and use <code>print</code> to display the variable.</li>
+<li>Assign the string <code>"Hello, Python!"</code> to a variable named <code>greeting</code> and use <code>print</code> to display the variable.</li>
+<li>Assign the boolean value <code>False</code> to a variable named <code>is_raining</code> and use <code>print</code> to display the variable.</li>
+</ol>
+<!-- *Example:* -->
+<!-- ```python -->
+<!-- my_age = 50 -->
+<!-- greeting = "Hello, Python!" -->
+<!-- is_raining = False -->
+<!-- print(my_age)  # Should print: 50 -->
+<!-- print(greeting)  # Should print: Hello, Python! -->
+<!-- print(is_raining)  # Should print: False -->
+<!-- ``` -->
+</section>
+<section id="exercise-2-variable-reassignment" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-variable-reassignment">Exercise 2: Variable Reassignment</h4>
+<ol type="a">
+<li>Assign the value <code>10</code> to a variable named <code>number</code> and use <code>print</code> to display the variable.</li>
+<li>Reassign the value of <code>number</code> to <code>20</code> and use <code>print</code> to display the variable.</li>
+<li>Reassign the value of <code>number</code> to the string <code>"twenty"</code> and use <code>print</code> to display the variable.</li>
+</ol>
+<!-- *Example:* -->
+<!-- ```python -->
+<!-- number = 10 -->
+<!-- print(number)  # Should print: 10 -->
+<!-- number = 20 -->
+<!-- print(number)  # Should print: 20 -->
+<!-- number = "twenty" -->
+<!-- print(number)  # Should print: twenty -->
+<!-- ``` -->
+</section>
+<section id="exercise-3-basic-arithmetic" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-basic-arithmetic">Exercise 3: Basic Arithmetic</h4>
+<ol type="a">
+<li>Create two variables <code>a</code> and <code>b</code>, and assign them the values <code>8</code> and <code>3</code> respectively.</li>
+<li>Perform the following operations and print the results:
+<ul>
+<li>Sum of <code>a</code> and <code>b</code></li>
+<li>Difference between <code>a</code> and <code>b</code></li>
+<li>Product of <code>a</code> and <code>b</code></li>
+<li>Quotient of <code>a</code> divided by <code>b</code></li>
+</ul></li>
+</ol>
+<!-- *Example:* -->
+<!-- ```python -->
+<!-- a = 8 -->
+<!-- b = 3 -->
+<!-- sum_result = a + b -->
+<!-- difference = a - b -->
+<!-- product = a * b -->
+<!-- quotient = a / b -->
+<!-- print("Sum:", sum_result)  # Should print: Sum: 11 -->
+<!-- print("Difference:", difference)  # Should print: Difference: 5 -->
+<!-- print("Product:", product)  # Should print: Product: 24 -->
+<!-- print("Quotient:", quotient)  # Should print: Quotient: 2.6666666666666665 -->
+<!-- ``` -->
+</section>
+<section id="exercise-4-temperature-conversion" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-temperature-conversion">Exercise 4: Temperature Conversion</h4>
+<ol type="a">
+<li>Create a variable <code>fahrenheit</code> and assign it the value <code>86</code>.</li>
+<li>Convert the temperature to Fahrenheit using the formula: <code>celsius = (fahrenheit - 32) * 5/9</code>.</li>
+<li>Print the Celsius value.</li>
+</ol>
+<!-- *Example:* -->
+<!-- ```python -->
+<!-- fahrenheit = 86 -->
+<!-- celsius = (fahrenheit - 32) * 5/9 -->
+<!-- print(fahrenheit, "Fahrenheit is", celsius, "Celsius")  # Should print: 86 Fahrenheit is 30.0 Celsius -->
+<!-- ``` -->
+</section>
+<section id="exercise-5-constants" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-constants">Exercise 5: Constants</h4>
+<ol type="a">
+<li>Define a constant <code>PI</code> with the value <code>3.14159</code>.</li>
+<li>Define a constant <code>MAX_SPEED</code> with the value <code>120</code>.</li>
+<li>Print both constants.</li>
+</ol>
+<!-- *Example:* -->
+<!-- ```python -->
+<!-- PI = 3.14159 -->
+<!-- MAX_SPEED = 120 -->
+<!-- print("PI:", PI)  # Should print: PI: 3.14159 -->
+<!-- print("Max Speed:", MAX_SPEED)  # Should print: Max Speed: 120 -->
+<!-- ``` -->
 
 
 </section>
@@ -489,10 +694,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./03_Basic_Syntax_and_Expressions.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_Intro_to_Programming.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./05_Data_Types.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

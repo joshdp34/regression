@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STA 2450 Computing for Math &amp; Stat</title>
+<title>STA 2450 Computing for Math &amp; Stat - 3&nbsp; Basic Syntax and Expressions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,7 +64,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./01_Intro_to_Programming.html" rel="next">
+<link href="./04_Names_and_Variables.html" rel="next">
+<link href="./02_Python_Install.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -74,7 +109,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Introduction</a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./03_Basic_Syntax_and_Expressions.html"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -101,7 +136,7 @@ ul.task-list li input[type="checkbox"] {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
   </div>
 </li>
@@ -119,7 +154,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
   </div>
 </li>
@@ -217,7 +252,8 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction">Introduction</a></li>
+  <li><a href="#syntax-in-programming-languages" id="toc-syntax-in-programming-languages" class="nav-link active" data-scroll-target="#syntax-in-programming-languages"><span class="header-section-number">3.1</span> Syntax in Programming Languages</a></li>
+  <li><a href="#semantics-in-programming-languages" id="toc-semantics-in-programming-languages" class="nav-link" data-scroll-target="#semantics-in-programming-languages"><span class="header-section-number">3.2</span> Semantics in Programming Languages</a></li>
   </ul>
 </nav>
     </div>
@@ -226,7 +262,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><p>STA 2450 Computing for Math &amp; Stat</p></h1>
+<h1 class="title"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></h1>
 </div>
 
 
@@ -241,13 +277,106 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
-<section id="introduction" class="level1 unnumbered">
-<h1 class="unnumbered">Introduction</h1>
-<p>These are the lecture notes for STA 2450 - Computing for Math &amp; Stat.</p>
-<p><strong>Prerequisites:</strong> None</p>
-<section id="course-description" class="level4">
-<h4 class="anchored" data-anchor-id="course-description">Course Description:</h4>
-<p>Computer programming for mathematical scientists with emphasis on designing algorithms, problem solving, and coding practices. Topics include development of programs from specifications; appropriate use of data types; functions; modular program organization; documentation and style; and version control and collaborative programming.</p>
+<p>In the realm of programming, understanding the basic syntax and semantics of a language is akin to grasping the fundamentals of a natural language. Syntax refers to the structure or format of the code, dictating how symbols and keywords can be combined to create valid instructions. Semantics, on the other hand, pertains to the meaning behind these instructions — what actions they perform when executed.</p>
+<section id="syntax-in-programming-languages" class="level2" data-number="3.1">
+<h2 data-number="3.1" class="anchored" data-anchor-id="syntax-in-programming-languages"><span class="header-section-number">3.1</span> Syntax in Programming Languages</h2>
+<p>Syntax rules in programming languages define how the code should be written and structured. These rules ensure that the code is readable both by humans and by the computer. Just as syntax in a spoken language dictates how words and phrases should be combined to convey meaning, syntax in programming languages dictates how symbols and keywords can be combined to create valid instructions.</p>
+<p>Key elements of syntax include keywords, operators, punctuation, and the overall structure of statements.</p>
+<section id="keywords" class="level4">
+<h4 class="anchored" data-anchor-id="keywords">Keywords</h4>
+<p>Keywords are reserved words that have special meanings in a programming language. For example, in English, words like “and,” “or,” “if,” and “then” are used to connect ideas and indicate logical relationships. Similarly, in Python, keywords like <code>if</code>, <code>else</code>, <code>while</code>, <code>for</code>, and <code>def</code> are used to construct control flow and define functions.</p>
+<p>Example in English: - “If it rains, then bring an umbrella.”</p>
+<p>Example in Python:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> it_rains:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    bring_umbrella()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="operators" class="level4">
+<h4 class="anchored" data-anchor-id="operators">Operators</h4>
+<p>Operators are symbols that perform operations on values. In both English and programming languages, operators are used to combine or modify elements.</p>
+<p>Example in English: - “Three plus five equals eight.”</p>
+<p>Example in Python:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> <span class="op">+</span> <span class="dv">5</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="punctuation" class="level4">
+<h4 class="anchored" data-anchor-id="punctuation">Punctuation</h4>
+<p>Punctuation marks, such as periods, commas, and parentheses, are used to group and organize sentences in English. Similarly, in programming languages, punctuation marks like parentheses <code>()</code>, brackets <code>[]</code>, and braces <code>{}</code> are used to group and organize code.</p>
+<p>Example in English: - “He said, ‘Hello!’”</p>
+<p>Example in Python:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Hello!"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="statements-and-expressions" class="level4">
+<h4 class="anchored" data-anchor-id="statements-and-expressions">Statements and Expressions</h4>
+<p>A statement is an instruction that the Python interpreter can execute, while an expression is a combination of values, variables, and operators that can be evaluated to produce another value. Every expression is a statement, but not every statement is an expression.</p>
+<p>Example in English: - “The sum of three and five is eight.” (Expression: “Three plus five”)</p>
+<p>Example in Python:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> <span class="op">+</span> <span class="dv">5</span>  <span class="co"># Expression</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="dv">3</span> <span class="op">+</span> <span class="dv">5</span>)  <span class="co"># Statement</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Note
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Comments in Python code are denoted by the <code>#</code> symbol and are used to explain and document the code. They are ignored by the Python interpreter and do not affect the execution of the program, making them useful for enhancing code readability and providing context for developers.</p>
+</div>
+</div>
+<p>Understanding the syntax rules in both natural and programming languages is crucial for effective communication and problem-solving. Syntax ensures that our messages, whether written in English or Python, are clear and interpretable by others, including computers.</p>
+</section>
+</section>
+<section id="semantics-in-programming-languages" class="level2" data-number="3.2">
+<h2 data-number="3.2" class="anchored" data-anchor-id="semantics-in-programming-languages"><span class="header-section-number">3.2</span> Semantics in Programming Languages</h2>
+<p>Semantics concerns the meaning of syntactically correct strings of symbols. In other words, while syntax is about the form, semantics is about the function. Semantics ensure that a piece of code not only adheres to the rules of the language but also performs the intended operations.</p>
+<p>For instance, the expression <code>3 + 4</code> adheres to Python’s syntax rules and its semantics dictate that this expression will evaluate to <code>7</code>.</p>
+<p>To illustrate basic syntax and semantics, let’s look at some simple Python expressions.</p>
+<section id="example-1-arithmetic-operations" class="level4">
+<h4 class="anchored" data-anchor-id="example-1-arithmetic-operations">Example 1: Arithmetic Operations</h4>
+<p>Arithmetic operations in Python are straightforward and follow standard mathematical conventions.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding two numbers</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">3</span> <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Subtracting two numbers</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="dv">10</span> <span class="op">-</span> <span class="dv">4</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Multiplying two numbers</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="dv">7</span> <span class="op">*</span> <span class="dv">6</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Dividing two numbers</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="dv">8</span> <span class="op">/</span> <span class="dv">2</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Each of these expressions follows the syntax rules for arithmetic operators in Python and has clear semantics: they perform addition, subtraction, multiplication, and division, respectively.</p>
+</section>
+<section id="example-2-comparison-operations" class="level4">
+<h4 class="anchored" data-anchor-id="example-2-comparison-operations">Example 2: Comparison Operations</h4>
+<p>Comparison operations are used to compare values and produce Boolean results (<code>True</code> or <code>False</code>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking equality</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="dv">4</span> <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking inequality</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="dv">5</span> <span class="op">!=</span> <span class="dv">3</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking greater than</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="dv">9</span> <span class="op">&gt;</span> <span class="dv">7</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Checking less than</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a><span class="dv">2</span> <span class="op">&lt;</span> <span class="dv">6</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>These expressions compare two values and return a Boolean value based on the comparison.</p>
+</section>
+<section id="example-3-logical-operations" class="level4">
+<h4 class="anchored" data-anchor-id="example-3-logical-operations">Example 3: Logical Operations</h4>
+<p>Logical operations combine Boolean values and are useful in conditional expressions.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Logical AND</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="va">True</span> <span class="kw">and</span> <span class="va">False</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Logical OR</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="va">True</span> <span class="kw">or</span> <span class="va">False</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Logical NOT</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">not</span> <span class="va">True</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In these examples, logical operators evaluate the Boolean expressions and return a Boolean result.</p>
+<p>Understanding the basic syntax and semantics of a programming language is crucial for writing correct and efficient code. Syntax provides the structure, while semantics ensures that the code performs the intended operations.</p>
 
 
 </section>
@@ -489,10 +618,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
+      <a href="./02_Python_Install.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span>
+      </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./01_Intro_to_Programming.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./04_Names_and_Variables.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

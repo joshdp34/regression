@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 16&nbsp; Object-Oriented Programming in Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./17_Documentation.html" rel="next">
+<link href="./15_Data_Vis.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./16_OOP.html"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-object-oriented-programming" id="toc-introduction-to-object-oriented-programming" class="nav-link active" data-scroll-target="#introduction-to-object-oriented-programming"><span class="header-section-number">16.1</span> Introduction to Object-Oriented Programming</a>
+  <ul class="collapse">
+  <li><a href="#objects-and-classes-in-everyday-life" id="toc-objects-and-classes-in-everyday-life" class="nav-link" data-scroll-target="#objects-and-classes-in-everyday-life"><span class="header-section-number">16.1.1</span> Objects and Classes in Everyday Life</a></li>
+  <li><a href="#attributes-and-methods" id="toc-attributes-and-methods" class="nav-link" data-scroll-target="#attributes-and-methods"><span class="header-section-number">16.1.2</span> Attributes and Methods</a></li>
+  <li><a href="#encapsulation-keeping-attributes-and-methods-together" id="toc-encapsulation-keeping-attributes-and-methods-together" class="nav-link" data-scroll-target="#encapsulation-keeping-attributes-and-methods-together"><span class="header-section-number">16.1.3</span> Encapsulation: Keeping Attributes and Methods Together</a></li>
+  <li><a href="#why-use-oop" id="toc-why-use-oop" class="nav-link" data-scroll-target="#why-use-oop"><span class="header-section-number">16.1.4</span> Why Use OOP?</a></li>
+  </ul></li>
+  <li><a href="#defining-a-class" id="toc-defining-a-class" class="nav-link" data-scroll-target="#defining-a-class"><span class="header-section-number">16.2</span> Defining a Class</a>
+  <ul class="collapse">
+  <li><a href="#basic-class-syntax" id="toc-basic-class-syntax" class="nav-link" data-scroll-target="#basic-class-syntax"><span class="header-section-number">16.2.1</span> Basic Class Syntax</a></li>
+  <li><a href="#the-__init__-method-class-constructor" id="toc-the-__init__-method-class-constructor" class="nav-link" data-scroll-target="#the-__init__-method-class-constructor"><span class="header-section-number">16.2.2</span> The <code>__init__</code> Method: Class Constructor</a></li>
+  </ul></li>
+  <li><a href="#methods-and-attributes-in-a-class" id="toc-methods-and-attributes-in-a-class" class="nav-link" data-scroll-target="#methods-and-attributes-in-a-class"><span class="header-section-number">16.3</span> Methods and Attributes in a Class</a>
+  <ul class="collapse">
+  <li><a href="#instance-attributes-vs.-class-attributes" id="toc-instance-attributes-vs.-class-attributes" class="nav-link" data-scroll-target="#instance-attributes-vs.-class-attributes"><span class="header-section-number">16.3.1</span> Instance Attributes vs.&nbsp;Class Attributes</a></li>
+  <li><a href="#modifying-attributes" id="toc-modifying-attributes" class="nav-link" data-scroll-target="#modifying-attributes"><span class="header-section-number">16.3.2</span> Modifying Attributes</a></li>
+  </ul></li>
+  <li><a href="#inheritance" id="toc-inheritance" class="nav-link" data-scroll-target="#inheritance"><span class="header-section-number">16.4</span> Inheritance</a>
+  <ul class="collapse">
+  <li><a href="#inheritance-in-everyday-life" id="toc-inheritance-in-everyday-life" class="nav-link" data-scroll-target="#inheritance-in-everyday-life"><span class="header-section-number">16.4.1</span> Inheritance in Everyday Life</a></li>
+  <li><a href="#defining-inheritance-in-python" id="toc-defining-inheritance-in-python" class="nav-link" data-scroll-target="#defining-inheritance-in-python"><span class="header-section-number">16.4.2</span> Defining Inheritance in Python</a></li>
+  <li><a href="#overriding-methods" id="toc-overriding-methods" class="nav-link" data-scroll-target="#overriding-methods"><span class="header-section-number">16.4.3</span> Overriding Methods</a></li>
+  <li><a href="#the-super-function" id="toc-the-super-function" class="nav-link" data-scroll-target="#the-super-function"><span class="header-section-number">16.4.4</span> The <code>super()</code> Function</a></li>
+  <li><a href="#multiple-inheritance" id="toc-multiple-inheritance" class="nav-link" data-scroll-target="#multiple-inheritance"><span class="header-section-number">16.4.5</span> Multiple Inheritance</a></li>
+  </ul></li>
+  <li><a href="#encapsulation-and-data-hiding" id="toc-encapsulation-and-data-hiding" class="nav-link" data-scroll-target="#encapsulation-and-data-hiding"><span class="header-section-number">16.5</span> Encapsulation and Data Hiding</a>
+  <ul class="collapse">
+  <li><a href="#data-hiding-the-foundation-of-encapsulation" id="toc-data-hiding-the-foundation-of-encapsulation" class="nav-link" data-scroll-target="#data-hiding-the-foundation-of-encapsulation"><span class="header-section-number">16.5.1</span> Data Hiding: The Foundation of Encapsulation</a></li>
+  <li><a href="#getter-and-setter-methods" id="toc-getter-and-setter-methods" class="nav-link" data-scroll-target="#getter-and-setter-methods"><span class="header-section-number">16.5.2</span> Getter and Setter Methods</a></li>
+  </ul></li>
+  <li><a href="#polymorphism" id="toc-polymorphism" class="nav-link" data-scroll-target="#polymorphism"><span class="header-section-number">16.6</span> Polymorphism</a>
+  <ul class="collapse">
+  <li><a href="#real-world-example-payment-systems" id="toc-real-world-example-payment-systems" class="nav-link" data-scroll-target="#real-world-example-payment-systems"><span class="header-section-number">16.6.1</span> Real-World Example: Payment Systems</a></li>
+  <li><a href="#polymorphism-through-method-overriding" id="toc-polymorphism-through-method-overriding" class="nav-link" data-scroll-target="#polymorphism-through-method-overriding"><span class="header-section-number">16.6.2</span> Polymorphism Through Method Overriding</a></li>
+  <li><a href="#polymorphism-through-method-overloading-not-native-to-python" id="toc-polymorphism-through-method-overloading-not-native-to-python" class="nav-link" data-scroll-target="#polymorphism-through-method-overloading-not-native-to-python"><span class="header-section-number">16.6.3</span> Polymorphism Through Method Overloading (Not Native to Python)</a></li>
+  <li><a href="#polymorphism-in-python-with-duck-typing" id="toc-polymorphism-in-python-with-duck-typing" class="nav-link" data-scroll-target="#polymorphism-in-python-with-duck-typing"><span class="header-section-number">16.6.4</span> Polymorphism in Python with Duck Typing</a></li>
+  <li><a href="#advantages-of-polymorphism" id="toc-advantages-of-polymorphism" class="nav-link" data-scroll-target="#advantages-of-polymorphism"><span class="header-section-number">16.6.5</span> Advantages of Polymorphism</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">16.7</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-oop" class="quarto-section-identifier"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction-to-object-oriented-programming" class="level2" data-number="16.1">
+<h2 data-number="16.1" class="anchored" data-anchor-id="introduction-to-object-oriented-programming"><span class="header-section-number">16.1</span> Introduction to Object-Oriented Programming</h2>
+<p>Object-Oriented Programming (OOP) is a programming paradigm that models real-world entities using objects and classes. While procedural programming focuses on functions and the sequence of operations, OOP centers around organizing code into objects, which encapsulate both data and behavior. This approach makes it easier to manage, extend, and modify large and complex programs, while also allowing for better reuse of code.</p>
+<p>To understand OOP at a conceptual level, it can be helpful to look at examples from everyday life. These examples will illustrate the key concepts of OOP: <strong>classes</strong>, <strong>objects</strong>, <strong>attributes</strong>, and <strong>methods</strong>. Later in this chapter, we will see how these ideas map onto programming.</p>
+<section id="objects-and-classes-in-everyday-life" class="level3" data-number="16.1.1">
+<h3 data-number="16.1.1" class="anchored" data-anchor-id="objects-and-classes-in-everyday-life"><span class="header-section-number">16.1.1</span> Objects and Classes in Everyday Life</h3>
+<p>Imagine you’re organizing a car dealership. Every car on the lot can be seen as an <strong>object</strong>—a specific instance of a general concept, such as a car. The general concept is what we refer to as a <strong>class</strong> in OOP. A class acts like a blueprint or template for creating objects. Each car on the lot is unique in some way, but they all share certain common traits and behaviors, just like objects created from a class.</p>
+<p>Let’s break this down:</p>
+<ul>
+<li><strong>Class</strong>: A car can be described by a blueprint, which details its general characteristics (such as make, model, engine type, etc.) and behaviors (like starting the engine, honking the horn). In OOP, this blueprint is the <strong>class</strong>.</li>
+<li><strong>Object</strong>: Each specific car you have on the lot—a 2021 Toyota Camry, a 2020 Honda Civic, etc.—is an <strong>object</strong> created from the class blueprint. These cars have specific values for their characteristics (for example, one car is blue, another has a sunroof).</li>
+</ul>
+<p>This distinction between class and object is fundamental to OOP. A <strong>class</strong> provides the general description, while an <strong>object</strong> is a specific instance created from that description.</p>
+</section>
+<section id="attributes-and-methods" class="level3" data-number="16.1.2">
+<h3 data-number="16.1.2" class="anchored" data-anchor-id="attributes-and-methods"><span class="header-section-number">16.1.2</span> Attributes and Methods</h3>
+<p>Objects have <strong>attributes</strong> and <strong>methods</strong>. Attributes are the data that describe the state of an object, while methods are the actions or behaviors an object can perform.</p>
+<p>Continuing with our car dealership analogy:</p>
+<ul>
+<li><strong>Attributes</strong>: Each car has specific properties like color, make, model, year, and mileage. These properties are the <strong>attributes</strong> of the car object.</li>
+<li><strong>Methods</strong>: The behaviors of a car, such as starting the engine, honking the horn, or accelerating, are the <strong>methods</strong>. In the class blueprint, methods describe what a car can do, and in OOP terms, they are the actions or functions that can be performed on or by an object.</li>
+</ul>
+<p>Just as a car’s attributes are set when the car is manufactured, an object’s attributes are defined when the object is created from the class.</p>
+<section id="example-oop-in-a-library-system" class="level4">
+<h4 class="anchored" data-anchor-id="example-oop-in-a-library-system">Example: OOP in a Library System</h4>
+<p>Consider a library system, which can also be modeled using OOP principles. In this case, <strong>books</strong> are objects, and <strong>LibraryBook</strong> might be the class that defines their shared characteristics and behaviors.</p>
+<ul>
+<li><strong>Class (LibraryBook)</strong>: The class defines the general properties of a book, such as its title, author, publication date, and ISBN. It also defines behaviors, such as checking the book out or returning it.</li>
+<li><strong>Objects</strong>: Each specific book in the library—like “To Kill a Mockingbird” or “Pride and Prejudice”—is an object created from the <strong>LibraryBook</strong> class. Each object has specific values for its attributes (e.g., title, author) but shares the same behaviors (e.g., can be checked out or returned).</li>
+</ul>
+<p>When you borrow a book from the library, the system doesn’t just perform random tasks; it interacts with the specific book object, checking if it is available or already checked out. This interaction between the object and its methods is one of the strengths of OOP—it provides a structured and organized way to manage complex systems.</p>
+</section>
+</section>
+<section id="encapsulation-keeping-attributes-and-methods-together" class="level3" data-number="16.1.3">
+<h3 data-number="16.1.3" class="anchored" data-anchor-id="encapsulation-keeping-attributes-and-methods-together"><span class="header-section-number">16.1.3</span> Encapsulation: Keeping Attributes and Methods Together</h3>
+<p>One of the key advantages of OOP is <strong>encapsulation</strong>—the concept of bundling data (attributes) and behaviors (methods) together in one entity, the object. This allows for better organization and modularity.</p>
+<p>Let’s return to our car example: You can think of each car as a self-contained object. If you want to interact with the car, you don’t need to know every intricate detail about its inner workings; you just need to use the car’s methods. For instance, to start the car, you don’t have to understand how the engine works—you just turn the key or press a button, and the car performs the appropriate behavior.</p>
+<p>In programming, encapsulation works in a similar way. When a class is designed, its internal workings (the code and data) are hidden from other parts of the program. Instead, the class provides a clear interface (methods) that can be used to interact with its objects. This hiding of internal details makes the system easier to maintain and modify, because changes to the internal structure of a class won’t affect the rest of the program as long as the interface remains the same.</p>
+<section id="real-world-example-a-bank-account-system" class="level4">
+<h4 class="anchored" data-anchor-id="real-world-example-a-bank-account-system">Real-World Example: A Bank Account System</h4>
+<p>Consider a <strong>BankAccount</strong> class in an online banking system. This class defines the shared characteristics of all bank accounts (e.g., account number, balance) and the behaviors that all accounts can perform (e.g., deposit money, withdraw money, check balance).</p>
+<ul>
+<li><strong>Class (BankAccount)</strong>: This acts as the blueprint for creating specific bank accounts. It defines that each account will have an account number, a balance, and methods to deposit or withdraw funds.</li>
+<li><strong>Objects</strong>: Each customer’s bank account is an object created from the BankAccount class. For example, one object might represent Alice’s bank account, while another represents Bob’s bank account.</li>
+</ul>
+<p>The concept of encapsulation is crucial here. You, as the user of the bank account, don’t need to know how the bank stores your balance or how it processes withdrawals internally. All you need to know is that when you call the <code>deposit()</code> method, money is added to your account, and when you call the <code>withdraw()</code> method, money is subtracted. The internal details (data storage, security checks) are hidden from you.</p>
+<p>This separation of concerns allows bank developers to modify the internal workings of the bank system without affecting the customers’ interactions. For example, the bank might switch to a more efficient algorithm for handling transactions, but as long as the deposit and withdraw methods work the same way, the change is invisible to the user.</p>
+</section>
+</section>
+<section id="why-use-oop" class="level3" data-number="16.1.4">
+<h3 data-number="16.1.4" class="anchored" data-anchor-id="why-use-oop"><span class="header-section-number">16.1.4</span> Why Use OOP?</h3>
+<p>Now that we’ve seen how OOP relates to real-world examples, let’s summarize why this approach is so beneficial in programming:</p>
+<ol type="1">
+<li><p><strong>Modularity and Reusability</strong>: By encapsulating data and behavior within classes, OOP promotes modular code that can be reused across different programs. For instance, a class written to represent a “student” in a school system can be reused in other systems (e.g., a library system).</p></li>
+<li><p><strong>Ease of Maintenance</strong>: Because objects are self-contained and interact with the rest of the system through defined methods, changes to one part of the system are less likely to break the entire program. This makes OOP programs easier to maintain and scale.</p></li>
+<li><p><strong>Flexibility Through Inheritance</strong>: OOP allows classes to be extended and specialized through inheritance, a powerful feature that we will discuss in detail later. This allows for the creation of complex systems that can be easily modified and extended.</p></li>
+<li><p><strong>Real-World Modeling</strong>: OOP allows programmers to model real-world systems in a way that’s intuitive and easy to understand. Objects in OOP can directly correspond to real-world entities, making the design and development process more natural.</p></li>
+</ol>
+<p>In the next section, we will explore how to define a class in Python, bringing these concepts into the programming world and showing how to create and work with objects.</p>
+</section>
+</section>
+<section id="defining-a-class" class="level2" data-number="16.2">
+<h2 data-number="16.2" class="anchored" data-anchor-id="defining-a-class"><span class="header-section-number">16.2</span> Defining a Class</h2>
+<p>Now that we’ve explored the key concepts behind Object-Oriented Programming (OOP) and how they relate to everyday examples, it’s time to move into the practical side: defining a class in Python. A class is the fundamental building block of OOP, serving as the blueprint for creating objects. Each object created from a class shares the structure and behavior defined by that class, but with unique values for its attributes.</p>
+<p>In this section, we will dive into the syntax of class definition in Python, demonstrate how to create classes, and explain how attributes and methods are defined within a class. As you go through this section, keep in mind the real-world analogies from the previous section to understand how Python classes mimic real-world entities.</p>
+<section id="basic-class-syntax" class="level3" data-number="16.2.1">
+<h3 data-number="16.2.1" class="anchored" data-anchor-id="basic-class-syntax"><span class="header-section-number">16.2.1</span> Basic Class Syntax</h3>
+<p>In Python, defining a class is straightforward. The keyword <code>class</code> is used, followed by the class name and a colon. The body of the class contains the attributes (data) and methods (functions) that define the behavior of objects created from the class.</p>
+<p>Here’s a simple example:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Car:</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">pass</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This is the simplest possible class definition: a class named <code>Car</code> with no attributes or methods. The keyword <code>pass</code> is used as a placeholder, indicating that there is no functionality yet. We will build on this example to make it more meaningful.</p>
+</section>
+<section id="the-__init__-method-class-constructor" class="level3" data-number="16.2.2">
+<h3 data-number="16.2.2" class="anchored" data-anchor-id="the-__init__-method-class-constructor"><span class="header-section-number">16.2.2</span> The <code>__init__</code> Method: Class Constructor</h3>
+<p>In most cases, you’ll want your class to initialize some values when an object is created. This is where the <code>__init__</code> method comes into play. The <code>__init__</code> method is known as the <strong>constructor</strong>, and it is automatically called when an object is instantiated from the class. It is used to set up initial values for the object’s attributes.</p>
+<p>Let’s expand on our <code>Car</code> class:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Car:</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, make, model, year):</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.make <span class="op">=</span> make</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.year <span class="op">=</span> year</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here’s what’s happening:</p>
+<ul>
+<li>The <code>__init__</code> method takes several arguments: <code>self</code>, <code>make</code>, <code>model</code>, and <code>year</code>.</li>
+<li><code>self</code> refers to the specific object being created. It allows you to assign the values to the object’s attributes.</li>
+<li>Inside the method, <code>self.make</code>, <code>self.model</code>, and <code>self.year</code> refer to the attributes of the object. We assign the values passed in (<code>make</code>, <code>model</code>, and <code>year</code>) to those attributes.</li>
+</ul>
+<p>This way, each object (or instance) of the <code>Car</code> class will have its own <code>make</code>, <code>model</code>, and <code>year</code> attributes, which are set when the object is created.</p>
+<section id="example-creating-objects-from-a-class" class="level4">
+<h4 class="anchored" data-anchor-id="example-creating-objects-from-a-class">Example: Creating Objects from a Class</h4>
+<p>Let’s create some <code>Car</code> objects using this class:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>car1 <span class="op">=</span> Car(<span class="st">"Toyota"</span>, <span class="st">"Camry"</span>, <span class="dv">2021</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>car2 <span class="op">=</span> Car(<span class="st">"Honda"</span>, <span class="st">"Civic"</span>, <span class="dv">2020</span>)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.make)  </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car2.year)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Toyota
+2020</code></pre>
+</div>
+</div>
+<p>Here, <code>car1</code> and <code>car2</code> are objects created from the <code>Car</code> class. Each object has its own set of attributes: <code>car1</code> is a Toyota Camry from 2021, and <code>car2</code> is a Honda Civic from 2020. We can access these attributes using dot notation (<code>car1.make</code>, <code>car2.year</code>).</p>
+<p>This structure mirrors real-world examples: just as each car in a dealership has specific properties, each object in OOP has specific values for its attributes, even though they are all created from the same class blueprint.</p>
+</section>
+</section>
+</section>
+<section id="methods-and-attributes-in-a-class" class="level2" data-number="16.3">
+<h2 data-number="16.3" class="anchored" data-anchor-id="methods-and-attributes-in-a-class"><span class="header-section-number">16.3</span> Methods and Attributes in a Class</h2>
+<p>In addition to attributes, a class can define <strong>methods</strong>—functions that describe the behaviors or actions the objects can perform. Methods in a class always take <code>self</code> as the first argument, which refers to the instance on which the method is being called.</p>
+<p>Let’s add a method to the <code>Car</code> class that allows the car to display its full description:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Car:</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, make, model, year):</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.make <span class="op">=</span> make</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.year <span class="op">=</span> year</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> description(<span class="va">self</span>):</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>year<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>make<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>model<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the method <code>description</code> returns a formatted string with the car’s year, make, and model.</p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>car1 <span class="op">=</span> Car(<span class="st">"Toyota"</span>, <span class="st">"Camry"</span>, <span class="dv">2021</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.description())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2021 Toyota Camry</code></pre>
+</div>
+</div>
+<p>Here, we define the method <code>description</code> inside the class. When we call <code>car1.description()</code>, the car provides its full description. This method operates on the instance of the class (e.g., <code>car1</code>), and it has access to the attributes via <code>self</code>.</p>
+<section id="instance-attributes-vs.-class-attributes" class="level3" data-number="16.3.1">
+<h3 data-number="16.3.1" class="anchored" data-anchor-id="instance-attributes-vs.-class-attributes"><span class="header-section-number">16.3.1</span> Instance Attributes vs.&nbsp;Class Attributes</h3>
+<p>In Python, attributes can be classified into two types: <strong>instance attributes</strong> and <strong>class attributes</strong>.</p>
+<ul>
+<li><p><strong>Instance Attributes</strong>: These are specific to each object and are defined inside the <code>__init__</code> method. For example, in the <code>Car</code> class, <code>make</code>, <code>model</code>, and <code>year</code> are instance attributes. Each car object has its own unique values for these attributes.</p></li>
+<li><p><strong>Class Attributes</strong>: These are shared across all instances of a class. They are defined directly within the class but outside of any method. All objects of the class will share the same value for a class attribute, unless it is explicitly overridden in an instance.</p></li>
+</ul>
+<p>Let’s modify the <code>Car</code> class to include a class attribute:</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Car:</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    wheels <span class="op">=</span> <span class="dv">4</span>  <span class="co"># Class attribute</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, make, model, year):</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.make <span class="op">=</span> make</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.model <span class="op">=</span> model</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.year <span class="op">=</span> year</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> description(<span class="va">self</span>):</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>year<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>make<span class="sc">}</span><span class="ss"> </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>model<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this case, <code>wheels</code> is a class attribute, meaning that all cars created from the <code>Car</code> class will have 4 wheels. This attribute is shared among all instances of the class:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>car1 <span class="op">=</span> Car(<span class="st">"Toyota"</span>, <span class="st">"Camry"</span>, <span class="dv">2021</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>car2 <span class="op">=</span> Car(<span class="st">"Honda"</span>, <span class="st">"Civic"</span>, <span class="dv">2020</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.wheels)  </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car2.wheels)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4
+4</code></pre>
+</div>
+</div>
+<p>Class attributes can be useful for defining properties that are the same across all instances, such as the number of wheels for cars.</p>
+</section>
+<section id="modifying-attributes" class="level3" data-number="16.3.2">
+<h3 data-number="16.3.2" class="anchored" data-anchor-id="modifying-attributes"><span class="header-section-number">16.3.2</span> Modifying Attributes</h3>
+<p>It is possible to modify both instance and class attributes after an object has been created. Let’s see how this works.</p>
+<section id="modifying-instance-attributes" class="level4">
+<h4 class="anchored" data-anchor-id="modifying-instance-attributes">Modifying Instance Attributes</h4>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>car1 <span class="op">=</span> Car(<span class="st">"Toyota"</span>, <span class="st">"Camry"</span>, <span class="dv">2021</span>)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.description())  </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Modifying the year</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>car1.year <span class="op">=</span> <span class="dv">2022</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.description())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2021 Toyota Camry
+2022 Toyota Camry</code></pre>
+</div>
+</div>
+<p>Here, we update the <code>year</code> attribute for <code>car1</code>, and the object reflects the new value when we call the <code>description</code> method again.</p>
+</section>
+<section id="modifying-class-attributes" class="level4">
+<h4 class="anchored" data-anchor-id="modifying-class-attributes">Modifying Class Attributes</h4>
+<p>Class attributes can be modified directly using the class name. Any change to a class attribute will be reflected across all instances of the class:</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>Car.wheels <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(car1.wheels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>3</code></pre>
+</div>
+</div>
+<p>By modifying the <code>wheels</code> class attribute, we’ve updated the number of wheels for all <code>Car</code> objects.</p>
+</section>
+</section>
+</section>
+<section id="inheritance" class="level2" data-number="16.4">
+<h2 data-number="16.4" class="anchored" data-anchor-id="inheritance"><span class="header-section-number">16.4</span> Inheritance</h2>
+<p>Inheritance is one of the most powerful features of Object-Oriented Programming (OOP). It allows a new class to inherit the properties and behaviors (attributes and methods) of an existing class. The new class, known as the <strong>subclass</strong> or <strong>child class</strong>, can also have additional attributes and methods or override existing ones from the parent class. This promotes code reuse and makes it easier to build complex systems by extending functionality rather than starting from scratch.</p>
+<p>To understand inheritance conceptually, let’s once again consider some real-world examples.</p>
+<section id="inheritance-in-everyday-life" class="level3" data-number="16.4.1">
+<h3 data-number="16.4.1" class="anchored" data-anchor-id="inheritance-in-everyday-life"><span class="header-section-number">16.4.1</span> Inheritance in Everyday Life</h3>
+<p>Imagine a university system where you have <strong>students</strong> and <strong>graduate students</strong>. Both graduate and undergraduate students share many characteristics: they have a name, student ID, and GPA. However, graduate students also have some unique attributes, such as a thesis title and an advisor. It would be redundant to create separate classes for students and graduate students from scratch because many of their attributes overlap.</p>
+<p>Instead, we can create a general <strong>Student</strong> class and a more specialized <strong>GraduateStudent</strong> class. The GraduateStudent class can inherit the common attributes and behaviors from the Student class, while adding its own unique features. This hierarchical structure is a natural fit for OOP and is made possible through inheritance.</p>
+</section>
+<section id="defining-inheritance-in-python" class="level3" data-number="16.4.2">
+<h3 data-number="16.4.2" class="anchored" data-anchor-id="defining-inheritance-in-python"><span class="header-section-number">16.4.2</span> Defining Inheritance in Python</h3>
+<p>In Python, inheritance is defined by specifying the parent class in parentheses when defining the child class. The child class inherits all the attributes and methods from the parent class.</p>
+<p>Let’s define a basic example:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Student:</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa):</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.student_id <span class="op">=</span> student_id</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.gpa <span class="op">=</span> gpa</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> display_info(<span class="va">self</span>):</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Student: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">, ID: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>student_id<span class="sc">}</span><span class="ss">, GPA: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>gpa<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Here, the <code>Student</code> class defines three attributes (<code>name</code>, <code>student_id</code>, and <code>gpa</code>) and one method (<code>display_info</code>). Now, we will define a subclass, <code>GraduateStudent</code>, which will inherit from <code>Student</code>.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GraduateStudent(Student):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa, thesis_title):</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(name, student_id, gpa)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.thesis_title <span class="op">=</span> thesis_title</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> display_thesis(<span class="va">self</span>):</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Thesis: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>thesis_title<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example:</p>
+<ul>
+<li>The <code>GraduateStudent</code> class inherits from <code>Student</code>. We can see this by the syntax <code>class GraduateStudent(Student)</code>.</li>
+<li>The <code>__init__</code> method of the <code>GraduateStudent</code> class uses <code>super().__init__()</code> to call the parent class’s constructor, inheriting the initialization of <code>name</code>, <code>student_id</code>, and <code>gpa</code>.</li>
+<li>A new attribute, <code>thesis_title</code>, is added, along with a method <code>display_thesis()</code> to show the thesis title.</li>
+</ul>
+<section id="example-creating-instances-of-subclasses" class="level4">
+<h4 class="anchored" data-anchor-id="example-creating-instances-of-subclasses">Example: Creating Instances of Subclasses</h4>
+<p>Now let’s create instances of the <code>Student</code> and <code>GraduateStudent</code> classes to see how inheritance works in practice:</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a Student object</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>student1 <span class="op">=</span> Student(<span class="st">"Alice"</span>, <span class="st">"S12345"</span>, <span class="fl">3.9</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student1.display_info())  </span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a GraduateStudent object</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>grad_student1 <span class="op">=</span> GraduateStudent(<span class="st">"Bob"</span>, <span class="st">"G54321"</span>, <span class="fl">4.0</span>, <span class="st">"Quantum Computing"</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grad_student1.display_info())  </span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grad_student1.display_thesis())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Student: Alice, ID: S12345, GPA: 3.9
+Student: Bob, ID: G54321, GPA: 4.0
+Thesis: Quantum Computing</code></pre>
+</div>
+</div>
+<p>As shown, <code>GraduateStudent</code> inherits the <code>display_info()</code> method from the <code>Student</code> class, and we can also use the <code>display_thesis()</code> method that is specific to <code>GraduateStudent</code>.</p>
+</section>
+</section>
+<section id="overriding-methods" class="level3" data-number="16.4.3">
+<h3 data-number="16.4.3" class="anchored" data-anchor-id="overriding-methods"><span class="header-section-number">16.4.3</span> Overriding Methods</h3>
+<p>One of the most useful aspects of inheritance is the ability to override methods from the parent class in the child class. This allows the child class to modify or extend the behavior of a method without affecting the parent class.</p>
+<p>Let’s say we want the <code>GraduateStudent</code> class to display more detailed information about the student, including the thesis title, when calling the <code>display_info()</code> method. We can override this method in the <code>GraduateStudent</code> class:</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GraduateStudent(Student):</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa, thesis_title):</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(name, student_id, gpa)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.thesis_title <span class="op">=</span> thesis_title</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Overriding the display_info method</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> display_info(<span class="va">self</span>):</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Graduate Student: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">, ID: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>student_id<span class="sc">}</span><span class="ss">, GPA: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>gpa<span class="sc">}</span><span class="ss">, Thesis: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>thesis_title<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, when <code>display_info()</code> is called on a <code>GraduateStudent</code> object, it uses the overridden version of the method instead of the parent class’s version:</p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>grad_student1 <span class="op">=</span> GraduateStudent(<span class="st">"Bob"</span>, <span class="st">"G54321"</span>, <span class="fl">4.0</span>, <span class="st">"Quantum Computing"</span>)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(grad_student1.display_info())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Graduate Student: Bob, ID: G54321, GPA: 4.0, Thesis: Quantum Computing</code></pre>
+</div>
+</div>
+<p>In this case, we have enhanced the method from the parent class to include additional information about the student’s thesis.</p>
+</section>
+<section id="the-super-function" class="level3" data-number="16.4.4">
+<h3 data-number="16.4.4" class="anchored" data-anchor-id="the-super-function"><span class="header-section-number">16.4.4</span> The <code>super()</code> Function</h3>
+<p>The <code>super()</code> function is crucial when working with inheritance. It allows you to call methods from the parent class, which is especially useful when overriding methods. As we saw in the example above, <code>super()</code> was used to call the parent class’s <code>__init__()</code> method, so we didn’t have to duplicate the code that initializes the common attributes.</p>
+<p>Here’s a breakdown of when to use <code>super()</code>:</p>
+<ul>
+<li><strong>Constructor Chaining</strong>: When defining a child class, you often need to initialize the attributes of the parent class. Using <code>super()</code> ensures that the parent class’s <code>__init__()</code> method is called automatically, making it easier to maintain your code.</li>
+<li><strong>Overriding Methods</strong>: If a method in the child class overrides a method in the parent class but you still need access to the parent class’s version of the method, <code>super()</code> allows you to call it.</li>
+</ul>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GraduateStudent(Student):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa, thesis_title):</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">super</span>().<span class="fu">__init__</span>(name, student_id, gpa)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.thesis_title <span class="op">=</span> thesis_title</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> display_info(<span class="va">self</span>):</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">super</span>().display_info() <span class="op">+</span> <span class="ss">f", Thesis: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>thesis_title<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this case, we use <code>super().display_info()</code> to call the parent class’s method and then add additional information about the thesis. This keeps the code for displaying the basic student information centralized in the <code>Student</code> class, avoiding code duplication.</p>
+</section>
+<section id="multiple-inheritance" class="level3" data-number="16.4.5">
+<h3 data-number="16.4.5" class="anchored" data-anchor-id="multiple-inheritance"><span class="header-section-number">16.4.5</span> Multiple Inheritance</h3>
+<p>Python supports <strong>multiple inheritance</strong>, which allows a class to inherit from more than one parent class. While this can be a powerful tool, it should be used with caution because it can lead to more complex and harder-to-maintain code. Let’s look at an example:</p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Athlete:</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, sport):</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sport <span class="op">=</span> sport</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> show_sport(<span class="va">self</span>):</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Sport: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>sport<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> StudentAthlete(Student, Athlete):</span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa, sport):</span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>        Student.<span class="fu">__init__</span>(<span class="va">self</span>, name, student_id, gpa)</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>        Athlete.<span class="fu">__init__</span>(<span class="va">self</span>, sport)</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> display_info(<span class="va">self</span>):</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"</span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>name<span class="sc">}</span><span class="ss">, ID: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>student_id<span class="sc">}</span><span class="ss">, GPA: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>gpa<span class="sc">}</span><span class="ss">, Sport: </span><span class="sc">{</span><span class="va">self</span><span class="sc">.</span>sport<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the <code>StudentAthlete</code> class inherits from both <code>Student</code> and <code>Athlete</code>. This allows the student-athlete to have both academic information (name, ID, GPA) and athletic information (sport). However, notice that we have to explicitly call both <code>Student.__init__()</code> and <code>Athlete.__init__()</code> because both parent classes need to be initialized.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>student_athlete1 <span class="op">=</span> StudentAthlete(<span class="st">"Charlie"</span>, <span class="st">"S98765"</span>, <span class="fl">3.8</span>, <span class="st">"Basketball"</span>)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student_athlete1.display_info())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Charlie, ID: S98765, GPA: 3.8, Sport: Basketball</code></pre>
+</div>
+</div>
+<p>In Python, multiple inheritance is resolved using a method resolution order (MRO), which determines the order in which classes are checked when calling a method. Python uses a depth-first, left-to-right search through the inheritance chain, ensuring that the proper methods are called.</p>
+</section>
+</section>
+<section id="encapsulation-and-data-hiding" class="level2" data-number="16.5">
+<h2 data-number="16.5" class="anchored" data-anchor-id="encapsulation-and-data-hiding"><span class="header-section-number">16.5</span> Encapsulation and Data Hiding</h2>
+<p>Encapsulation is a core concept in Object-Oriented Programming (OOP) that refers to bundling data (attributes) and methods (functions) that operate on that data into a single unit called an object. This not only helps with organization but also protects the internal state of an object from unintended interference or misuse. Encapsulation allows objects to expose only necessary information to the outside world while hiding their internal workings.</p>
+<p>This idea is similar to how most real-world objects work: you interact with them in simple ways, without needing to know all the underlying mechanics. Let’s explore this further with examples, and then move on to the specific programming techniques used to implement encapsulation in Python.</p>
+<section id="data-hiding-the-foundation-of-encapsulation" class="level3" data-number="16.5.1">
+<h3 data-number="16.5.1" class="anchored" data-anchor-id="data-hiding-the-foundation-of-encapsulation"><span class="header-section-number">16.5.1</span> Data Hiding: The Foundation of Encapsulation</h3>
+<p>In programming, <strong>data hiding</strong> is the practice of restricting access to certain attributes and methods within an object. Data hiding is a key aspect of encapsulation, as it ensures that an object’s internal state cannot be altered in unintended or unpredictable ways by external code. In Python, we achieve data hiding by using certain naming conventions.</p>
+<ul>
+<li><strong>Public attributes</strong>: These attributes and methods are accessible from outside the class and can be used or modified freely. By default, all attributes in Python are public unless specified otherwise.</li>
+<li><strong>Private attributes</strong>: Private attributes are intended to be hidden from outside the class. In Python, we make an attribute private by prefixing its name with a double underscore (<code>__</code>).</li>
+</ul>
+<p>Let’s see how this works in practice with a simple example.</p>
+<section id="example-bank-account-with-private-balance" class="level4">
+<h4 class="anchored" data-anchor-id="example-bank-account-with-private-balance">Example: Bank Account with Private Balance</h4>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BankAccount:</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, account_number, initial_balance):</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.account_number <span class="op">=</span> account_number  <span class="co"># Public attribute</span></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.__balance <span class="op">=</span> initial_balance  <span class="co"># Private attribute</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> deposit(<span class="va">self</span>, amount):</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> amount <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.__balance <span class="op">+=</span> amount</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Deposit amount must be positive"</span>)</span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> withdraw(<span class="va">self</span>, amount):</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="dv">0</span> <span class="op">&lt;</span> amount <span class="op">&lt;=</span> <span class="va">self</span>.__balance:</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.__balance <span class="op">-=</span> amount</span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Insufficient funds or invalid amount"</span>)</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_balance(<span class="va">self</span>):</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.__balance</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example: - <code>account_number</code> is a public attribute, meaning anyone can access and modify it. - <code>__balance</code> is a private attribute, meaning it cannot be accessed or modified directly from outside the class. - The class provides public methods like <code>deposit()</code>, <code>withdraw()</code>, and <code>get_balance()</code> to interact with the private balance in a controlled way.</p>
+<p>Let’s see how this works in action:</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a bank account</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>account <span class="op">=</span> BankAccount(<span class="st">"12345"</span>, <span class="dv">1000</span>)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing public attribute</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(account.account_number)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>12345</code></pre>
+</div>
+</div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing private attribute directly (raises AttributeError)</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(account.__balance)  <span class="co"># Raises: AttributeError: 'BankAccount' object has no attribute '__balance'</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing balance through the public method</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(account.get_balance())  </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Depositing money</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>account.deposit(<span class="dv">500</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(account.get_balance()) </span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Withdrawing money</span></span>
+<span id="cb30-9"><a href="#cb30-9" aria-hidden="true" tabindex="-1"></a>account.withdraw(<span class="dv">200</span>)</span>
+<span id="cb30-10"><a href="#cb30-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(account.get_balance())  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1000
+1500
+1300</code></pre>
+</div>
+</div>
+<p>As you can see, attempting to directly access <code>__balance</code> raises an error, demonstrating that the attribute is hidden from outside access. Instead, users of the <code>BankAccount</code> class must interact with the balance through the <code>deposit()</code>, <code>withdraw()</code>, and <code>get_balance()</code> methods. This ensures that the balance is only modified in valid ways, preserving the integrity of the object.</p>
+</section>
+</section>
+<section id="getter-and-setter-methods" class="level3" data-number="16.5.2">
+<h3 data-number="16.5.2" class="anchored" data-anchor-id="getter-and-setter-methods"><span class="header-section-number">16.5.2</span> Getter and Setter Methods</h3>
+<p>Encapsulation does not mean that the data inside an object is completely inaccessible. Often, we need a way to safely access or modify private attributes. In such cases, classes can provide <strong>getter</strong> and <strong>setter</strong> methods to expose specific attributes to the outside world, while still maintaining control over how they are accessed or modified.</p>
+<p>Let’s modify our <code>BankAccount</code> class to include a setter for the balance attribute:</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> BankAccount:</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, account_number, initial_balance):</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.account_number <span class="op">=</span> account_number</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.__balance <span class="op">=</span> initial_balance</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> deposit(<span class="va">self</span>, amount):</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> amount <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.__balance <span class="op">+=</span> amount</span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Deposit amount must be positive"</span>)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> withdraw(<span class="va">self</span>, amount):</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="dv">0</span> <span class="op">&lt;</span> amount <span class="op">&lt;=</span> <span class="va">self</span>.__balance:</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.__balance <span class="op">-=</span> amount</span>
+<span id="cb32-15"><a href="#cb32-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb32-16"><a href="#cb32-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Insufficient funds or invalid amount"</span>)</span>
+<span id="cb32-17"><a href="#cb32-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Getter for balance</span></span>
+<span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> get_balance(<span class="va">self</span>):</span>
+<span id="cb32-20"><a href="#cb32-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.__balance</span>
+<span id="cb32-21"><a href="#cb32-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-22"><a href="#cb32-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Setter for balance (with validation)</span></span>
+<span id="cb32-23"><a href="#cb32-23" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> set_balance(<span class="va">self</span>, amount):</span>
+<span id="cb32-24"><a href="#cb32-24" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> amount <span class="op">&gt;=</span> <span class="dv">0</span>:</span>
+<span id="cb32-25"><a href="#cb32-25" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.__balance <span class="op">=</span> amount</span>
+<span id="cb32-26"><a href="#cb32-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb32-27"><a href="#cb32-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"Balance cannot be negative"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now we have added a <code>set_balance()</code> method to allow controlled modification of the private <code>__balance</code> attribute. The setter ensures that the balance cannot be set to a negative value, preserving the consistency of the account’s data.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Setting the balance directly using the setter method</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>account.set_balance(<span class="dv">2000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Trying to set a negative balance (raises ValueError)</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>account.set_balance(<span class="op">-</span><span class="dv">500</span>)  <span class="co"># Raises: ValueError: Balance cannot be negative</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>By using getter and setter methods, we provide a controlled interface for accessing and modifying private data. This helps prevent improper use of an object’s data, enforcing rules and validation where necessary.</p>
+</section>
+</section>
+<section id="polymorphism" class="level2" data-number="16.6">
+<h2 data-number="16.6" class="anchored" data-anchor-id="polymorphism"><span class="header-section-number">16.6</span> Polymorphism</h2>
+<p>Polymorphism is another fundamental concept in Object-Oriented Programming (OOP). The term “polymorphism” comes from the Greek words <em>poly</em> (meaning “many”) and <em>morph</em> (meaning “forms”). In programming, polymorphism allows objects of different classes to be treated as objects of a common parent class, while still preserving their individual behaviors. The primary benefit of polymorphism is that it enables the same operation to behave differently on different types of objects.</p>
+<p>Polymorphism is essential in creating flexible and reusable code. By allowing methods to take many forms, polymorphism makes it possible to design systems where the exact behavior of an object can vary depending on the object’s class, yet all objects share a common interface. This allows for a more generalized and powerful approach to programming.</p>
+<section id="real-world-example-payment-systems" class="level3" data-number="16.6.1">
+<h3 data-number="16.6.1" class="anchored" data-anchor-id="real-world-example-payment-systems"><span class="header-section-number">16.6.1</span> Real-World Example: Payment Systems</h3>
+<p>Imagine a payment processing system for an online store. The store accepts multiple types of payment: credit cards, PayPal, and gift cards. Even though each payment method is different, they all share the same core behavior: they allow customers to make payments. In this scenario, you can create a common interface (or parent class) called <code>Payment</code>, and then create specific subclasses like <code>CreditCardPayment</code>, <code>PayPalPayment</code>, and <code>GiftCardPayment</code>.</p>
+<p>Each subclass implements its own version of a <code>process_payment()</code> method, but all can be treated as instances of the <code>Payment</code> class. This is polymorphism in action: the same method name (<code>process_payment()</code>) works on different types of payment objects, each with its own implementation of the behavior.</p>
+</section>
+<section id="polymorphism-through-method-overriding" class="level3" data-number="16.6.2">
+<h3 data-number="16.6.2" class="anchored" data-anchor-id="polymorphism-through-method-overriding"><span class="header-section-number">16.6.2</span> Polymorphism Through Method Overriding</h3>
+<p>Polymorphism in OOP is often achieved through <strong>method overriding</strong>. When a subclass provides a specific implementation of a method that is already defined in its parent class, this is known as overriding. The method in the subclass replaces the method in the parent class, while still sharing the same interface.</p>
+<p>Let’s build an example based on our payment processing system.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Payment:</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_payment(<span class="va">self</span>, amount):</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span>(<span class="st">"Subclasses must implement this method"</span>)</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CreditCardPayment(Payment):</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_payment(<span class="va">self</span>, amount):</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Processing credit card payment of </span><span class="sc">{</span>amount<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="#cb35-9" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> PayPalPayment(Payment):</span>
+<span id="cb35-10"><a href="#cb35-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_payment(<span class="va">self</span>, amount):</span>
+<span id="cb35-11"><a href="#cb35-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Processing PayPal payment of </span><span class="sc">{</span>amount<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb35-12"><a href="#cb35-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-13"><a href="#cb35-13" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> GiftCardPayment(Payment):</span>
+<span id="cb35-14"><a href="#cb35-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> process_payment(<span class="va">self</span>, amount):</span>
+<span id="cb35-15"><a href="#cb35-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="ss">f"Processing gift card payment of </span><span class="sc">{</span>amount<span class="sc">}</span><span class="ss">"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example: - <code>Payment</code> is the parent class, which defines the method <code>process_payment()</code> but leaves its implementation to the subclasses. - The subclasses (<code>CreditCardPayment</code>, <code>PayPalPayment</code>, and <code>GiftCardPayment</code>) each override the <code>process_payment()</code> method with their specific implementations.</p>
+<p>Now, let’s see polymorphism in action by creating different payment objects and processing payments through the same interface:</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>payments <span class="op">=</span> [CreditCardPayment(), PayPalPayment(), GiftCardPayment()]</span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> payment <span class="kw">in</span> payments:</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(payment.process_payment(<span class="dv">100</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing credit card payment of 100
+Processing PayPal payment of 100
+Processing gift card payment of 100</code></pre>
+</div>
+</div>
+<p>Even though we have three different types of payment objects, they all share the same interface (<code>process_payment()</code>), and we can treat them as instances of the <code>Payment</code> class. This makes the code more flexible and easier to extend.</p>
+</section>
+<section id="polymorphism-through-method-overloading-not-native-to-python" class="level3" data-number="16.6.3">
+<h3 data-number="16.6.3" class="anchored" data-anchor-id="polymorphism-through-method-overloading-not-native-to-python"><span class="header-section-number">16.6.3</span> Polymorphism Through Method Overloading (Not Native to Python)</h3>
+<p>Some programming languages allow <strong>method overloading</strong>, where multiple methods in the same class share the same name but have different parameter lists. While Python doesn’t support method overloading natively, polymorphism can still be achieved through other means, such as using default parameters or the <code>*args</code> and <code>**kwargs</code> syntax to handle variable numbers of arguments.</p>
+<p>Here’s an example using default parameters to simulate method overloading in Python:</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Calculator:</span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> add(<span class="va">self</span>, a, b<span class="op">=</span><span class="dv">0</span>, c<span class="op">=</span><span class="dv">0</span>):</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> a <span class="op">+</span> b <span class="op">+</span> c</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>In this example, the <code>add()</code> method can be called with one, two, or three arguments, providing flexibility in how the method is used.</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>calc <span class="op">=</span> Calculator()</span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calc.add(<span class="dv">5</span>))      </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calc.add(<span class="dv">5</span>, <span class="dv">10</span>))  </span>
+<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(calc.add(<span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">20</span>)) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>5
+15
+35</code></pre>
+</div>
+</div>
+<p>Although Python doesn’t support method overloading in the traditional sense, this technique allows you to achieve similar functionality.</p>
+</section>
+<section id="polymorphism-in-python-with-duck-typing" class="level3" data-number="16.6.4">
+<h3 data-number="16.6.4" class="anchored" data-anchor-id="polymorphism-in-python-with-duck-typing"><span class="header-section-number">16.6.4</span> Polymorphism in Python with Duck Typing</h3>
+<p>Python’s approach to polymorphism relies heavily on a concept called <strong>duck typing</strong>. Duck typing is based on the principle that “if it looks like a duck and quacks like a duck, it’s probably a duck.” In Python, an object’s suitability for a given operation is determined by whether it has the necessary attributes and methods, rather than its class hierarchy.</p>
+<p>Let’s see how duck typing works with an example:</p>
+<div class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Dog:</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> speak(<span class="va">self</span>):</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Woof!"</span></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="#cb41-5" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Cat:</span>
+<span id="cb41-6"><a href="#cb41-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> speak(<span class="va">self</span>):</span>
+<span id="cb41-7"><a href="#cb41-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="st">"Meow!"</span></span>
+<span id="cb41-8"><a href="#cb41-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-9"><a href="#cb41-9" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> make_animal_speak(animal):</span>
+<span id="cb41-10"><a href="#cb41-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(animal.speak())</span>
+<span id="cb41-11"><a href="#cb41-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-12"><a href="#cb41-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Using different objects with the same method</span></span>
+<span id="cb41-13"><a href="#cb41-13" aria-hidden="true" tabindex="-1"></a>dog <span class="op">=</span> Dog()</span>
+<span id="cb41-14"><a href="#cb41-14" aria-hidden="true" tabindex="-1"></a>cat <span class="op">=</span> Cat()</span>
+<span id="cb41-15"><a href="#cb41-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-16"><a href="#cb41-16" aria-hidden="true" tabindex="-1"></a>make_animal_speak(dog) </span>
+<span id="cb41-17"><a href="#cb41-17" aria-hidden="true" tabindex="-1"></a>make_animal_speak(cat)  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Woof!
+Meow!</code></pre>
+</div>
+</div>
+<p>In this example, both <code>Dog</code> and <code>Cat</code> have a <code>speak()</code> method, and the function <code>make_animal_speak()</code> works with both objects without caring about their specific types. This is a form of polymorphism enabled by duck typing—Python doesn’t require a strict type hierarchy as long as the necessary method (<code>speak()</code>) is implemented.</p>
+</section>
+<section id="advantages-of-polymorphism" class="level3" data-number="16.6.5">
+<h3 data-number="16.6.5" class="anchored" data-anchor-id="advantages-of-polymorphism"><span class="header-section-number">16.6.5</span> Advantages of Polymorphism</h3>
+<p>Polymorphism offers several key benefits that make it a cornerstone of OOP:</p>
+<ol type="1">
+<li><p><strong>Code Reusability</strong>: Polymorphism allows you to write code that works with objects of different types but share a common interface. This reduces duplication and promotes reusability.</p></li>
+<li><p><strong>Extensibility</strong>: When new subclasses are added, they automatically work with the existing polymorphic methods without requiring changes to the code that uses the parent class.</p></li>
+<li><p><strong>Flexibility</strong>: Since polymorphism allows methods to adapt to different object types, you can write more general and flexible programs. This makes it easier to build and extend complex systems.</p></li>
+<li><p><strong>Readability and Maintainability</strong>: Polymorphism allows you to design cleaner and more understandable code by abstracting common behaviors into a shared interface.</p></li>
+</ol>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="16.7">
+<h2 data-number="16.7" class="anchored" data-anchor-id="exercises"><span class="header-section-number">16.7</span> Exercises</h2>
+<section id="exercise-1-create-a-book-class" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-create-a-book-class">Exercise 1: Create a Book Class</h4>
+<p>Define a <code>Book</code> class with the following attributes: - <code>title</code> (str) - <code>author</code> (str) - <code>pages</code> (int) - <code>year_published</code> (int)<br>
+Implement a method <code>description()</code> that returns a string with the book’s title, author, and the number of pages. Create a few <code>Book</code> objects and print their descriptions.</p>
+</section>
+<section id="exercise-2-car-dealership-simulation" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-car-dealership-simulation">Exercise 2: Car Dealership Simulation</h4>
+<p>Using the <code>Car</code> class example from the chapter, create an inventory system for a car dealership. Define a list of cars with different makes, models, and years. Write a method that searches the inventory and returns all cars from a particular year.</p>
+</section>
+<section id="exercise-3-create-a-vehicle-class-with-subclasses" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-create-a-vehicle-class-with-subclasses">Exercise 3: Create a Vehicle Class with Subclasses</h4>
+<p>Define a parent class <code>Vehicle</code> with attributes <code>make</code> and <code>model</code>. Then, define two subclasses <code>Truck</code> and <code>Motorcycle</code>, each with additional attributes (<code>Truck</code> has a <code>payload_capacity</code>, and <code>Motorcycle</code> has <code>cc</code> for engine capacity). Both subclasses should override a method <code>vehicle_type()</code> that prints the specific type of vehicle. Create objects for both subclasses and call their methods.</p>
+</section>
+<section id="exercise-4-university-system" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-university-system">Exercise 4: University System</h4>
+<p>Expand on the university system example in the chapter by adding a <code>Professor</code> class that inherits from <code>Person</code>. In addition to the <code>Person</code> attributes (e.g., name, age), the <code>Professor</code> class should include a <code>department</code> and <code>courses_taught</code>. Implement a method that prints the professor’s name and department, and a method to add a course to the professor’s list of courses.</p>
+</section>
+<section id="exercise-5-bank-account-with-private-attributes" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-bank-account-with-private-attributes">Exercise 5: Bank Account with Private Attributes</h4>
+<p>Create a <code>BankAccount</code> class where the balance is a private attribute. Write getter and setter methods to access and modify the balance, ensuring that the balance can never be negative. Write a method <code>withdraw()</code> that subtracts a specified amount from the balance and a method <code>deposit()</code> to add to the balance. Test these methods to verify the data is encapsulated properly.</p>
+</section>
+<section id="exercise-6-employee-management-system" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-6-employee-management-system">Exercise 6: Employee Management System</h4>
+<p>Create a class <code>Employee</code> that has private attributes <code>name</code> and <code>salary</code>. Implement getter and setter methods for the salary that ensure a minimum salary threshold of $30,000. Write a method to display the employee’s name and salary, and test the setter to ensure no invalid salaries are set.</p>
+</section>
+<section id="exercise-7-animal-sound-system" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-7-animal-sound-system">Exercise 7: Animal Sound System</h4>
+<p>Create a parent class <code>Animal</code> with a method <code>speak()</code>. Then, create subclasses <code>Dog</code>, <code>Cat</code>, and <code>Bird</code>, each overriding the <code>speak()</code> method to return a sound appropriate to the animal. Write a function that accepts any <code>Animal</code> object and prints the result of calling its <code>speak()</code> method.</p>
+</section>
+<section id="exercise-8-shape-class-with-polymorphism" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-8-shape-class-with-polymorphism">Exercise 8: Shape Class with Polymorphism</h4>
+<p>Define a parent class <code>Shape</code> with a method <code>area()</code>. Create two subclasses, <code>Circle</code> and <code>Rectangle</code>, each overriding the <code>area()</code> method to calculate the respective areas. Write a function that takes a list of shapes and prints their areas using polymorphism.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./15_Data_Vis.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./17_Documentation.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

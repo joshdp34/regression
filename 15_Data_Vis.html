@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 15&nbsp; Data Visualization in Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./16_OOP.html" rel="next">
+<link href="./14_Pandas.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./15_Data_Vis.html"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-matplotlib" id="toc-introduction-to-matplotlib" class="nav-link active" data-scroll-target="#introduction-to-matplotlib"><span class="header-section-number">15.1</span> Introduction to Matplotlib</a>
+  <ul class="collapse">
+  <li><a href="#creating-basic-plots-with-matplotlib" id="toc-creating-basic-plots-with-matplotlib" class="nav-link" data-scroll-target="#creating-basic-plots-with-matplotlib"><span class="header-section-number">15.1.1</span> Creating Basic Plots with Matplotlib</a></li>
+  <li><a href="#types-of-plots-in-matplotlib" id="toc-types-of-plots-in-matplotlib" class="nav-link" data-scroll-target="#types-of-plots-in-matplotlib"><span class="header-section-number">15.1.2</span> Types of Plots in Matplotlib</a></li>
+  <li><a href="#customizing-plots-in-matplotlib" id="toc-customizing-plots-in-matplotlib" class="nav-link" data-scroll-target="#customizing-plots-in-matplotlib"><span class="header-section-number">15.1.3</span> Customizing Plots in Matplotlib</a></li>
+  <li><a href="#adding-annotations-and-legends" id="toc-adding-annotations-and-legends" class="nav-link" data-scroll-target="#adding-annotations-and-legends"><span class="header-section-number">15.1.4</span> Adding Annotations and Legends</a></li>
+  <li><a href="#working-with-subplots" id="toc-working-with-subplots" class="nav-link" data-scroll-target="#working-with-subplots"><span class="header-section-number">15.1.5</span> Working with Subplots</a></li>
+  <li><a href="#styling-and-themes-in-matplotlib" id="toc-styling-and-themes-in-matplotlib" class="nav-link" data-scroll-target="#styling-and-themes-in-matplotlib"><span class="header-section-number">15.1.6</span> Styling and Themes in Matplotlib</a></li>
+  <li><a href="#saving-plots-to-files" id="toc-saving-plots-to-files" class="nav-link" data-scroll-target="#saving-plots-to-files"><span class="header-section-number">15.1.7</span> Saving Plots to Files</a></li>
+  <li><a href="#common-pitfalls-and-best-practices" id="toc-common-pitfalls-and-best-practices" class="nav-link" data-scroll-target="#common-pitfalls-and-best-practices"><span class="header-section-number">15.1.8</span> Common Pitfalls and Best Practices</a></li>
+  </ul></li>
+  <li><a href="#introduction-to-seaborn" id="toc-introduction-to-seaborn" class="nav-link" data-scroll-target="#introduction-to-seaborn"><span class="header-section-number">15.2</span> Introduction to Seaborn</a>
+  <ul class="collapse">
+  <li><a href="#getting-started-with-seaborn" id="toc-getting-started-with-seaborn" class="nav-link" data-scroll-target="#getting-started-with-seaborn"><span class="header-section-number">15.2.1</span> Getting Started with Seaborn</a></li>
+  <li><a href="#creating-basic-plots-with-seaborn" id="toc-creating-basic-plots-with-seaborn" class="nav-link" data-scroll-target="#creating-basic-plots-with-seaborn"><span class="header-section-number">15.2.2</span> Creating Basic Plots with Seaborn</a></li>
+  <li><a href="#customizing-visualizations-with-seaborn" id="toc-customizing-visualizations-with-seaborn" class="nav-link" data-scroll-target="#customizing-visualizations-with-seaborn"><span class="header-section-number">15.2.3</span> Customizing Visualizations with Seaborn</a></li>
+  <li><a href="#visualizing-distributions" id="toc-visualizing-distributions" class="nav-link" data-scroll-target="#visualizing-distributions"><span class="header-section-number">15.2.4</span> Visualizing Distributions</a></li>
+  <li><a href="#creating-categorical-plots" id="toc-creating-categorical-plots" class="nav-link" data-scroll-target="#creating-categorical-plots"><span class="header-section-number">15.2.5</span> Creating Categorical Plots</a></li>
+  <li><a href="#pair-plots-for-multivariate-analysis" id="toc-pair-plots-for-multivariate-analysis" class="nav-link" data-scroll-target="#pair-plots-for-multivariate-analysis"><span class="header-section-number">15.2.6</span> Pair Plots for Multivariate Analysis</a></li>
+  <li><a href="#heatmaps-for-correlation-analysis" id="toc-heatmaps-for-correlation-analysis" class="nav-link" data-scroll-target="#heatmaps-for-correlation-analysis"><span class="header-section-number">15.2.7</span> Heatmaps for Correlation Analysis</a></li>
+  <li><a href="#customizing-seaborn-themes" id="toc-customizing-seaborn-themes" class="nav-link" data-scroll-target="#customizing-seaborn-themes"><span class="header-section-number">15.2.8</span> Customizing Seaborn Themes</a></li>
+  <li><a href="#combining-seaborn-with-matplotlib" id="toc-combining-seaborn-with-matplotlib" class="nav-link" data-scroll-target="#combining-seaborn-with-matplotlib"><span class="header-section-number">15.2.9</span> Combining Seaborn with Matplotlib</a></li>
+  <li><a href="#advantages-of-using-seaborn" id="toc-advantages-of-using-seaborn" class="nav-link" data-scroll-target="#advantages-of-using-seaborn"><span class="header-section-number">15.2.10</span> Advantages of Using Seaborn</a></li>
+  <li><a href="#limitations-and-considerations" id="toc-limitations-and-considerations" class="nav-link" data-scroll-target="#limitations-and-considerations"><span class="header-section-number">15.2.11</span> Limitations and Considerations</a></li>
+  </ul></li>
+  <li><a href="#introduction-to-ggplot-plotnine" id="toc-introduction-to-ggplot-plotnine" class="nav-link" data-scroll-target="#introduction-to-ggplot-plotnine"><span class="header-section-number">15.3</span> Introduction to ggplot (plotnine)</a>
+  <ul class="collapse">
+  <li><a href="#the-grammar-of-graphics" id="toc-the-grammar-of-graphics" class="nav-link" data-scroll-target="#the-grammar-of-graphics"><span class="header-section-number">15.3.1</span> The Grammar of Graphics</a></li>
+  <li><a href="#creating-a-basic-plot-with-ggplot" id="toc-creating-a-basic-plot-with-ggplot" class="nav-link" data-scroll-target="#creating-a-basic-plot-with-ggplot"><span class="header-section-number">15.3.2</span> Creating a Basic Plot with ggplot</a></li>
+  <li><a href="#enhancing-visualizations-with-layers" id="toc-enhancing-visualizations-with-layers" class="nav-link" data-scroll-target="#enhancing-visualizations-with-layers"><span class="header-section-number">15.3.3</span> Enhancing Visualizations with Layers</a></li>
+  <li><a href="#common-plot-types-in-ggplot" id="toc-common-plot-types-in-ggplot" class="nav-link" data-scroll-target="#common-plot-types-in-ggplot"><span class="header-section-number">15.3.4</span> Common Plot Types in ggplot</a></li>
+  <li><a href="#faceting-for-multi-plot-layouts" id="toc-faceting-for-multi-plot-layouts" class="nav-link" data-scroll-target="#faceting-for-multi-plot-layouts"><span class="header-section-number">15.3.5</span> Faceting for Multi-Plot Layouts</a></li>
+  <li><a href="#customizing-aesthetics-and-themes" id="toc-customizing-aesthetics-and-themes" class="nav-link" data-scroll-target="#customizing-aesthetics-and-themes"><span class="header-section-number">15.3.6</span> Customizing Aesthetics and Themes</a></li>
+  <li><a href="#statistical-transformations" id="toc-statistical-transformations" class="nav-link" data-scroll-target="#statistical-transformations"><span class="header-section-number">15.3.7</span> Statistical Transformations</a></li>
+  <li><a href="#advantages-of-using-ggplot" id="toc-advantages-of-using-ggplot" class="nav-link" data-scroll-target="#advantages-of-using-ggplot"><span class="header-section-number">15.3.8</span> Advantages of Using ggplot</a></li>
+  <li><a href="#limitations-and-considerations-1" id="toc-limitations-and-considerations-1" class="nav-link" data-scroll-target="#limitations-and-considerations-1"><span class="header-section-number">15.3.9</span> Limitations and Considerations</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">15.4</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-datavis" class="quarto-section-identifier"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>Data visualization is a crucial aspect of data analysis that enables the understanding and interpretation of data through graphical representation. It allows us to observe trends, patterns, and outliers in data that might not be evident in raw numerical forms. In Python, there are several powerful libraries for creating visualizations, with Matplotlib, ggplot, and Seaborn being among the most popular. This section will introduce these libraries and demonstrate how to create a variety of plots to explore and present data effectively.</p>
+<section id="introduction-to-matplotlib" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="introduction-to-matplotlib"><span class="header-section-number">15.1</span> Introduction to Matplotlib</h2>
+<p>Matplotlib is a comprehensive library for creating static, animated, and interactive visualizations in Python. It is often the first choice for many data scientists and analysts due to its flexibility and the detailed control it offers over plots. Matplotlib is organized into several components, with the <code>pyplot</code> module being the most commonly used. This module provides a MATLAB-like interface that simplifies the process of creating and customizing plots.</p>
+<section id="creating-basic-plots-with-matplotlib" class="level3" data-number="15.1.1">
+<h3 data-number="15.1.1" class="anchored" data-anchor-id="creating-basic-plots-with-matplotlib"><span class="header-section-number">15.1.1</span> Creating Basic Plots with Matplotlib</h3>
+<p>The most fundamental plot in Matplotlib is the line plot, which is typically used to visualize trends over time or continuous data. To get started with plotting in Matplotlib, you need to import the <code>pyplot</code> module:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Example: Plotting a Simple Line Graph</strong></p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for plotting</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">25</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a line plot</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'X-axis label'</span>)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Y-axis label'</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Simple Line Plot'</span>)</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)  <span class="co"># Adds a grid to the plot</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-3-output-1.png" width="510" height="302"></p>
+</div>
+</div>
+<p>This example creates a simple line plot with labeled axes, a title, and a grid. The method <code>plt.show()</code> is used to render the plot.</p>
+</section>
+<section id="types-of-plots-in-matplotlib" class="level3" data-number="15.1.2">
+<h3 data-number="15.1.2" class="anchored" data-anchor-id="types-of-plots-in-matplotlib"><span class="header-section-number">15.1.2</span> Types of Plots in Matplotlib</h3>
+<p>Matplotlib supports a wide variety of plot types beyond simple line graphs. Some of the most commonly used plot types include:</p>
+<ol type="1">
+<li><strong>Scatter Plots</strong>: Useful for exploring relationships between two variables.</li>
+<li><strong>Bar Charts</strong>: Ideal for comparing discrete categories.</li>
+<li><strong>Histograms</strong>: Commonly used to display the distribution of data.</li>
+<li><strong>Pie Charts</strong>: Used to show proportions of a whole.</li>
+<li><strong>Box Plots</strong>: Effective for visualizing the spread and outliers of data.</li>
+</ol>
+<p><strong>Example: Creating a Scatter Plot</strong></p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for scatter plot</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">7</span>]</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> [<span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating the scatter plot</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>plt.scatter(x, y, color<span class="op">=</span><span class="st">'blue'</span>, marker<span class="op">=</span><span class="st">'^'</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'X-axis label'</span>)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Y-axis label'</span>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Scatter Plot Example'</span>)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-4-output-1.png" width="502" height="302"></p>
+</div>
+</div>
+<p>In this example, we use <code>plt.scatter()</code> to create a scatter plot, where the color and marker style of the points can be easily customized.</p>
+</section>
+<section id="customizing-plots-in-matplotlib" class="level3" data-number="15.1.3">
+<h3 data-number="15.1.3" class="anchored" data-anchor-id="customizing-plots-in-matplotlib"><span class="header-section-number">15.1.3</span> Customizing Plots in Matplotlib</h3>
+<p>Customization is one of Matplotlib’s greatest strengths. You can modify almost every aspect of a plot, including colors, line styles, markers, axis scales, legends, and more. This flexibility allows you to create publication-quality visualizations.</p>
+<p><strong>Example: Customizing a Line Plot</strong></p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Customizing the line plot</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>, linewidth<span class="op">=</span><span class="dv">2</span>, marker<span class="op">=</span><span class="st">'o'</span>, markersize<span class="op">=</span><span class="dv">8</span>, markerfacecolor<span class="op">=</span><span class="st">'yellow'</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'X-axis label'</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Y-axis label'</span>)</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Customized Line Plot'</span>)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-5-output-1.png" width="502" height="302"></p>
+</div>
+</div>
+<p>In this example, we modify the line style to be dashed (<code>--</code>), set the line color to red, increase the line width, and customize the marker appearance with size and color adjustments.</p>
+</section>
+<section id="adding-annotations-and-legends" class="level3" data-number="15.1.4">
+<h3 data-number="15.1.4" class="anchored" data-anchor-id="adding-annotations-and-legends"><span class="header-section-number">15.1.4</span> Adding Annotations and Legends</h3>
+<p>Annotations and legends can significantly enhance the interpretability of your plots. Annotations allow you to highlight specific data points or trends, while legends help distinguish different datasets in a multi-line plot.</p>
+<p><strong>Example: Adding a Legend and Annotations</strong></p>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for multiple lines</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>y1 <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">25</span>]</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>y2 <span class="op">=</span> [<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>]</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Plotting multiple lines</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y1, label<span class="op">=</span><span class="st">'Dataset 1'</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y2, label<span class="op">=</span><span class="st">'Dataset 2'</span>, color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding an annotation</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>plt.annotate(<span class="st">'Intersection'</span>, xy<span class="op">=</span>(<span class="dv">3</span>, <span class="dv">9</span>), xytext<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">15</span>),</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>             arrowprops<span class="op">=</span><span class="bu">dict</span>(facecolor<span class="op">=</span><span class="st">'black'</span>, shrink<span class="op">=</span><span class="fl">0.05</span>))</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Customizing plot</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'X-axis label'</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Y-axis label'</span>)</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Annotated Plot with Legend'</span>)</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>plt.legend(loc<span class="op">=</span><span class="st">'upper left'</span>)</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>plt.grid(<span class="va">True</span>)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-6-output-1.png" width="510" height="302"></p>
+</div>
+</div>
+<p>This example demonstrates how to use the <code>annotate()</code> function to add a text label to a specific point on the plot, along with an arrow pointing to that location. The <code>legend()</code> function is used to add a legend that describes the different lines in the plot.</p>
+</section>
+<section id="working-with-subplots" class="level3" data-number="15.1.5">
+<h3 data-number="15.1.5" class="anchored" data-anchor-id="working-with-subplots"><span class="header-section-number">15.1.5</span> Working with Subplots</h3>
+<p>Subplots allow you to create multiple plots in a single figure, making it easier to compare different visualizations side by side.</p>
+<p><strong>Example: Creating Subplots</strong></p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a figure with 2 rows and 1 column of subplots</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>fig, axs <span class="op">=</span> plt.subplots(<span class="dv">2</span>, <span class="dv">1</span>, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">8</span>))</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="co"># First subplot</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].plot(x, y1, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_title(<span class="st">'Line Plot 1'</span>)</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_xlabel(<span class="st">'X-axis'</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">0</span>].set_ylabel(<span class="st">'Y-axis'</span>)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Second subplot</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].scatter(x, y2, color<span class="op">=</span><span class="st">'green'</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_title(<span class="st">'Scatter Plot 2'</span>)</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_xlabel(<span class="st">'X-axis'</span>)</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>axs[<span class="dv">1</span>].set_ylabel(<span class="st">'Y-axis'</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Display the plots</span></span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()  <span class="co"># Adjusts spacing between subplots</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-7-output-1.png" width="566" height="758"></p>
+</div>
+</div>
+<p>This example uses the <code>subplots()</code> function to create a figure with two subplots arranged in a column. Each subplot is customized with its own title, labels, and data.</p>
+</section>
+<section id="styling-and-themes-in-matplotlib" class="level3" data-number="15.1.6">
+<h3 data-number="15.1.6" class="anchored" data-anchor-id="styling-and-themes-in-matplotlib"><span class="header-section-number">15.1.6</span> Styling and Themes in Matplotlib</h3>
+<p>Matplotlib offers several built-in styles that can be applied to your plots to give them a consistent and visually appealing look. Styles can be easily switched using the <code>plt.style.use()</code> function.</p>
+<p><strong>Example: Using Different Styles</strong></p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying a style to the plot</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'ggplot'</span>)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Replotting the data with the new style</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y1, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'-'</span>, marker<span class="op">=</span><span class="st">'o'</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Styled Plot with ggplot Theme'</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'X-axis'</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Y-axis'</span>)</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Reset to the default style</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'default'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-8-output-1.png" width="513" height="306"></p>
+</div>
+</div>
+<p>In this example, we apply the <code>ggplot</code> style to the plot, which gives it a different color scheme and grid design inspired by the aesthetics of the ggplot2 package in R.</p>
+</section>
+<section id="saving-plots-to-files" class="level3" data-number="15.1.7">
+<h3 data-number="15.1.7" class="anchored" data-anchor-id="saving-plots-to-files"><span class="header-section-number">15.1.7</span> Saving Plots to Files</h3>
+<p>Once you’ve created your visualizations, you might want to save them as image files for use in presentations or publications.</p>
+<p><strong>Example: Saving a Plot</strong></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Saving the plot to a file</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>plt.plot(x, y1, color<span class="op">=</span><span class="st">'blue'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Plot to be Saved'</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>plt.savefig(<span class="st">'my_plot.png'</span>, dpi<span class="op">=</span><span class="dv">300</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The <code>savefig()</code> function saves the plot as a PNG file with high resolution (specified by <code>dpi=300</code>) and tight bounding boxes to remove excess whitespace.</p>
+</section>
+<section id="common-pitfalls-and-best-practices" class="level3" data-number="15.1.8">
+<h3 data-number="15.1.8" class="anchored" data-anchor-id="common-pitfalls-and-best-practices"><span class="header-section-number">15.1.8</span> Common Pitfalls and Best Practices</h3>
+<ul>
+<li><strong>Aspect Ratio</strong>: Always check the aspect ratio of your plots to ensure they are not distorted.</li>
+<li><strong>Labels and Titles</strong>: Make sure to label all axes and include a title to provide context to the visualization.</li>
+<li><strong>Color Blindness</strong>: Use color palettes that are accessible to those with color vision deficiencies.</li>
+<li><strong>Legend Placement</strong>: Place legends in a position that does not overlap with important data points.</li>
+</ul>
+<p>Understanding how to leverage the power of Matplotlib will enable you to create informative and professional-quality data visualizations, enhancing your ability to communicate data-driven insights.</p>
+</section>
+</section>
+<section id="introduction-to-seaborn" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="introduction-to-seaborn"><span class="header-section-number">15.2</span> Introduction to Seaborn</h2>
+<p>Seaborn is a powerful Python visualization library built on top of Matplotlib, designed specifically for creating informative and attractive statistical graphics. It provides a high-level interface for drawing a variety of statistical plots and integrates seamlessly with data structures like Pandas DataFrames. Seaborn’s design philosophy emphasizes the importance of aesthetics, making it easy to generate complex visualizations with concise code.</p>
+<section id="getting-started-with-seaborn" class="level3" data-number="15.2.1">
+<h3 data-number="15.2.1" class="anchored" data-anchor-id="getting-started-with-seaborn"><span class="header-section-number">15.2.1</span> Getting Started with Seaborn</h3>
+<p>To use Seaborn, you first need to import the library. If you haven’t already installed it, you can do so using the following command:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install seaborn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Once installed, import Seaborn into your Python environment:</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="creating-basic-plots-with-seaborn" class="level3" data-number="15.2.2">
+<h3 data-number="15.2.2" class="anchored" data-anchor-id="creating-basic-plots-with-seaborn"><span class="header-section-number">15.2.2</span> Creating Basic Plots with Seaborn</h3>
+<p>Seaborn simplifies the process of creating plots by offering specific functions for different types of statistical visualizations. Some of the most commonly used plot types include scatter plots, line plots, histograms, and bar charts.</p>
+<p><strong>Example: Creating a Scatter Plot</strong></p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sample data</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>tips <span class="op">=</span> sns.load_dataset(<span class="st">'tips'</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a scatter plot</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span><span class="st">'total_bill'</span>, y<span class="op">=</span><span class="st">'tip'</span>, data<span class="op">=</span>tips)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Scatter Plot of Total Bill vs. Tip'</span>)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Tip'</span>)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-10-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, we use the <code>tips</code> dataset (which is built into Seaborn) to create a scatter plot that shows the relationship between the total bill and the tip amount.</p>
+</section>
+<section id="customizing-visualizations-with-seaborn" class="level3" data-number="15.2.3">
+<h3 data-number="15.2.3" class="anchored" data-anchor-id="customizing-visualizations-with-seaborn"><span class="header-section-number">15.2.3</span> Customizing Visualizations with Seaborn</h3>
+<p>Seaborn allows extensive customization of plot aesthetics to make visualizations more informative and appealing. You can easily modify colors, markers, and styles.</p>
+<p><strong>Example: Customizing a Scatter Plot</strong></p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom scatter plot with color and marker variations</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span><span class="st">'total_bill'</span>, y<span class="op">=</span><span class="st">'tip'</span>, hue<span class="op">=</span><span class="st">'sex'</span>, style<span class="op">=</span><span class="st">'smoker'</span>, size<span class="op">=</span><span class="st">'size'</span>, data<span class="op">=</span>tips)</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Customized Scatter Plot of Total Bill vs. Tip'</span>)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Tip'</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-11-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Here, the scatter plot is customized to differentiate data points based on additional variables using color (<code>hue</code>), marker style (<code>style</code>), and size (<code>size</code>). This makes it easier to visualize relationships between multiple variables in a single plot.</p>
+</section>
+<section id="visualizing-distributions" class="level3" data-number="15.2.4">
+<h3 data-number="15.2.4" class="anchored" data-anchor-id="visualizing-distributions"><span class="header-section-number">15.2.4</span> Visualizing Distributions</h3>
+<p>Understanding the distribution of data is crucial in statistical analysis. Seaborn offers several functions specifically for visualizing distributions, such as histograms, KDE plots, and box plots.</p>
+<p><strong>Example: Creating a Histogram and KDE Plot</strong></p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Histogram and KDE plot for total bill</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>sns.histplot(tips[<span class="st">'total_bill'</span>], kde<span class="op">=</span><span class="va">True</span>, color<span class="op">=</span><span class="st">'blue'</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Distribution of Total Bill with Histogram and KDE'</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Frequency'</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-12-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, we create a histogram of the <code>total_bill</code> variable with an overlaid Kernel Density Estimate (KDE), which provides a smoothed curve representing the distribution.</p>
+</section>
+<section id="creating-categorical-plots" class="level3" data-number="15.2.5">
+<h3 data-number="15.2.5" class="anchored" data-anchor-id="creating-categorical-plots"><span class="header-section-number">15.2.5</span> Creating Categorical Plots</h3>
+<p>Seaborn excels in creating categorical plots that help analyze the relationship between categorical data and numerical data. The most common types include bar plots, box plots, and violin plots.</p>
+<p><strong>Example: Bar Plot</strong></p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Bar plot showing the average tip amount by day</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>sns.barplot(x<span class="op">=</span><span class="st">'day'</span>, y<span class="op">=</span><span class="st">'tip'</span>, data<span class="op">=</span>tips, ci<span class="op">=</span><span class="st">'sd'</span>, palette<span class="op">=</span><span class="st">'viridis'</span>)</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Average Tip by Day'</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day'</span>)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Average Tip'</span>)</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\Joshua_Patrick\AppData\Local\Temp\ipykernel_74992\690395935.py:2: FutureWarning: 
+
+The `ci` parameter is deprecated. Use `errorbar='sd'` for the same effect.
+
+  sns.barplot(x='day', y='tip', data=tips, ci='sd', palette='viridis')
+C:\Users\Joshua_Patrick\AppData\Local\Temp\ipykernel_74992\690395935.py:2: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+
+  sns.barplot(x='day', y='tip', data=tips, ci='sd', palette='viridis')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-13-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This bar plot displays the average tip amount for each day of the week, using error bars to indicate the standard deviation. Seaborn’s color palettes, like <code>viridis</code>, enhance the plot’s visual appeal.</p>
+<p><strong>Example: Box Plot</strong></p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Box plot showing the distribution of total bill by day</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">'day'</span>, y<span class="op">=</span><span class="st">'total_bill'</span>, hue<span class="op">=</span><span class="st">'smoker'</span>, data<span class="op">=</span>tips, palette<span class="op">=</span><span class="st">'Set2'</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Box Plot of Total Bill by Day'</span>)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day'</span>)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The box plot provides insights into the distribution of the <code>total_bill</code> by day, highlighting the median, interquartile range (IQR), and potential outliers. The <code>hue</code> parameter adds another layer to the plot, differentiating between smokers and non-smokers.</p>
+</section>
+<section id="pair-plots-for-multivariate-analysis" class="level3" data-number="15.2.6">
+<h3 data-number="15.2.6" class="anchored" data-anchor-id="pair-plots-for-multivariate-analysis"><span class="header-section-number">15.2.6</span> Pair Plots for Multivariate Analysis</h3>
+<p>Pair plots are useful for visualizing relationships between multiple variables at once. They create a grid of scatter plots for each pair of variables and display histograms for individual variable distributions.</p>
+<p><strong>Example: Pair Plot</strong></p>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a pair plot of the tips dataset</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>sns.pairplot(tips, hue<span class="op">=</span><span class="st">'sex'</span>, palette<span class="op">=</span><span class="st">'coolwarm'</span>)</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>plt.suptitle(<span class="st">'Pair Plot of the Tips Dataset'</span>, y<span class="op">=</span><span class="fl">1.02</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, the pair plot provides a comprehensive view of pairwise relationships between all numerical variables in the dataset, with color-coded distinctions based on the <code>sex</code> variable.</p>
+</section>
+<section id="heatmaps-for-correlation-analysis" class="level3" data-number="15.2.7">
+<h3 data-number="15.2.7" class="anchored" data-anchor-id="heatmaps-for-correlation-analysis"><span class="header-section-number">15.2.7</span> Heatmaps for Correlation Analysis</h3>
+<p>Heatmaps are an effective way to visualize the correlation matrix of numerical data, showing how strongly pairs of variables are related.</p>
+<p><strong>Example: Creating a Heatmap</strong></p>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Correlation heatmap for the tips dataset</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>corr <span class="op">=</span> tips.corr(numeric_only <span class="op">=</span> <span class="va">True</span>)</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>sns.heatmap(corr, annot<span class="op">=</span><span class="va">True</span>, cmap<span class="op">=</span><span class="st">'coolwarm'</span>, linewidths<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Correlation Heatmap of Tips Dataset'</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-16-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>The heatmap in this example displays the correlation coefficients between variables in the <code>tips</code> dataset, with color intensity indicating the strength of the correlation. The <code>annot=True</code> parameter ensures that the correlation values are displayed on the heatmap.</p>
+</section>
+<section id="customizing-seaborn-themes" class="level3" data-number="15.2.8">
+<h3 data-number="15.2.8" class="anchored" data-anchor-id="customizing-seaborn-themes"><span class="header-section-number">15.2.8</span> Customizing Seaborn Themes</h3>
+<p>Seaborn comes with several built-in themes to enhance the appearance of plots, making it easy to change the overall look with minimal code.</p>
+<p><strong>Example: Applying a Different Theme</strong></p>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set a Seaborn style for all plots</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>sns.set_style(<span class="st">'whitegrid'</span>)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a box plot with the new style</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>sns.boxplot(x<span class="op">=</span><span class="st">'day'</span>, y<span class="op">=</span><span class="st">'total_bill'</span>, data<span class="op">=</span>tips, palette<span class="op">=</span><span class="st">'pastel'</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Box Plot with Whitegrid Theme'</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day'</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\Joshua_Patrick\AppData\Local\Temp\ipykernel_74992\3431770401.py:5: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+
+  sns.boxplot(x='day', y='total_bill', data=tips, palette='pastel')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-17-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, the <code>whitegrid</code> style adds grid lines to the plot background, which can help in analyzing data points more effectively.</p>
+</section>
+<section id="combining-seaborn-with-matplotlib" class="level3" data-number="15.2.9">
+<h3 data-number="15.2.9" class="anchored" data-anchor-id="combining-seaborn-with-matplotlib"><span class="header-section-number">15.2.9</span> Combining Seaborn with Matplotlib</h3>
+<p>Although Seaborn provides a high-level interface for creating plots, it is often beneficial to use Matplotlib functions for further customization.</p>
+<p><strong>Example: Combining Seaborn and Matplotlib for Plot Customization</strong></p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a violin plot with Seaborn</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>sns.violinplot(x<span class="op">=</span><span class="st">'day'</span>, y<span class="op">=</span><span class="st">'total_bill'</span>, data<span class="op">=</span>tips, inner<span class="op">=</span><span class="st">'quartile'</span>, palette<span class="op">=</span><span class="st">'Set3'</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Customizing with Matplotlib</span></span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>plt.axhline(y<span class="op">=</span><span class="dv">20</span>, color<span class="op">=</span><span class="st">'red'</span>, linestyle<span class="op">=</span><span class="st">'--'</span>)  <span class="co"># Add a reference line</span></span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>plt.title(<span class="st">'Violin Plot with Custom Reference Line'</span>)</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>plt.xlabel(<span class="st">'Day'</span>)</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>plt.ylabel(<span class="st">'Total Bill'</span>)</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>C:\Users\Joshua_Patrick\AppData\Local\Temp\ipykernel_74992\122318432.py:2: FutureWarning: 
+
+Passing `palette` without assigning `hue` is deprecated and will be removed in v0.14.0. Assign the `x` variable to `hue` and set `legend=False` for the same effect.
+
+  sns.violinplot(x='day', y='total_bill', data=tips, inner='quartile', palette='Set3')</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-18-output-2.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, a Seaborn violin plot is enhanced with a Matplotlib horizontal line, illustrating the synergy between the two libraries for creating complex visualizations.</p>
+</section>
+<section id="advantages-of-using-seaborn" class="level3" data-number="15.2.10">
+<h3 data-number="15.2.10" class="anchored" data-anchor-id="advantages-of-using-seaborn"><span class="header-section-number">15.2.10</span> Advantages of Using Seaborn</h3>
+<ul>
+<li><strong>Simplified Syntax</strong>: Seaborn’s API is intuitive and reduces the code complexity for creating statistical graphics.</li>
+<li><strong>Built-in Themes</strong>: It offers aesthetically pleasing color palettes and themes that enhance the visual appeal.</li>
+<li><strong>Integration with Pandas</strong>: Seamlessly works with Pandas DataFrames, making data manipulation and visualization straightforward.</li>
+<li><strong>Statistical Visualization</strong>: Designed specifically for statistical plotting, providing functions that directly interpret and visualize statistical relationships.</li>
+</ul>
+</section>
+<section id="limitations-and-considerations" class="level3" data-number="15.2.11">
+<h3 data-number="15.2.11" class="anchored" data-anchor-id="limitations-and-considerations"><span class="header-section-number">15.2.11</span> Limitations and Considerations</h3>
+<ul>
+<li><strong>Customization Limitations</strong>: Although Seaborn is powerful, certain highly specific customizations may require falling back on Matplotlib.</li>
+<li><strong>Learning Curve</strong>: Requires familiarity with data structures like DataFrames and understanding of statistical concepts for full utilization.</li>
+</ul>
+</section>
+</section>
+<section id="introduction-to-ggplot-plotnine" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="introduction-to-ggplot-plotnine"><span class="header-section-number">15.3</span> Introduction to ggplot (plotnine)</h2>
+<p>The <code>ggplot</code> library in Python, made accessible through the <code>plotnine</code> package, is inspired by the grammar of graphics principles introduced by Leland Wilkinson. This approach allows data visualizations to be built by combining independent layers, where each layer adds a new element to the plot. This methodology enables the creation of highly customizable and aesthetically pleasing plots with a structured syntax that emphasizes clarity and reproducibility.</p>
+<section id="the-grammar-of-graphics" class="level3" data-number="15.3.1">
+<h3 data-number="15.3.1" class="anchored" data-anchor-id="the-grammar-of-graphics"><span class="header-section-number">15.3.1</span> The Grammar of Graphics</h3>
+<p>The grammar of graphics is a theoretical framework that breaks down the process of constructing data visualizations into independent components:</p>
+<ul>
+<li><strong>Data</strong>: The dataset being visualized.</li>
+<li><strong>Aesthetics (aes)</strong>: The mapping of data variables to visual properties, such as position, color, and size.</li>
+<li><strong>Geometries (geoms)</strong>: The visual elements that represent data points, such as lines, bars, points, or histograms.</li>
+<li><strong>Facets</strong>: The ability to split data into subplots for comparison.</li>
+<li><strong>Statistics</strong>: Transformation or summary of data to highlight patterns.</li>
+<li><strong>Scales</strong>: Controls the mapping between data values and their visual representation.</li>
+<li><strong>Coordinate systems</strong>: Defines how data points are placed in a plot.</li>
+</ul>
+<p>Understanding this layered approach helps in constructing meaningful and well-organized visualizations.</p>
+</section>
+<section id="creating-a-basic-plot-with-ggplot" class="level3" data-number="15.3.2">
+<h3 data-number="15.3.2" class="anchored" data-anchor-id="creating-a-basic-plot-with-ggplot"><span class="header-section-number">15.3.2</span> Creating a Basic Plot with ggplot</h3>
+<p>To use <code>ggplot</code> in Python, you will need to install the <code>plotnine</code> package if you haven’t already:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip install plotnine</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, let’s begin by creating a basic line plot using <code>plotnine</code>. We will use a simple dataset to demonstrate how to create a visualization using the <code>ggplot</code> syntax.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> ggplot, aes, geom_line, ggtitle</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dataset</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'x'</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'y'</span>: [<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">25</span>]</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a basic line plot</span></span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>(ggplot(data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a> geom_line() <span class="op">+</span></span>
+<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Basic Line Plot with ggplot'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-19-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, we define the dataset and specify the aesthetics using <code>aes()</code>, which maps the <code>x</code> and <code>y</code> variables to the axes of the plot. The <code>geom_line()</code> function adds a line graph layer to the plot. The title is set using <code>ggtitle()</code>.</p>
+</section>
+<section id="enhancing-visualizations-with-layers" class="level3" data-number="15.3.3">
+<h3 data-number="15.3.3" class="anchored" data-anchor-id="enhancing-visualizations-with-layers"><span class="header-section-number">15.3.3</span> Enhancing Visualizations with Layers</h3>
+<p>One of the strengths of <code>ggplot</code> is the ability to add multiple layers to a plot, allowing you to build more informative visualizations.</p>
+<p><strong>Example: Adding Points to a Line Plot</strong></p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> geom_point, xlab, ylab</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Adding a layer of points to the line plot</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>(ggplot(data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a> geom_line(color<span class="op">=</span><span class="st">'blue'</span>) <span class="op">+</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a> geom_point(color<span class="op">=</span><span class="st">'red'</span>, size<span class="op">=</span><span class="dv">3</span>) <span class="op">+</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Enhanced Line Plot with Points'</span>) <span class="op">+</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a> xlab(<span class="st">'X-axis'</span>) <span class="op">+</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a> ylab(<span class="st">'Y-axis'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-20-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Here, we use the <code>geom_point()</code> function to overlay points on the existing line plot. This combination helps highlight individual data points while still showing the overall trend.</p>
+</section>
+<section id="common-plot-types-in-ggplot" class="level3" data-number="15.3.4">
+<h3 data-number="15.3.4" class="anchored" data-anchor-id="common-plot-types-in-ggplot"><span class="header-section-number">15.3.4</span> Common Plot Types in ggplot</h3>
+<p><code>ggplot</code> supports a wide variety of plot types, each suited for different types of data analysis:</p>
+<ol type="1">
+<li><strong>Scatter Plots</strong>: Used to visualize relationships between two continuous variables.</li>
+<li><strong>Bar Charts</strong>: Ideal for comparing categorical data.</li>
+<li><strong>Histograms</strong>: Useful for visualizing the distribution of a single variable.</li>
+<li><strong>Box Plots</strong>: Helps to visualize the spread, central tendency, and outliers in data.</li>
+</ol>
+<p><strong>Example: Creating a Scatter Plot</strong></p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dataset for the scatter plot</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>scatter_data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'x'</span>: [<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">5</span>, <span class="dv">9</span>, <span class="dv">7</span>],</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'y'</span>: [<span class="dv">3</span>, <span class="dv">8</span>, <span class="dv">4</span>, <span class="dv">7</span>, <span class="dv">2</span>, <span class="dv">5</span>]</span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot with ggplot</span></span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>(ggplot(scatter_data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a> geom_point(color<span class="op">=</span><span class="st">'green'</span>, size<span class="op">=</span><span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Scatter Plot Example'</span>) <span class="op">+</span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a> xlab(<span class="st">'X-axis Label'</span>) <span class="op">+</span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a> ylab(<span class="st">'Y-axis Label'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-21-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, the scatter plot is created using <code>geom_point()</code>, with customizations for point color and size.</p>
+</section>
+<section id="faceting-for-multi-plot-layouts" class="level3" data-number="15.3.5">
+<h3 data-number="15.3.5" class="anchored" data-anchor-id="faceting-for-multi-plot-layouts"><span class="header-section-number">15.3.5</span> Faceting for Multi-Plot Layouts</h3>
+<p>Faceting in <code>ggplot</code> allows you to create multiple subplots within a single plot, enabling easy comparison of different subsets of the data. Faceting can be done by rows, columns, or both.</p>
+<p><strong>Example: Faceting with a Categorical Variable</strong></p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> facet_wrap</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a dataset for faceting</span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>facet_data <span class="op">=</span> pd.DataFrame({</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'x'</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>],</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'y'</span>: [<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>],</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'category'</span>: [<span class="st">'A'</span>, <span class="st">'A'</span>, <span class="st">'A'</span>, <span class="st">'A'</span>, <span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'B'</span>, <span class="st">'B'</span>, <span class="st">'B'</span>, <span class="st">'B'</span>]</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Facet plot with ggplot</span></span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>(ggplot(facet_data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a> geom_line() <span class="op">+</span></span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a> facet_wrap(<span class="st">'~category'</span>) <span class="op">+</span></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Faceted Line Plot by Category'</span>) <span class="op">+</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a> xlab(<span class="st">'X-axis'</span>) <span class="op">+</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a> ylab(<span class="st">'Y-axis'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-22-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>This example uses <code>facet_wrap()</code> to create separate plots for each category in the dataset, allowing for a clear visual comparison between the groups.</p>
+</section>
+<section id="customizing-aesthetics-and-themes" class="level3" data-number="15.3.6">
+<h3 data-number="15.3.6" class="anchored" data-anchor-id="customizing-aesthetics-and-themes"><span class="header-section-number">15.3.6</span> Customizing Aesthetics and Themes</h3>
+<p>Customization in <code>ggplot</code> extends beyond simple color and size adjustments. The library allows for fine-tuning the plot’s appearance through themes, which can dramatically change the look and feel of your visualizations.</p>
+<p><strong>Example: Using a Different Theme</strong></p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> theme_minimal, theme_bw</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Applying a minimal theme to a scatter plot</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a>(ggplot(scatter_data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a> geom_point(color<span class="op">=</span><span class="st">'blue'</span>, size<span class="op">=</span><span class="dv">4</span>) <span class="op">+</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Scatter Plot with Minimal Theme'</span>) <span class="op">+</span></span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a> xlab(<span class="st">'X-axis Label'</span>) <span class="op">+</span></span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a> ylab(<span class="st">'Y-axis Label'</span>) <span class="op">+</span></span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a> theme_minimal())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-23-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>In this example, the <code>theme_minimal()</code> function is applied to give the plot a clean and modern look, with minimal grid lines and axis labels.</p>
+</section>
+<section id="statistical-transformations" class="level3" data-number="15.3.7">
+<h3 data-number="15.3.7" class="anchored" data-anchor-id="statistical-transformations"><span class="header-section-number">15.3.7</span> Statistical Transformations</h3>
+<p><code>ggplot</code> in Python supports built-in statistical transformations to highlight trends and patterns within the data. These transformations can automatically compute summaries like smoothing lines or histograms.</p>
+<p><strong>Example: Adding a Smoothing Line to a Scatter Plot</strong></p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> plotnine <span class="im">import</span> geom_smooth</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Scatter plot with a smoothing line</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>(ggplot(scatter_data, aes(x<span class="op">=</span><span class="st">'x'</span>, y<span class="op">=</span><span class="st">'y'</span>)) <span class="op">+</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a> geom_point(color<span class="op">=</span><span class="st">'red'</span>, size<span class="op">=</span><span class="dv">3</span>) <span class="op">+</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a> geom_smooth(method<span class="op">=</span><span class="st">'lm'</span>, color<span class="op">=</span><span class="st">'blue'</span>) <span class="op">+</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a> ggtitle(<span class="st">'Scatter Plot with Smoothing Line'</span>) <span class="op">+</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a> xlab(<span class="st">'X-axis Label'</span>) <span class="op">+</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a> ylab(<span class="st">'Y-axis Label'</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<p><img src="15_Data_Vis_files/figure-html/cell-24-output-1.png" class="img-fluid"></p>
+</div>
+</div>
+<p>Here, <code>geom_smooth()</code> adds a linear regression line to the scatter plot, showing the trend in the data points.</p>
+</section>
+<section id="advantages-of-using-ggplot" class="level3" data-number="15.3.8">
+<h3 data-number="15.3.8" class="anchored" data-anchor-id="advantages-of-using-ggplot"><span class="header-section-number">15.3.8</span> Advantages of Using ggplot</h3>
+<ul>
+<li><strong>Consistency</strong>: The grammar of graphics approach ensures that the process of building plots is systematic and repeatable.</li>
+<li><strong>Customization</strong>: Every aspect of the plot can be adjusted to suit specific needs or aesthetic preferences.</li>
+<li><strong>Layered Design</strong>: Allows for easy addition and modification of plot components without altering the underlying structure.</li>
+<li><strong>Built-In Statistical Tools</strong>: Supports automatic statistical transformations to help identify patterns in the data.</li>
+</ul>
+</section>
+<section id="limitations-and-considerations-1" class="level3" data-number="15.3.9">
+<h3 data-number="15.3.9" class="anchored" data-anchor-id="limitations-and-considerations-1"><span class="header-section-number">15.3.9</span> Limitations and Considerations</h3>
+<p>While <code>ggplot</code> offers great flexibility and aesthetic appeal, there are some considerations to keep in mind:</p>
+<ul>
+<li><strong>Performance</strong>: Rendering complex visualizations with large datasets can be slower compared to other libraries.</li>
+<li><strong>Learning Curve</strong>: Requires a solid understanding of the grammar of graphics concepts, which might be challenging for beginners.</li>
+<li><strong>Dependencies</strong>: As a port of ggplot2 from R, some features might differ or be less developed than in the R version.</li>
+</ul>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="15.4">
+<h2 data-number="15.4" class="anchored" data-anchor-id="exercises"><span class="header-section-number">15.4</span> Exercises</h2>
+<section id="exercise-1-working-with-matplotlib---creating-basic-line-plots" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-working-with-matplotlib---creating-basic-line-plots">Exercise 1: Working with Matplotlib - Creating Basic Line Plots</h4>
+<ul>
+<li><p>Using Matplotlib, create a line plot of the function <span class="math inline">\(f(x) = x^2\)</span> for <span class="math inline">\(x\)</span> values ranging from -10 to 10. Customize the plot by adding labels to the axes, a title, and a grid.</p></li>
+<li><p>Modify your plot to change the line color to red and use a dashed line style. Add circular markers to each data point.</p></li>
+</ul>
+</section>
+<section id="exercise-2-working-with-matplotlib---scatter-plot-customization" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-working-with-matplotlib---scatter-plot-customization">Exercise 2: Working with Matplotlib - Scatter Plot Customization</h4>
+<ul>
+<li><p>Generate a scatter plot using the following data:</p>
+<ul>
+<li><span class="math inline">\(x = [2, 4, 6, 8, 10]\)</span></li>
+<li><span class="math inline">\(y = [1, 4, 9, 16, 25]\)</span></li>
+</ul></li>
+<li><p>Customize the scatter plot by using triangle markers, coloring the points green, and increasing the marker size. Label the axes and add a title to the plot.</p></li>
+</ul>
+</section>
+<section id="exercise-3-working-with-matplotlib---creating-subplots" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-working-with-matplotlib---creating-subplots">Exercise 3: Working with Matplotlib - Creating Subplots</h4>
+<ul>
+<li><p>Create a figure with two subplots arranged vertically:</p>
+<ul>
+<li><p>The first subplot should be a line plot of <span class="math inline">\(f(x) = x^3\)</span> for <span class="math inline">\(x\)</span> values from -5 to 5.</p></li>
+<li><p>The second subplot should be a scatter plot of the points <span class="math inline">\((-3, -27)\)</span>, <span class="math inline">\((-2, -8)\)</span>, <span class="math inline">\((0, 0)\)</span>, <span class="math inline">\((2, 8)\)</span>, and <span class="math inline">\((3, 27)\)</span>.</p></li>
+</ul></li>
+<li><p>Ensure that each subplot has a title and labeled axes, and adjust the spacing between the plots for better readability.</p></li>
+</ul>
+</section>
+<section id="exercise-4-advanced-data-visualization-with-seaborn---analyzing-data-distributions" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-advanced-data-visualization-with-seaborn---analyzing-data-distributions">Exercise 4: Advanced Data Visualization with Seaborn - Analyzing Data Distributions</h4>
+<ul>
+<li><p>Load the built-in <code>tips</code> dataset from Seaborn. Create a histogram of the <code>total_bill</code> variable with a KDE (Kernel Density Estimate) overlay. Customize the color of the histogram and KDE line.</p></li>
+<li><p>Interpret the resulting plot, describing any noticeable patterns in the distribution of the <code>total_bill</code> values.</p></li>
+</ul>
+</section>
+<section id="exercise-5-advanced-data-visualization-with-seaborn---comparing-categorical-data" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-advanced-data-visualization-with-seaborn---comparing-categorical-data">Exercise 5: Advanced Data Visualization with Seaborn - Comparing Categorical Data</h4>
+<ul>
+<li><p>Using the <code>tips</code> dataset, create a box plot to visualize the distribution of tips received by day of the week. Differentiate between smokers and non-smokers using the <code>hue</code> parameter.</p></li>
+<li><p>Analyze the box plot to determine on which day the highest median tip amount is given and whether smokers tend to tip more than non-smokers.</p></li>
+</ul>
+</section>
+<section id="exercise-6-advanced-data-visualization-with-seaborn---correlation-analysis-with-heatmaps" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-6-advanced-data-visualization-with-seaborn---correlation-analysis-with-heatmaps">Exercise 6: Advanced Data Visualization with Seaborn - Correlation Analysis with Heatmaps</h4>
+<ul>
+<li><p>Generate a heatmap showing the correlation matrix of the numerical variables in the <code>tips</code> dataset. Use the <code>coolwarm</code> color palette and display the correlation values on the heatmap.</p></li>
+<li><p>Based on the heatmap, identify which two variables have the strongest correlation and describe their relationship.</p></li>
+</ul>
+</section>
+<section id="exercise-7-exploring-ggplot-with-plotnine---basic-line-plot-with-ggplot" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-7-exploring-ggplot-with-plotnine---basic-line-plot-with-ggplot">Exercise 7: Exploring ggplot with plotnine - Basic Line Plot with ggplot</h4>
+<ul>
+<li><p>Using the <code>plotnine</code> package, create a basic line plot of the function <span class="math inline">\(g(x) = \sin(x)\)</span> for <span class="math inline">\(x\)</span> values ranging from 0 to <span class="math inline">\(2\pi\)</span>. Add appropriate labels to the axes and a title to the plot.</p></li>
+<li><p>Enhance the plot by adding points at each integer value of <span class="math inline">\(x\)</span> with different color markers.</p></li>
+</ul>
+</section>
+<section id="exercise-8-exploring-ggplot-with-plotnine---creating-faceted-plots" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-8-exploring-ggplot-with-plotnine---creating-faceted-plots">Exercise 8: Exploring ggplot with plotnine - Creating Faceted Plots</h4>
+<ul>
+<li><p>Create a dataset with two groups, “A” and “B”, and plot a faceted line plot using <code>ggplot</code>. Plot the following data points:</p>
+<ul>
+<li>Group A: <span class="math inline">\((1, 2)\)</span>, <span class="math inline">\((2, 4)\)</span>, <span class="math inline">\((3, 8)\)</span>, <span class="math inline">\((4, 16)\)</span></li>
+<li>Group B: <span class="math inline">\((1, 1)\)</span>, <span class="math inline">\((2, 2)\)</span>, <span class="math inline">\((3, 3)\)</span>, <span class="math inline">\((4, 4)\)</span></li>
+</ul></li>
+<li><p>Use facetting to display each group’s plot in a separate subplot and ensure that both plots share the same x-axis and y-axis labels.</p></li>
+</ul>
+</section>
+<section id="exercise-9-exploring-ggplot-with-plotnine---applying-themes-and-aesthetic-modifications" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-9-exploring-ggplot-with-plotnine---applying-themes-and-aesthetic-modifications">Exercise 9: Exploring ggplot with plotnine - Applying Themes and Aesthetic Modifications</h4>
+<ul>
+<li><p>Create a scatter plot using <code>ggplot</code> with a dataset of your choice. Apply the <code>theme_minimal</code> style and modify the aesthetics by changing the point color, size, and adding a smooth line to represent the trend in the data.</p></li>
+<li><p>Save your plot as a PNG file with a resolution of 300 dpi.</p></li>
+</ul>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./14_Pandas.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./16_OOP.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

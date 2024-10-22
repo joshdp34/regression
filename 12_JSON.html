@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 12&nbsp; JSON Files in Python</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./13_NumPy.html" rel="next">
+<link href="./11_Data_Structures2.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./12_JSON.html"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-json" id="toc-introduction-to-json" class="nav-link active" data-scroll-target="#introduction-to-json"><span class="header-section-number">12.1</span> Introduction to JSON</a>
+  <ul class="collapse">
+  <li><a href="#why-use-json" id="toc-why-use-json" class="nav-link" data-scroll-target="#why-use-json"><span class="header-section-number">12.1.1</span> Why Use JSON?</a></li>
+  <li><a href="#json-structure-and-data-types" id="toc-json-structure-and-data-types" class="nav-link" data-scroll-target="#json-structure-and-data-types"><span class="header-section-number">12.1.2</span> JSON Structure and Data Types</a></li>
+  <li><a href="#differences-between-json-and-python-data-types" id="toc-differences-between-json-and-python-data-types" class="nav-link" data-scroll-target="#differences-between-json-and-python-data-types"><span class="header-section-number">12.1.3</span> Differences Between JSON and Python Data Types</a></li>
+  <li><a href="#use-cases-for-json" id="toc-use-cases-for-json" class="nav-link" data-scroll-target="#use-cases-for-json"><span class="header-section-number">12.1.4</span> Use Cases for JSON</a></li>
+  </ul></li>
+  <li><a href="#reading-and-writing-json-data" id="toc-reading-and-writing-json-data" class="nav-link" data-scroll-target="#reading-and-writing-json-data"><span class="header-section-number">12.2</span> Reading and Writing JSON Data</a>
+  <ul class="collapse">
+  <li><a href="#loading-json-data-from-a-file" id="toc-loading-json-data-from-a-file" class="nav-link" data-scroll-target="#loading-json-data-from-a-file"><span class="header-section-number">12.2.1</span> Loading JSON Data from a File</a></li>
+  <li><a href="#error-handling-while-loading-json-data" id="toc-error-handling-while-loading-json-data" class="nav-link" data-scroll-target="#error-handling-while-loading-json-data"><span class="header-section-number">12.2.2</span> Error Handling While Loading JSON Data</a></li>
+  <li><a href="#writing-json-data-to-a-file" id="toc-writing-json-data-to-a-file" class="nav-link" data-scroll-target="#writing-json-data-to-a-file"><span class="header-section-number">12.2.3</span> Writing JSON Data to a File</a></li>
+  <li><a href="#error-handling-when-writing-json-data" id="toc-error-handling-when-writing-json-data" class="nav-link" data-scroll-target="#error-handling-when-writing-json-data"><span class="header-section-number">12.2.4</span> Error Handling When Writing JSON Data</a></li>
+  <li><a href="#loading-json-data-from-a-string" id="toc-loading-json-data-from-a-string" class="nav-link" data-scroll-target="#loading-json-data-from-a-string"><span class="header-section-number">12.2.5</span> Loading JSON Data from a String</a></li>
+  <li><a href="#converting-python-objects-to-json-strings" id="toc-converting-python-objects-to-json-strings" class="nav-link" data-scroll-target="#converting-python-objects-to-json-strings"><span class="header-section-number">12.2.6</span> Converting Python Objects to JSON Strings</a></li>
+  <li><a href="#customizing-json-serialization" id="toc-customizing-json-serialization" class="nav-link" data-scroll-target="#customizing-json-serialization"><span class="header-section-number">12.2.7</span> Customizing JSON Serialization</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">12.3</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-json" class="quarto-section-identifier"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<p>JSON (JavaScript Object Notation) is a lightweight format used for storing and exchanging data. It is often used to transmit data between a server and a web application, serving as a common data-interchange format. In Python, working with JSON is straightforward thanks to the built-in <code>json</code> module, which provides functionality for parsing, serializing, and deserializing JSON data. This chapter introduces JSON, how to handle it using standard libraries, and how to create and manage custom modules for JSON processing.</p>
+<section id="introduction-to-json" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="introduction-to-json"><span class="header-section-number">12.1</span> Introduction to JSON</h2>
+<p>JSON (JavaScript Object Notation) is a widely-used format for data interchange, particularly in web development and API communication. JSON is designed to be both human-readable and machine-readable, making it an ideal choice for data exchange across platforms and programming languages. JSON represents structured data as a series of key-value pairs, much like Python dictionaries, but with a more constrained and universal syntax. It can easily handle data types such as objects, arrays, strings, numbers, booleans, and null values.</p>
+<section id="why-use-json" class="level3" data-number="12.1.1">
+<h3 data-number="12.1.1" class="anchored" data-anchor-id="why-use-json"><span class="header-section-number">12.1.1</span> Why Use JSON?</h3>
+<p>JSON (JavaScript Object Notation) has become the dominant format for data interchange due to its simplicity, flexibility, and widespread support. Here are several key reasons why JSON is preferred in many applications:</p>
+<ol type="1">
+<li><p><strong>Lightweight and Efficient</strong>: JSON is a minimalistic format that uses a concise structure to represent data. Unlike XML, JSON eliminates the need for heavy markup tags, making it more compact and faster to process. This lightweight nature is especially beneficial in network communication, where reducing data size can significantly improve performance.</p></li>
+<li><p><strong>Cross-Platform Compatibility</strong>: Although JSON originated from JavaScript, it is now a language-independent standard. Most modern programming languages, including Python, Java, C++, and Ruby, offer built-in support for parsing and generating JSON. This makes JSON ideal for systems where data needs to be transferred between different technologies.</p></li>
+<li><p><strong>Human-Readable</strong>: JSON’s clear and straightforward syntax makes it easy for humans to read and write. The structure, based on key-value pairs and arrays, is intuitive and similar to Python’s dictionaries and lists, which helps developers quickly understand the data.</p></li>
+<li><p><strong>Common in Web Development</strong>: JSON is the default data format for most web APIs. RESTful services, in particular, rely heavily on JSON to structure the data exchanged between clients and servers. Its popularity in web applications makes it a critical skill for developers working with modern web technologies.</p></li>
+<li><p><strong>Easy to Parse</strong>: JSON is simple to parse in most programming environments. Libraries like Python’s <code>json</code> module provide straightforward methods for converting JSON data into native data structures and vice versa, making JSON a practical choice for data interchange.</p></li>
+</ol>
+<p>Overall, JSON is widely used because it strikes an effective balance between being machine-friendly and human-friendly, making it an optimal choice for a variety of applications.</p>
+</section>
+<section id="json-structure-and-data-types" class="level3" data-number="12.1.2">
+<h3 data-number="12.1.2" class="anchored" data-anchor-id="json-structure-and-data-types"><span class="header-section-number">12.1.2</span> JSON Structure and Data Types</h3>
+<p>JSON’s structure is based on two universal data structures:</p>
+<ul>
+<li><strong>Objects</strong>: Collections of key-value pairs, where keys are strings and values can be any valid JSON type.</li>
+<li><strong>Arrays</strong>: Ordered lists of values, where each value can be any valid JSON type.</li>
+</ul>
+<p>In addition, JSON supports the following primitive types:</p>
+<ul>
+<li><strong>String</strong>: A sequence of characters, enclosed in double quotes.</li>
+<li><strong>Number</strong>: Integers or floating-point numbers.</li>
+<li><strong>Boolean</strong>: <code>true</code> or <code>false</code>.</li>
+<li><strong>Null</strong>: A special value representing the absence of data (<code>null</code> in JSON, <code>None</code> in Python).</li>
+</ul>
+<section id="example-json-object" class="level4">
+<h4 class="anchored" data-anchor-id="example-json-object">Example JSON Object</h4>
+<p>A typical JSON object that describes a student might look like this:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Alice"</span><span class="fu">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">21</span><span class="fu">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Statistics"</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"graduated"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"courses"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Calculus"</span><span class="ot">,</span> <span class="st">"Linear Algebra"</span><span class="ot">,</span> <span class="st">"Statistics"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"details"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"GPA"</span><span class="fu">:</span> <span class="fl">3.8</span><span class="fu">,</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"credits_completed"</span><span class="fu">:</span> <span class="dv">95</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here, the JSON object contains several fields:</p>
+<ul>
+<li><strong>name</strong>: A string representing the student’s name.</li>
+<li><strong>age</strong>: A number representing the student’s age.</li>
+<li><strong>major</strong>: A string representing the student’s field of study.</li>
+<li><strong>graduated</strong>: A boolean indicating whether the student has graduated.</li>
+<li><strong>courses</strong>: An array of strings representing the courses the student has taken.</li>
+<li><strong>details</strong>: A nested object with more specific information about the student’s GPA and credits completed.</li>
+</ul>
+</section>
+<section id="json-arrays" class="level4">
+<h4 class="anchored" data-anchor-id="json-arrays">JSON Arrays</h4>
+<p>In JSON, arrays are used to store lists of data. An array can contain any type of value: numbers, strings, booleans, objects, or even other arrays. This makes JSON very flexible for representing complex data structures.</p>
+<p>Example of an array of student objects:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Alice"</span><span class="fu">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">21</span><span class="fu">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Statistics"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Bob"</span><span class="fu">,</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">23</span><span class="fu">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Mathematics"</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Charlie"</span><span class="fu">,</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">22</span><span class="fu">,</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Computer Science"</span></span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This JSON array contains three objects, each representing a student with their name, age, and major.</p>
+</section>
+</section>
+<section id="differences-between-json-and-python-data-types" class="level3" data-number="12.1.3">
+<h3 data-number="12.1.3" class="anchored" data-anchor-id="differences-between-json-and-python-data-types"><span class="header-section-number">12.1.3</span> Differences Between JSON and Python Data Types</h3>
+<p>Although JSON and Python share many similarities, there are important differences to keep in mind when converting between the two:</p>
+<ul>
+<li><strong>Python dictionaries</strong> (<code>dict</code>) correspond to <strong>JSON objects</strong>.</li>
+<li><strong>Python lists</strong> (<code>list</code>) correspond to <strong>JSON arrays</strong>.</li>
+<li><strong>Python strings</strong> (<code>str</code>) map directly to <strong>JSON strings</strong>.</li>
+<li><strong>Python integers</strong> and <strong>floats</strong> map to <strong>JSON numbers</strong>.</li>
+<li><strong>Python <code>None</code></strong> is equivalent to <strong>JSON <code>null</code></strong>.</li>
+<li><strong>Python <code>True</code></strong> and <strong><code>False</code></strong> are equivalent to <strong>JSON <code>true</code></strong> and <strong><code>false</code></strong>, respectively.</li>
+</ul>
+<p>These mappings allow for seamless conversions between Python data structures and JSON, but developers must be aware of slight differences in how Python and JSON handle certain data. For example, in JSON, only double quotes (<code>"</code>) are allowed for strings, while Python allows both single and double quotes.</p>
+<section id="example-converting-python-data-to-json" class="level5">
+<h5 class="anchored" data-anchor-id="example-converting-python-data-to-json">Example: Converting Python Data to JSON</h5>
+<p>Suppose you have the following Python dictionary:</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>student_data <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Alice"</span>,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">21</span>,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"major"</span>: <span class="st">"Statistics"</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"graduated"</span>: <span class="va">False</span>,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"courses"</span>: [<span class="st">"Calculus"</span>, <span class="st">"Linear Algebra"</span>, <span class="st">"Statistics"</span>],</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"details"</span>: {</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"GPA"</span>: <span class="fl">3.8</span>,</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"credits_completed"</span>: <span class="dv">95</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This Python dictionary can be converted to JSON using the <code>json</code> module:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>json_data <span class="op">=</span> json.dumps(student_data)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{"name": "Alice", "age": 21, "major": "Statistics", "graduated": false, "courses": ["Calculus", "Linear Algebra", "Statistics"], "details": {"GPA": 3.8, "credits_completed": 95}}</code></pre>
+</div>
+</div>
+<p>Note the subtle differences, such as the use of lowercase <code>false</code> instead of Python’s <code>False</code>, and the use of double quotes around strings.</p>
+</section>
+</section>
+<section id="use-cases-for-json" class="level3" data-number="12.1.4">
+<h3 data-number="12.1.4" class="anchored" data-anchor-id="use-cases-for-json"><span class="header-section-number">12.1.4</span> Use Cases for JSON</h3>
+<p>JSON is widely used in various applications, some of the most common being:</p>
+<ul>
+<li><strong>Web APIs</strong>: JSON is the standard format for exchanging data between client-side applications (e.g., web browsers) and server-side applications.</li>
+<li><strong>Configuration Files</strong>: JSON is often used for configuration files in modern software applications because it is easy to read and write.</li>
+<li><strong>Data Serialization</strong>: JSON is commonly used to serialize and deserialize data in a format that can be easily exchanged across different programming languages and platforms.</li>
+<li><strong>Data Storage</strong>: JSON can be used as a lightweight alternative to databases for small-scale data storage, particularly for configuration settings or user preferences.</li>
+</ul>
+<p>By understanding the structure of JSON and how it relates to Python’s data types, we can efficiently use it to handle data in real-world scenarios, particularly when working with web applications, APIs, or data storage systems.</p>
+</section>
+</section>
+<section id="reading-and-writing-json-data" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="reading-and-writing-json-data"><span class="header-section-number">12.2</span> Reading and Writing JSON Data</h2>
+<p><strong>Serialization</strong> is the process of converting an object or data structure into a format that can be easily stored or transmitted and then reconstructed later. This process allows data to be saved to a file, sent over a network, or stored in a database, and later deserialized (reconstructed) back into its original form. In Python, serialization often refers to converting Python objects into formats like JSON, XML, or binary formats.</p>
+<p>For example, when you serialize a Python dictionary into a JSON string, you are converting the dictionary into a format that can be written to a file or transmitted over a network. The reverse process—converting a serialized format back into a Python object—is called <strong>deserialization</strong>.</p>
+<p>One of the key benefits of JSON in Python is the ease with which it can be read from and written to files using the built-in <code>json</code> module. This section explores the core methods provided by this module, including reading (parsing) JSON data from files, writing (serializing) Python objects into JSON, and handling JSON data as strings. Understanding these operations is essential for working with APIs, configurations, or any structured data exchange.</p>
+<section id="loading-json-data-from-a-file" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="loading-json-data-from-a-file"><span class="header-section-number">12.2.1</span> Loading JSON Data from a File</h3>
+<p>To read (or deserialize) JSON data from a file, the <code>json.load()</code> method is used. This method reads the entire content of a file and converts it into a Python object (such as a dictionary or list). Here’s a simple example:</p>
+<section id="example-reading-from-a-json-file" class="level4">
+<h4 class="anchored" data-anchor-id="example-reading-from-a-json-file">Example: Reading from a JSON File</h4>
+<p>Assume you have a file <code>student.json</code> that contains the following JSON data:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Alice"</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">21</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Statistics"</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"graduated"</span><span class="fu">:</span> <span class="kw">false</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You can load this data into a Python dictionary using the <code>json.load()</code> method as follows:</p>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Open the JSON file for reading</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"student.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    student_data <span class="op">=</span> json.load(<span class="bu">file</span>)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Accessing the data</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student_data[<span class="st">"name"</span>])  <span class="co"># Output: Alice</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Alice</code></pre>
+</div>
+</div>
+<p>In this example:</p>
+<ul>
+<li>We open the <code>student.json</code> file in read mode.</li>
+<li>The <code>json.load()</code> function parses the JSON data and converts it into a Python dictionary.</li>
+<li>You can then access the values in the dictionary as you would with any Python dictionary.</li>
+</ul>
+</section>
+</section>
+<section id="error-handling-while-loading-json-data" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="error-handling-while-loading-json-data"><span class="header-section-number">12.2.2</span> Error Handling While Loading JSON Data</h3>
+<p>When reading JSON data from a file, errors can occur if the file is improperly formatted or does not exist. Python’s <code>json</code> module raises a <code>json.JSONDecodeError</code> if the content is not valid JSON, and a <code>FileNotFoundError</code> if the file is missing. To handle these potential errors, you can use <code>try-except</code> blocks.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Safely loading JSON data from a file</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"student.json"</span>, <span class="st">"r"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>        student_data <span class="op">=</span> json.load(<span class="bu">file</span>)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">FileNotFoundError</span>:</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Error: The file was not found."</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> json.JSONDecodeError:</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"Error: The file contains invalid JSON."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This ensures that the program gracefully handles common file and parsing errors instead of crashing unexpectedly.</p>
+</section>
+<section id="writing-json-data-to-a-file" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="writing-json-data-to-a-file"><span class="header-section-number">12.2.3</span> Writing JSON Data to a File</h3>
+<p>Writing (or serializing) Python objects into JSON format is done using the <code>json.dump()</code> method as shown in the previous section. This method takes a Python object and writes it to a file in JSON format.</p>
+<section id="example-writing-to-a-json-file" class="level4">
+<h4 class="anchored" data-anchor-id="example-writing-to-a-json-file">Example: Writing to a JSON File</h4>
+<p>Let’s say we want to save a dictionary representing a student’s data to a JSON file:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Python dictionary</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>student_data <span class="op">=</span> {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Bob"</span>,</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">23</span>,</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"major"</span>: <span class="st">"Mathematics"</span>,</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"graduated"</span>: <span class="va">True</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Writing to a JSON file</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"student.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>    json.dump(student_data, <span class="bu">file</span>, indent<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this example:</p>
+<ul>
+<li>We open a file <code>student.json</code> in write mode.</li>
+<li>The <code>json.dump()</code> function writes the <code>student_data</code> dictionary to the file in JSON format.</li>
+<li>The <code>indent=4</code> argument is used to format the output with indentation, making the JSON more readable.</li>
+</ul>
+<p>The resulting <code>student.json</code> file will look like this:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Bob"</span><span class="fu">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"age"</span><span class="fu">:</span> <span class="dv">23</span><span class="fu">,</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"major"</span><span class="fu">:</span> <span class="st">"Mathematics"</span><span class="fu">,</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"graduated"</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+</section>
+<section id="error-handling-when-writing-json-data" class="level3" data-number="12.2.4">
+<h3 data-number="12.2.4" class="anchored" data-anchor-id="error-handling-when-writing-json-data"><span class="header-section-number">12.2.4</span> Error Handling When Writing JSON Data</h3>
+<p>Just like reading JSON files, writing to JSON files can also result in errors, such as <code>IOError</code> if the file cannot be opened or written to. To handle these cases, wrap the <code>json.dump()</code> operation in a <code>try-except</code> block.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Safely writing JSON data to a file</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> <span class="bu">open</span>(<span class="st">"student.json"</span>, <span class="st">"w"</span>) <span class="im">as</span> <span class="bu">file</span>:</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        json.dump(student_data, <span class="bu">file</span>, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="cf">except</span> <span class="pp">IOError</span> <span class="im">as</span> e:</span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"Error writing to file: </span><span class="sc">{</span>e<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This approach ensures that your program responds appropriately if file operations fail.</p>
+</section>
+<section id="loading-json-data-from-a-string" class="level3" data-number="12.2.5">
+<h3 data-number="12.2.5" class="anchored" data-anchor-id="loading-json-data-from-a-string"><span class="header-section-number">12.2.5</span> Loading JSON Data from a String</h3>
+<p>In some cases, JSON data might not come from a file but from a string, such as when receiving data from a web API. The <code>json.loads()</code> function is used to parse JSON data from a string and convert it into a Python object.</p>
+<section id="example-parsing-json-from-a-string" class="level4">
+<h4 class="anchored" data-anchor-id="example-parsing-json-from-a-string">Example: Parsing JSON from a String</h4>
+<p>Here’s how you can parse a JSON string into a Python dictionary:</p>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="co"># JSON string</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> <span class="st">'{"name": "Charlie", "age": 22, "major": "Computer Science"}'</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Parsing the JSON string</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>student_data <span class="op">=</span> json.loads(json_string)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(student_data)  <span class="co"># Output: {'name': 'Charlie', 'age': 22, 'major': 'Computer Science'}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'name': 'Charlie', 'age': 22, 'major': 'Computer Science'}</code></pre>
+</div>
+</div>
+<p>The <code>json.loads()</code> method converts the JSON string into a Python dictionary, which can be used like any other dictionary.</p>
+</section>
+</section>
+<section id="converting-python-objects-to-json-strings" class="level3" data-number="12.2.6">
+<h3 data-number="12.2.6" class="anchored" data-anchor-id="converting-python-objects-to-json-strings"><span class="header-section-number">12.2.6</span> Converting Python Objects to JSON Strings</h3>
+<p>In addition to writing JSON to files, you might need to generate JSON-formatted strings for data exchange, such as sending data over a network or printing it to the console. The <code>json.dumps()</code> function allows you to convert Python objects to JSON strings.</p>
+<section id="example-converting-python-dictionary-to-json-string" class="level4">
+<h4 class="anchored" data-anchor-id="example-converting-python-dictionary-to-json-string">Example: Converting Python Dictionary to JSON String</h4>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Python dictionary</span></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>student_data <span class="op">=</span> {</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Diana"</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"age"</span>: <span class="dv">20</span>,</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"major"</span>: <span class="st">"Engineering"</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting to JSON string</span></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> json.dumps(student_data, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "name": "Diana",
+    "age": 20,
+    "major": "Engineering"
+}</code></pre>
+</div>
+</div>
+<p>The <code>indent</code> parameter is optional, but it improves readability by formatting the JSON with proper indentation.</p>
+</section>
+</section>
+<section id="customizing-json-serialization" class="level3" data-number="12.2.7">
+<h3 data-number="12.2.7" class="anchored" data-anchor-id="customizing-json-serialization"><span class="header-section-number">12.2.7</span> Customizing JSON Serialization</h3>
+<p>Sometimes, Python objects may contain data types that are not directly serializable by the <code>json</code> module, such as datetime objects. In these cases, you can provide a custom function to handle the serialization of these complex types.</p>
+<section id="example-custom-serialization" class="level4">
+<h4 class="anchored" data-anchor-id="example-custom-serialization">Example: Custom Serialization</h4>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Python dictionary with a datetime object</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>student_data <span class="op">=</span> {</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Emily"</span>,</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"graduation_date"</span>: datetime(<span class="dv">2023</span>, <span class="dv">5</span>, <span class="dv">15</span>)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Custom serialization function</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> custom_serializer(obj):</span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">isinstance</span>(obj, datetime):</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> obj.strftime(<span class="st">'%Y-%m-</span><span class="sc">%d</span><span class="st">'</span>)</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">raise</span> <span class="pp">TypeError</span>(<span class="ss">f"Type </span><span class="sc">{</span><span class="bu">type</span>(obj)<span class="sc">}</span><span class="ss"> is not serializable"</span>)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a><span class="co"># Converting to JSON string with custom serialization</span></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>json_string <span class="op">=</span> json.dumps(student_data, default<span class="op">=</span>custom_serializer, indent<span class="op">=</span><span class="dv">4</span>)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(json_string)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+    "name": "Emily",
+    "graduation_date": "2023-05-15"
+}</code></pre>
+</div>
+</div>
+<p>In this example, the <code>default</code> parameter is used to specify a custom serialization function for handling the <code>datetime</code> object. The resulting JSON string will look like this:</p>
+<p>Without the custom function, attempting to serialize a <code>datetime</code> object would raise a <code>TypeError</code>.</p>
+</section>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="exercises"><span class="header-section-number">12.3</span> Exercises</h2>
+<section id="exercise-1-loading-json-from-a-file" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-loading-json-from-a-file">Exercise 1: Loading JSON from a File</h4>
+<p>You have a file named <code>book.json</code> that contains the following JSON data:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"title"</span><span class="fu">:</span> <span class="st">"Python Programming"</span><span class="fu">,</span></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"author"</span><span class="fu">:</span> <span class="st">"John Doe"</span><span class="fu">,</span></span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"year"</span><span class="fu">:</span> <span class="dv">2020</span><span class="fu">,</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"genres"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Programming"</span><span class="ot">,</span> <span class="st">"Technology"</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"available"</span><span class="fu">:</span> <span class="kw">true</span></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python program to read the contents of the file <code>book.json</code> and print the title of the book. B. Extend your program to print the author and the list of genres as well.</p>
+</section>
+<section id="exercise-2-writing-json-to-a-file" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-writing-json-to-a-file">Exercise 2: Writing JSON to a File</h4>
+<p>Create a Python dictionary that represents the following student data:</p>
+<ul>
+<li>Name: “Sarah”</li>
+<li>Age: 24</li>
+<li>Major: “Data Science”</li>
+<li>Courses: [“Machine Learning”, “Statistics”, “Python Programming”]</li>
+<li>Graduated: False</li>
+</ul>
+<p>A. Write a Python script that saves this dictionary to a file named <code>student_data.json</code> in JSON format with indentation. B. Open the file and verify that the content is properly formatted as JSON.</p>
+</section>
+<section id="exercise-3-parsing-json-from-a-string" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-parsing-json-from-a-string">Exercise 3: Parsing JSON from a String</h4>
+<p>You receive the following JSON string from an API response:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"city"</span><span class="fu">:</span> <span class="st">"Austin"</span><span class="fu">,</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"temperature"</span><span class="fu">:</span> <span class="dv">30</span><span class="fu">,</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"conditions"</span><span class="fu">:</span> <span class="st">"Sunny"</span><span class="fu">,</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"forecast"</span><span class="fu">:</span> <span class="ot">[</span><span class="st">"Sunny"</span><span class="ot">,</span> <span class="st">"Partly Cloudy"</span><span class="ot">,</span> <span class="st">"Rain"</span><span class="ot">]</span></span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python program to parse this JSON string and convert it into a Python dictionary. B. Print the current weather condition (<code>"conditions"</code>) and the second item in the forecast list.</p>
+</section>
+<section id="exercise-4-serializing-python-data-to-json" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-serializing-python-data-to-json">Exercise 4: Serializing Python Data to JSON</h4>
+<p>You are given the following Python dictionary:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>employee_data <span class="op">=</span> {</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Alice"</span>,</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"id"</span>: <span class="dv">12345</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"position"</span>: <span class="st">"Software Engineer"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"start_date"</span>: <span class="st">"2021-09-01"</span>,</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"salary"</span>: <span class="dv">85000</span>,</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"active"</span>: <span class="va">True</span></span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python script to convert this dictionary into a JSON-formatted string. B. Ensure that the resulting JSON string is printed with an indentation of 4 spaces for better readability. C. Save this JSON string to a file called <code>employee.json</code>.</p>
+</section>
+<section id="exercise-5-handling-errors-in-json-files" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-handling-errors-in-json-files">Exercise 5: Handling Errors in JSON Files</h4>
+<p>You are working with JSON files, and sometimes they may not be formatted correctly or may be missing. Write a Python program that:</p>
+<p>A. Attempts to load JSON data from a file named <code>config.json</code>. B. If the file is missing or contains invalid JSON, catch and handle the exceptions appropriately, printing an error message like:</p>
+<ul>
+<li><code>"Error: config.json not found."</code> for missing files.</li>
+<li><code>"Error: Invalid JSON format."</code> for JSON decoding errors.</li>
+</ul>
+</section>
+<section id="exercise-6-custom-serialization-of-python-objects" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-6-custom-serialization-of-python-objects">Exercise 6: Custom Serialization of Python Objects</h4>
+<p>Consider a Python dictionary that contains a <code>datetime</code> object:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> datetime <span class="im">import</span> datetime</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>event <span class="op">=</span> {</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"name"</span>: <span class="st">"Conference"</span>,</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"location"</span>: <span class="st">"New York"</span>,</span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"date"</span>: datetime(<span class="dv">2024</span>, <span class="dv">5</span>, <span class="dv">15</span>, <span class="dv">10</span>, <span class="dv">30</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python program to serialize this dictionary into a JSON string. Use a custom serialization function to convert the <code>datetime</code> object into a string formatted as <code>YYYY-MM-DD HH:MM</code>. B. Save the resulting JSON string to a file named <code>event.json</code>.</p>
+</section>
+<section id="exercise-7-converting-a-list-of-dictionaries-to-json" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-7-converting-a-list-of-dictionaries-to-json">Exercise 7: Converting a List of Dictionaries to JSON</h4>
+<p>You have the following list of dictionaries, each representing a book in a library:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>books <span class="op">=</span> [</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"title"</span>: <span class="st">"Python Basics"</span>, <span class="st">"author"</span>: <span class="st">"Alice"</span>, <span class="st">"year"</span>: <span class="dv">2019</span>},</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"title"</span>: <span class="st">"Data Science Handbook"</span>, <span class="st">"author"</span>: <span class="st">"Bob"</span>, <span class="st">"year"</span>: <span class="dv">2021</span>},</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>    {<span class="st">"title"</span>: <span class="st">"Machine Learning 101"</span>, <span class="st">"author"</span>: <span class="st">"Charlie"</span>, <span class="st">"year"</span>: <span class="dv">2020</span>}</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python script to convert this list into a JSON-formatted string. B. Save the JSON data to a file called <code>books.json</code>.</p>
+</section>
+<section id="exercise-8-modifying-and-writing-json-data" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-8-modifying-and-writing-json-data">Exercise 8: Modifying and Writing JSON Data</h4>
+<p>You are given a file named <code>users.json</code> with the following data:</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"username"</span><span class="fu">:</span> <span class="st">"john_doe"</span><span class="fu">,</span> <span class="dt">"email"</span><span class="fu">:</span> <span class="st">"john@example.com"</span><span class="fu">,</span> <span class="dt">"active"</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">}</span><span class="ot">,</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span><span class="dt">"username"</span><span class="fu">:</span> <span class="st">"jane_doe"</span><span class="fu">,</span> <span class="dt">"email"</span><span class="fu">:</span> <span class="st">"jane@example.com"</span><span class="fu">,</span> <span class="dt">"active"</span><span class="fu">:</span> <span class="kw">false</span><span class="fu">}</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python script that loads this data into a Python list. B. Modify the script to activate all users by setting the <code>"active"</code> field to <code>true</code> for all entries. C. Save the modified data back to <code>users.json</code>.</p>
+</section>
+<section id="exercise-9-nested-json-parsing" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-9-nested-json-parsing">Exercise 9: Nested JSON Parsing</h4>
+<p>You are given a JSON string representing nested product data:</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode json code-with-copy"><code class="sourceCode json"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>    <span class="dt">"product"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"id"</span><span class="fu">:</span> <span class="dv">101</span><span class="fu">,</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"name"</span><span class="fu">:</span> <span class="st">"Laptop"</span><span class="fu">,</span></span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"price"</span><span class="fu">:</span> <span class="dv">1200</span><span class="fu">,</span></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">"specifications"</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"processor"</span><span class="fu">:</span> <span class="st">"Intel i7"</span><span class="fu">,</span></span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"ram"</span><span class="fu">:</span> <span class="st">"16GB"</span><span class="fu">,</span></span>
+<span id="cb25-9"><a href="#cb25-9" aria-hidden="true" tabindex="-1"></a>            <span class="dt">"storage"</span><span class="fu">:</span> <span class="st">"512GB SSD"</span></span>
+<span id="cb25-10"><a href="#cb25-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">}</span></span>
+<span id="cb25-11"><a href="#cb25-11" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb25-12"><a href="#cb25-12" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write a Python program to parse this JSON string into a Python dictionary. B. Extract and print the product name, price, and the processor specification from the nested dictionary.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./11_Data_Structures2.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./13_NumPy.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 2450 Computing for Math &amp; Stat - 14&nbsp; Pandas</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./15_Data_Vis.html" rel="next">
+<link href="./13_NumPy.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./14_Pandas.html"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro_to_Programming.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">An Intro to Computing</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Python_Install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Installing Python and Setting Up Your IDE</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Basic_Syntax_and_Expressions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Basic Syntax and Expressions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Names_and_Variables.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Names and Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Data_Types.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Data Types</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Conditional_Statements.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Control Structures: Conditional Statements</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Loops.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Control Structures: Loops</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Functions.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Functions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Libraries.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Introduction to Modules and Libraries</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Data_Structures1.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Data Structures: Lists and Tuples</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Data_Structures2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Data Structures: Dictionaries and Sets</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_JSON.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">JSON Files in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_NumPy.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Pandas.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Data_Vis.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_OOP.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Object-Oriented Programming in Python</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Documentation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Writing Clear and Effective Documentation and PEP 8</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#introduction-to-pandas" id="toc-introduction-to-pandas" class="nav-link active" data-scroll-target="#introduction-to-pandas"><span class="header-section-number">14.1</span> Introduction to Pandas</a>
+  <ul class="collapse">
+  <li><a href="#why-use-pandas" id="toc-why-use-pandas" class="nav-link" data-scroll-target="#why-use-pandas"><span class="header-section-number">14.1.1</span> Why Use Pandas?</a></li>
+  <li><a href="#key-features-of-pandas" id="toc-key-features-of-pandas" class="nav-link" data-scroll-target="#key-features-of-pandas"><span class="header-section-number">14.1.2</span> Key Features of Pandas</a></li>
+  </ul></li>
+  <li><a href="#series" id="toc-series" class="nav-link" data-scroll-target="#series"><span class="header-section-number">14.2</span> Series</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-series" id="toc-creating-a-series" class="nav-link" data-scroll-target="#creating-a-series"><span class="header-section-number">14.2.1</span> Creating a Series</a></li>
+  <li><a href="#handling-missing-data-in-a-series" id="toc-handling-missing-data-in-a-series" class="nav-link" data-scroll-target="#handling-missing-data-in-a-series"><span class="header-section-number">14.2.2</span> Handling Missing Data in a Series</a></li>
+  <li><a href="#handling-duplicates-in-a-series" id="toc-handling-duplicates-in-a-series" class="nav-link" data-scroll-target="#handling-duplicates-in-a-series"><span class="header-section-number">14.2.3</span> Handling Duplicates in a Series</a></li>
+  <li><a href="#performing-numeric-computations-with-a-series" id="toc-performing-numeric-computations-with-a-series" class="nav-link" data-scroll-target="#performing-numeric-computations-with-a-series"><span class="header-section-number">14.2.4</span> Performing Numeric Computations with a Series</a></li>
+  </ul></li>
+  <li><a href="#dataframe" id="toc-dataframe" class="nav-link" data-scroll-target="#dataframe"><span class="header-section-number">14.3</span> DataFrame</a>
+  <ul class="collapse">
+  <li><a href="#creating-a-dataframe" id="toc-creating-a-dataframe" class="nav-link" data-scroll-target="#creating-a-dataframe"><span class="header-section-number">14.3.1</span> Creating a DataFrame</a></li>
+  <li><a href="#indexing-dataframes" id="toc-indexing-dataframes" class="nav-link" data-scroll-target="#indexing-dataframes"><span class="header-section-number">14.3.2</span> Indexing DataFrames</a></li>
+  <li><a href="#handling-missing-data-in-a-dataframe" id="toc-handling-missing-data-in-a-dataframe" class="nav-link" data-scroll-target="#handling-missing-data-in-a-dataframe"><span class="header-section-number">14.3.3</span> Handling Missing Data in a DataFrame</a></li>
+  <li><a href="#handling-duplicates-in-a-dataframe" id="toc-handling-duplicates-in-a-dataframe" class="nav-link" data-scroll-target="#handling-duplicates-in-a-dataframe"><span class="header-section-number">14.3.4</span> Handling Duplicates in a DataFrame</a></li>
+  <li><a href="#performing-numeric-computations-with-a-dataframe" id="toc-performing-numeric-computations-with-a-dataframe" class="nav-link" data-scroll-target="#performing-numeric-computations-with-a-dataframe"><span class="header-section-number">14.3.5</span> Performing Numeric Computations with a DataFrame</a></li>
+  </ul></li>
+  <li><a href="#sorting-filtering-and-merging-dataframes" id="toc-sorting-filtering-and-merging-dataframes" class="nav-link" data-scroll-target="#sorting-filtering-and-merging-dataframes"><span class="header-section-number">14.4</span> Sorting, Filtering, and Merging DataFrames</a>
+  <ul class="collapse">
+  <li><a href="#sorting-dataframes" id="toc-sorting-dataframes" class="nav-link" data-scroll-target="#sorting-dataframes"><span class="header-section-number">14.4.1</span> Sorting DataFrames</a></li>
+  <li><a href="#filtering-dataframes" id="toc-filtering-dataframes" class="nav-link" data-scroll-target="#filtering-dataframes"><span class="header-section-number">14.4.2</span> Filtering DataFrames</a></li>
+  <li><a href="#merging-dataframes" id="toc-merging-dataframes" class="nav-link" data-scroll-target="#merging-dataframes"><span class="header-section-number">14.4.3</span> Merging DataFrames</a></li>
+  </ul></li>
+  <li><a href="#reading-and-writing-data" id="toc-reading-and-writing-data" class="nav-link" data-scroll-target="#reading-and-writing-data"><span class="header-section-number">14.5</span> Reading and Writing Data</a>
+  <ul class="collapse">
+  <li><a href="#reading-data-from-files" id="toc-reading-data-from-files" class="nav-link" data-scroll-target="#reading-data-from-files"><span class="header-section-number">14.5.1</span> Reading Data from Files</a></li>
+  <li><a href="#writing-data-to-files" id="toc-writing-data-to-files" class="nav-link" data-scroll-target="#writing-data-to-files"><span class="header-section-number">14.5.2</span> Writing Data to Files</a></li>
+  </ul></li>
+  <li><a href="#exercises" id="toc-exercises" class="nav-link" data-scroll-target="#exercises"><span class="header-section-number">14.6</span> Exercises</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-pandas" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Pandas</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="introduction-to-pandas" class="level2" data-number="14.1">
+<h2 data-number="14.1" class="anchored" data-anchor-id="introduction-to-pandas"><span class="header-section-number">14.1</span> Introduction to Pandas</h2>
+<p>Data analysis often involves handling large volumes of structured data and performing operations such as data cleaning, transformation, and statistical analysis. The ability to efficiently manipulate data is crucial for extracting meaningful insights. Pandas is a powerful open-source library in Python specifically designed to make these tasks easier and more intuitive.</p>
+<section id="why-use-pandas" class="level3" data-number="14.1.1">
+<h3 data-number="14.1.1" class="anchored" data-anchor-id="why-use-pandas"><span class="header-section-number">14.1.1</span> Why Use Pandas?</h3>
+<p>Pandas, short for “Panel Data,” is built on top of NumPy and provides high-level data manipulation tools that are both fast and versatile. It is particularly well-suited for handling and analyzing data in the form of tables, such as those found in spreadsheets or SQL databases. The two primary data structures in Pandas, the <strong>Series</strong> and the <strong>DataFrame</strong>, offer powerful ways to organize and manipulate data, making it possible to perform complex data analysis with just a few lines of code.</p>
+<p>The development of Pandas by Wes McKinney in 2008 was driven by the need for a flexible and efficient tool that could handle the demands of modern data analysis. Since its creation, Pandas has become the de facto standard for data manipulation in Python, widely used in fields such as finance, statistics, machine learning, and scientific research.</p>
+</section>
+<section id="key-features-of-pandas" class="level3" data-number="14.1.2">
+<h3 data-number="14.1.2" class="anchored" data-anchor-id="key-features-of-pandas"><span class="header-section-number">14.1.2</span> Key Features of Pandas</h3>
+<p>Pandas offers several key features that make it an essential tool for data analysis:</p>
+<ol type="1">
+<li><p><strong>Data Alignment and Indexing</strong>: Pandas automatically aligns data during arithmetic operations, handling missing data with ease. This feature ensures that data manipulations are efficient and that operations can be performed across different datasets without losing track of the relationships between data points.</p></li>
+<li><p><strong>Handling Missing Data</strong>: In real-world datasets, missing data is a common occurrence. Pandas provides robust methods for detecting, handling, and imputing missing values, allowing analysts to maintain data integrity and make informed decisions.</p></li>
+<li><p><strong>Data Cleaning and Preparation</strong>: Pandas simplifies the process of data cleaning, including handling duplicates, filtering data, and transforming variables into the desired formats. Clean data is essential for producing accurate and reliable analysis results.</p></li>
+<li><p><strong>Flexible Data Structures</strong>: The <strong>Series</strong> and <strong>DataFrame</strong> objects in Pandas are highly flexible. They can handle different data types, including integers, floats, strings, and even objects, all within the same data structure. This flexibility is crucial when dealing with heterogeneous datasets.</p></li>
+<li><p><strong>Integration with Other Libraries</strong>: Pandas integrates seamlessly with other Python libraries such as NumPy, Matplotlib, and SciPy, making it easy to combine data analysis with numerical operations, visualization, and statistical techniques.</p></li>
+<li><p><strong>High Performance</strong>: Pandas is optimized for performance with large datasets. Its operations are built on top of the highly efficient NumPy library, allowing for quick execution of complex data manipulations.</p></li>
+</ol>
+</section>
+</section>
+<section id="series" class="level2" data-number="14.2">
+<h2 data-number="14.2" class="anchored" data-anchor-id="series"><span class="header-section-number">14.2</span> Series</h2>
+<p>A <strong>Series</strong> in Pandas is a one-dimensional array-like object that can hold data of any type (integers, strings, floating-point numbers, etc.). A Series is similar to a column in a spreadsheet or a database. Each element in a Series has an associated label called an <strong>index</strong>, which allows for intuitive data handling and alignment.</p>
+<section id="creating-a-series" class="level3" data-number="14.2.1">
+<h3 data-number="14.2.1" class="anchored" data-anchor-id="creating-a-series"><span class="header-section-number">14.2.1</span> Creating a Series</h3>
+<p>You can create a Series in Pandas using the <code>pd.Series()</code> function, where <code>pd</code> is the standard alias for the Pandas module.</p>
+<div class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a Series from a list</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>series <span class="op">=</span> pd.Series(data)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    10
+1    20
+2    30
+3    40
+4    50
+dtype: int64</code></pre>
+</div>
+</div>
+<p>Here, the numbers on the left represent the <strong>index</strong> of the Series, and the numbers on the right are the data values.</p>
+<section id="accessing-elements-in-a-series" class="level4">
+<h4 class="anchored" data-anchor-id="accessing-elements-in-a-series">Accessing Elements in a Series</h4>
+<p>You can access individual elements in a Series using the index. For example, to access the third element:</p>
+<div class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>value <span class="op">=</span> series[<span class="dv">2</span>]</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(value)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>30</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="handling-missing-data-in-a-series" class="level3" data-number="14.2.2">
+<h3 data-number="14.2.2" class="anchored" data-anchor-id="handling-missing-data-in-a-series"><span class="header-section-number">14.2.2</span> Handling Missing Data in a Series</h3>
+<p>Missing data is a common issue when dealing with real-world datasets. Pandas represents missing values as <code>NaN</code> (Not a Number), and it provides built-in methods to handle these missing values.</p>
+<section id="creating-a-series-with-missing-data" class="level4">
+<h4 class="anchored" data-anchor-id="creating-a-series-with-missing-data">Creating a Series with Missing Data</h4>
+<div class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a Series with missing data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="va">None</span>, <span class="dv">40</span>, <span class="dv">50</span>]</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>series_with_nan <span class="op">=</span> pd.Series(data)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(series_with_nan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    10.0
+1    20.0
+2     NaN
+3    40.0
+4    50.0
+dtype: float64</code></pre>
+</div>
+</div>
+<p>In this example, the third value is <code>None</code>, which Pandas automatically converts to <code>NaN</code> to signify missing data.</p>
+</section>
+<section id="handling-missing-data" class="level4">
+<h4 class="anchored" data-anchor-id="handling-missing-data">Handling Missing Data</h4>
+<p>Pandas provides several methods to handle missing data in a Series:</p>
+<ul>
+<li><strong>Removing Missing Values</strong>: You can use the <code>dropna()</code> method to remove any missing values from the Series.</li>
+</ul>
+<div class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing missing values</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>clean_series <span class="op">=</span> series_with_nan.dropna()</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(clean_series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    10.0
+1    20.0
+3    40.0
+4    50.0
+dtype: float64</code></pre>
+</div>
+</div>
+<ul>
+<li><strong>Filling Missing Values</strong>: The <code>fillna()</code> method allows you to replace missing values with a specified value.</li>
+</ul>
+<div class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filling missing values with a specific number</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>filled_series <span class="op">=</span> series_with_nan.fillna(<span class="dv">0</span>)</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filled_series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    10.0
+1    20.0
+2     0.0
+3    40.0
+4    50.0
+dtype: float64</code></pre>
+</div>
+</div>
+<p>These methods provide flexibility in handling missing data, depending on the specific requirements of your analysis.</p>
+</section>
+</section>
+<section id="handling-duplicates-in-a-series" class="level3" data-number="14.2.3">
+<h3 data-number="14.2.3" class="anchored" data-anchor-id="handling-duplicates-in-a-series"><span class="header-section-number">14.2.3</span> Handling Duplicates in a Series</h3>
+<p>Duplicates can often occur in data, and it is essential to handle them to ensure the accuracy of your analysis. Pandas makes it easy to identify and remove duplicate values in a Series.</p>
+<section id="identifying-duplicates" class="level4">
+<h4 class="anchored" data-anchor-id="identifying-duplicates">Identifying Duplicates</h4>
+<p>You can use the <code>duplicated()</code> method to identify duplicate values in a Series. This method returns a boolean Series indicating whether each value is a duplicate.</p>
+<div class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a Series with duplicate values</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">40</span>, <span class="dv">50</span>]</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>series_with_duplicates <span class="op">=</span> pd.Series(data)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying duplicates</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>duplicates <span class="op">=</span> series_with_duplicates.duplicated()</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(duplicates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    False
+1    False
+2     True
+3    False
+4    False
+5     True
+6    False
+dtype: bool</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-duplicates" class="level4">
+<h4 class="anchored" data-anchor-id="removing-duplicates">Removing Duplicates</h4>
+<p>To remove duplicate values, you can use the <code>drop_duplicates()</code> method:</p>
+<div class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing duplicate values</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>unique_series <span class="op">=</span> series_with_duplicates.drop_duplicates()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(unique_series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    10
+1    20
+3    30
+4    40
+6    50
+dtype: int64</code></pre>
+</div>
+</div>
+<p>This method retains only the first occurrence of each value, removing all subsequent duplicates.</p>
+</section>
+</section>
+<section id="performing-numeric-computations-with-a-series" class="level3" data-number="14.2.4">
+<h3 data-number="14.2.4" class="anchored" data-anchor-id="performing-numeric-computations-with-a-series"><span class="header-section-number">14.2.4</span> Performing Numeric Computations with a Series</h3>
+<p>One of the strengths of a Pandas Series is its ability to perform vectorized operations, making numeric computations fast and intuitive. You can perform arithmetic operations on a Series just as you would with individual numbers.</p>
+<section id="basic-arithmetic-operations" class="level4">
+<h4 class="anchored" data-anchor-id="basic-arithmetic-operations">Basic Arithmetic Operations</h4>
+<p>Pandas supports element-wise operations, allowing you to perform calculations directly on a Series.</p>
+<div class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a Series</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> [<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>]</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>numeric_series <span class="op">=</span> pd.Series(data)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Performing arithmetic operations</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>sum_series <span class="op">=</span> numeric_series <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>product_series <span class="op">=</span> numeric_series <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>squared_series <span class="op">=</span> numeric_series <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Sum Series:</span><span class="ch">\n</span><span class="st">"</span>, sum_series)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Product Series:</span><span class="ch">\n</span><span class="st">"</span>, product_series)</span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Squared Series:</span><span class="ch">\n</span><span class="st">"</span>, squared_series)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sum Series:
+ 0    15
+1    25
+2    35
+3    45
+4    55
+dtype: int64
+Product Series:
+ 0     20
+1     40
+2     60
+3     80
+4    100
+dtype: int64
+Squared Series:
+ 0     100
+1     400
+2     900
+3    1600
+4    2500
+dtype: int64</code></pre>
+</div>
+</div>
+</section>
+<section id="summary-statistics" class="level4">
+<h4 class="anchored" data-anchor-id="summary-statistics">Summary Statistics</h4>
+<p>Pandas also provides convenient methods for calculating summary statistics on a Series, such as the mean, median, and standard deviation.</p>
+<div class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating summary statistics</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>mean_value <span class="op">=</span> numeric_series.mean()</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>median_value <span class="op">=</span> numeric_series.median()</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>std_dev <span class="op">=</span> numeric_series.std()</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Mean:"</span>, mean_value)</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Median:"</span>, median_value)</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Standard Deviation:"</span>, std_dev)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Mean: 30.0
+Median: 30.0
+Standard Deviation: 15.811388300841896</code></pre>
+</div>
+</div>
+<p>These built-in methods allow you to quickly analyze the statistical properties of your data, providing insights with minimal code.</p>
+</section>
+</section>
+</section>
+<section id="dataframe" class="level2" data-number="14.3">
+<h2 data-number="14.3" class="anchored" data-anchor-id="dataframe"><span class="header-section-number">14.3</span> DataFrame</h2>
+<p>A <strong>DataFrame</strong> is a two-dimensional, size-mutable, and potentially heterogeneous tabular data structure with labeled axes (rows and columns). It is similar to a table in a database or an Excel spreadsheet. DataFrames are one of the most commonly used data structures in data analysis and provide a powerful tool for working with structured data in Python.</p>
+<section id="creating-a-dataframe" class="level3" data-number="14.3.1">
+<h3 data-number="14.3.1" class="anchored" data-anchor-id="creating-a-dataframe"><span class="header-section-number">14.3.1</span> Creating a DataFrame</h3>
+<p>DataFrames can be created in various ways, such as from dictionaries, lists, or external data sources like CSV files. Here’s an example of creating a DataFrame from a dictionary:</p>
+<div class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>, <span class="dv">32</span>],</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>]</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name  Age         City
+0    Alice   24     New York
+1      Bob   27  Los Angeles
+2  Charlie   22      Chicago
+3    David   32      Houston</code></pre>
+</div>
+</div>
+<p>The DataFrame structure consists of rows and columns, where each column represents a Series.</p>
+</section>
+<section id="indexing-dataframes" class="level3" data-number="14.3.2">
+<h3 data-number="14.3.2" class="anchored" data-anchor-id="indexing-dataframes"><span class="header-section-number">14.3.2</span> Indexing DataFrames</h3>
+<p>Indexing in Pandas DataFrames is a way to access, filter, and manipulate data efficiently. DataFrames support multiple methods of indexing, which can be used to select specific rows, columns, or even individual values. Understanding how to use indexing properly is essential for effective data analysis.</p>
+<section id="types-of-indexing-in-dataframes" class="level4">
+<h4 class="anchored" data-anchor-id="types-of-indexing-in-dataframes">Types of Indexing in DataFrames</h4>
+<p>Pandas provides several ways to index a DataFrame:</p>
+<ol type="1">
+<li><strong>Label-based indexing</strong> using <code>.loc[]</code></li>
+<li><strong>Integer-based indexing</strong> using <code>.iloc[]</code></li>
+<li><strong>Boolean indexing</strong></li>
+</ol>
+</section>
+<section id="label-based-indexing-with-.loc" class="level4">
+<h4 class="anchored" data-anchor-id="label-based-indexing-with-.loc">Label-based Indexing with <code>.loc[]</code></h4>
+<p>The <code>.loc[]</code> method is used to select data based on the labels of rows and columns. It allows you to access a group of rows and columns by labels or a boolean array.</p>
+<div class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame</span></span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>, <span class="dv">32</span>],</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>]</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Using .loc[] to select data by labels</span></span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the row with label 1 (Bob) and specific columns</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>selected_data <span class="op">=</span> df.loc[<span class="dv">1</span>, [<span class="st">'Name'</span>, <span class="st">'City'</span>]]</span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(selected_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Name            Bob
+City    Los Angeles
+Name: 1, dtype: object</code></pre>
+</div>
+</div>
+<p>In this example, the <code>.loc[]</code> method selects the data from the row with index label <code>1</code> and returns the values from the <code>Name</code> and <code>City</code> columns.</p>
+</section>
+<section id="integer-based-indexing-with-.iloc" class="level4">
+<h4 class="anchored" data-anchor-id="integer-based-indexing-with-.iloc">Integer-based Indexing with <code>.iloc[]</code></h4>
+<p>The <code>.iloc[]</code> method is used to select data by position, similar to how you would index arrays in Python. It uses integer-based positions to access data.</p>
+<div class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using .iloc[] to select data by position</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Selecting the first two rows and the first two columns</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>selected_data <span class="op">=</span> df.iloc[<span class="dv">0</span>:<span class="dv">2</span>, <span class="dv">0</span>:<span class="dv">2</span>]</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(selected_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Name  Age
+0  Alice   24
+1    Bob   27</code></pre>
+</div>
+</div>
+<p>Here, <code>.iloc[]</code> selects the data from the first two rows (<code>0:2</code>) and the first two columns (<code>0:2</code>), providing a quick way to subset the DataFrame using integer positions.</p>
+</section>
+<section id="boolean-indexing" class="level4">
+<h4 class="anchored" data-anchor-id="boolean-indexing">Boolean Indexing</h4>
+<p>Boolean indexing allows you to filter data in a DataFrame based on conditions. This is useful for selecting rows that meet specific criteria.</p>
+<div class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Using Boolean indexing to filter rows where Age is greater than 25</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>filtered_data <span class="op">=</span> df[df[<span class="st">'Age'</span>] <span class="op">&gt;</span> <span class="dv">25</span>]</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filtered_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Name  Age         City
+1    Bob   27  Los Angeles
+3  David   32      Houston</code></pre>
+</div>
+</div>
+<p>In this example, we used a condition (<code>df['Age'] &gt; 25</code>) to filter the DataFrame, returning only the rows where the <code>Age</code> column has values greater than 25.</p>
+</section>
+</section>
+<section id="handling-missing-data-in-a-dataframe" class="level3" data-number="14.3.3">
+<h3 data-number="14.3.3" class="anchored" data-anchor-id="handling-missing-data-in-a-dataframe"><span class="header-section-number">14.3.3</span> Handling Missing Data in a DataFrame</h3>
+<p>Missing data is a frequent issue in datasets. Pandas provides several methods to handle missing data, allowing you to clean and prepare your data efficiently.</p>
+<section id="creating-a-dataframe-with-missing-data" class="level4">
+<h4 class="anchored" data-anchor-id="creating-a-dataframe-with-missing-data">Creating a DataFrame with Missing Data</h4>
+<div class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame with missing data</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="va">None</span>, <span class="dv">22</span>, <span class="dv">32</span>],</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="va">None</span>, <span class="st">'Houston'</span>]</span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>df_with_nan <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_with_nan)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name   Age         City
+0    Alice  24.0     New York
+1      Bob   NaN  Los Angeles
+2  Charlie  22.0         None
+3    David  32.0      Houston</code></pre>
+</div>
+</div>
+</section>
+<section id="handling-missing-data-1" class="level4">
+<h4 class="anchored" data-anchor-id="handling-missing-data-1">Handling Missing Data</h4>
+<p>Pandas provides several ways to handle missing data in a DataFrame:</p>
+<ul>
+<li><strong>Removing Missing Values</strong>: Use the <code>dropna()</code> method to remove any rows or columns with missing values.</li>
+</ul>
+<div class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Dropping rows with missing values</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>cleaned_df <span class="op">=</span> df_with_nan.dropna()</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(cleaned_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Name   Age      City
+0  Alice  24.0  New York
+3  David  32.0   Houston</code></pre>
+</div>
+</div>
+<p>In this example, only the rows without missing values are retained.</p>
+<ul>
+<li><strong>Filling Missing Values</strong>: Use the <code>fillna()</code> method to fill missing values with a specified value or a method like the mean.</li>
+</ul>
+<div class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filling missing values in the Age column with the average age</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>df_filled <span class="op">=</span> df_with_nan.fillna({<span class="st">'Age'</span>: df_with_nan[<span class="st">'Age'</span>].mean(), <span class="st">'City'</span>: <span class="st">'Unknown'</span>})</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_filled)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name   Age         City
+0    Alice  24.0     New York
+1      Bob  26.0  Los Angeles
+2  Charlie  22.0      Unknown
+3    David  32.0      Houston</code></pre>
+</div>
+</div>
+<p>In this example, missing values in the <code>Age</code> column are filled with the mean of the existing ages, while missing values in the <code>City</code> column are replaced with “Unknown.”</p>
+</section>
+</section>
+<section id="handling-duplicates-in-a-dataframe" class="level3" data-number="14.3.4">
+<h3 data-number="14.3.4" class="anchored" data-anchor-id="handling-duplicates-in-a-dataframe"><span class="header-section-number">14.3.4</span> Handling Duplicates in a DataFrame</h3>
+<p>Duplicate data can often cause inaccuracies in analysis. Pandas makes it easy to identify and remove duplicates.</p>
+<section id="identifying-duplicates-1" class="level4">
+<h4 class="anchored" data-anchor-id="identifying-duplicates-1">Identifying Duplicates</h4>
+<p>You can use the <code>duplicated()</code> method to find duplicate rows in the DataFrame.</p>
+<div class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame with duplicate rows</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>, <span class="st">'Alice'</span>],</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>, <span class="dv">32</span>, <span class="dv">24</span>],</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>, <span class="st">'New York'</span>]</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="#cb33-8" aria-hidden="true" tabindex="-1"></a>df_with_duplicates <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb33-9"><a href="#cb33-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-10"><a href="#cb33-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Identifying duplicate rows</span></span>
+<span id="cb33-11"><a href="#cb33-11" aria-hidden="true" tabindex="-1"></a>duplicates <span class="op">=</span> df_with_duplicates.duplicated()</span>
+<span id="cb33-12"><a href="#cb33-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(duplicates)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>0    False
+1    False
+2    False
+3    False
+4     True
+dtype: bool</code></pre>
+</div>
+</div>
+</section>
+<section id="removing-duplicates-1" class="level4">
+<h4 class="anchored" data-anchor-id="removing-duplicates-1">Removing Duplicates</h4>
+<p>To remove duplicate rows, use the <code>drop_duplicates()</code> method:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removing duplicate rows</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>df_unique <span class="op">=</span> df_with_duplicates.drop_duplicates()</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df_unique)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This removes the duplicate occurrence of Alice from the DataFrame.</p>
+</section>
+</section>
+<section id="performing-numeric-computations-with-a-dataframe" class="level3" data-number="14.3.5">
+<h3 data-number="14.3.5" class="anchored" data-anchor-id="performing-numeric-computations-with-a-dataframe"><span class="header-section-number">14.3.5</span> Performing Numeric Computations with a DataFrame</h3>
+<p>DataFrames support a wide range of arithmetic operations that can be performed on numerical data, making it easy to compute and analyze your data.</p>
+<section id="basic-arithmetic-operations-1" class="level4">
+<h4 class="anchored" data-anchor-id="basic-arithmetic-operations-1">Basic Arithmetic Operations</h4>
+<p>You can perform operations on individual columns or the entire DataFrame.</p>
+<div class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Product'</span>: [<span class="st">'A'</span>, <span class="st">'B'</span>, <span class="st">'C'</span>],</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Price'</span>: [<span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>],</span>
+<span id="cb36-5"><a href="#cb36-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Quantity'</span>: [<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb36-9"><a href="#cb36-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb36-10"><a href="#cb36-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating the total cost for each product</span></span>
+<span id="cb36-11"><a href="#cb36-11" aria-hidden="true" tabindex="-1"></a>df[<span class="st">'Total Cost'</span>] <span class="op">=</span> df[<span class="st">'Price'</span>] <span class="op">*</span> df[<span class="st">'Quantity'</span>]</span>
+<span id="cb36-12"><a href="#cb36-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Product  Price  Quantity  Total Cost
+0       A    100         3         300
+1       B    150         4         600
+2       C    200         5        1000</code></pre>
+</div>
+</div>
+<p>This example demonstrates how to create a new column (<code>Total Cost</code>) by multiplying the <code>Price</code> and <code>Quantity</code> columns.</p>
+</section>
+<section id="summary-statistics-1" class="level4">
+<h4 class="anchored" data-anchor-id="summary-statistics-1">Summary Statistics</h4>
+<p>Pandas makes it easy to calculate summary statistics for a DataFrame using built-in methods like <code>mean()</code>, <code>sum()</code>, and <code>max()</code>.</p>
+<div class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculating summary statistics</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>average_price <span class="op">=</span> df[<span class="st">'Price'</span>].mean()</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>total_quantity <span class="op">=</span> df[<span class="st">'Quantity'</span>].<span class="bu">sum</span>()</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb38-5"><a href="#cb38-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Average Price:"</span>, average_price)</span>
+<span id="cb38-6"><a href="#cb38-6" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Total Quantity Sold:"</span>, total_quantity)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Average Price: 150.0
+Total Quantity Sold: 12</code></pre>
+</div>
+</div>
+<p>These operations allow you to quickly analyze data trends and obtain insights with minimal code.</p>
+</section>
+</section>
+</section>
+<section id="sorting-filtering-and-merging-dataframes" class="level2" data-number="14.4">
+<h2 data-number="14.4" class="anchored" data-anchor-id="sorting-filtering-and-merging-dataframes"><span class="header-section-number">14.4</span> Sorting, Filtering, and Merging DataFrames</h2>
+<p>When working with data, it is often necessary to sort, filter, and merge datasets to analyze information efficiently. Pandas provides intuitive methods for these operations, allowing you to organize and manipulate data easily.</p>
+<section id="sorting-dataframes" class="level3" data-number="14.4.1">
+<h3 data-number="14.4.1" class="anchored" data-anchor-id="sorting-dataframes"><span class="header-section-number">14.4.1</span> Sorting DataFrames</h3>
+<p>Sorting data is essential when you want to analyze your DataFrame in a specific order. Pandas allows you to sort DataFrames by their row indices or column values using the <code>sort_values()</code> and <code>sort_index()</code> methods.</p>
+<section id="sorting-by-column-values" class="level4">
+<h4 class="anchored" data-anchor-id="sorting-by-column-values">Sorting by Column Values</h4>
+<p>You can sort a DataFrame by the values in one or more columns using the <code>sort_values()</code> method.</p>
+<div class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating a DataFrame</span></span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>, <span class="dv">32</span>],</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>]</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(data)</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorting the DataFrame by the 'Age' column in ascending order</span></span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>sorted_df <span class="op">=</span> df.sort_values(by<span class="op">=</span><span class="st">'Age'</span>)</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sorted_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name  Age         City
+2  Charlie   22      Chicago
+0    Alice   24     New York
+1      Bob   27  Los Angeles
+3    David   32      Houston</code></pre>
+</div>
+</div>
+<p>This example sorts the DataFrame by the <code>Age</code> column, arranging the rows in ascending order. You can sort in descending order by setting the parameter <code>ascending=False</code>.</p>
+</section>
+<section id="sorting-by-index" class="level4">
+<h4 class="anchored" data-anchor-id="sorting-by-index">Sorting by Index</h4>
+<p>To sort the DataFrame by its index, use the <code>sort_index()</code> method.</p>
+<div class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Sorting the DataFrame by its index in descending order</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>sorted_by_index <span class="op">=</span> df.sort_index(ascending<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(sorted_by_index)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name  Age         City
+3    David   32      Houston
+2  Charlie   22      Chicago
+1      Bob   27  Los Angeles
+0    Alice   24     New York</code></pre>
+</div>
+</div>
+<p>This arranges the DataFrame in descending order based on the row index.</p>
+</section>
+</section>
+<section id="filtering-dataframes" class="level3" data-number="14.4.2">
+<h3 data-number="14.4.2" class="anchored" data-anchor-id="filtering-dataframes"><span class="header-section-number">14.4.2</span> Filtering DataFrames</h3>
+<p>Filtering data allows you to extract specific rows that meet particular conditions. This is useful for analyzing subsets of your data.</p>
+<section id="filtering-rows-based-on-a-condition" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-rows-based-on-a-condition">Filtering Rows Based on a Condition</h4>
+<p>You can filter a DataFrame to include only the rows that meet a specific condition using boolean indexing.</p>
+<div class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering rows where the Age is greater than 25</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>filtered_df <span class="op">=</span> df[df[<span class="st">'Age'</span>] <span class="op">&gt;</span> <span class="dv">25</span>]</span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filtered_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Name  Age         City
+1    Bob   27  Los Angeles
+3  David   32      Houston</code></pre>
+</div>
+</div>
+<p>In this example, only the rows where the <code>Age</code> column has a value greater than 25 are included.</p>
+</section>
+<section id="filtering-with-multiple-conditions" class="level4">
+<h4 class="anchored" data-anchor-id="filtering-with-multiple-conditions">Filtering with Multiple Conditions</h4>
+<p>You can also filter rows based on multiple conditions using the logical operators <code>&amp;</code> (and), <code>|</code> (or), and <code>~</code> (not).</p>
+<div class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Filtering rows where Age is greater than 25 and City is 'Los Angeles'</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>filtered_df <span class="op">=</span> df[(df[<span class="st">'Age'</span>] <span class="op">&gt;</span> <span class="dv">25</span>) <span class="op">&amp;</span> (df[<span class="st">'City'</span>] <span class="op">==</span> <span class="st">'Los Angeles'</span>)]</span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(filtered_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Name  Age         City
+1  Bob   27  Los Angeles</code></pre>
+</div>
+</div>
+<p>This filters the DataFrame to include only rows where the <code>Age</code> is greater than 25 and the <code>City</code> is ‘Los Angeles’.</p>
+</section>
+</section>
+<section id="merging-dataframes" class="level3" data-number="14.4.3">
+<h3 data-number="14.4.3" class="anchored" data-anchor-id="merging-dataframes"><span class="header-section-number">14.4.3</span> Merging DataFrames</h3>
+<p>Merging is the process of combining multiple DataFrames into a single DataFrame based on a common key or index. Pandas provides several methods for merging, including <code>merge()</code>, <code>concat()</code>, and <code>join()</code>.</p>
+<section id="merging-dataframes-with-merge" class="level4">
+<h4 class="anchored" data-anchor-id="merging-dataframes-with-merge">Merging DataFrames with <code>merge()</code></h4>
+<p>The <code>merge()</code> function is similar to SQL joins and is used to combine DataFrames based on a key column.</p>
+<div class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Creating two DataFrames to merge</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> {<span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>],</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>]}</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>df1 <span class="op">=</span> pd.DataFrame(data1)</span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> {<span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'David'</span>],</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>         <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Houston'</span>]}</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame(data2)</span>
+<span id="cb48-9"><a href="#cb48-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb48-10"><a href="#cb48-10" aria-hidden="true" tabindex="-1"></a><span class="co"># Merging the DataFrames on the 'Name' column</span></span>
+<span id="cb48-11"><a href="#cb48-11" aria-hidden="true" tabindex="-1"></a>merged_df <span class="op">=</span> pd.merge(df1, df2, on<span class="op">=</span><span class="st">'Name'</span>, how<span class="op">=</span><span class="st">'inner'</span>)</span>
+<span id="cb48-12"><a href="#cb48-12" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(merged_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Name  Age         City
+0  Alice   24     New York
+1    Bob   27  Los Angeles</code></pre>
+</div>
+</div>
+<p>In this example, we performed an <strong>inner join</strong> on the <code>Name</code> column, returning only the rows with matching values in both DataFrames. You can change the <code>how</code> parameter to perform different types of joins:</p>
+<ul>
+<li><code>how='inner'</code> (default) returns only the intersection of the keys.</li>
+<li><code>how='outer'</code> returns all keys from both DataFrames.</li>
+<li><code>how='left'</code> returns all keys from the left DataFrame and matches them with the right.</li>
+<li><code>how='right'</code> returns all keys from the right DataFrame and matches them with the left.</li>
+</ul>
+</section>
+<section id="concatenating-dataframes-with-concat" class="level4">
+<h4 class="anchored" data-anchor-id="concatenating-dataframes-with-concat">Concatenating DataFrames with <code>concat()</code></h4>
+<p>The <code>concat()</code> function is used to concatenate DataFrames along a particular axis (rows or columns).</p>
+<div class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Concatenating two DataFrames along the rows (axis=0)</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>df3 <span class="op">=</span> pd.DataFrame({<span class="st">'Name'</span>: [<span class="st">'Eve'</span>, <span class="st">'Frank'</span>],</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'Age'</span>: [<span class="dv">29</span>, <span class="dv">34</span>],</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>                    <span class="st">'City'</span>: [<span class="st">'Seattle'</span>, <span class="st">'Boston'</span>]})</span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>concatenated_df <span class="op">=</span> pd.concat([df, df3], ignore_index<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(concatenated_df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Name  Age         City
+0    Alice   24     New York
+1      Bob   27  Los Angeles
+2  Charlie   22      Chicago
+3    David   32      Houston
+4      Eve   29      Seattle
+5    Frank   34       Boston</code></pre>
+</div>
+</div>
+<p>This example shows how to concatenate two DataFrames by stacking them on top of each other.</p>
+</section>
+</section>
+</section>
+<section id="reading-and-writing-data" class="level2" data-number="14.5">
+<h2 data-number="14.5" class="anchored" data-anchor-id="reading-and-writing-data"><span class="header-section-number">14.5</span> Reading and Writing Data</h2>
+<p>One of the most common tasks in data analysis is reading data from files and writing data to them. Pandas makes it easy to handle these operations with its built-in functions.</p>
+<section id="reading-data-from-files" class="level3" data-number="14.5.1">
+<h3 data-number="14.5.1" class="anchored" data-anchor-id="reading-data-from-files"><span class="header-section-number">14.5.1</span> Reading Data from Files</h3>
+<p>Pandas supports reading data from various file formats, such as CSV, Excel, JSON, and more. The most commonly used format is CSV (Comma-Separated Values). You can read a CSV file into a DataFrame using the <code>pd.read_csv()</code> function:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(<span class="st">'data.csv'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This command reads the contents of the <code>data.csv</code> file and stores it as a DataFrame in the variable <code>df</code>. Pandas automatically infers the data types and the structure of the file.</p>
+</section>
+<section id="writing-data-to-files" class="level3" data-number="14.5.2">
+<h3 data-number="14.5.2" class="anchored" data-anchor-id="writing-data-to-files"><span class="header-section-number">14.5.2</span> Writing Data to Files</h3>
+<p>Similarly, you can write a DataFrame to a file using the <code>to_csv()</code> method. This is useful for saving your data after performing analysis or making modifications.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">'output.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>The parameter <code>index=False</code> ensures that the index is not included in the saved file.</p>
+</section>
+</section>
+<section id="exercises" class="level2" data-number="14.6">
+<h2 data-number="14.6" class="anchored" data-anchor-id="exercises"><span class="header-section-number">14.6</span> Exercises</h2>
+<section id="exercise-1-creating-and-manipulating-series" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-1-creating-and-manipulating-series">Exercise 1: Creating and Manipulating Series</h4>
+<p>Create a Pandas Series from the following list of temperatures (in Celsius): <code>[22, 25, 23, 20, 27, None, 28, 24]</code>.</p>
+<p>A. Print the Series.</p>
+<p>B. Identify any missing data.</p>
+<p>C. Replace the missing data with the average of the other temperatures.</p>
+</section>
+<section id="exercise-2-creating-and-manipulating-series" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-2-creating-and-manipulating-series">Exercise 2: Creating and Manipulating Series</h4>
+<p>Create a Series of temperatures using the list <code>[22, 25, 23, 22, 25, 28, 24, 22]</code>.</p>
+<p>A. Identify and remove any duplicate values.</p>
+<p>B. Sort the Series in descending order.</p>
+</section>
+<section id="exercise-3-creating-and-manipulating-series" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-3-creating-and-manipulating-series">Exercise 3: Creating and Manipulating Series</h4>
+<p>Perform the following calculations on the Series you created in Exercise 2:</p>
+<p>A. Multiply each temperature by 9/5 and then add 32 to convert the values from Celsius to Fahrenheit.</p>
+<p>B. Find the mean, median, and standard deviation of the converted temperatures.</p>
+</section>
+<section id="exercise-4-working-with-dataframes" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-4-working-with-dataframes">Exercise 4: Working with DataFrames</h4>
+<p>Create a DataFrame from the following dictionary:</p>
+<div class="sourceCode" id="cb54"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>   <span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>   <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="va">None</span>, <span class="dv">22</span>, <span class="dv">32</span>],</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>   <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Los Angeles'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>]</span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Print the DataFrame.</p>
+<p>B. Identify and remove any rows with missing values.</p>
+<p>C. Fill in the missing values in the <code>Age</code> column with the average age.</p>
+</section>
+<section id="exercise-5-working-with-dataframes" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-5-working-with-dataframes">Exercise 5: Working with DataFrames</h4>
+<p>Using the same DataFrame from Exercise 4, perform the following tasks:</p>
+<p>A. Sort the DataFrame by the <code>Age</code> column in ascending order.</p>
+<p>B. Filter the DataFrame to include only rows where the <code>Age</code> is greater than 23.</p>
+</section>
+<section id="exercise-6-working-with-dataframes" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-6-working-with-dataframes">Exercise 6: Working with DataFrames</h4>
+<p>Create two new DataFrames:</p>
+<ul>
+<li><p>DataFrame 1:</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>data1 <span class="op">=</span> {<span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Bob'</span>, <span class="st">'Charlie'</span>],</span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">'Age'</span>: [<span class="dv">24</span>, <span class="dv">27</span>, <span class="dv">22</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+<li><p>DataFrame 2:</p>
+<div class="sourceCode" id="cb56"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>data2 <span class="op">=</span> {<span class="st">'Name'</span>: [<span class="st">'Alice'</span>, <span class="st">'Charlie'</span>, <span class="st">'David'</span>],</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a>         <span class="st">'City'</span>: [<span class="st">'New York'</span>, <span class="st">'Chicago'</span>, <span class="st">'Houston'</span>]}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div></li>
+</ul>
+<p>A. Merge these two DataFrames on the <code>Name</code> column using an inner join.</p>
+<p>B. Perform an outer join on the same DataFrames and observe the differences.</p>
+</section>
+<section id="exercise-7-sorting-filtering-and-merging" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-7-sorting-filtering-and-merging">Exercise 7: Sorting, Filtering, and Merging</h4>
+<p>Create a DataFrame using the following data:</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Product'</span>: [<span class="st">'Apples'</span>, <span class="st">'Bananas'</span>, <span class="st">'Cherries'</span>, <span class="st">'Dates'</span>],</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Price'</span>: [<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">2</span>],</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Quantity'</span>: [<span class="dv">5</span>, <span class="dv">7</span>, <span class="dv">6</span>, <span class="dv">3</span>]</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Sort the DataFrame by <code>Price</code> in ascending order.</p>
+<p>B. Filter the DataFrame to include only products with a <code>Quantity</code> greater than 4.</p>
+<p>C. Add a new column to the DataFrame called <code>Total Cost</code> that calculates the total cost as <code>Price * Quantity</code>.</p>
+</section>
+<section id="exercise-8-sorting-filtering-and-merging" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-8-sorting-filtering-and-merging">Exercise 8: Sorting, Filtering, and Merging</h4>
+<p>Create a new DataFrame with the following data:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Product'</span>: [<span class="st">'Apples'</span>, <span class="st">'Cherries'</span>, <span class="st">'Dates'</span>],</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Supplier'</span>: [<span class="st">'Supplier A'</span>, <span class="st">'Supplier B'</span>, <span class="st">'Supplier C'</span>]</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Merge this DataFrame with the DataFrame from Exercise 7 using the <code>Product</code> column as the key.</p>
+<p>B. Experiment with different types of joins (inner, outer, left, and right) and note the changes in the resulting DataFrame.</p>
+</section>
+<section id="exercise-9-reading-and-writing-data" class="level4">
+<h4 class="anchored" data-anchor-id="exercise-9-reading-and-writing-data">Exercise 9: Reading and Writing Data</h4>
+<p>Save the following DataFrame to a CSV file named <code>students.csv</code>:</p>
+<div class="sourceCode" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Name'</span>: [<span class="st">'Anna'</span>, <span class="st">'Ben'</span>, <span class="st">'Cathy'</span>, <span class="st">'Dan'</span>],</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'Score'</span>: [<span class="dv">88</span>, <span class="dv">92</span>, <span class="dv">85</span>, <span class="dv">90</span>]</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>A. Write the DataFrame to the CSV file, ensuring that the index is not included in the file.</p>
+<p>B. Read the data back into a DataFrame and display its contents.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./13_NumPy.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">NumPy</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./15_Data_Vis.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Data Visualization in Python</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 2450</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>
