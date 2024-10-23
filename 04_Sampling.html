@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -288,7 +300,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </blockquote>
 <section id="properties-of-the-constants-k_i-and-c_i" class="level2" data-number="4.1">
 <h2 data-number="4.1" class="anchored" data-anchor-id="properties-of-the-constants-k_i-and-c_i"><span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span></h2>
-<p>In the previous section, we examined how the least squares estimators are linear combinations of the response variable <span class="math inline">\(y\)</span>. Let’s know look at the properties of the coefficients in <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6">Equation&nbsp;<span>3.2</span></a>. We will not present the proofs in this course but they are not complicated.</p>
+<p>In the previous section, we examined how the least squares estimators are linear combinations of the response variable <span class="math inline">\(y\)</span>. Let’s know look at the properties of the coefficients in <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a> and <a href="#eq-w1_6">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_6</span></a>. We will not present the proofs in this course but they are not complicated.</p>
 <p>The coefficients <span class="math inline">\(k_{i}\)</span> have the following properties: <span id="eq-w1_7"><span class="math display">\[
 \begin{align}
 \sum k_{i} &amp; =0
@@ -414,7 +426,7 @@ Var\left[b_0\right] &amp; =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\no
 </section>
 <section id="best-linear-unbiased-estimators-blues" class="level2" data-number="4.4">
 <h2 data-number="4.4" class="anchored" data-anchor-id="best-linear-unbiased-estimators-blues"><span class="header-section-number">4.4</span> Best Linear Unbiased Estimators (BLUEs)</h2>
-<p>We see from <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6">Equation&nbsp;<span>3.2</span></a> that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are <em>linear</em> estimators.</p>
+<p>We see from <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a> and <a href="#eq-w1_6">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_6</span></a> that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are <em>linear</em> estimators.</p>
 <p>Any estimator for <span class="math inline">\(\beta_{1}\)</span>, which we will denote as <span class="math inline">\(\hat{\beta}_{0}\)</span>, that takes the form <span class="math display">\[
 \begin{align*}
 \hat{\beta}_{1} &amp; =\sum a_{i}y_i
@@ -461,7 +473,7 @@ E\left[\hat{\beta}_{1}\right] &amp; =\sum a_{i}\left(\beta_{0}+\beta_{1}x_i\righ
 Var\left[\hat{\beta}_{1}\right] &amp; =\sum a_{i}^{2}Var\left[y_i\right]\\
 &amp; =\sigma^{2}\sum a_{i}^{2}
 \end{align*}
-\]</span> Let’s now define <span class="math inline">\(a_{i}=k_{i}+d_{i}\)</span> where <span class="math inline">\(k_{i}\)</span> is defined in <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a>. and <span class="math inline">\(d_{i}\)</span> is some arbitrary constant.</p>
+\]</span> Let’s now define <span class="math inline">\(a_{i}=k_{i}+d_{i}\)</span> where <span class="math inline">\(k_{i}\)</span> is defined in <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a>. and <span class="math inline">\(d_{i}\)</span> is some arbitrary constant.</p>
 <p>We will show that adding a constant (whether negative or positive) to <span class="math inline">\(k_i\)</span> cannot make the variance smaller. Thus, the smallest variance of the linear estimator <span class="math inline">\(\hat{\beta}_1\)</span> is when <span class="math inline">\(a_i=k_i\)</span>.</p>
 <p>The variance of <span class="math inline">\(\hat{\beta}_{1}\)</span> can now be written as <span class="math display">\[
 \begin{align*}
@@ -470,7 +482,7 @@ Var\left[\hat{\beta}_{1}\right] &amp; =\sigma^{2}\sum a_{i}^{2}\\
 &amp; =\sigma^{2}\sum\left(k_{i}^{2}+2k_{i}d_{i}+d_{i}^{2}\right)\\
 &amp; =Var\left[b_1\right]+2\sigma^{2}\sum k_{i}d_{i}+\sigma^{2}\sum d_{i}^{2}
 \end{align*}
-\]</span> Examining the second term and using the expression of <span class="math inline">\(k_{i}\)</span> in <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math display">\[
+\]</span> Examining the second term and using the expression of <span class="math inline">\(k_{i}\)</span> in <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a>, we see that <span class="math display">\[
 \begin{align*}
 \sum k_{i}d_{i} &amp; =\sum k_{i}\left(a_{i}-k_{i}\right)\\
 &amp; =\sum a_{i}k_{i}-\underbrace{\sum k_{i}^{2}}_{(4.3)}\\
@@ -485,7 +497,7 @@ Var\left[\hat{\beta}_{1}\right] &amp; =\sigma^{2}\sum a_{i}^{2}\\
 Var\left[\hat{\beta}_{1}\right] &amp; =Var\left[b_1\right]+\sigma^{2}\sum d_{i}^{2}
 \end{align*}
 \]</span> This variance is minimized when <span class="math inline">\(\sum d_{i}^{2}=0\)</span> which only happens when <span class="math inline">\(d_{i}=0\)</span>.</p>
-<p>Thus, the unbiased linear estimator with the smallest variance is when <span class="math inline">\(a_{i}=k_{i}\)</span>. That is, the least squares estimator <span class="math inline">\(b_1\)</span> in <a href="03_Properties.html#eq-w1_5">Equation&nbsp;<span>3.1</span></a> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_{1}\)</span>.</p>
+<p>Thus, the unbiased linear estimator with the smallest variance is when <span class="math inline">\(a_{i}=k_{i}\)</span>. That is, the least squares estimator <span class="math inline">\(b_1\)</span> in <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_{1}\)</span>.</p>
 <p>A similar argument can be used to show that <span class="math inline">\(b_0\)</span> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_{0}\)</span>.</p>
 </div>
 </div>
@@ -522,7 +534,7 @@ Y\sim N\left(\mu,\sigma^2\right)
 Y+c\sim N\left(\mu+c,\sigma^2\right)
 \]</span></p>
 </div>
-<p>Since <span class="math inline">\(Y\)</span> is normally distributed by <a href="#eq-4_10">Equation&nbsp;<span>4.11</span></a>, then we can apply <a href="#thm-4_1">Theorem&nbsp;<span>4.2</span></a> which implies that <span class="math inline">\(b_1\)</span> is normally distributed. That is, <span id="eq-w2_3"><span class="math display">\[
+<p>Since <span class="math inline">\(Y\)</span> is normally distributed by <a href="#eq-4_10">Equation&nbsp;<span class="quarto-unresolved-ref">eq-4_10</span></a>, then we can apply <a href="#thm-4_1">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-4_1</span></a> which implies that <span class="math inline">\(b_1\)</span> is normally distributed. That is, <span id="eq-w2_3"><span class="math display">\[
 \begin{align}
 b_1 &amp; \sim N\left(\beta_{1},\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}\right)
 \end{align}
@@ -573,7 +585,7 @@ For those who want to see the math:
 \frac{Z}{\sqrt{\frac{W}{\nu}}}
 \end{align*}\]</span> is distributed as a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(\nu\)</span> degrees of freedom.</p>
 </div>
-<p>We will take the standardized score in <a href="#eq-w2_4">Equation&nbsp;<span>4.13</span></a> and divide by <span class="math display">\[\begin{align*}
+<p>We will take the standardized score in <a href="#eq-w2_4">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w2_4</span></a> and divide by <span class="math display">\[\begin{align*}
 \sqrt{\frac{\frac{\left(n-2\right)s^{2}}{\sigma^{2}}}{\left(n-2\right)}} &amp; =\sqrt{\frac{s^{2}}{\sigma^{2}}}
 \end{align*}\]</span> to give us <span class="math display">\[\begin{align*}
 t &amp; =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}}{\sqrt{\frac{s^{2}}{\sigma^{2}}}}\\
@@ -614,7 +626,7 @@ t &amp; =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overl
 \end{align*}\]</span></p>
 <p>We can obtain the p-value for the hypothesis test by using the <code>summary</code> function with an <code>lm</code> object. For the previous example consisting of the <code>mtcars</code> data.</p>
 <div id="exm-4_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4.1 (<a href="03_Properties.html#exm-3_1">Example&nbsp;<span>3.1</span></a> - revisited) </strong></span>&nbsp;</p>
+<p><span class="theorem-title"><strong>Example 4.1 (<a href="#exm-3_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-3_1</span></a> - revisited) </strong></span>&nbsp;</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>

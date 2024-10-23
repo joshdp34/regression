@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -318,11 +330,11 @@ Review: Greek Letters in Notation
 <p>Usually, in Statistics, lower-case Greek letters are used to denote population parameters. In our model above, we have an exception. The Greek letter <span class="math inline">\(\varepsilon\)</span> is not a parameter, but a random variable (parameters are not random variables in frequentist statistics).</p>
 </div>
 </div>
-<p>As discussed in <a href="01_Intro.html#sec-regoverview"><span>Section&nbsp;1.2</span></a>, regression can be viewed as a six-step process. For now, we’ll focus on steps 2-6, using the simple linear regression model. We’ll explore more complex models later.</p>
+<p>As discussed in <a href="#sec-regoverview"><span class="quarto-unresolved-ref">sec-regoverview</span></a>, regression can be viewed as a six-step process. For now, we’ll focus on steps 2-6, using the simple linear regression model. We’ll explore more complex models later.</p>
 </section>
 <section id="fitting-the-model-the-method-of-least-squares" class="level2" data-number="2.3">
 <h2 data-number="2.3" class="anchored" data-anchor-id="fitting-the-model-the-method-of-least-squares"><span class="header-section-number">2.3</span> Fitting the Model: The Method of Least Squares</h2>
-<p>Suppose we have the data shown in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a> below and plotted in the scatterplot in <a href="#fig-2_1">Figure&nbsp;<span>2.1</span></a>.</p>
+<p>Suppose we have the data shown in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a> below and plotted in the scatterplot in <a href="#fig-2_1">Figure&nbsp;<span class="quarto-unresolved-ref">fig-2_1</span></a>.</p>
 <div id="tbl-table2_1" class="anchored">
 <table class="table">
 <caption>Table&nbsp;2.1: Data for Scatterplot</caption>
@@ -381,7 +393,7 @@ Review: Greek Letters in Notation
 <div id="fig-2_1" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="02_Fitting_files/figure-html/fig-2_1-1.png" class="img-fluid figure-img" width="576"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.1: Scatterplot of the data in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;2.1: Scatterplot of the data in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -390,7 +402,7 @@ Review: Greek Letters in Notation
 <p><span class="math display">\[
 y = \beta_0 + \beta_1 x + \varepsilon
 \]</span></p>
-<p>How can we use the data from the eight observations in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a> to estimate the unknown y-intercept (<span class="math inline">\(\beta_0\)</span>) and slope (<span class="math inline">\(\beta_1\)</span>)?</p>
+<p>How can we use the data from the eight observations in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a> to estimate the unknown y-intercept (<span class="math inline">\(\beta_0\)</span>) and slope (<span class="math inline">\(\beta_1\)</span>)?</p>
 <p>We can start by trying some lines and see how well they fit the data. But how do we measure how well a line <em>fits</em> the data?</p>
 <p>A quantitative method to evaluate how well a straight line fits a set of data is by measuring the deviations of the data points from the line.</p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -411,7 +423,7 @@ Review: Deviations of Response Variable
 <p>Suppose we try to fit the line <span id="eq-02_01"><span class="math display">\[
     \hat{y} =2-.2x
 \tag{2.1}\]</span></span></p>
-<p>This line can be seen in <a href="#fig-2_2">Figure&nbsp;<span>2.2</span></a>.</p>
+<p>This line can be seen in <a href="#fig-2_2">Figure&nbsp;<span class="quarto-unresolved-ref">fig-2_2</span></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> </span>
@@ -421,7 +433,7 @@ Review: Deviations of Response Variable
 <div id="fig-2_2" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="02_Fitting_files/figure-html/fig-2_2-1.png" class="img-fluid figure-img" width="576"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.2: Scatterplot of data in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a> with the red line representing the line in <a href="#eq-02_01">Equation&nbsp;<span>2.1</span></a></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;2.2: Scatterplot of data in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a> with the red line representing the line in <a href="#eq-02_01">Equation&nbsp;<span class="quarto-unresolved-ref">eq-02_01</span></a></figcaption>
 </figure>
 </div>
 </div>
@@ -429,7 +441,7 @@ Review: Deviations of Response Variable
 <p>The observed and predicted values of <span class="math inline">\(y\)</span>, their differences, and their squared differences are shown in the table below.</p>
 <div id="tbl-table2_2" class="anchored">
 <table class="table">
-<caption>Table&nbsp;2.2: Deviations and squared deviations of the line in <a href="#eq-02_01">Equation&nbsp;<span>2.1</span></a> and the data in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a>.</caption>
+<caption>Table&nbsp;2.2: Deviations and squared deviations of the line in <a href="#eq-02_01">Equation&nbsp;<span class="quarto-unresolved-ref">eq-02_01</span></a> and the data in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a>.</caption>
 <thead>
 <tr class="header">
 <th><span class="math inline">\(x\)</span></th>
@@ -504,7 +516,7 @@ Review: Deviations of Response Variable
 <p>Let’s try the line <span id="eq-02_02"><span class="math display">\[
     \hat{y} =1.8-.15x
 \tag{2.2}\]</span></span></p>
-<p>This line can be seen in <a href="#fig-2_3">Figure&nbsp;<span>2.3</span></a>.</p>
+<p>This line can be seen in <a href="#fig-2_3">Figure&nbsp;<span class="quarto-unresolved-ref">fig-2_3</span></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> </span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)) <span class="sc">+</span> </span>
@@ -514,15 +526,15 @@ Review: Deviations of Response Variable
 <div id="fig-2_3" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="02_Fitting_files/figure-html/fig-2_3-1.png" class="img-fluid figure-img" width="576"></p>
-<figcaption class="figure-caption">Figure&nbsp;2.3: Scatterplot of data in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a> with the red line representing the line in <a href="#eq-02_02">Equation&nbsp;<span>2.2</span></a></figcaption>
+<figcaption class="figure-caption">Figure&nbsp;2.3: Scatterplot of data in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a> with the red line representing the line in <a href="#eq-02_02">Equation&nbsp;<span class="quarto-unresolved-ref">eq-02_02</span></a></figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p>The fit results are shown in <a href="#tbl-table2_3">Table&nbsp;<span>2.3</span></a>.</p>
+<p>The fit results are shown in <a href="#tbl-table2_3">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_3</span></a>.</p>
 <div id="tbl-table2_3" class="anchored">
 <table class="table">
-<caption>Table&nbsp;2.3: Deviations and squared deviations of the line in <a href="#eq-02_02">Equation&nbsp;<span>2.2</span></a> and the data in <a href="#tbl-table2_1">Table&nbsp;<span>2.1</span></a>.</caption>
+<caption>Table&nbsp;2.3: Deviations and squared deviations of the line in <a href="#eq-02_02">Equation&nbsp;<span class="quarto-unresolved-ref">eq-02_02</span></a> and the data in <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a>.</caption>
 <thead>
 <tr class="header">
 <th><span class="math inline">\(x\)</span></th>
@@ -645,7 +657,7 @@ For those who want to see the math:
 b_0 &amp; =\frac{1}{n}\left(\sum y_{i}-b_1\sum x_{i}\right)\\
 &amp; =\bar{y}-b_1\bar{x}.
 \end{align*}\]</span></p>
-<p>We now substitute this into the second equation in <a href="#eq-w1_3">Equation&nbsp;<span>2.4</span></a>. Solving this for <span class="math inline">\(b_1\)</span> gives us <span class="math display">\[\begin{align*}
+<p>We now substitute this into the second equation in <a href="#eq-w1_3">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_3</span></a>. Solving this for <span class="math inline">\(b_1\)</span> gives us <span class="math display">\[\begin{align*}
 &amp; \sum x_{i}y_{i}=b_0\sum x_{i}+b_1\sum x_{i}^{2}\\
 &amp; \quad\Longrightarrow\sum x_{i}y_{i}=\left(\bar{y}-b_1\bar{x}\right)\sum x_{i}+b_1\sum x_{i}^{2}\\
 &amp;\quad\Longrightarrow b_1=\frac{\sum \left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum \left(x_{i}-\bar{x}\right)^{2}}.
@@ -675,7 +687,7 @@ For those who want to see the math:
 </div>
 </div>
 </div>
-<p>The least squares estimators in <a href="#eq-w1_4">Equation&nbsp;<span>2.5</span></a> can be expressed in simpler terms if we let <span class="math display">\[\begin{align*}
+<p>The least squares estimators in <a href="#eq-w1_4">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_4</span></a> can be expressed in simpler terms if we let <span class="math display">\[\begin{align*}
 SS_{xx} &amp;= \sum \left(x_i-\bar x\right)^2 \\
 SS_{xy} &amp;= \sum \left(x_i-\bar x\right)\left(y_i - \bar y\right)
 \end{align*}\]</span></p>

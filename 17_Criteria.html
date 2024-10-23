@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 17&nbsp; Model Comparison Criteria</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./16_Linearity.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./17_Criteria.html"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Indicator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#possible-models" id="toc-possible-models" class="nav-link active" data-scroll-target="#possible-models"><span class="header-section-number">17.1</span> Possible Models</a></li>
+  <li><a href="#notation" id="toc-notation" class="nav-link" data-scroll-target="#notation"><span class="header-section-number">17.2</span> Notation</a></li>
+  <li><a href="#coefficient-of-determination-and-sse" id="toc-coefficient-of-determination-and-sse" class="nav-link" data-scroll-target="#coefficient-of-determination-and-sse"><span class="header-section-number">17.3</span> Coefficient of Determination and SSE</a></li>
+  <li><a href="#adjusted-coefficient-of-determination-and-mse" id="toc-adjusted-coefficient-of-determination-and-mse" class="nav-link" data-scroll-target="#adjusted-coefficient-of-determination-and-mse"><span class="header-section-number">17.4</span> Adjusted Coefficient of Determination and MSE</a></li>
+  <li><a href="#aic-and-bic" id="toc-aic-and-bic" class="nav-link" data-scroll-target="#aic-and-bic"><span class="header-section-number">17.5</span> AIC and BIC</a></li>
+  <li><a href="#criteria-for-prediction" id="toc-criteria-for-prediction" class="nav-link" data-scroll-target="#criteria-for-prediction"><span class="header-section-number">17.6</span> Criteria for Prediction</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“When a measure becomes a target, it ceases to be a good measure.” - Marilyn Strathern</p>
+</blockquote>
+<p>So far, we have discussed using the coefficient of determination, <span class="math inline">\(R^2\)</span> and adjusted coefficient of determination, <span class="math inline">\(R^2_a\)</span>, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be use to help in the model building process.</p>
+<section id="possible-models" class="level2" data-number="17.1">
+<h2 data-number="17.1" class="anchored" data-anchor-id="possible-models"><span class="header-section-number">17.1</span> Possible Models</h2>
+<p>From any set of <span class="math inline">\(p - 1\)</span> predictors, <span class="math inline">\(2^{p-1}\)</span> alternative models can be constructed.</p>
+<p>This calculation is based on the fact that each predictor can be either included or excluded from the model.</p>
+<p>For example, the <span class="math display">\[
+2^4 = 16
+\]</span> different possible subset models that can be formed from the pool of four <span class="math inline">\(X\)</span> variables are <span class="math display">\[
+\begin{align*}
+&amp; \text{None}\\
+&amp; x_{1}\\
+&amp; x_{2}\\
+&amp; x_{3}\\
+&amp; x_{4}\\
+&amp; x_{1},x_{2}\\
+&amp; x_{1},x_{3}\\
+&amp; x_{1},x_{4}\\
+&amp; x_{2},x_{3}\\
+&amp; x_{2},x_{4}\\
+&amp; x_{3},x_{4}\\
+&amp; x_{1},x_{2},x_{3}\\
+&amp; x_{1},x_{2},x_{4}\\
+&amp; x_{1},x_{3},x_{4}\\
+&amp; x_{2},x_{3},x_{4}\\
+&amp; x_{1},x_{2},x_{3},x_{4}
+\end{align*}
+\]</span></p>
+<p>If there are 10 potential predictor variables, there there would be <span class="math display">\[
+2^{10} = 1024
+\]</span> possible subset models.</p>
+<p>Model selection procedures, also known as <em>subset</em> <em>selection</em> or <em>variables</em> <em>selection</em> <em>procedures</em>, have been developed to identify a small group of regression models that are “good” according to a specified <em>criterion</em>.</p>
+<p>This limited number might consist of three to six “good” subsets according to the criteria specified, so the investigator can then carefully study these regression models for choosing the final model.</p>
+<p>While many criteria for comparing the regression models have been developed, we will focus on six: <span class="math display">\[
+\begin{align*}
+&amp; R_{p}^{2}\\
+&amp; R_{a,p}^{2}\\
+&amp; AIC_{p}\\
+&amp; SBC_{p}\\
+&amp; PRESS_{p}
+\end{align*}
+\]</span></p>
+</section>
+<section id="notation" class="level2" data-number="17.2">
+<h2 data-number="17.2" class="anchored" data-anchor-id="notation"><span class="header-section-number">17.2</span> Notation</h2>
+<p>Before discussing the criteria, we will need to develop some notation. We will denote the number of potential <span class="math inline">\(X\)</span> variables in the pool by <span class="math inline">\(P-1\)</span>.</p>
+<p>We assume that all regression models contain an intercept term <span class="math inline">\(\beta_0\)</span>.</p>
+<p>Hence, the regression function containing all potential <span class="math inline">\(X\)</span> variables contains <span class="math inline">\(P\)</span> parameters, and the function with no <span class="math inline">\(X\)</span> variables contains one parameter (<span class="math inline">\(\beta_0\)</span>).</p>
+<p>The number of <span class="math inline">\(X\)</span> variables in a subset will be denoted by <span class="math inline">\(p-1\)</span>, as always, so that there are <span class="math inline">\(p\)</span> parameters in the regression function for this subset of <span class="math inline">\(X\)</span> variables. Thus, we have: <span class="math display">\[
+1\le p \le P &lt; n
+\]</span></p>
+</section>
+<section id="coefficient-of-determination-and-sse" class="level2" data-number="17.3">
+<h2 data-number="17.3" class="anchored" data-anchor-id="coefficient-of-determination-and-sse"><span class="header-section-number">17.3</span> Coefficient of Determination and SSE</h2>
+<p>Clearly, we would like models that fit the data well. Thus we would like a coefficient of <em>multiple determiantion</em>, <span class="math inline">\(R^2\)</span>, to be high.</p>
+<p>We will denote the number of parameters in the potential model as a subscript and write the coefficient of determination as <span class="math inline">\(R^2_p\)</span>.</p>
+<p>The <span class="math inline">\(R^2_p\)</span> criterion is equivalent to using the error sum of squares <span class="math inline">\(SSE_p\)</span> as the criterion. The <span class="math inline">\(R^2_p\)</span> criterion is not intended to identify the subsets that maximize this criterion.</p>
+<p>We know that <span class="math inline">\(R^2_p\)</span> can never decrease as additional <span class="math inline">\(X\)</span> variables are included in the model. Hence, <span class="math inline">\(R^2_p\)</span> will be a maximum when all <span class="math inline">\(P - 1\)</span> potential X variables are included in the regression model.</p>
+<p>The intent in using the <span class="math inline">\(R^2_p\)</span> criterion is to find the point where adding more <span class="math inline">\(X\)</span> variables is not worthwhile because it leads to a very small increase in <span class="math inline">\(R^2_p\)</span>.</p>
+<p>Often, this point is reached when only a limited number of <span class="math inline">\(X\)</span> variables are included in the regression model.</p>
+</section>
+<section id="adjusted-coefficient-of-determination-and-mse" class="level2" data-number="17.4">
+<h2 data-number="17.4" class="anchored" data-anchor-id="adjusted-coefficient-of-determination-and-mse"><span class="header-section-number">17.4</span> Adjusted Coefficient of Determination and MSE</h2>
+<p>Since <span class="math inline">\(R^2_{p}\)</span> does not take account of the number of parameters in the regression model and since max(<span class="math inline">\(R^2_{p}\)</span>) can never decrease as <span class="math inline">\(p\)</span> increases, the <em>adjusted</em> coefficient of multiple determination <span class="math inline">\(R^2_{a,p}\)</span> has been suggested as an alternative criterion.</p>
+<p>This coefficient takes the number of parameters in the regression model into account through the degrees of freedom.</p>
+<p>Users of the <span class="math inline">\(R^2_{a,p}\)</span> criterion seek to find a few subsets for which <span class="math inline">\(R^2_{a,p}\)</span> is at the maximum or so close to the maximum that adding more variables is not worthwhile.</p>
+<p>The <span class="math inline">\(R^2_{a,p}\)</span> criterion is equivalent to using the mean square error <span class="math inline">\(SSE_p\)</span> as the criterion. This come from the relationship in <a href="#eq-w4_44">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_44</span></a> <span class="math display">\[
+\begin{align*}
+R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
+&amp; =1-\left(\frac{n-1}{n-p}\right)\frac{SSE}{SSTO}\\
+&amp; = 1-\frac{MSE}{\frac{SSTO}{n-1}}
+\end{align*}
+\]</span></p>
+</section>
+<section id="aic-and-bic" class="level2" data-number="17.5">
+<h2 data-number="17.5" class="anchored" data-anchor-id="aic-and-bic"><span class="header-section-number">17.5</span> AIC and BIC</h2>
+<p>We have seen that <span class="math inline">\(R_{a,p}^2\)</span> is a criterion that penalizes models having large numbers of predictors.</p>
+<p>Two popular alternatives that also provide penalties for adding predictors are <em>Akaike’s information criterion</em> (<span class="math inline">\(AIC_p\)</span>) and <em>Schwarz’ Bayesian criterion</em> (<span class="math inline">\(SBC_p\)</span>).</p>
+<p>A more popular name for <span class="math inline">\(SBC_p\)</span> is <em>Bayesian information criterion</em> (<span class="math inline">\(BIC_p\)</span>).</p>
+<p>We search for models that have small values of <span class="math inline">\(AIC_p\)</span>, or <span class="math inline">\(BIC_p\)</span>, where these criteria are given by: <span id="eq-w7_2"><span class="math display">\[
+\begin{align}
+AIC_{p} &amp; =n\ln SSE_{p}-n\ln n+2p\\
+BIC_{p} &amp; =n\ln SSE_{p}-n\ln n+\left(\ln n\right)p
+\end{align}
+\tag{17.1}\]</span></span></p>
+<p>Notice that for both of these measures, the first term is which decreases as <span class="math inline">\(p\)</span> increases.</p>
+<p>The second term is fixed (for a given sample size <span class="math inline">\(n\)</span>), and the third term increases with the number of parameters, <span class="math inline">\(p\)</span>.</p>
+<p>Models with small <span class="math inline">\(SSE_p\)</span> will do well by these criteria as long as the penalties <span class="math display">\[
+\begin{align*}
+2p &amp; \text{ for }AIC_p \\
+(\ln n)p &amp; \text{ for }BIC_p
+\end{align*}
+\]</span> are not too large.</p>
+<p>If <span class="math inline">\(n \ge 8\)</span> the penalty for <span class="math inline">\(BIC_p\)</span> is larger than that for <span class="math inline">\(AIC_p\)</span>; hence the <span class="math inline">\(BIC_p\)</span> criterion tends to favor more <em>parsimonious</em> models.</p>
+<p>A parsimonious model is a model that accomplishes a desired level of explanation or prediction with as few predictor variables as possible.</p>
+<p>We consider the “best” models the ones with the lowest <span class="math inline">\(AIC_p\)</span> or <span class="math inline">\(BIC_p\)</span>.</p>
+</section>
+<section id="criteria-for-prediction" class="level2" data-number="17.6">
+<h2 data-number="17.6" class="anchored" data-anchor-id="criteria-for-prediction"><span class="header-section-number">17.6</span> Criteria for Prediction</h2>
+<p>The <span class="math inline">\(PRESS_p\)</span> (<em>prediction sum of squares</em>) criterion is a measure of how well the use of the fitted values for a subset model can predict the observed responses <span class="math inline">\(y_i\)</span>.</p>
+<p>The PRESS measure differs from SSE in that each fitted value <span class="math inline">\(\hat{y}_i\)</span> for the PRESS criterion is obtained by</p>
+<ol type="1">
+<li><p>deleting the <span class="math inline">\(i\)</span>th case from the data set</p></li>
+<li><p>estimating the regression function for the subset model from the remaining <span class="math inline">\(n - 1\)</span> cases, and</p></li>
+<li><p>then using the fitted regression function to obtain the predicted value <span class="math inline">\(\hat{y}_{i(i)}\)</span> for the <span class="math inline">\(i\)</span>th case.</p></li>
+</ol>
+<p>We use the notation <span class="math inline">\(\hat{y}_{i(i)}\)</span> now for the fitted value to indicate, by the first subscript <span class="math inline">\(i\)</span>, that it is a predicted value for the <span class="math inline">\(i\)</span>th case and, by the second subscript <span class="math inline">\((i)\)</span>, that the <span class="math inline">\(i\)</span>th case was omitted when the regression function was fitted.</p>
+<p>The PRESS prediction error for the <span class="math inline">\(i\)</span>th case then is: <span class="math display">\[
+y_i - \hat{y}_{i(i)}
+\]</span> and the <span class="math inline">\(PRESS_p\)</span> criterion is the sum of the squared prediction errors over all <span class="math inline">\(n\)</span> cases: <span id="eq-w7_7"><span class="math display">\[
+\begin{align}
+PRESS_p = \sum_{i=1}^n\left(y_i - \hat{y}_{i(i)} \right)^2
+\end{align}
+\tag{17.2}\]</span></span></p>
+<p>Models with small <span class="math inline">\(PRESS_p\)</span> values are considered good candidate models. The reason is that when the prediction errors <span class="math inline">\(y_i - \hat{y}_{i(i)}\)</span> are small, so are the squared prediction errors and the sum of the squared prediction errors.</p>
+<p>Thus, models with small <span class="math inline">\(PRESS_p\)</span> values fit well in the sense of having small prediction errors.</p>
+<p>Another measure of prediction is the <em>predicted</em> <span class="math inline">\(R^{2}\)</span>. Is is related to PRESS by <span id="eq-w7_8"><span class="math display">\[
+\begin{align}
+\text{pred }R_{p}^{2} &amp; =1-\frac{PRESS_{p}}{SSTO}
+\end{align}
+\tag{17.3}\]</span></span> Large values of pred <span class="math inline">\(R_{p}^{2}\)</span> indicates a model that is “good” at prediction.</p>
+<div id="exm-17_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 17.1 </strong></span>We can obtain <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2_a\)</span>, <span class="math inline">\(AIC\)</span>, and <span class="math inline">\(BIC\)</span> using the <code>glance</code> function after fitting a model. Let’s examine the fit to <code>mtcars</code> in <a href="#exm-16_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-16_2</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(mpg <span class="sc">~</span> disp <span class="sc">+</span> hp <span class="sc">+</span> drat <span class="sc">+</span> wt <span class="sc">+</span> qsec, <span class="at">data =</span> mtcars) <span class="sc">|&gt;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_mutate</span>(</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_disp =</span> <span class="fu">log</span>(disp),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_hp =</span> <span class="fu">log</span>(hp),</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">log_wt =</span> <span class="fu">log</span>(wt)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_rm</span>(disp, hp, wt)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">&lt;-</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> wf <span class="sc">|&gt;</span> <span class="fu">fit</span>(mtcars)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.892         0.871  2.16      43.0 9.14e-12     5  -66.7  147.  158.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>To obtain the PRESS statistic, we can use the <code>PRESS</code> function from the <code>MPV</code> library.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(MPV)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">PRESS</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 171.8721</code></pre>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./16_Linearity.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

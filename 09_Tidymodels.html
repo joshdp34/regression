@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -305,7 +317,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>We will illustrate with the <code>mtcars</code> data first used in <a href="03_Properties.html#exm-3_1">Example&nbsp;<span>3.1</span></a>.</p>
+<p>We will illustrate with the <code>mtcars</code> data first used in <a href="#exm-3_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-3_1</span></a>.</p>
 <section id="specifying-the-model" class="level2" data-number="9.1">
 <h2 data-number="9.1" class="anchored" data-anchor-id="specifying-the-model"><span class="header-section-number">9.1</span> Specifying the Model</h2>
 <p>In <code>tidymodels</code>, the first step in model building is to define the type of model you want to fit. The <code>parsnip</code> package is the tool within <code>tidymodels</code> that handles model specification. Unlike the traditional approach where you directly use a modeling function like <code>lm()</code>, <code>parsnip</code> separates the model definition from the model fitting, making the process more modular and adaptable to different engines (i.e., different computational backends).</p>

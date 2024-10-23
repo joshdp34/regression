@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -372,12 +384,12 @@ r_{k} &amp; =\widehat{Cor}\left[e_{i},e_{i+k}\right]\\
 </section>
 <section id="durbin-watson-test" class="level3" data-number="8.2.5">
 <h3 data-number="8.2.5" class="anchored" data-anchor-id="durbin-watson-test"><span class="header-section-number">8.2.5</span> Durbin-Watson Test</h3>
-<p>The <em>Durbin-Watson</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> test is for autocorrelation at <span class="math inline">\(k=1\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span>8.1</span></a>. That is, it tests for correlation one index (one time point) away.</p>
+<p>The <em>Durbin-Watson</em><a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> test is for autocorrelation at <span class="math inline">\(k=1\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w3_4</span></a>. That is, it tests for correlation one index (one time point) away.</p>
 <p>The Durbin-Watson test can be conducted in R with the <code>dwtest</code> function in the <code>lmtest</code> package.</p>
 </section>
 <section id="ljung-box-test" class="level3" data-number="8.2.6">
 <h3 data-number="8.2.6" class="anchored" data-anchor-id="ljung-box-test"><span class="header-section-number">8.2.6</span> Ljung-Box Test</h3>
-<p>The <em>Ljung-Box</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> test differs from the Durbin-Watson test in that it tests for <em>overall</em> correlation over all lags up to <span class="math inline">\(k\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span>8.1</span></a>. For example, if <span class="math inline">\(k=4\)</span> then the Ljung-Box test is for significant autocorrelation over all lags up to <span class="math inline">\(k=4\)</span>.</p>
+<p>The <em>Ljung-Box</em><a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a> test differs from the Durbin-Watson test in that it tests for <em>overall</em> correlation over all lags up to <span class="math inline">\(k\)</span> in <a href="#eq-w3_4">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w3_4</span></a>. For example, if <span class="math inline">\(k=4\)</span> then the Ljung-Box test is for significant autocorrelation over all lags up to <span class="math inline">\(k=4\)</span>.</p>
 <p>The Ljung-Box test can be conducted in <code>R</code> with the <code>Box.test</code> function with the argument <code>type=("Ljung")</code>. This function is in base <code>R</code>.</p>
 </section>
 <section id="breusch-godfrey-test" class="level3" data-number="8.2.7">

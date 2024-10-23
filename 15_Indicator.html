@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./16_Linearity.html" rel="next">
 <link href="./14_Multicollinearity.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -231,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -241,11 +254,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#two-types-of-independent-variables" id="toc-two-types-of-independent-variables" class="nav-link active" data-scroll-target="#two-types-of-independent-variables"><span class="header-section-number">15.0.1</span> Two Types of Independent Variables</a></li>
-  <li><a href="#qualitative-predictors" id="toc-qualitative-predictors" class="nav-link" data-scroll-target="#qualitative-predictors"><span class="header-section-number">15.0.2</span> Qualitative Predictors</a></li>
-  <li><a href="#indicator-variables-for-two-classes" id="toc-indicator-variables-for-two-classes" class="nav-link" data-scroll-target="#indicator-variables-for-two-classes"><span class="header-section-number">15.0.3</span> Indicator Variables for Two Classes</a></li>
-  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">15.0.4</span> Interpretation</a></li>
-  <li><a href="#qualitative-predictors-with-more-than-two-classes" id="toc-qualitative-predictors-with-more-than-two-classes" class="nav-link" data-scroll-target="#qualitative-predictors-with-more-than-two-classes"><span class="header-section-number">15.0.5</span> Qualitative Predictors with More Than Two Classes</a></li>
+  <li><a href="#two-types-of-independent-variables" id="toc-two-types-of-independent-variables" class="nav-link active" data-scroll-target="#two-types-of-independent-variables"><span class="header-section-number">15.1</span> Two Types of Independent Variables</a>
+  <ul class="collapse">
+  <li><a href="#qualitative-predictors" id="toc-qualitative-predictors" class="nav-link" data-scroll-target="#qualitative-predictors"><span class="header-section-number">15.1.1</span> Qualitative Predictors</a></li>
+  </ul></li>
+  <li><a href="#indicator-variables-for-two-classes" id="toc-indicator-variables-for-two-classes" class="nav-link" data-scroll-target="#indicator-variables-for-two-classes"><span class="header-section-number">15.2</span> Indicator Variables for Two Classes</a>
+  <ul class="collapse">
+  <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">15.2.1</span> Interpretation</a></li>
+  </ul></li>
+  <li><a href="#qualitative-predictors-with-more-than-two-classes" id="toc-qualitative-predictors-with-more-than-two-classes" class="nav-link" data-scroll-target="#qualitative-predictors-with-more-than-two-classes"><span class="header-section-number">15.3</span> Qualitative Predictors with More Than Two Classes</a></li>
   </ul>
 </nav>
     </div>
@@ -272,15 +289,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <blockquote class="blockquote">
 <p>“Those who ignore Statistics are condemned to reinvent it.” - Brad Efron</p>
 </blockquote>
-<section id="two-types-of-independent-variables" class="level3" data-number="15.0.1">
-<h3 data-number="15.0.1" class="anchored" data-anchor-id="two-types-of-independent-variables"><span class="header-section-number">15.0.1</span> Two Types of Independent Variables</h3>
+<section id="two-types-of-independent-variables" class="level2" data-number="15.1">
+<h2 data-number="15.1" class="anchored" data-anchor-id="two-types-of-independent-variables"><span class="header-section-number">15.1</span> Two Types of Independent Variables</h2>
 <p>The independent variables that appear in a linear model can be one of two types: <em>quantitative</em> and <em>qualitative</em> (or <em>categorical</em>)</p>
 <p>The different values of an independent variable used in regression are called it’s <em>levels</em>.</p>
 <p>For a quantitative variable, the levels correspond to the numerical values it assumes. For example, if the number of defects in a product ranges from 0 to 3, the independent variable assumes four levels: 0, 1, 2, and 3.</p>
 <p>The levels of a qualitative variable are not numerical. They can be defined only by describing them. Thus, they are the categories the variable can be.</p>
-</section>
-<section id="qualitative-predictors" class="level3" data-number="15.0.2">
-<h3 data-number="15.0.2" class="anchored" data-anchor-id="qualitative-predictors"><span class="header-section-number">15.0.2</span> Qualitative Predictors</h3>
+<section id="qualitative-predictors" class="level3" data-number="15.1.1">
+<h3 data-number="15.1.1" class="anchored" data-anchor-id="qualitative-predictors"><span class="header-section-number">15.1.1</span> Qualitative Predictors</h3>
 <p>Thus far, we have only considered predictor variables that are quantitative.</p>
 <p>Qualitative predictor variables can also be used in regression models.</p>
 <p>Let’s look at an example involving handspans and heights of students.</p>
@@ -313,8 +329,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>We can see that sex plays a role in the regression line. For the male subjects, the fitted line tends to be higher than for the female subjects.</p>
 </div>
 </section>
-<section id="indicator-variables-for-two-classes" class="level3" data-number="15.0.3">
-<h3 data-number="15.0.3" class="anchored" data-anchor-id="indicator-variables-for-two-classes"><span class="header-section-number">15.0.3</span> Indicator Variables for Two Classes</h3>
+</section>
+<section id="indicator-variables-for-two-classes" class="level2" data-number="15.2">
+<h2 data-number="15.2" class="anchored" data-anchor-id="indicator-variables-for-two-classes"><span class="header-section-number">15.2</span> Indicator Variables for Two Classes</h2>
 <p>We will include the qualitative variables in our model by using <em>indicator</em> variables.</p>
 <p>An indicator variable (or <em>dummy</em> variable) takes on the values of 0 and 1. For example, a model for the handspan data is <span class="math display">\[
 \begin{align*}
@@ -330,9 +347,8 @@ x_{2} &amp; =\begin{cases}
 \end{cases}
 \end{align*}
 \]</span></p>
-</section>
-<section id="interpretation" class="level3" data-number="15.0.4">
-<h3 data-number="15.0.4" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">15.0.4</span> Interpretation</h3>
+<section id="interpretation" class="level3" data-number="15.2.1">
+<h3 data-number="15.2.1" class="anchored" data-anchor-id="interpretation"><span class="header-section-number">15.2.1</span> Interpretation</h3>
 <p>If the subject is male, then the expectation becomes <span class="math display">\[
 \begin{align*}
 E\left[y_{i}\right] &amp; =\beta_{0}+\beta_{1}x_{i1}+\beta_{2}\left(1\right)\\
@@ -414,8 +430,9 @@ E\left[y_{i}\right] &amp; =\beta_{0}+\beta_{1}x_{i1}+\beta_{2}\left(0\right)\\
 <p>Note that the coefficient for <code>height</code> did not change and the coefficient for <code>sex</code> just signs but had the same magnitude.</p>
 </div>
 </section>
-<section id="qualitative-predictors-with-more-than-two-classes" class="level3" data-number="15.0.5">
-<h3 data-number="15.0.5" class="anchored" data-anchor-id="qualitative-predictors-with-more-than-two-classes"><span class="header-section-number">15.0.5</span> Qualitative Predictors with More Than Two Classes</h3>
+</section>
+<section id="qualitative-predictors-with-more-than-two-classes" class="level2" data-number="15.3">
+<h2 data-number="15.3" class="anchored" data-anchor-id="qualitative-predictors-with-more-than-two-classes"><span class="header-section-number">15.3</span> Qualitative Predictors with More Than Two Classes</h2>
 <p>We can use indicator variables for qualitative predictors that have more than two classes (categories).</p>
 <p>For example, suppose we wanted to model the sales price of a home bases on the quantitative predictors lot size (<span class="math inline">\(x_1\)</span>), local taxes (<span class="math inline">\(x_2\)</span>), and age (<span class="math inline">\(x_3\)</span>).</p>
 <p>We may also want to include the qualitative predictor for air conditioning type. The possible classes are “no air conditioning”, “window units”, “heat pumps”, and “central air conditioning”.</p>
@@ -502,7 +519,7 @@ x_{6} &amp; =\begin{cases}
 6 region_Western       -149.       86.8        -1.72   8.68e- 2</code></pre>
 </div>
 </div>
-<p>Note that we did not have to use <code>step_dummy</code> here due to the numbers being turned into factors by <code>step_num2factor</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character into dummy variables. So we did not need to use <code>step_dummy</code> in either <a href="#exm-15_1">Example&nbsp;<span>15.1</span></a> or <a href="#exm-15_2">Example&nbsp;<span>15.2</span></a> either. However, it is good practice to include <code>step_dummy</code> in your recipe when dealing with qualitative variables since it will allow for more control when dealing with complex data.</p>
+<p>Note that we did not have to use <code>step_dummy</code> here due to the numbers being turned into factors by <code>step_num2factor</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character into dummy variables. So we did not need to use <code>step_dummy</code> in either <a href="#exm-15_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_1</span></a> or <a href="#exm-15_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_2</span></a> either. However, it is good practice to include <code>step_dummy</code> in your recipe when dealing with qualitative variables since it will allow for more control when dealing with complex data.</p>
 </div>
 
 
@@ -755,6 +772,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./16_Linearity.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

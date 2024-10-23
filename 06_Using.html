@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -308,18 +320,18 @@ y = {\beta}_0 + {\beta}_1 x + \varepsilon
 &amp; =\sum c_{i}y_{i}+\sum k_{i}y_{h}x_{h}\\
 &amp; =\sum\left(c_{i}+k_{i}x_{h}\right)y_{h}
 \end{align*}\]</span></p>
-<p>Thus, <span class="math inline">\(\hat{y}_{j}\)</span> is a linear combination of the observed <span class="math inline">\(y_{i}\)</span> which are normally distributed. Then by <a href="04_Sampling.html#thm-4_1">Theorem&nbsp;<span>4.2</span></a>, <span class="math inline">\(\hat{y}_{j}\)</span> is normally distributed.</p>
+<p>Thus, <span class="math inline">\(\hat{y}_{j}\)</span> is a linear combination of the observed <span class="math inline">\(y_{i}\)</span> which are normally distributed. Then by <a href="#thm-4_1">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-4_1</span></a>, <span class="math inline">\(\hat{y}_{j}\)</span> is normally distributed.</p>
 </section>
 <section id="the-mean-of-haty_h" class="level3" data-number="6.1.3">
 <h3 data-number="6.1.3" class="anchored" data-anchor-id="the-mean-of-haty_h"><span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span></h3>
-<p>Using <a href="04_Sampling.html#thm-4_1">Theorem&nbsp;<span>4.2</span></a>, we have the mean as <span class="math display">\[\begin{align*}
+<p>Using <a href="#thm-4_1">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-4_1</span></a>, we have the mean as <span class="math display">\[\begin{align*}
 \sum\left(c_{i}+k_{i}x_{h}\right)E\left[y_{h}\right] &amp; =\left(\underbrace{\sum c_{i}}_{=1}+x_{h}\underbrace{\sum k_{i}}_{=0}\right)\left(\beta_{0}+\beta_{1}x_{h}\right)\\
 &amp; =\beta_{0}+\beta_{1}x_{h}
 \end{align*}\]</span></p>
 </section>
 <section id="the-variance-of-haty_h" class="level3" data-number="6.1.4">
 <h3 data-number="6.1.4" class="anchored" data-anchor-id="the-variance-of-haty_h"><span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span></h3>
-<p>Using <a href="04_Sampling.html#thm-4_2">Theorem&nbsp;<span>4.3</span></a>, we have the variance as <span class="math display">\[\begin{align*}
+<p>Using <a href="#thm-4_2">Theorem&nbsp;<span class="quarto-unresolved-ref">thm-4_2</span></a>, we have the variance as <span class="math display">\[\begin{align*}
 Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
 \end{align*}\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
@@ -392,7 +404,7 @@ t_{\alpha/2}s
 </section>
 <section id="the-variance-of-the-predicted-response" class="level3" data-number="6.2.4">
 <h3 data-number="6.2.4" class="anchored" data-anchor-id="the-variance-of-the-predicted-response"><span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</h3>
-<p>Since <span class="math inline">\(\hat{y}_{h}\)</span> is a random variable, it will have a sampling distribution. From <a href="#eq-w2_19">Equation&nbsp;<span>6.1</span></a>, that sampling distribution has a variance of <span class="math display">\[\begin{align*}
+<p>Since <span class="math inline">\(\hat{y}_{h}\)</span> is a random variable, it will have a sampling distribution. From <a href="#eq-w2_19">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w2_19</span></a>, that sampling distribution has a variance of <span class="math display">\[\begin{align*}
 Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
 \end{align*}\]</span></p>
 <p>Thus, the variance of the prediction of <span class="math inline">\(y_{h\left(pred\right)}\)</span> will be the sum of the variance of the response variable: <span class="math display">\[\begin{align*}
@@ -410,7 +422,7 @@ Var\left[y_{h\left(pred\right)}\right] &amp; =\sigma^{2}+\sigma^{2}\left(\frac{1
 \end{align}
 \]</span>#eq-w2_21</p>
 <div id="exm-5_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 6.1 (<a href="05_Correlation.html#exm-5_2">Example&nbsp;<span>5.2</span></a> revisited) </strong></span>Let’s examine the <code>trees</code> data from <a href="05_Correlation.html#exm-5_2">Example&nbsp;<span>5.2</span></a>.</p>
+<p><span class="theorem-title"><strong>Example 6.1 (<a href="#exm-5_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-5_2</span></a> revisited) </strong></span>Let’s examine the <code>trees</code> data from <a href="#exm-5_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-5_2</span></a>.</p>
 <p>Recall the least squares fit:</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datasets)</span>

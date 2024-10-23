@@ -232,6 +232,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -439,14 +451,14 @@ economicActivityFemale         illiteracyMale       illiteracyFemale
 </section>
 <section id="effects-on-inferences" class="level3" data-number="14.1.2">
 <h3 data-number="14.1.2" class="anchored" data-anchor-id="effects-on-inferences"><span class="header-section-number">14.1.2</span> Effects on Inferences</h3>
-<p>Recall from <a href="13_Inferences.html#eq-w4_31">Equation&nbsp;<span>13.3</span></a> that we can obtain the variance of the least squares estimators with the diagonal of <span class="math inline">\({\bf s}^{2}\left[{\bf b}\right]\)</span>.</p>
+<p>Recall from <a href="#eq-w4_31">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_31</span></a> that we can obtain the variance of the least squares estimators with the diagonal of <span class="math inline">\({\bf s}^{2}\left[{\bf b}\right]\)</span>.</p>
 <p>It can be shown that this variance can be expressed in terms of VIF. So the variance of <span class="math inline">\(b_{j}\)</span> can be expressed as <span id="eq-w5_2"><span class="math display">\[
 \begin{align}
 s^{2}\left[b_{j}\right] &amp; =MSE\frac{VIF_{j}}{\left(n-1\right)\widehat{Var}\left[x_{j}\right]}
 \end{align}
 \tag{14.2}\]</span></span> where <span class="math inline">\(\widehat{Var}\left[x_{j}\right]\)</span> is the sample variance of <span class="math inline">\(x_j\)</span>.</p>
 <p>So we see that if <span class="math inline">\(VIF_{j}\)</span> is large (meaning there is multicollinearity when <span class="math inline">\(x_{j}\)</span> is included in the model) then the standard error will be larger.</p>
-<p>Noting that the test statistic for testing <span class="math inline">\(\beta_{j}=0\)</span> in <a href="13_Inferences.html#eq-w4_33">Equation&nbsp;<span>13.5</span></a> is <span class="math display">\[
+<p>Noting that the test statistic for testing <span class="math inline">\(\beta_{j}=0\)</span> in <a href="#eq-w4_33">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_33</span></a> is <span class="math display">\[
 \begin{align*}
 t^{*} &amp; =\frac{b_{j}}{s\left[b_{j}\right]}
 \end{align*}
@@ -721,18 +733,18 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <pre><code># A tibble: 12 × 4
    terms                            value component id       
    &lt;chr&gt;                            &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;    
- 1 variance                      2.07             1 pca_UkTY6
- 2 variance                      0.933            2 pca_UkTY6
- 3 variance                      0.000727         3 pca_UkTY6
- 4 cumulative variance           2.07             1 pca_UkTY6
- 5 cumulative variance           3.00             2 pca_UkTY6
- 6 cumulative variance           3                3 pca_UkTY6
- 7 percent variance             68.9              1 pca_UkTY6
- 8 percent variance             31.1              2 pca_UkTY6
- 9 percent variance              0.0242           3 pca_UkTY6
-10 cumulative percent variance  68.9              1 pca_UkTY6
-11 cumulative percent variance 100.               2 pca_UkTY6
-12 cumulative percent variance 100                3 pca_UkTY6</code></pre>
+ 1 variance                      2.07             1 pca_TRz2B
+ 2 variance                      0.933            2 pca_TRz2B
+ 3 variance                      0.000727         3 pca_TRz2B
+ 4 cumulative variance           2.07             1 pca_TRz2B
+ 5 cumulative variance           3.00             2 pca_TRz2B
+ 6 cumulative variance           3                3 pca_TRz2B
+ 7 percent variance             68.9              1 pca_TRz2B
+ 8 percent variance             31.1              2 pca_TRz2B
+ 9 percent variance              0.0242           3 pca_TRz2B
+10 cumulative percent variance  68.9              1 pca_TRz2B
+11 cumulative percent variance 100.               2 pca_TRz2B
+12 cumulative percent variance 100                3 pca_TRz2B</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the explained variance</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>pca_results <span class="sc">|&gt;</span></span>
