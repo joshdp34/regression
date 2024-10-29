@@ -210,6 +210,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -328,7 +334,7 @@ y_{i}= &amp; \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\cdots+\beta_{p-1}x_{i,p-
 <h2 data-number="10.3" class="anchored" data-anchor-id="estimating-the-multiple-regression-model"><span class="header-section-number">10.3</span> Estimating the Multiple Regression Model</h2>
 <section id="minimizing-the-sse" class="level3" data-number="10.3.1">
 <h3 data-number="10.3.1" class="anchored" data-anchor-id="minimizing-the-sse"><span class="header-section-number">10.3.1</span> Minimizing the SSE</h3>
-<p>As we did in the simple linear regression case, we want to fit model <a href="#eq-w4_1">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_1</span></a> to the observed data.</p>
+<p>As we did in the simple linear regression case, we want to fit model <a href="#eq-w4_1">Equation&nbsp;<span>10.1</span></a> to the observed data.</p>
 <p>The fitted line in the multiple regression case is <span id="eq-w4_2"><span class="math display">\[
 \begin{align}
 \hat{y}_i = b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}
@@ -338,11 +344,11 @@ y_{i}= &amp; \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\cdots+\beta_{p-1}x_{i,p-
 Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\right)\right)^2\
 \end{align}
 \tag{10.3}\]</span></span> in the multiple regression case.</p>
-<p>Note that model <a href="#eq-w4_1">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_1</span></a> is no longer a line. It is a <em>plane</em> when <span class="math inline">\(p=3\)</span> and a <em>hyperplane</em> when <span class="math inline">\(p&gt;3\)</span>.</p>
+<p>Note that model <a href="#eq-w4_1">Equation&nbsp;<span>10.1</span></a> is no longer a line. It is a <em>plane</em> when <span class="math inline">\(p=3\)</span> and a <em>hyperplane</em> when <span class="math inline">\(p&gt;3\)</span>.</p>
 </section>
 <section id="case-with-two-predictor-variables" class="level3" data-number="10.3.2">
 <h3 data-number="10.3.2" class="anchored" data-anchor-id="case-with-two-predictor-variables"><span class="header-section-number">10.3.2</span> Case with Two Predictor Variables</h3>
-<p>When there are two predictor variables (<span class="math inline">\(p=3\)</span>), we will take three partial derivatives of <a href="#eq-w4_3">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_3</span></a> with respect to <span class="math inline">\(b_0\)</span>, <span class="math inline">\(b_1\)</span>, and <span class="math inline">\(b_2\)</span>. This leads us to <span id="eq-w4_4"><span class="math display">\[
+<p>When there are two predictor variables (<span class="math inline">\(p=3\)</span>), we will take three partial derivatives of <a href="#eq-w4_3">Equation&nbsp;<span>10.3</span></a> with respect to <span class="math inline">\(b_0\)</span>, <span class="math inline">\(b_1\)</span>, and <span class="math inline">\(b_2\)</span>. This leads us to <span id="eq-w4_4"><span class="math display">\[
 \begin{align}
 \frac{\partial Q}{\partial b_{0}} &amp; =-2\sum\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\
 \frac{\partial Q}{\partial b_{1}} &amp; =-2\sum x_{i1}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\

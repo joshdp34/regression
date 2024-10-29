@@ -210,6 +210,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -328,7 +334,7 @@ y, x_1, x_2, \ldots, x_k
 <p>For <em>observational data</em> no control is exerted over the independent variables (<span class="math inline">\(x\)</span>’s). For example, recording people’s ages and their corresponding blood pressure levels without influencing either.</p>
 <p>For <em>experimental data</em> the independent variables are controlled or manipulated. For instance, setting different fertilizer amounts for crops to observe the impact on growth.</p>
 <p>Suppose you want to model a student’s annual GPA (<span class="math inline">\(y\)</span>). One approach is to randomly select a sample of <span class="math inline">\(n=100\)</span> students and record their GPA along with the values of each predictor variable.</p>
-<p>Data for the first three students in the sample are shown in <a href="#tbl-table1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table1</span></a>.</p>
+<p>Data for the first three students in the sample are shown in <a href="#tbl-table1">Table&nbsp;<span>1.1</span></a>.</p>
 <div id="tbl-table1" class="anchored">
 <table class="table">
 <caption>Table&nbsp;1.1: Values of the response variable and predictor variables for the first three students.</caption>
@@ -399,14 +405,14 @@ y, x_1, x_2, \ldots, x_k
 <p>To ensure a sufficient sample size, a common guideline is to select a sample size <span class="math inline">\(n\)</span> that is at least 10 times the number of parameters in the model.</p>
 <p>For instance, if a university registrar’s office uses the following model for the annual GPA <span class="math inline">\(y\)</span> of a current student:</p>
 <p><span class="math display">\[E(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_6 x_6\]</span></p>
-<p>where <span class="math inline">\(x_1, x_2, \dots, x_6\)</span> are defined in <a href="#tbl-table1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table1</span></a>, the model includes six <span class="math inline">\(\beta\)</span> parameters (excluding <span class="math inline">\(\beta_0\)</span>). Therefore, they should include at least:</p>
+<p>where <span class="math inline">\(x_1, x_2, \dots, x_6\)</span> are defined in <a href="#tbl-table1">Table&nbsp;<span>1.1</span></a>, the model includes six <span class="math inline">\(\beta\)</span> parameters (excluding <span class="math inline">\(\beta_0\)</span>). Therefore, they should include at least:</p>
 <p><span class="math display">\[ 10 \times 6 = 60 \]</span></p>
 <p>students in the sample.</p>
 </section>
 <section id="experimental-data" class="level4">
 <h4 class="anchored" data-anchor-id="experimental-data">Experimental Data</h4>
 <p>The second type of data in regression, <em>experimental</em> data, is generated through designed experiments where the independent variables are <em>set</em> in advance (i.e., controlled) before observing the value of <span class="math inline">\(y\)</span>.</p>
-<p>For instance, consider a scenario where a researcher wants to study the effect of two independent variables—say, fertilizer amount <span class="math inline">\(x_1\)</span> and irrigation level <span class="math inline">\(x_2\)</span>—on the growth rate <span class="math inline">\(y\)</span> of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the <span class="math inline">\(3\times 3=9\)</span> fertilizer–irrigation combinations (see <a href="#tbl-table1_2">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table1_2</span></a> below).</p>
+<p>For instance, consider a scenario where a researcher wants to study the effect of two independent variables—say, fertilizer amount <span class="math inline">\(x_1\)</span> and irrigation level <span class="math inline">\(x_2\)</span>—on the growth rate <span class="math inline">\(y\)</span> of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the <span class="math inline">\(3\times 3=9\)</span> fertilizer–irrigation combinations (see <a href="#tbl-table1_2">Table&nbsp;<span>1.2</span></a> below).</p>
 <div id="tbl-table1_2" class="anchored">
 <table class="table">
 <caption>Table&nbsp;1.2: Values of the response variable and two independent variables for the growth rate of plants.</caption>

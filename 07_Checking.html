@@ -244,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -334,7 +340,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 \sum y_{i} &amp; =\sum\hat{y}_{i}
 \end{align}
 \tag{7.2}\]</span></span></p>
-<p>Clearly, from <a href="#eq-w1_20-23">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_20-23</span></a>, the mean of the residuals is <span id="eq-w3_1"><span class="math display">\[
+<p>Clearly, from <a href="#eq-w1_20-23">Equation&nbsp;<span>7.2</span></a>, the mean of the residuals is <span id="eq-w3_1"><span class="math display">\[
 \begin{align}
     \bar{e}_i=0
 \end{align}
@@ -351,8 +357,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="semistudentized-residuals" class="level3" data-number="7.1.4">
 <h3 data-number="7.1.4" class="anchored" data-anchor-id="semistudentized-residuals"><span class="header-section-number">7.1.4</span> Semistudentized Residuals</h3>
 <p>It will be helpful to <em>studentize</em> each residuals. As always, we do this by subtracting off the mean, <span class="math inline">\(\bar{e}_{i}\)</span>, and dividing by the standard error of <span class="math inline">\(e_{i}\)</span>.</p>
-<p>We know by <a href="#eq-w3_1">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w3_1</span></a> that <span class="math inline">\(\bar{e}_{i}=0\)</span>.</p>
-<p>In <a href="#eq-w3_2">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w3_2</span></a>, we said the variance of the sample of the <span class="math inline">\(e_{i}\)</span>’s is MSE. For each individual <span class="math inline">\(e_{i}\)</span>, the standard error is not quite <span class="math inline">\(\sqrt{MSE}\)</span>. The actual standard error is dependent on the predictor variable(s). We will discuss this more in multiple regression.</p>
+<p>We know by <a href="#eq-w3_1">Equation&nbsp;<span>7.3</span></a> that <span class="math inline">\(\bar{e}_{i}=0\)</span>.</p>
+<p>In <a href="#eq-w3_2">Equation&nbsp;<span>7.4</span></a>, we said the variance of the sample of the <span class="math inline">\(e_{i}\)</span>’s is MSE. For each individual <span class="math inline">\(e_{i}\)</span>, the standard error is not quite <span class="math inline">\(\sqrt{MSE}\)</span>. The actual standard error is dependent on the predictor variable(s). We will discuss this more in multiple regression.</p>
 <p>For now, we will use the approximation <span class="math inline">\(\sqrt{MSE}\)</span> and calculate <span class="math display">\[\begin{align*}
 e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
 &amp; =\frac{e_{i}}{\sqrt{MSE}}
@@ -511,7 +517,7 @@ d_{ik}=|e_{ik}-\bar{e}_{j}|
 <p>If the variance is non-constant, then the slope of this line will be non-zero. Thus, a test for the slope is conducted. A small p-value is evidence that the variance is non-constant.</p>
 <p>Because it is testing the slope, the Brown-Forsythe test assumes the error terms are independent and normally distributed.</p>
 <div id="exm-w3_3_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 7.3 (<a href="#exm-w3_3_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-w3_3_1</span></a> revisited) </strong></span>Let’s examine the blood pressure data from <a href="#exm-w3_3_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-w3_3_1</span></a> again.</p>
+<p><span class="theorem-title"><strong>Example 7.3 (<a href="#exm-w3_3_1">Example&nbsp;<span>7.2</span></a> revisited) </strong></span>Let’s examine the blood pressure data from <a href="#exm-w3_3_1">Example&nbsp;<span>7.2</span></a> again.</p>
 <p>If you want the Brown-Forsythe test, then you will need to determine the <span class="math inline">\(k\)</span> groups yourself and then use the <code>bf.test</code> function in <code>onewaytests</code> package.</p>
 <p>In the <code>lmtest</code> package, the Breusch-Pagan test can be conducted by using the <code>bptest</code> function.</p>
 <div class="cell">

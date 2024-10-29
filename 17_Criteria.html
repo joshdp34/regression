@@ -64,6 +64,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./18_Stepwise.html" rel="next">
 <link href="./16_Linearity.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -243,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -350,7 +357,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Since <span class="math inline">\(R^2_{p}\)</span> does not take account of the number of parameters in the regression model and since max(<span class="math inline">\(R^2_{p}\)</span>) can never decrease as <span class="math inline">\(p\)</span> increases, the <em>adjusted</em> coefficient of multiple determination <span class="math inline">\(R^2_{a,p}\)</span> has been suggested as an alternative criterion.</p>
 <p>This coefficient takes the number of parameters in the regression model into account through the degrees of freedom.</p>
 <p>Users of the <span class="math inline">\(R^2_{a,p}\)</span> criterion seek to find a few subsets for which <span class="math inline">\(R^2_{a,p}\)</span> is at the maximum or so close to the maximum that adding more variables is not worthwhile.</p>
-<p>The <span class="math inline">\(R^2_{a,p}\)</span> criterion is equivalent to using the mean square error <span class="math inline">\(SSE_p\)</span> as the criterion. This come from the relationship in <a href="#eq-w4_44">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_44</span></a> <span class="math display">\[
+<p>The <span class="math inline">\(R^2_{a,p}\)</span> criterion is equivalent to using the mean square error <span class="math inline">\(SSE_p\)</span> as the criterion. This come from the relationship in <a href="13_Inferences.html#eq-w4_44">Equation&nbsp;<span>13.7</span></a> <span class="math display">\[
 \begin{align*}
 R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
 &amp; =1-\left(\frac{n-1}{n-p}\right)\frac{SSE}{SSTO}\\
@@ -369,7 +376,9 @@ AIC_{p} &amp; =n\ln SSE_{p}-n\ln n+2p\\
 BIC_{p} &amp; =n\ln SSE_{p}-n\ln n+\left(\ln n\right)p
 \end{align}
 \tag{17.1}\]</span></span></p>
-<p>Notice that for both of these measures, the first term is which decreases as <span class="math inline">\(p\)</span> increases.</p>
+<p>Notice that for both of these measures, the first term is <span class="math display">\[
+n\ln SSE_{p}
+\]</span> which decreases as <span class="math inline">\(p\)</span> increases.</p>
 <p>The second term is fixed (for a given sample size <span class="math inline">\(n\)</span>), and the third term increases with the number of parameters, <span class="math inline">\(p\)</span>.</p>
 <p>Models with small <span class="math inline">\(SSE_p\)</span> will do well by these criteria as long as the penalties <span class="math display">\[
 \begin{align*}
@@ -406,7 +415,7 @@ PRESS_p = \sum_{i=1}^n\left(y_i - \hat{y}_{i(i)} \right)^2
 \end{align}
 \tag{17.3}\]</span></span> Large values of pred <span class="math inline">\(R_{p}^{2}\)</span> indicates a model that is “good” at prediction.</p>
 <div id="exm-17_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 17.1 </strong></span>We can obtain <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2_a\)</span>, <span class="math inline">\(AIC\)</span>, and <span class="math inline">\(BIC\)</span> using the <code>glance</code> function after fitting a model. Let’s examine the fit to <code>mtcars</code> in <a href="#exm-16_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-16_2</span></a>.</p>
+<p><span class="theorem-title"><strong>Example 17.1 </strong></span>We can obtain <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2_a\)</span>, <span class="math inline">\(AIC\)</span>, and <span class="math inline">\(BIC\)</span> using the <code>glance</code> function after fitting a model. Let’s examine the fit to <code>mtcars</code> in <a href="16_Linearity.html#exm-16_2">Example&nbsp;<span>16.2</span></a>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -690,6 +699,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
+      <a href="./18_Stepwise.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
   </div>
 </nav>
 </div> <!-- /content -->

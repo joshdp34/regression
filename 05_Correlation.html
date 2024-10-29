@@ -244,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -319,7 +325,7 @@ SS_{xy} &amp;= \sum\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)
 <p><span class="math inline">\(SS_{xx}\)</span> and <span class="math inline">\(SS_{yy}\)</span> are measures of <em>variability</em> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, respectively. That is, they indicate how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> varies about their mean, individually.</p>
 <p><span class="math inline">\(SS_{xy}\)</span> is a measure of how <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> vary <em>together</em>.</p>
 <div id="exm-5_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.1 (Data from <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a>) </strong></span>For example, consider the data from <a href="#tbl-table2_1">Table&nbsp;<span class="quarto-unresolved-ref">tbl-table2_1</span></a>. Let’s find <span class="math inline">\(SS_{xx}\)</span>, <span class="math inline">\(SS_{yy}\)</span>, and <span class="math inline">\(SS_{xy}\)</span> in R.</p>
+<p><span class="theorem-title"><strong>Example 5.1 (Data from <a href="02_Fitting.html#tbl-table2_1">Table&nbsp;<span>2.1</span></a>) </strong></span>For example, consider the data from <a href="02_Fitting.html#tbl-table2_1">Table&nbsp;<span>2.1</span></a>. Let’s find <span class="math inline">\(SS_{xx}\)</span>, <span class="math inline">\(SS_{yy}\)</span>, and <span class="math inline">\(SS_{xy}\)</span> in R.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -504,7 +510,7 @@ SS_{xy} &amp;= \sum\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)
 </section>
 <section id="some-examples-of-r" class="level3" data-number="5.1.2">
 <h3 data-number="5.1.2" class="anchored" data-anchor-id="some-examples-of-r"><span class="header-section-number">5.1.2</span> Some Examples of <span class="math inline">\(r\)</span></h3>
-<p>The best way to grasp correlation is to see examples. In <a href="#fig-05_01">Figure&nbsp;<span class="quarto-unresolved-ref">fig-05_01</span></a>, scatterplots of 200 observations are shown with a least squares line.</p>
+<p>The best way to grasp correlation is to see examples. In <a href="#fig-05_01">Figure&nbsp;<span>5.1</span></a>, scatterplots of 200 observations are shown with a least squares line.</p>
 <div id="fig-05_01" class="quarto-layout-panel">
 <figure class="figure">
 <div class="quarto-layout-row quarto-layout-valign-top">
@@ -558,7 +564,7 @@ SS_{xy} &amp;= \sum\left(x_i-\bar{x}\right)\left(y_i-\bar{y}\right)
   H_0:\rho = 0\\
 H_a:\rho \ne 0
 \end{align*}\]</span></p>
-<p>Recall the hypothesis test for the slope in <a href="#sec-modelutility"><span class="quarto-unresolved-ref">sec-modelutility</span></a>.</p>
+<p>Recall the hypothesis test for the slope in <a href="04_Sampling.html#sec-modelutility"><span>Section&nbsp;4.6</span></a>.</p>
 <p>If we test <span class="math display">\[\begin{align*}
 H_{0}: &amp; \beta_{1}=0\\
 H_{a}: &amp; \beta_{1}\ne0
@@ -566,7 +572,7 @@ H_{a}: &amp; \beta_{1}\ne0
 H_{0}: &amp; \rho=0\\
 H_{a}: &amp; \rho\ne0
 \end{align*}\]</span> since both hypotheses test to see of there is a linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
-<p>Now note, using <a href="#eq-w1_4">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_4</span></a>, that <span class="math inline">\(b_1\)</span> can be rewritten as <span id="eq-w2_14"><span class="math display">\[
+<p>Now note, using <a href="02_Fitting.html#eq-w1_4">Equation&nbsp;<span>2.5</span></a>, that <span class="math inline">\(b_1\)</span> can be rewritten as <span id="eq-w2_14"><span class="math display">\[
 \begin{align}
 b_1 &amp; =\frac{\sum\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
 &amp; =\frac{SS_{xy}}{SS_{xx}}\\
@@ -626,7 +632,7 @@ SSE = \sum \left(y_i - \hat{y}_i\right)^2
 <p>Practical Interpretation:</p>
 <p>About <span class="math inline">\(100(r^2)\%\)</span> of the sample variation in <span class="math inline">\(y\)</span> (measured by the total sum of squares of deviations of the sample <span class="math inline">\(y\)</span>-values about their mean <span class="math inline">\(\bar{y}\)</span>) can be explained by (or attributed to) using <span class="math inline">\(x\)</span> to predict <span class="math inline">\(y\)</span> in the straight-line model.</p>
 <div id="exm-5_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 5.3 (<a href="#exm-5_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-5_2</span></a> revisited) </strong></span>We can find the coefficient of determination using the <code>summary</code> function with an <code>lm</code> object.</p>
+<p><span class="theorem-title"><strong>Example 5.3 (<a href="#exm-5_2">Example&nbsp;<span>5.2</span></a> revisited) </strong></span>We can find the coefficient of determination using the <code>summary</code> function with an <code>lm</code> object.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(datasets)</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a></span>

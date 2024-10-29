@@ -244,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -365,7 +371,7 @@ b_1 &amp; =\frac{\sum\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum\
 </div>
 </div>
 </div>
-<p>From <a href="#eq-w1_5">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w1_5</span></a>, we see that <span class="math inline">\(b_1\)</span> is a linear combination of the <span class="math inline">\(y\)</span>’s since <span class="math inline">\(k_{i}\)</span> are known constants (recall that <span class="math inline">\(x_{i}\)</span> are treated as known constants).</p>
+<p>From <a href="#eq-w1_5">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math inline">\(b_1\)</span> is a linear combination of the <span class="math inline">\(y\)</span>’s since <span class="math inline">\(k_{i}\)</span> are known constants (recall that <span class="math inline">\(x_{i}\)</span> are treated as known constants).</p>
 </section>
 <section id="b_0-as-a-linear-estimator" class="level3" data-number="3.1.3">
 <h3 data-number="3.1.3" class="anchored" data-anchor-id="b_0-as-a-linear-estimator"><span class="header-section-number">3.1.3</span> <span class="math inline">\(b_0\)</span> as a Linear Estimator</h3>
@@ -410,7 +416,7 @@ b_0 &amp; =\bar{y}-b_{1}\bar{x}\\
 <li><p>The probability distribution of <span class="math inline">\(\varepsilon\)</span> is <em>normal</em>.</p></li>
 <li><p>The errors for different observations are <em>independent</em>. In other words, the error for one value of <span class="math inline">\(y\)</span> does not influence the errors for other <span class="math inline">\(y\)</span> values.</p></li>
 </ol>
-<p>The implications of the first three assumptions can be seen in <a href="#fig-3_8">Figure&nbsp;<span class="quarto-unresolved-ref">fig-3_8</span></a>;, which shows distributions of errors for four particular values of <span class="math inline">\(x\)</span>.</p>
+<p>The implications of the first three assumptions can be seen in <a href="#fig-3_8">Figure&nbsp;<span>3.1</span></a>;, which shows distributions of errors for four particular values of <span class="math inline">\(x\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-3_8" class="quarto-figure quarto-figure-center anchored">
@@ -421,7 +427,7 @@ b_0 &amp; =\bar{y}-b_{1}\bar{x}\\
 </div>
 </div>
 </div>
-<p>From <a href="#fig-3_8">Figure&nbsp;<span class="quarto-unresolved-ref">fig-3_8</span></a>, we see that the probability distributions of the errors are <em>normal</em>, with a mean of 0 and a <em>constant</em> variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>From <a href="#fig-3_8">Figure&nbsp;<span>3.1</span></a>, we see that the probability distributions of the errors are <em>normal</em>, with a mean of 0 and a <em>constant</em> variance <span class="math inline">\(\sigma^2\)</span>.</p>
 <p>The line in the middle of the curve that goes to the regression line represents the mean value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. The line of means is given by the equation: <span class="math display">\[
 E(y) = \beta_0 + \beta_1 x
 \]</span></p>
@@ -462,7 +468,7 @@ Review: The Empirical Rule
 </div>
 </div>
 <div id="exm-3_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.2 (<a href="#exm-3_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-3_1</span></a> - revisited) </strong></span>We can use the <code>summary()</code> function with the fit from <code>lm</code> to obtain the summary stats of the fit.</p>
+<p><span class="theorem-title"><strong>Example 3.2 (<a href="#exm-3_1">Example&nbsp;<span>3.1</span></a> - revisited) </strong></span>We can use the <code>summary()</code> function with the fit from <code>lm</code> to obtain the summary stats of the fit.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(mpg<span class="sc">~</span>wt, <span class="at">data =</span> mtcars)</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>

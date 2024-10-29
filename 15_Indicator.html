@@ -244,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -519,7 +525,7 @@ x_{6} &amp; =\begin{cases}
 6 region_Western       -149.       86.8        -1.72   8.68e- 2</code></pre>
 </div>
 </div>
-<p>Note that we did not have to use <code>step_dummy</code> here due to the numbers being turned into factors by <code>step_num2factor</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character into dummy variables. So we did not need to use <code>step_dummy</code> in either <a href="#exm-15_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_1</span></a> or <a href="#exm-15_2">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_2</span></a> either. However, it is good practice to include <code>step_dummy</code> in your recipe when dealing with qualitative variables since it will allow for more control when dealing with complex data.</p>
+<p>Note that we did not have to use <code>step_dummy</code> here due to the numbers being turned into factors by <code>step_num2factor</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character into dummy variables. So we did not need to use <code>step_dummy</code> in either <a href="#exm-15_1">Example&nbsp;<span>15.1</span></a> or <a href="#exm-15_2">Example&nbsp;<span>15.2</span></a> either. However, it is good practice to include <code>step_dummy</code> in your recipe when dealing with qualitative variables since it will allow for more control when dealing with complex data.</p>
 </div>
 
 

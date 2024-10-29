@@ -210,6 +210,12 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -412,8 +418,8 @@ f\left({\bf Y}\right) &amp; =\frac{1}{\left(2\pi\right)^{n/2}\left|\boldsymbol{\
 <h2 data-number="11.3" class="anchored" data-anchor-id="least-squares-and-inferences-using-matrices"><span class="header-section-number">11.3</span> Least Squares and Inferences Using Matrices</h2>
 <section id="least-squares-estimators" class="level3" data-number="11.3.1">
 <h3 data-number="11.3.1" class="anchored" data-anchor-id="least-squares-estimators"><span class="header-section-number">11.3.1</span> Least Squares Estimators</h3>
-<p>For the model in <a href="#eq-w4_18">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_18</span></a> we want to minimize the squared distances between the observed <span class="math inline">\(y_i\)</span> and the fitted <span class="math inline">\(\hat{y}_i\)</span>.</p>
-<p>We will express the sum of the squared distances in <a href="#eq-w4_3">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_3</span></a> in matrix terms as <span id="eq-w4_19"><span class="math display">\[
+<p>For the model in <a href="#eq-w4_18">Equation&nbsp;<span>11.1</span></a> we want to minimize the squared distances between the observed <span class="math inline">\(y_i\)</span> and the fitted <span class="math inline">\(\hat{y}_i\)</span>.</p>
+<p>We will express the sum of the squared distances in <a href="10_Intro_Multiple.html#eq-w4_3">Equation&nbsp;<span>10.3</span></a> in matrix terms as <span id="eq-w4_19"><span class="math display">\[
 \begin{align}
 Q &amp; =\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)
 \end{align}
@@ -428,7 +434,7 @@ b_{p-1}
 </section>
 <section id="minimizing-the-sums-of-squares" class="level3" data-number="11.3.2">
 <h3 data-number="11.3.2" class="anchored" data-anchor-id="minimizing-the-sums-of-squares"><span class="header-section-number">11.3.2</span> Minimizing the Sums of Squares</h3>
-<p>We will minimize <span class="math inline">\(Q\)</span> in <a href="#eq-w4_19">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_19</span></a> by taking the derivative with respect to <span class="math inline">\({\bf b}\)</span> and setting it equal to the vector of zeros. The derivative is done using the properties listed in <a href="#sec-multiple"><span class="quarto-unresolved-ref">sec-multiple</span></a> and using the chain rule: <span class="math display">\[\begin{align*}
+<p>We will minimize <span class="math inline">\(Q\)</span> in <a href="#eq-w4_19">Equation&nbsp;<span>11.2</span></a> by taking the derivative with respect to <span class="math inline">\({\bf b}\)</span> and setting it equal to the vector of zeros. The derivative is done using the properties listed in <a href="10_Intro_Multiple.html"><span>Chapter&nbsp;10</span></a> and using the chain rule: <span class="math display">\[\begin{align*}
 \frac{\partial\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)}{\partial{\bf b}} &amp; =-2{\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)
 \end{align*}\]</span></p>
 <p>Setting this derivative equal to the vector of zeros gives us <span class="math display">\[\begin{align*}
@@ -442,7 +448,7 @@ b_{p-1}
 {\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)={\bf 0} &amp; \Longrightarrow{\bf X}^{\prime}{\bf Y}-{\bf X}^{\prime}{\bf X}{\bf b}={\bf 0}\\
 &amp; \Longrightarrow{\bf X}^{\prime}{\bf X}{\bf b}={\bf X}^{\prime}{\bf Y}
 \end{align}
-\tag{11.3}\]</span></span> Equation <a href="#eq-w4_20">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_20</span></a> represents the <em>normal equations</em> in matrix format.</p>
+\tag{11.3}\]</span></span> Equation <a href="#eq-w4_20">Equation&nbsp;<span>11.3</span></a> represents the <em>normal equations</em> in matrix format.</p>
 </section>
 <section id="the-estimators" class="level3" data-number="11.3.4">
 <h3 data-number="11.3.4" class="anchored" data-anchor-id="the-estimators"><span class="header-section-number">11.3.4</span> The Estimators</h3>
@@ -460,7 +466,7 @@ b_{p-1}
 \hat{{\bf Y}} &amp; ={\bf X}{\bf b}
 \end{align}
 \tag{11.5}\]</span></span></p>
-<p>Substituting <a href="#eq-w4_21">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_21</span></a> for <span class="math inline">\({\bf b}\)</span> gives us <span id="eq-w4_23"><span class="math display">\[
+<p>Substituting <a href="#eq-w4_21">Equation&nbsp;<span>11.4</span></a> for <span class="math inline">\({\bf b}\)</span> gives us <span id="eq-w4_23"><span class="math display">\[
 \begin{align}
 \hat{{\bf Y}}={\bf X}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf Y}
 \end{align}
@@ -484,7 +490,7 @@ b_{p-1}
 &amp; ={\bf Y}-{\bf X}{\bf b}
 \end{align}
 \tag{11.9}\]</span></span></p>
-<p>Using <a href="#eq-w4_25">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_25</span></a>, the residuals can be expressed in terms of the hat matrix as well <span id="eq-w4_27"><span class="math display">\[
+<p>Using <a href="#eq-w4_25">Equation&nbsp;<span>11.8</span></a>, the residuals can be expressed in terms of the hat matrix as well <span id="eq-w4_27"><span class="math display">\[
 \begin{align}
 {\bf e} &amp; ={\bf Y}-{\bf H}{\bf Y}\\
 &amp; =\left({\bf I}-{\bf H}\right){\bf Y}

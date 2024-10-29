@@ -244,6 +244,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
   </div>
 </li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
     </ul>
     </div>
 </nav>
@@ -418,7 +424,7 @@ R^{2} &amp; ={\frac{SSR}{SSTO}}\\
 <p>The interpretation is still the same: it gives the proportion of the variation in <span class="math inline">\(y\)</span> explained by the model using the predictor variables.</p>
 <section id="adjusted-coefficient-of-determination" class="level3" data-number="13.2.1">
 <h3 data-number="13.2.1" class="anchored" data-anchor-id="adjusted-coefficient-of-determination"><span class="header-section-number">13.2.1</span> Adjusted Coefficient of Determination</h3>
-<p>It is of importance to note that <span class="math inline">\(R^{2}\)</span> cannot decrease when adding another <span class="math inline">\(x\)</span> to the model. It can either <em>increase</em> (if the new <span class="math inline">\(x\)</span> explains more of the variability of <span class="math inline">\(y\)</span>) or stay the <em>same</em> (if the new <span class="math inline">\(x\)</span> does not explain more of the variability of <span class="math inline">\(y\)</span>). This can be seen in <a href="#eq-w4_43">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_43</span></a> by noting that SSE cannot become larger by including more <span class="math inline">\(X\)</span> variables and SSTO stays the same regardless of which <span class="math inline">\(X\)</span> variables are used.</p>
+<p>It is of importance to note that <span class="math inline">\(R^{2}\)</span> cannot decrease when adding another <span class="math inline">\(x\)</span> to the model. It can either <em>increase</em> (if the new <span class="math inline">\(x\)</span> explains more of the variability of <span class="math inline">\(y\)</span>) or stay the <em>same</em> (if the new <span class="math inline">\(x\)</span> does not explain more of the variability of <span class="math inline">\(y\)</span>). This can be seen in <a href="#eq-w4_43">Equation&nbsp;<span>13.6</span></a> by noting that SSE cannot become larger by including more <span class="math inline">\(X\)</span> variables and SSTO stays the same regardless of which <span class="math inline">\(X\)</span> variables are used.</p>
 <p>Because of this, <span class="math inline">\(R^{2}\)</span> cannot be used for comparing the fit of models with different subsets of the <span class="math inline">\(x\)</span> variables.</p>
 <p>A modified version of the <span class="math inline">\(R^{2}\)</span> could be used that adjusts for the number of <span class="math inline">\(X\)</span> variables. It is called the <em>adjusted</em> coefficient of determination denoted as <span class="math inline">\(R_{a}^{2}\)</span>.</p>
 <p>In <span class="math inline">\(R_{a}^{2}\)</span>, SSE and SSTO are divided by their respective degrees of freedom: <span id="eq-w4_44"><span class="math display">\[
@@ -477,7 +483,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 \end{align}
 \tag{13.13}\]</span></span></p>
 <div id="exm-13_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 13.2 (<a href="#exm-13_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-13_1</span></a> revisited) </strong></span>For the bodyfat data, suppose we want to predict and estimate at <code>tri=25</code>, <code>thigh=51.2</code>, and <code>midarm=24.9</code>. We will use the <code>predict</code> function.</p>
+<p><span class="theorem-title"><strong>Example 13.2 (<a href="#exm-13_1">Example&nbsp;<span>13.1</span></a> revisited) </strong></span>For the bodyfat data, suppose we want to predict and estimate at <code>tri=25</code>, <code>thigh=51.2</code>, and <code>midarm=24.9</code>. We will use the <code>predict</code> function.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>new_dat <span class="ot">=</span> <span class="fu">tibble</span>(<span class="at">tri=</span><span class="dv">25</span>, <span class="at">thigh=</span><span class="fl">51.2</span>, <span class="at">midarm =</span> <span class="fl">24.9</span>)</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -681,7 +687,7 @@ SSE_R - SSE_C
 \]</span></p>
 <p>When the candidate models in model building are nested models, the <span class="math inline">\(F\)</span>-Test is the appropriate procedure to apply to compare the models. However, if the models are not nested, this <span class="math inline">\(F\)</span>-Test is not applicable. In this situation, the analyst must base the choice of the best model on statistics such as <span class="math inline">\(R^2_a\)</span>. It is important to remember that decisions based on these and other numerical descriptive measures of model adequacy cannot be supported with a measure of reliability and are often very subjective in nature.</p>
 <div id="exm-13_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 13.3 (<a href="#exm-13_1">Example&nbsp;<span class="quarto-unresolved-ref">exm-13_1</span></a> revisited - Nested F-test) </strong></span>Suppose, for some reason, we were to hypothesize that model needed the term <code>midarm^2</code>. Let’s conduct a nested F-test to see if this extra term is significant.</p>
+<p><span class="theorem-title"><strong>Example 13.3 (<a href="#exm-13_1">Example&nbsp;<span>13.1</span></a> revisited - Nested F-test) </strong></span>Suppose, for some reason, we were to hypothesize that model needed the term <code>midarm^2</code>. Let’s conduct a nested F-test to see if this extra term is significant.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>

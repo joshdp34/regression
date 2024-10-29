@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 18&nbsp; Stepwise and Best Subsets Regresion</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./17_Criteria.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./18_Stepwise.html"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Indicator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#best-subsets-procedure" id="toc-best-subsets-procedure" class="nav-link active" data-scroll-target="#best-subsets-procedure"><span class="header-section-number">18.1</span> Best Subsets Procedure</a>
+  <ul class="collapse">
+  <li><a href="#choosing-a-subset-of-models" id="toc-choosing-a-subset-of-models" class="nav-link" data-scroll-target="#choosing-a-subset-of-models"><span class="header-section-number">18.1.1</span> Choosing a Subset of Models</a></li>
+  </ul></li>
+  <li><a href="#stepwise-regression-procedures" id="toc-stepwise-regression-procedures" class="nav-link" data-scroll-target="#stepwise-regression-procedures"><span class="header-section-number">18.2</span> Stepwise Regression Procedures</a>
+  <ul class="collapse">
+  <li><a href="#stepwise-regression" id="toc-stepwise-regression" class="nav-link" data-scroll-target="#stepwise-regression"><span class="header-section-number">18.2.1</span> Stepwise Regression</a></li>
+  <li><a href="#limitations-of-stepwise-methods" id="toc-limitations-of-stepwise-methods" class="nav-link" data-scroll-target="#limitations-of-stepwise-methods"><span class="header-section-number">18.2.2</span> Limitations of Stepwise Methods</a></li>
+  <li><a href="#forward-stepwise-regression" id="toc-forward-stepwise-regression" class="nav-link" data-scroll-target="#forward-stepwise-regression"><span class="header-section-number">18.2.3</span> Forward Stepwise Regression</a></li>
+  <li><a href="#other-stepwise-procedures" id="toc-other-stepwise-procedures" class="nav-link" data-scroll-target="#other-stepwise-procedures"><span class="header-section-number">18.2.4</span> Other Stepwise Procedures</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“Statistics cannot be any smarter than the people who use them. And in some cases, they can make smart people do dumb things.” - Charles Wheelan</p>
+</blockquote>
+<p>We now discuss ways to determine a several potential subsets of predictor variables.</p>
+<p>We start by discussing the criteria that could be used for comparing different models.</p>
+<section id="best-subsets-procedure" class="level2" data-number="18.1">
+<h2 data-number="18.1" class="anchored" data-anchor-id="best-subsets-procedure"><span class="header-section-number">18.1</span> Best Subsets Procedure</h2>
+<p>As noted previously, the number of possible models, <span class="math display">\[
+2^{p-1}
+\]</span> grows rapidly with the number of predictors.</p>
+<p>Evaluating all of the possible alternatives can be a daunting endeavor. However, for small <span class="math inline">\(p\)</span> and a sample size that is not too large, we can fit all the possible models. From all of the models, we can pick a few models that are close in some criterion that we can examine further.</p>
+<p>When the pool of potential predictor variables is very large, the “best” subset algorithms may require excessive computer time.</p>
+<p>Under these conditions, one of the stepwise regression procedures, described next, may need to be employed to assist in the selection of predictor variables.</p>
+<div id="exm-18_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 18.1 (Surgical Unit data) </strong></span>The surgical unit data is available from the <code>olsrr</code> library. This library also has functions for conducting subsets regression.</p>
+<p>This data is originally from Kutner<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. It consists of data about survival of patients undergoing a liver operation. The response variable is number of days the patient survived after the operation. We will actually model the natural log of the survival time. The predictor variables are:</p>
+<ul>
+<li><code>bcs</code>: blood clotting score</li>
+<li><code>pindex</code>: prognistic index</li>
+<li><code>enzyme_test</code>: enzyme function test score</li>
+<li><code>liver_test</code>: liver function test score</li>
+<li><code>age</code>: age, in years</li>
+<li><code>gender</code>: indicator variable for gender (0=male, 1=female)</li>
+<li><code>alc_mod</code>: indicator variable for history of alcohol use (1=Moderate, 0=otherwise)</li>
+<li><code>alc_heavy</code>: indicator variable for history of alcohol use (1=Heavy, 0=otherwise)</li>
+</ul>
+<p>The <code>tidymodels</code> library does not have functions to do subsets regression (we will use <code>olsrr</code> instead).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> surgical <span class="sc">|&gt;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">ln_y =</span> <span class="fu">log</span>(y)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>dat <span class="sc">|&gt;</span> <span class="fu">ggpairs</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="18_Stepwise_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>No obvious nonlinear relationships seen from the scatterplot matrix.</p>
+<p>Let’s first fit all <span class="math inline">\(2^8=258\)</span> models using the <code>ols_step_all_possible</code> function.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> <span class="fu">lm</span>(ln_y <span class="sc">~</span> bcs <span class="sc">+</span> pindex <span class="sc">+</span> enzyme_test <span class="sc">+</span> liver_test<span class="sc">+</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                      age <span class="sc">+</span> gender <span class="sc">+</span> alc_mod <span class="sc">+</span> alc_heavy, <span class="at">data =</span> dat)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>fits <span class="ot">=</span> <span class="fu">ols_step_all_possible</span>(fit)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(fits)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="18_Stepwise_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="18_Stepwise_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>From these plots, we can determine a few models that may be of interest to us. Suppose that we want the model 93 which appears to be the best model with four predictors by all of the criteria. We can find this model in the subsets with the following code.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>fits <span class="sc">|&gt;</span> </span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(mindex <span class="sc">==</span> <span class="dv">93</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Index N                       Predictors  R-Square Adj. R-Square Mallow's Cp
+1    93 4 bcs pindex enzyme_test alc_heavy 0.8299187     0.8160345    5.733992</code></pre>
+</div>
+</div>
+<p>If we want to just examine the best subset of predictors for each value of <span class="math inline">\(p\)</span>, then we can use the <code>ols_step_best_subset</code> function. This will return the criteria for only the best combination of predictors for each <span class="math inline">\(p\)</span>. The difference between <code>ols_step_best_subset</code> and <code>ols_step_all_possible</code> is that <code>ols_step_all_possible</code> does return every possible model whereas <code>ols_step_best_subset</code> returns only the best models.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>subset <span class="ot">=</span> <span class="fu">ols_step_best_subset</span>(fit) </span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>subset</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                           Best Subsets Regression                           
+-----------------------------------------------------------------------------
+Model Index    Predictors
+-----------------------------------------------------------------------------
+     1         enzyme_test                                                    
+     2         pindex enzyme_test                                             
+     3         pindex enzyme_test alc_heavy                                   
+     4         bcs pindex enzyme_test alc_heavy                               
+     5         bcs pindex enzyme_test gender alc_heavy                        
+     6         bcs pindex enzyme_test age gender alc_heavy                    
+     7         bcs pindex enzyme_test age gender alc_mod alc_heavy            
+     8         bcs pindex enzyme_test liver_test age gender alc_mod alc_heavy 
+-----------------------------------------------------------------------------
+
+                                                   Subsets Regression Summary                                                   
+--------------------------------------------------------------------------------------------------------------------------------
+                       Adj.        Pred                                                                                          
+Model    R-Square    R-Square    R-Square      C(p)        AIC        SBIC         SBC       MSEP      FPE       HSP       APC  
+--------------------------------------------------------------------------------------------------------------------------------
+  1        0.4273      0.4162      0.3496    117.4783    51.4343    -105.4395    57.4013    7.6160    0.1463    0.0028    0.6168 
+  2        0.6632      0.6500      0.6044     50.4918    24.7668    -131.5971    32.7228    4.5684    0.0893    0.0017    0.3765 
+  3        0.7780      0.7647      0.7291     18.9015     4.2432    -150.4023    14.1881    3.0718    0.0610    0.0012    0.2575 
+  4        0.8299      0.8160      0.7863      5.7340    -8.1306    -160.5329     3.8033    2.4030    0.0486     9e-04    0.2048 
+  5        0.8375      0.8205      0.7828      5.5282    -8.5803    -160.2288     5.3426    2.3453    0.0482     9e-04    0.2032 
+  6        0.8435      0.8235      0.7836      5.7725    -8.6129    -159.4064     7.2990    2.3077    0.0482     9e-04    0.2032 
+  7        0.8460      0.8226      0.7807      7.0288    -7.4974    -157.6344    10.4035    2.3207    0.0492    0.0010    0.2076 
+  8        0.8461      0.8187      0.7711      9.0000    -5.5320    -155.2573    14.3579    2.3719    0.0511    0.0010    0.2154 
+--------------------------------------------------------------------------------------------------------------------------------
+AIC: Akaike Information Criteria 
+ SBIC: Sawa's Bayesian Information Criteria 
+ SBC: Schwarz Bayesian Criteria 
+ MSEP: Estimated error of prediction, assuming multivariate normality 
+ FPE: Final Prediction Error 
+ HSP: Hocking's Sp 
+ APC: Amemiya Prediction Criteria </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(subset)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="18_Stepwise_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="cell-output-display">
+<p><img src="18_Stepwise_files/figure-html/unnamed-chunk-4-2.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>This dataset does not take too long to run with all possible models. However, some datasets will have many more possible predictors and more observations. Using <code>ols_step_all_possible</code> will take too long. We can then use an automatic search method.</p>
+</div>
+<section id="choosing-a-subset-of-models" class="level3" data-number="18.1.1">
+<h3 data-number="18.1.1" class="anchored" data-anchor-id="choosing-a-subset-of-models"><span class="header-section-number">18.1.1</span> Choosing a Subset of Models</h3>
+<p>The best subsets regressions procedure leads to the identification of a small number of subsets that are “good” according to a specified criterion.</p>
+<p>Sometimes, one may wish to consider more than one criterion in evaluating possible subsets of predictor variables.</p>
+<p>Once the investigator has identified a few “good” subsets for intensive examination, a final choice of the model variables must be made.</p>
+<p>This choice is aided by examining outliers, checking model assumptions, and by the investigator’s knowledge of the subject under study, and is finally confirmed through model validation studies.</p>
+</section>
+</section>
+<section id="stepwise-regression-procedures" class="level2" data-number="18.2">
+<h2 data-number="18.2" class="anchored" data-anchor-id="stepwise-regression-procedures"><span class="header-section-number">18.2</span> Stepwise Regression Procedures</h2>
+<section id="stepwise-regression" class="level3" data-number="18.2.1">
+<h3 data-number="18.2.1" class="anchored" data-anchor-id="stepwise-regression"><span class="header-section-number">18.2.1</span> Stepwise Regression</h3>
+<p>In those occasional cases when the pool of potential predictor variables contains 30 to 40 or even more variables, use of a “best” subsets algorithm may not be feasible.</p>
+<p>An automatic search procedure that develops the “best” subset of <span class="math inline">\(X\)</span> variables <em>sequentially</em> may then be helpful.</p>
+<p>The <em>forward</em> <em>stepwise</em> <em>regression</em> procedure is probably the most widely used of the automatic search methods.</p>
+<p>It was developed to economize on computational efforts as compared with the various all-possible-regressions procedures. Essentially, this search method develops a sequence of regression models, at each step <em>adding</em> or <em>deleting</em> an <span class="math inline">\(X\)</span> variable.</p>
+<p>The criterion for adding or deleting an <span class="math inline">\(X\)</span> variable can be stated equivalently in terms of error sum of squares reduction, <span class="math inline">\(t^*\)</span> statistic, <span class="math inline">\(F^*\)</span> statistic, AIC, or BIC.</p>
+</section>
+<section id="limitations-of-stepwise-methods" class="level3" data-number="18.2.2">
+<h3 data-number="18.2.2" class="anchored" data-anchor-id="limitations-of-stepwise-methods"><span class="header-section-number">18.2.2</span> Limitations of Stepwise Methods</h3>
+<p>An essential difference between stepwise procedures and the “best” subsets algorithm is that stepwise search procedures end with the identification of a <em>single</em> regression model as “best.”</p>
+<p>With the “best” subsets algorithm, on the other hand. several regression models can be identified as “good” for final consideration.</p>
+<p>The identification of a single regression model as “best” by the stepwise procedures is a major weakness of these procedures.</p>
+<p>Experience has shown that each of the stepwise search procedures can sometimes err by identifying a suboptimal regression model as “best.”</p>
+<p>In addition, the identification of a single regression model may hide the fact that several other regression models may also be “good.”</p>
+<p>Finally, the “goodness” of a regression model can only be established by a thorough examination using a variety of diagnostics.</p>
+<p>What then can we do on those occasions when the pool of potential <span class="math inline">\(X\)</span> variables is very large and an automatic search procedure must be utilized? Basically, we should use the subset identified by the automatic search procedure as a starting point for searching for other “good” subsets.</p>
+<p>One possibility is to treat the number of <span class="math inline">\(X\)</span> variables in the regression model identified by the automatic search procedure as being about the right subset size and then use the “best” subsets procedure for subsets of this and nearby sizes.</p>
+</section>
+<section id="forward-stepwise-regression" class="level3" data-number="18.2.3">
+<h3 data-number="18.2.3" class="anchored" data-anchor-id="forward-stepwise-regression"><span class="header-section-number">18.2.3</span> Forward Stepwise Regression</h3>
+<p>We shall describe the forward stepwise regression search algorithm in terms of the AIC statistic.</p>
+<ul>
+<li><p>The stepwise regression routine first fits a simple linear regression model for each of the <span class="math inline">\(P - 1\)</span> potential <span class="math inline">\(X\)</span> variables.</p>
+<p>For each simple linear regression model, the AIC statistic is obtained.</p>
+<p>The X variable with the smallest AIC is the candidate for first addition.</p></li>
+<li><p>Assume <span class="math inline">\(x_7\)</span> is the variable entered at step 1. The stepwise regression routine now fits all regression models with two <span class="math inline">\(X\)</span> variables, where <span class="math inline">\(x_7\)</span> is one of the pair.</p>
+<p>For each such regression model, the AIC corresponding to the newly added predictor <span class="math inline">\(x_k\)</span> is obtained.</p>
+<p>The <span class="math inline">\(X\)</span> variable with the smallest AIC is the candidate for addition at the second stage.</p>
+<p>If the AIC is smaller than AIC for model in the previous step (in this case, the model with only <span class="math inline">\(x_7\)</span>), then that variable is added to the model that already has <span class="math inline">\(x_7\)</span>. Otherwise, the program terminates.</p></li>
+<li><p>Suppose <span class="math inline">\(x_3\)</span> is added at the second stage. Now the stepwise regression routine examines whether any of the other <span class="math inline">\(X\)</span> variables already in the model should be dropped.</p>
+<p>For our illustration, there is at this stage only one other <span class="math inline">\(X\)</span> variable in the model, <span class="math inline">\(x_7\)</span>. At later stages, there would be a number of variables in the model besides the one last added.</p>
+<p>The variable with the largest AIC is the candidate for deletion. If this AIC exceeds the AIC for when the variable is not in the model, the variable is dropped from the model; otherwise, it is retained.</p></li>
+<li><p>Suppose <span class="math inline">\(x_7\)</span> is retained so that both <span class="math inline">\(x_3\)</span> and <span class="math inline">\(x_7\)</span> are now in the model.</p>
+<p>The stepwise regression routine now examines which <span class="math inline">\(X\)</span> variable is the next candidate for addition, then examines whether any of the variables already in the model should now be dropped, and so on until no further <span class="math inline">\(X\)</span> variables can either be added or deleted, at which point the search terminates.</p></li>
+</ul>
+<p>Note that the stepwise regression algorithm allows a predictor variable, brought into the model at an earlier stage, to be dropped subsequently if it is no longer helpful in conjunction with variables added at later stages.</p>
+</section>
+<section id="other-stepwise-procedures" class="level3" data-number="18.2.4">
+<h3 data-number="18.2.4" class="anchored" data-anchor-id="other-stepwise-procedures"><span class="header-section-number">18.2.4</span> Other Stepwise Procedures</h3>
+<p>Other stepwise procedures are available to find a ``best” subset of predictor variables. We mention two of these.</p>
+<section id="forward-selection" class="level4">
+<h4 class="anchored" data-anchor-id="forward-selection">Forward Selection</h4>
+<p>The <em>forward</em> <em>selection</em> search procedure is a simplified version of forward stepwise regression, omitting the test whether a variable once entered into the model should be dropped.</p>
+</section>
+<section id="backward-elimination" class="level4">
+<h4 class="anchored" data-anchor-id="backward-elimination">Backward Elimination</h4>
+<p>The <em>backward</em> <em>elimination</em> search procedure is the opposite of forward selection.</p>
+<p>It begins with the model containing all potential <span class="math inline">\(X\)</span> variables and identifies the one with the largest AIC. If the maximum AIC is greater than the full model, that <span class="math inline">\(X\)</span> variable is dropped.</p>
+<p>The model with the remaining <span class="math inline">\(P - 2\)</span> <span class="math inline">\(X\)</span> variables is then fitted, and the next candidate for dropping is identified.</p>
+<p>This process continues until no further <span class="math inline">\(X\)</span> variables can be dropped.</p>
+<p>A stepwise modification can also be adapted that allows variables eliminated earlier to be added later: this modification is called the <em>backward</em> <em>stepwise</em> regression procedure.</p>
+<div id="exm-18_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 18.2 (<a href="#exm-18_1">Example&nbsp;<span>18.1</span></a> revisted) </strong></span>Let use forward stepwise to find a model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> surgical <span class="sc">|&gt;</span> </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="at">ln_y =</span> <span class="fu">log</span>(y)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>forward_step <span class="ot">=</span> <span class="fu">ols_step_both_aic</span>(fit, <span class="at">details =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Stepwise Selection Method 
+-------------------------
+
+Candidate Terms: 
+
+1 . bcs 
+2 . pindex 
+3 . enzyme_test 
+4 . liver_test 
+5 . age 
+6 . gender 
+7 . alc_mod 
+8 . alc_heavy 
+
+ Step 0: AIC = 79.52928 
+ ln_y ~ 1 
+
+
+Variables Entered/Removed: 
+
+                          Enter New Variables                        
+---------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS      R-Sq     Adj. R-Sq 
+---------------------------------------------------------------------
+enzyme_test     1    51.434     5.471     7.334    0.427        0.416 
+liver_test      1    51.977     5.397     7.408    0.421        0.410 
+pindex          1    68.040     2.830     9.974    0.221        0.206 
+alc_heavy       1    73.443     1.781    11.024    0.139        0.123 
+bcs             1    78.149     0.777    12.028    0.061        0.043 
+gender          1    78.543     0.689    12.116    0.054        0.036 
+age             1    80.381     0.269    12.535    0.021        0.002 
+alc_mod         1    80.651     0.207    12.598    0.016       -0.003 
+---------------------------------------------------------------------
+
+- enzyme_test added 
+
+
+ Step 1 : AIC = 51.43434 
+ ln_y ~ enzyme_test 
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+pindex         1    24.767     8.492    4.313    0.663        0.650 
+liver_test     1    34.156     7.673    5.132    0.599        0.583 
+bcs            1    40.602     7.022    5.783    0.548        0.531 
+alc_heavy      1    44.323     6.609    6.195    0.516        0.497 
+gender         1    51.499     5.729    7.075    0.447        0.426 
+age            1    51.645     5.710    7.095    0.446        0.424 
+alc_mod        1    52.947     5.537    7.268    0.432        0.410 
+-------------------------------------------------------------------
+
+- pindex added 
+
+
+ Step 2 : AIC = 24.76682 
+ ln_y ~ enzyme_test + pindex 
+
+                     Remove Existing Variables                      
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+pindex          1    51.434     5.471    7.334    0.427        0.416 
+enzyme_test     1    68.040     2.830    9.974    0.221        0.206 
+--------------------------------------------------------------------
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+alc_heavy      1     4.243     9.963    2.842    0.778        0.765 
+bcs            1     9.084     9.696    3.109    0.757        0.743 
+liver_test     1    17.234     9.190    3.615    0.718        0.701 
+alc_mod        1    23.834     8.720    4.085    0.681        0.662 
+age            1    24.663     8.656    4.148    0.676        0.657 
+gender         1    25.727     8.574    4.231    0.670        0.650 
+-------------------------------------------------------------------
+
+- alc_heavy added 
+
+
+ Step 3 : AIC = 4.243223 
+ ln_y ~ enzyme_test + pindex + alc_heavy 
+
+                     Remove Existing Variables                      
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+alc_heavy       1    24.767     8.492    4.313    0.663        0.650 
+pindex          1    44.323     6.609    6.195    0.516        0.497 
+enzyme_test     1    56.640     5.022    7.782    0.392        0.368 
+--------------------------------------------------------------------
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+bcs            1    -8.131    10.627    2.178    0.830        0.816 
+liver_test     1    -3.424    10.428    2.376    0.814        0.799 
+gender         1     3.572    10.100    2.705    0.789        0.772 
+age            1     4.879    10.033    2.771    0.784        0.766 
+alc_mod        1     5.783     9.987    2.818    0.780        0.762 
+-------------------------------------------------------------------
+
+- bcs added 
+
+
+ Step 4 : AIC = -8.130569 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs 
+
+                     Remove Existing Variables                      
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+bcs             1     4.243     9.963    2.842    0.778        0.765 
+alc_heavy       1     9.084     9.696    3.109    0.757        0.743 
+pindex          1    36.524     7.638    5.167    0.596        0.572 
+enzyme_test     1    57.529     5.181    7.624    0.405        0.369 
+--------------------------------------------------------------------
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+gender         1    -8.580    10.723    2.081    0.837        0.821 
+age            1    -8.048    10.703    2.102    0.836        0.819 
+liver_test     1    -7.170    10.668    2.136    0.833        0.816 
+alc_mod        1    -6.689    10.649    2.155    0.832        0.814 
+-------------------------------------------------------------------
+
+- gender added 
+
+
+ Step 5 : AIC = -8.580332 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs + gender 
+
+                     Remove Existing Variables                      
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+gender          1    -8.131    10.627    2.178    0.830        0.816 
+bcs             1     3.572    10.100    2.705    0.789        0.772 
+alc_heavy       1    10.176     9.748    3.057    0.761        0.742 
+pindex          1    35.768     7.895    4.910    0.617        0.585 
+enzyme_test     1    56.105     5.649    7.155    0.441        0.396 
+--------------------------------------------------------------------
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+age            1    -8.613    10.800    2.004    0.843        0.823 
+alc_mod        1    -7.151    10.745    2.059    0.839        0.819 
+liver_test     1    -7.005    10.740    2.065    0.839        0.818 
+-------------------------------------------------------------------
+
+- age added 
+
+
+ Step 6 : AIC = -8.612898 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs + gender + age 
+
+                     Remove Existing Variables                      
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+age             1    -8.580    10.723    2.081    0.837        0.821 
+gender          1    -8.048    10.703    2.102    0.836        0.819 
+bcs             1     4.113    10.172    2.633    0.794        0.773 
+alc_heavy       1     9.435     9.899    2.905    0.773        0.749 
+pindex          1    36.193     8.036    4.769    0.628        0.589 
+enzyme_test     1    57.529     5.725    7.080    0.447        0.390 
+--------------------------------------------------------------------
+
+                         Enter New Variables                       
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+alc_mod        1    -7.497    10.833    1.972    0.846        0.823 
+liver_test     1    -6.673    10.802    2.002    0.844        0.820 
+-------------------------------------------------------------------
+
+
+No more variables to be added or removed.
+
+Final Model Output 
+------------------
+
+                        Model Summary                         
+-------------------------------------------------------------
+R                       0.918       RMSE               0.207 
+R-Squared               0.843       Coef. Var          3.211 
+Adj. R-Squared          0.823       MSE                0.043 
+Pred R-Squared          0.784       MAE                0.162 
+-------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+
+                               ANOVA                                
+-------------------------------------------------------------------
+               Sum of                                              
+              Squares        DF    Mean Square      F         Sig. 
+-------------------------------------------------------------------
+Regression     10.800         6          1.800    42.209    0.0000 
+Residual        2.004        47          0.043                     
+Total          12.805        53                                    
+-------------------------------------------------------------------
+
+                                  Parameter Estimates                                   
+---------------------------------------------------------------------------------------
+      model      Beta    Std. Error    Std. Beta      t        Sig      lower    upper 
+---------------------------------------------------------------------------------------
+(Intercept)     4.054         0.235                 17.272    0.000     3.582    4.527 
+enzyme_test     0.015         0.001        0.653    10.909    0.000     0.012    0.018 
+     pindex     0.014         0.002        0.473     8.051    0.000     0.010    0.017 
+  alc_heavy     0.351         0.076        0.280     4.597    0.000     0.197    0.505 
+        bcs     0.072         0.019        0.233     3.839    0.000     0.034    0.109 
+     gender     0.087         0.058        0.089     1.512    0.137    -0.029    0.203 
+        age    -0.003         0.003       -0.078    -1.343    0.186    -0.009    0.002 
+---------------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Let’s now use forward selection:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>forward_sel <span class="ot">=</span> <span class="fu">ols_step_forward_aic</span>(fit, <span class="at">details =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Forward Selection Method 
+------------------------
+
+Candidate Terms: 
+
+1 . bcs 
+2 . pindex 
+3 . enzyme_test 
+4 . liver_test 
+5 . age 
+6 . gender 
+7 . alc_mod 
+8 . alc_heavy 
+
+ Step 0: AIC = 79.52928 
+ ln_y ~ 1 
+
+---------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS      R-Sq     Adj. R-Sq 
+---------------------------------------------------------------------
+enzyme_test     1    51.434     5.471     7.334    0.427        0.416 
+liver_test      1    51.977     5.397     7.408    0.421        0.410 
+pindex          1    68.040     2.830     9.974    0.221        0.206 
+alc_heavy       1    73.443     1.781    11.024    0.139        0.123 
+bcs             1    78.149     0.777    12.028    0.061        0.043 
+gender          1    78.543     0.689    12.116    0.054        0.036 
+age             1    80.381     0.269    12.535    0.021        0.002 
+alc_mod         1    80.651     0.207    12.598    0.016       -0.003 
+---------------------------------------------------------------------
+
+
+- enzyme_test 
+
+
+ Step 1 : AIC = 51.43434 
+ ln_y ~ enzyme_test 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+pindex         1    24.767     3.021    4.313    0.663        0.650 
+liver_test     1    34.156     2.202    5.132    0.599        0.583 
+bcs            1    40.602     1.551    5.783    0.548        0.531 
+alc_heavy      1    44.323     1.139    6.195    0.516        0.497 
+gender         1    51.499     0.258    7.075    0.447        0.426 
+age            1    51.645     0.239    7.095    0.446        0.424 
+alc_mod        1    52.947     0.066    7.268    0.432        0.410 
+-------------------------------------------------------------------
+
+- pindex 
+
+
+ Step 2 : AIC = 24.76682 
+ ln_y ~ enzyme_test + pindex 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+alc_heavy      1     4.243     1.471    2.842    0.778        0.765 
+bcs            1     9.084     1.204    3.109    0.757        0.743 
+liver_test     1    17.234     0.698    3.615    0.718        0.701 
+alc_mod        1    23.834     0.228    4.085    0.681        0.662 
+age            1    24.663     0.165    4.148    0.676        0.657 
+gender         1    25.727     0.082    4.231    0.670        0.650 
+-------------------------------------------------------------------
+
+- alc_heavy 
+
+
+ Step 3 : AIC = 4.243223 
+ ln_y ~ enzyme_test + pindex + alc_heavy 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+bcs            1    -8.131     0.664    2.178    0.830        0.816 
+liver_test     1    -3.424     0.466    2.376    0.814        0.799 
+gender         1     3.572     0.137    2.705    0.789        0.772 
+age            1     4.879     0.071    2.771    0.784        0.766 
+alc_mod        1     5.783     0.024    2.818    0.780        0.762 
+-------------------------------------------------------------------
+
+- bcs 
+
+
+ Step 4 : AIC = -8.130569 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+gender         1    -8.580     0.097    2.081    0.837        0.821 
+age            1    -8.048     0.076    2.102    0.836        0.819 
+liver_test     1    -7.170     0.042    2.136    0.833        0.816 
+alc_mod        1    -6.689     0.022    2.155    0.832        0.814 
+-------------------------------------------------------------------
+
+- gender 
+
+
+ Step 5 : AIC = -8.580332 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs + gender 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+age            1    -8.613     0.077    2.004    0.843        0.823 
+alc_mod        1    -7.151     0.022    2.059    0.839        0.819 
+liver_test     1    -7.005     0.016    2.065    0.839        0.818 
+-------------------------------------------------------------------
+
+- age 
+
+
+ Step 6 : AIC = -8.612898 
+ ln_y ~ enzyme_test + pindex + alc_heavy + bcs + gender + age 
+
+-------------------------------------------------------------------
+Variable      DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+-------------------------------------------------------------------
+alc_mod        1    -7.497     0.033    1.972    0.846        0.823 
+liver_test     1    -6.673     0.002    2.002    0.844        0.820 
+-------------------------------------------------------------------
+
+
+No more variables to be added.
+
+Variables Entered: 
+
+- enzyme_test 
+- pindex 
+- alc_heavy 
+- bcs 
+- gender 
+- age 
+
+
+Final Model Output 
+------------------
+
+                        Model Summary                         
+-------------------------------------------------------------
+R                       0.918       RMSE               0.207 
+R-Squared               0.843       Coef. Var          3.211 
+Adj. R-Squared          0.823       MSE                0.043 
+Pred R-Squared          0.784       MAE                0.162 
+-------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+
+                               ANOVA                                
+-------------------------------------------------------------------
+               Sum of                                              
+              Squares        DF    Mean Square      F         Sig. 
+-------------------------------------------------------------------
+Regression     10.800         6          1.800    42.209    0.0000 
+Residual        2.004        47          0.043                     
+Total          12.805        53                                    
+-------------------------------------------------------------------
+
+                                  Parameter Estimates                                   
+---------------------------------------------------------------------------------------
+      model      Beta    Std. Error    Std. Beta      t        Sig      lower    upper 
+---------------------------------------------------------------------------------------
+(Intercept)     4.054         0.235                 17.272    0.000     3.582    4.527 
+enzyme_test     0.015         0.001        0.653    10.909    0.000     0.012    0.018 
+     pindex     0.014         0.002        0.473     8.051    0.000     0.010    0.017 
+  alc_heavy     0.351         0.076        0.280     4.597    0.000     0.197    0.505 
+        bcs     0.072         0.019        0.233     3.839    0.000     0.034    0.109 
+     gender     0.087         0.058        0.089     1.512    0.137    -0.029    0.203 
+        age    -0.003         0.003       -0.078    -1.343    0.186    -0.009    0.002 
+---------------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Notice that forward selection results in the same model as forward stepwise.</p>
+<p>Let’s now try backward elimnation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>backward_elim <span class="ot">=</span> <span class="fu">ols_step_backward_aic</span>(fit, <span class="at">details =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Backward Elimination Method 
+---------------------------
+
+Candidate Terms: 
+
+1 . bcs 
+2 . pindex 
+3 . enzyme_test 
+4 . liver_test 
+5 . age 
+6 . gender 
+7 . alc_mod 
+8 . alc_heavy 
+
+ Step 0: AIC = -5.531982 
+ ln_y ~ bcs + pindex + enzyme_test + liver_test + age + gender + alc_mod + alc_heavy 
+
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+liver_test     1     -7.497     0.001    1.972    0.846        0.823 
+alc_mod        1     -6.673     0.032    2.002    0.844        0.820 
+age            1     -5.552     0.074    2.044    0.840        0.816 
+gender         1     -5.277     0.084    2.055    0.840        0.815 
+bcs            1      0.557     0.318    2.289    0.821        0.794 
+alc_heavy      1     11.736     0.845    2.815    0.780        0.747 
+pindex         1     31.549     2.093    4.063    0.683        0.634 
+enzyme_test    1     42.307     2.989    4.959    0.613        0.554 
+--------------------------------------------------------------------
+
+
+Variables Removed: 
+
+- liver_test 
+
+
+  Step 1 : AIC = -7.497389 
+ ln_y ~ bcs + pindex + enzyme_test + age + gender + alc_mod + alc_heavy 
+
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+alc_mod        1     -8.613     0.033    2.004    0.843        0.823 
+age            1     -7.151     0.088    2.059    0.839        0.819 
+gender         1     -6.907     0.097    2.069    0.838        0.818 
+bcs            1      5.410     0.627    2.599    0.797        0.771 
+alc_heavy      1      9.739     0.844    2.816    0.780        0.752 
+pindex         1     36.799     2.675    4.647    0.637        0.591 
+enzyme_test    1     59.420     5.093    7.065    0.448        0.378 
+--------------------------------------------------------------------
+
+- alc_mod 
+
+
+  Step 2 : AIC = -8.612898 
+ ln_y ~ bcs + pindex + enzyme_test + age + gender + alc_heavy 
+
+--------------------------------------------------------------------
+Variable       DF     AIC      Sum Sq     RSS     R-Sq     Adj. R-Sq 
+--------------------------------------------------------------------
+age            1     -8.580     0.077    2.081    0.837        0.821 
+gender         1     -8.048     0.097    2.102    0.836        0.819 
+bcs            1      4.113     0.628    2.633    0.794        0.773 
+alc_heavy      1      9.435     0.901    2.905    0.773        0.749 
+pindex         1     36.193     2.764    4.769    0.628        0.589 
+enzyme_test    1     57.529     5.075    7.080    0.447        0.390 
+--------------------------------------------------------------------
+
+
+No more variables to be removed.
+
+Variables Removed: 
+
+- liver_test 
+- alc_mod 
+
+
+Final Model Output 
+------------------
+
+                        Model Summary                         
+-------------------------------------------------------------
+R                       0.918       RMSE               0.207 
+R-Squared               0.843       Coef. Var          3.211 
+Adj. R-Squared          0.823       MSE                0.043 
+Pred R-Squared          0.784       MAE                0.162 
+-------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+
+                               ANOVA                                
+-------------------------------------------------------------------
+               Sum of                                              
+              Squares        DF    Mean Square      F         Sig. 
+-------------------------------------------------------------------
+Regression     10.800         6          1.800    42.209    0.0000 
+Residual        2.004        47          0.043                     
+Total          12.805        53                                    
+-------------------------------------------------------------------
+
+                                  Parameter Estimates                                   
+---------------------------------------------------------------------------------------
+      model      Beta    Std. Error    Std. Beta      t        Sig      lower    upper 
+---------------------------------------------------------------------------------------
+(Intercept)     4.054         0.235                 17.272    0.000     3.582    4.527 
+        bcs     0.072         0.019        0.233     3.839    0.000     0.034    0.109 
+     pindex     0.014         0.002        0.473     8.051    0.000     0.010    0.017 
+enzyme_test     0.015         0.001        0.653    10.909    0.000     0.012    0.018 
+        age    -0.003         0.003       -0.078    -1.343    0.186    -0.009    0.002 
+     gender     0.087         0.058        0.089     1.512    0.137    -0.029    0.203 
+  alc_heavy     0.351         0.076        0.280     4.597    0.000     0.197    0.505 
+---------------------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+<p>Note that <code>olsrr</code> does not provide the ability to do backward stepwise.</p>
+</div>
+
+
+</section>
+</section>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./17_Criteria.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>
