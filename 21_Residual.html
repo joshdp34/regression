@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.433">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>STA 3386 Regression Analysis - 21&nbsp; Residual Analysis and Remedial Measures</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./20_Outliers.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="nav-sidebar docked">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./21_Residual.html"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Residual Analysis and Remedial Measures</span></a></li></ol></nav>
+      <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+      </a>
+      <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal sidebar-navigation docked overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./"></a> 
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./01_Intro.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Regression Analysis</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./02_Fitting.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Fitting the Simple Linear Regression Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./03_Properties.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Properties of the Least Squares Estimators and Model Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./04_Sampling.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Sampling Distribution of the Least Squares Estimators and Testing the Slope</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./05_Correlation.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Correlation Coefficient and the Coefficient of Determination</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./06_Using.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Using the Simple Linear Model</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./07_Checking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Checking the Linearity and Constant Variance Assumptions</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./08_Checking2.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Checking the Normality and Independence Assumptions and Outliers</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./09_Tidymodels.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Simple Linear Regression with Tidymodels</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./10_Intro_Multiple.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">An Intro to Multiple Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./11_Regression_Matrix.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">The Regression Model in Matrix Terms</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./12_ANOVA.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Model Assumptions and the ANOVA F-test</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./13_Inferences.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Model Inferences and Second-Order Models</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./14_Multicollinearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./15_Indicator.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Indicator Variables</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./16_Linearity.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">The Linearity Assumption</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./17_Criteria.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">17</span>&nbsp; <span class="chapter-title">Model Comparison Criteria</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_Ridge.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Ridge Regression and the LASSO</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_Outliers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Outliers and Influential Observations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21_Residual.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Residual Analysis and Remedial Measures</span></span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#assumptions-for-the-multiple-regression-model" id="toc-assumptions-for-the-multiple-regression-model" class="nav-link active" data-scroll-target="#assumptions-for-the-multiple-regression-model"><span class="header-section-number">21.1</span> Assumptions for the Multiple Regression Model</a>
+  <ul class="collapse">
+  <li><a href="#box-cox-transformation" id="toc-box-cox-transformation" class="nav-link" data-scroll-target="#box-cox-transformation"><span class="header-section-number">21.1.1</span> Box-Cox Transformation</a></li>
+  <li><a href="#independence" id="toc-independence" class="nav-link" data-scroll-target="#independence"><span class="header-section-number">21.1.2</span> Independence</a></li>
+  <li><a href="#constant-variance" id="toc-constant-variance" class="nav-link" data-scroll-target="#constant-variance"><span class="header-section-number">21.1.3</span> Constant Variance</a></li>
+  </ul></li>
+  <li><a href="#remedial-measures" id="toc-remedial-measures" class="nav-link" data-scroll-target="#remedial-measures"><span class="header-section-number">21.2</span> Remedial Measures</a>
+  <ul class="collapse">
+  <li><a href="#overview-of-assumptions-and-remedial-measures" id="toc-overview-of-assumptions-and-remedial-measures" class="nav-link" data-scroll-target="#overview-of-assumptions-and-remedial-measures"><span class="header-section-number">21.2.1</span> Overview of Assumptions and Remedial Measures</a></li>
+  <li><a href="#bootstrap-sampling" id="toc-bootstrap-sampling" class="nav-link" data-scroll-target="#bootstrap-sampling"><span class="header-section-number">21.2.2</span> Bootstrap Sampling</a></li>
+  <li><a href="#bootstrap" id="toc-bootstrap" class="nav-link" data-scroll-target="#bootstrap"><span class="header-section-number">21.2.3</span> Bootstrap</a></li>
+  <li><a href="#bootstrap-intervals" id="toc-bootstrap-intervals" class="nav-link" data-scroll-target="#bootstrap-intervals"><span class="header-section-number">21.2.4</span> Bootstrap Intervals</a></li>
+  <li><a href="#weighted-least-squares" id="toc-weighted-least-squares" class="nav-link" data-scroll-target="#weighted-least-squares"><span class="header-section-number">21.2.5</span> Weighted Least Squares</a></li>
+  <li><a href="#wls-estimators" id="toc-wls-estimators" class="nav-link" data-scroll-target="#wls-estimators"><span class="header-section-number">21.2.6</span> WLS Estimators</a></li>
+  <li><a href="#the-variance-and-standard-deviation-functions" id="toc-the-variance-and-standard-deviation-functions" class="nav-link" data-scroll-target="#the-variance-and-standard-deviation-functions"><span class="header-section-number">21.2.7</span> The Variance and Standard Deviation Functions</a></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Residual Analysis and Remedial Measures</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<blockquote class="blockquote">
+<p>“And I knew exactly what to do. But in a much more real sense, I had no idea what to do.” - Michael Scott</p>
+</blockquote>
+<p>We discussed checking the assumptions of a simple linear regression model in <a href="07_Checking.html"><span>Chapter&nbsp;7</span></a> and <a href="08_Checking2.html"><span>Chapter&nbsp;8</span></a>. For multiple regression, we have already discussed the linearity assumption in <a href="16_Linearity.html"><span>Chapter&nbsp;16</span></a> and multicollinearity in <a href="14_Multicollinearity.html"><span>Chapter&nbsp;14</span></a>. We will now revisit the remaining assumptions of the multiple regression model and present some remedial measures.</p>
+<section id="assumptions-for-the-multiple-regression-model" class="level2" data-number="21.1">
+<h2 data-number="21.1" class="anchored" data-anchor-id="assumptions-for-the-multiple-regression-model"><span class="header-section-number">21.1</span> Assumptions for the Multiple Regression Model</h2>
+<p>For the normal errors multiple regression model in <a href="11_Regression_Matrix.html#eq-w4_18">Equation&nbsp;<span>11.1</span></a> we need to check the assumptions.</p>
+<p>We will use the residuals here as we did in simple regression.</p>
+<p>Let’s begin by listing all of the assumptions for the model in <a href="11_Regression_Matrix.html#eq-w4_18">Equation&nbsp;<span>11.1</span></a>:</p>
+<ol type="1">
+<li><em>Linearity</em>: There is a linear relationship between <span class="math inline">\(y\)</span> and each of the predictor variables. (see <a href="16_Linearity.html"><span>Chapter&nbsp;16</span></a>)</li>
+<li><em>Normality</em> of the residuals: In the normal error model, the error terms should be approximately normally distributed. 3.<em>Constant</em> variance: The variance of the error terms should be constant throughout the range of the predictor variables. 4.<em>Independence</em> of the residuals: We assume the error terms are independent of each other. 5.<em>Uncorrelated</em> predictor variables: There is no multicollinearity present between the predictor variables (see <a href="14_Multicollinearity.html"><span>Chapter&nbsp;14</span></a>).</li>
+</ol>
+<p>#3# Normality and Transformations</p>
+<p>We can check normality as we did in simple regression by plotting the residuals in a <em>QQ plot</em> or by using the <em>Shapiro Wilk</em> test.</p>
+<p>It is good practice to do both so that you can get a formal test and a visualization.</p>
+<p>If the data are not normally distributed, then a transformation on <span class="math inline">\(y\)</span>, such as a <em>Box-Cox</em> transformation may be helpful.</p>
+<section id="box-cox-transformation" class="level3" data-number="21.1.1">
+<h3 data-number="21.1.1" class="anchored" data-anchor-id="box-cox-transformation"><span class="header-section-number">21.1.1</span> Box-Cox Transformation</h3>
+<p>In the Box-Cox transformation, a procedure is used to determine a power (<span class="math inline">\(\lambda\)</span>) of <span class="math inline">\(y\)</span> <span class="math display">\[
+\begin{align*}
+Y^\prime =&amp; \frac{Y^\lambda - 1}{\lambda} &amp;\text{ if }\lambda\ne 0\\
+Y^\prime =&amp; \ln Y &amp; \text{ if }\lambda= 0
+\end{align*}
+\]</span> that results in a regression fit with residuals as close to normality as possible.</p>
+<p>In tidymodels, we can conduct a Box-Cox transformation using <code>step_BoxCox</code> in the recipe.</p>
+<div id="exm-21_1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 21.1 (Handspan data) </strong></span>Let’s look at the handspan data first examine in <a href="15_Indicator.html#exm-15_1">Example&nbsp;<span>15.1</span></a>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"SurveyMeasurements.csv"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span> <span class="sc">+</span> sex, </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> dat) <span class="sc">|&gt;</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_naomit</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) </span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">ols_plot_resid_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat_recipe_bc <span class="ot">=</span> <span class="fu">recipe</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span> <span class="sc">~</span> <span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span> <span class="sc">+</span> sex, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">data =</span> dat) <span class="sc">|&gt;</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_naomit</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_dummy</span>(<span class="fu">all_nominal_predictors</span>()) <span class="sc">|&gt;</span> </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">step_BoxCox</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>lm_model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>lm_workflow <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe_bc) <span class="sc">|&gt;</span> </span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(lm_model)</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="ot">=</span> lm_workflow <span class="sc">|&gt;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fit</span>(<span class="at">data =</span> dat)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>lm_fit <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">ols_plot_resid_qq</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We see that the transformation dampened the skewness of residuals but they are still nonnormal. The Box-Cox transformation does not guarantee the result will be normal, but is attempts to make it closer to normal.</p>
+<p>If we would like to see the value of <span class="math inline">\(\lambda\)</span> used in <code>step_BoxCox</code>, we can do so with the following:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#use number = 3 since step_BoxCox is the third step in the recipe</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">prep</span>(dat_recipe_bc, <span class="at">training =</span> dat) <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">number=</span><span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  terms               value id          
+  &lt;chr&gt;               &lt;dbl&gt; &lt;chr&gt;       
+1 right handspan (cm)  1.75 BoxCox_GL1SZ</code></pre>
+</div>
+</div>
+</div>
+<p>One downside to transformations on <span class="math inline">\(y\)</span> is that the <em>interpretability</em> on the confidence intervals may be difficult to grasp.</p>
+<p>For example, if we have a confidence interval for the mean response where <span class="math inline">\(y\)</span> was log-transformed as <span class="math inline">\((.35, .78)\)</span>, we could back transform by doing the inverse function of log which is the exponential function. So we would have <span class="math inline">\((\exp(.35), \exp(.78)=(1.419, 2.181)\)</span>. However, this is not a confidence interval for the mean <span class="math inline">\(y\)</span>, it is instead a confidence interval for the median <span class="math inline">\(y\)</span>.</p>
+<p>Other back transformations may not have this interpretation. If the transformation is not monotonic, then the backtransformed confidence interval may not have the desired coverage.</p>
+<p>Thus, a transformation may not be the best option if the goal is to obtain confidence and prediction intervals for the response.</p>
+</section>
+<section id="independence" class="level3" data-number="21.1.2">
+<h3 data-number="21.1.2" class="anchored" data-anchor-id="independence"><span class="header-section-number">21.1.2</span> Independence</h3>
+<p>We can visualize the correlation by using a <em>acf</em> plot.</p>
+<p>A formal test for significant autocorrelation is the <em>Breusch-Godfrey</em> Test as was used in simple linear regression.</p>
+<p>If significant autocorrelation is present, then a time series model is necessary (beyond the scope of this course).</p>
+</section>
+<section id="constant-variance" class="level3" data-number="21.1.3">
+<h3 data-number="21.1.3" class="anchored" data-anchor-id="constant-variance"><span class="header-section-number">21.1.3</span> Constant Variance</h3>
+<p>We can visualize the variance of the residuals as we did in simple regression. A plot of the residuals versus the fitted values can be examined for the “cone” or “megaphone” shape.</p>
+<p>We can also use the <em>Breusch-Pagan</em> test as we did in simple regression to formally test for nonconstant variance.</p>
+</section>
+</section>
+<section id="remedial-measures" class="level2" data-number="21.2">
+<h2 data-number="21.2" class="anchored" data-anchor-id="remedial-measures"><span class="header-section-number">21.2</span> Remedial Measures</h2>
+<section id="overview-of-assumptions-and-remedial-measures" class="level3" data-number="21.2.1">
+<h3 data-number="21.2.1" class="anchored" data-anchor-id="overview-of-assumptions-and-remedial-measures"><span class="header-section-number">21.2.1</span> Overview of Assumptions and Remedial Measures</h3>
+<p>We will list again the assumptions of model <a href="11_Regression_Matrix.html#eq-w4_18">Equation&nbsp;<span>11.1</span></a> and also discuss the problems violations of these assumptions present and what can be done when they are violated.</p>
+<ol type="1">
+<li><p>Linearity: Violating linearity will lead to incorrect conclusions about the relationship between <span class="math inline">\(y\)</span> and the predictor variables and thus lead to incorrect estimations and predictions.</p>
+<p>As discussed previously, a transformation on the <span class="math inline">\(x\)</span> variables can help with linearity.</p></li>
+<li><p>Normality of the residuals: The t-test, F-test, confidence intervals, and prediction intervals all depend on normality of the residuals (or at least symmetric distribution).</p>
+<p>If we do not have normality, then we cannot do the inferences for the model. A transformation on <span class="math inline">\(y\)</span> may help with normality (or at least get to a symmetric distribution), however, we tend to lose interpretation in our inferences.</p>
+<p>If we cannot obtain normality through a transformation, or we wish to keep interpretation and not do a transformation, then we can still do inferences based on <em>bootstrapping</em>. We will discuss bootstrapping in more detail below.</p></li>
+<li><p>Constant variance: Very much like the normality assumption, the constant variance assumption affects the inferences made for the model. Recall all the equations for the variance of the estimated coefficients (<a href="13_Inferences.html#eq-w4_31">Equation&nbsp;<span>13.3</span></a>), the variance of the mean response (<a href="13_Inferences.html#eq-w4_47">Equation&nbsp;<span>13.10</span></a>), and the variance of the prediction (<a href="13_Inferences.html#eq-w4_50">Equation&nbsp;<span>13.13</span></a>). Each involves MSE which is an estimate of the constant variance <span class="math inline">\(\sigma^2\)</span>. If <span class="math inline">\(\sigma^2\)</span> is not constant, then MSE is not the estimator we need. We would need an estimator that takes into account the nonconstant variance.</p>
+<p>Taking a transformation of <span class="math inline">\(y\)</span> could help stabilize the variance, however, we would lose interpretation due to the transformation. Using a method known as weighted least squares (discussed below) can help with nonconstant variance.</p></li>
+<li><p>Independence of the residuals: If there is significant autocorrelation in the residuals, then a time series model will be needed.</p>
+<p>In simple regression, we discussed that a difference could be used to remove simple autocorrelation (see <a href="08_Checking2.html"><span>Chapter&nbsp;8</span></a>). The downside to doing a difference is that, once again, you lose interpretation in your inferences.</p></li>
+<li><p>Uncorrelated predictor variables: Previously, we discussed the problems of having highly correlated predictor variables which is known as multicollinearity.</p>
+<p>In some applications, it is very difficult to have a subset of predictor variables that do not have multicollinearity. When this is the case, we can use ridge regression or lasso.</p></li>
+</ol>
+</section>
+<section id="bootstrap-sampling" class="level3" data-number="21.2.2">
+<h3 data-number="21.2.2" class="anchored" data-anchor-id="bootstrap-sampling"><span class="header-section-number">21.2.2</span> Bootstrap Sampling</h3>
+<section id="repeated-sampling" class="level4">
+<h4 class="anchored" data-anchor-id="repeated-sampling">Repeated Sampling</h4>
+<p>If we were to repeatedly take a sample of size <span class="math inline">\(n\)</span> from the population of interest and then find the least squares estimates each time, we could plot these estimates to estimate their sampling distributions. This is known as <em>repeated sampling</em>.</p>
+<p>For example, let’s consider the handspan and height measurements from <a href="15_Indicator.html#exm-15_1">Example&nbsp;<span>15.1</span></a>. These measurements were from 1102 college students. Suppose these students are now the population of interest.</p>
+<p>We will take a random sample of <span class="math inline">\(n=30\)</span> from this population of 1102 college students. We could look at all possible samples of size <span class="math inline">\(n=30\)</span> and the resulting least squares estimates <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>. This would give us the exact sampling distribution for each. In this example with a relatively small population size of 1102, the number of possible samples of size 30 is <span class="math display">\[
+\begin{align*}
+\binom{1102}{30} &amp; =4.6645012\times 10^{58}
+\end{align*}
+\]</span></p>
+<p>It would be infeasible to examine this many samples, however, we could look at enough samples (tens of thousands) to get an estimate of the sampling distributions.</p>
+<p>Let’s first get a scatterplot all 1102 population measurements. They are colored gray. The least squares line for the entire population is shown in blue.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read_csv</span>(<span class="st">"SurveyMeasurements.csv"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>p1 <span class="ot">=</span> dat <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">y=</span><span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"gray"</span>) <span class="sc">+</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">se=</span><span class="cn">FALSE</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>p1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Let’s now take a random sample of size <span class="math inline">\(n=30\)</span>. This sample will be shown as red points in the scatterplot below. The red line represents the fitted line for the sample.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">34</span>)<span class="co">#to replicate results</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>dat_sample <span class="ot">=</span> <span class="fu">sample_n</span>(dat, <span class="dv">30</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>fit_sample <span class="ot">=</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span><span class="sc">~</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">data =</span> dat_sample)</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>p1 <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data=</span>dat_sample, <span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data=</span>dat_sample, <span class="at">method=</span><span class="st">"lm"</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>The sample in the figure above is just one sample of size <span class="math inline">\(n=30\)</span>. Suppose we repeated this sampling and got a total of 10,000 samples of size <span class="math inline">\(n=30\)</span> from the data. Each time, we fit the least squares line to the sample and save the y-intercept (<span class="math inline">\(b_0\)</span>) and slope (<span class="math inline">\(b_1\)</span>).</p>
+<p>The plots below show the histograms of the least squares estimates <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> from the repeated sampling. The blue and red vertical lines in the histograms represent the population parameters and the mean of the estimates, respectively.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>fit_all <span class="ot">=</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span><span class="sc">~</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">data =</span> dat)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">b0 =</span> <span class="fu">numeric</span>(<span class="dv">10000</span>), <span class="at">b1 =</span> <span class="fu">numeric</span>(<span class="dv">10000</span>))</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(results)){</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  dat_sample_c <span class="ot">=</span> <span class="fu">sample_n</span>(dat, <span class="dv">30</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">=</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span><span class="sc">~</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">data =</span> dat_sample_c)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  results[i,<span class="dv">1</span>] <span class="ot">=</span> fit<span class="sc">$</span>coefficients[<span class="dv">1</span>]</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  results[i,<span class="dv">2</span>] <span class="ot">=</span> fit<span class="sc">$</span>coefficients[<span class="dv">2</span>]</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>b0))<span class="sc">+</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>fit_all<span class="sc">$</span>coefficients[<span class="dv">1</span>], <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(results[,<span class="dv">1</span>]), <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>b1))<span class="sc">+</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>fit_all<span class="sc">$</span>coefficients[<span class="dv">2</span>], <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> <span class="fu">mean</span>(results[,<span class="dv">2</span>]), <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>The equation of the population line is <span class="math display">\[
+y_i=-2.2859674+0.3318128 x_i
+\]</span></p>
+<p>The equation for the line for the first sample is <span class="math display">\[
+\hat{y}_i=0.353943+0.2874696 x_i
+\]</span></p>
+<p>Examining the histograms, we see the mean of all 10,000 <span class="math inline">\(b_0\)</span>’s is -2.6025954 and the mean of all 10,000 <span class="math inline">\(b_1\)</span>’s is 0.3363284.</p>
+<p>We can get a good estimate of the sampling distributions by examining just ten thousand samples. The downside to using repeated sampling is that we usually only have one sample. Thus, we need a different approach that will allow us to estimate the sampling distributions with just the information in our one sample. We will explore one way to do this next.</p>
+</section>
+</section>
+<section id="bootstrap" class="level3" data-number="21.2.3">
+<h3 data-number="21.2.3" class="anchored" data-anchor-id="bootstrap"><span class="header-section-number">21.2.3</span> Bootstrap</h3>
+<p><em>Bootstrapping</em> is a method for estimating the sampling distribution of a statistic based on the observations of <em>one sample</em>.</p>
+<p>This estimation is done by sampling <em>with replacement</em> of size <span class="math inline">\(n\)</span> from the observed data. For each of these “bootstrap” samples, the estimator, both <span class="math inline">\(\hat{\beta}_0\)</span> and <span class="math inline">\(\hat{\beta}_1\)</span> in this case, is computed. This is done many times (usually thousands) so that the resulting distribution of these bootstrapped statistics provides an estimate for the sampling distribution of the statistic.</p>
+<p>Suppose we only had a sample of size <span class="math inline">\(n=30\)</span> from the handspan and height data. This sample is plotted below with the least squares line (both in red).</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>boot_sample <span class="ot">=</span> <span class="fu">sample_n</span>(dat_sample, <span class="dv">30</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="ot">=</span> dat_sample <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">y=</span><span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span>)) <span class="sc">+</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">color =</span> <span class="st">"red"</span>) <span class="sc">+</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">method=</span><span class="st">"lm"</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color =</span> <span class="st">"red"</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>p2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>A sample of size <span class="math inline">\(n=30\)</span> is taken from the red dots, with replacement. This bootstrapped sample are the black dots in the plot below. Note that some of the observations can be selected more than once due to sampling with replacement. This is why some of the points are still red.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>boot_sample <span class="ot">=</span> <span class="fu">sample_n</span>(dat_sample, <span class="dv">30</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>p2 <span class="sc">+</span> <span class="fu">geom_point</span>(<span class="at">data=</span>boot_sample, <span class="at">color=</span><span class="st">"black"</span>)<span class="sc">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data=</span>boot_sample, <span class="at">method=</span><span class="st">"lm"</span>, <span class="at">se=</span><span class="cn">FALSE</span>, <span class="at">color=</span><span class="st">"black"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>The equation of the line for the sample (the red line in the plot above) is <span class="math display">\[
+\hat{y}_i=0.353943+0.2874696 x_i
+\]</span></p>
+<p>The equation for the line for the first bootstrap sample (the black line in the figure above) is <span class="math display">\[
+\hat{y}_i=5.7948976+0.2062484 x_i
+\]</span></p>
+<p>The <span class="math inline">\(b_0\)</span>’s and <span class="math inline">\(b_1\)</span>’s for 10,000 bootstrap samples are plotted in the histograms in the figure below.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">data.frame</span>(<span class="at">b0 =</span> <span class="fu">numeric</span>(<span class="dv">10000</span>), <span class="at">b1 =</span> <span class="fu">numeric</span>(<span class="dv">10000</span>))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span><span class="fu">nrow</span>(results)){</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  boot_sample <span class="ot">=</span> <span class="fu">sample_n</span>(dat_sample, <span class="dv">30</span>, <span class="at">replace=</span><span class="cn">TRUE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>  fit <span class="ot">=</span> <span class="fu">lm</span>(<span class="st">`</span><span class="at">right handspan (cm)</span><span class="st">`</span><span class="sc">~</span><span class="st">`</span><span class="at">height (inches)</span><span class="st">`</span>, <span class="at">data =</span> boot_sample)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  results[i,<span class="dv">1</span>] <span class="ot">=</span> fit<span class="sc">$</span>coefficients[<span class="dv">1</span>]</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  results[i,<span class="dv">2</span>] <span class="ot">=</span> fit<span class="sc">$</span>coefficients[<span class="dv">2</span>]</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>b0))<span class="sc">+</span></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>fit_all<span class="sc">$</span>coefficients[<span class="dv">1</span>], <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> fit_sample<span class="sc">$</span>coefficients[<span class="dv">1</span>], <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>b1))<span class="sc">+</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>() <span class="sc">+</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept=</span>fit_all<span class="sc">$</span>coefficients[<span class="dv">2</span>], <span class="at">color =</span> <span class="st">"blue"</span>)<span class="sc">+</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_vline</span>(<span class="at">xintercept =</span> fit_sample<span class="sc">$</span>coefficients[<span class="dv">2</span>], <span class="at">color =</span> <span class="st">"red"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>Examining the histograms, we see the mean of all 10,000 <span class="math inline">\(b_0\)</span>’s is 0.3894754 and the mean of all 10,000 <span class="math inline">\(b_1\)</span>’s is 0.2869148.</p>
+<p>After generating 10,000 bootstrap estimates, we can get a good estimate of the sampling distributions of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>. Note, however, how these estimated distributions are centered at the least squares estimates of the observed sample (the red vertical lines) and not at the true population values (the blue vertical lines).</p>
+</section>
+<section id="bootstrap-intervals" class="level3" data-number="21.2.4">
+<h3 data-number="21.2.4" class="anchored" data-anchor-id="bootstrap-intervals"><span class="header-section-number">21.2.4</span> Bootstrap Intervals</h3>
+<p>We just discussed how to bootstrap the observations in order to estimated the sampling distributions for <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>.</p>
+<p>Based on the normality assumption, we could determine the sampling distributions for the coefficients theoretically without need to bootstrap.</p>
+<p>When the normality assumption does not hold, then we can use the bootstrap to estimate the sampling distributions of the coefficients and for the mean response. We could also use it for the distribution of the predicted values.</p>
+<p>Thus, we can still obtain confidence intervals for the coefficients, confidence intervals for the mean response, and prediction intervals even when normality does not hold.</p>
+<section id="fixed-sampling-vs-random-sampling" class="level4">
+<h4 class="anchored" data-anchor-id="fixed-sampling-vs-random-sampling">Fixed Sampling vs Random Sampling</h4>
+<p>How the bootstrap works in regression is determined by the assumptions that hold for our model.</p>
+<p>If the model is a good model for our data, the variance <span class="math inline">\(\sigma^2\)</span> is constant, and the predictor variables are regarded as fixed, then we use <em>fixed <span class="math inline">\(x\)</span></em> sampling.</p>
+<p>In fixed <span class="math inline">\(x\)</span> sampling, the regression is fitted on the sample data and the fitted values, <span class="math inline">\(\hat{y}_i\)</span>, and the residuals, <span class="math inline">\(e_i\)</span> are obtained. A bootstrap sample of size <span class="math inline">\(n\)</span> are then obtained from the residuals which are denoted <span class="math inline">\(e^*_i\)</span>. The bootstrap <span class="math inline">\(y\)</span> values are found as <span id="eq-w5_17"><span class="math display">\[
+\begin{align}
+y^*_i = \hat{y}_i +e^*_i
+\end{align}
+\tag{21.1}\]</span></span></p>
+<p>These bootstrapped <span class="math inline">\(y_i^*\)</span> are regressed on the original predictor variables. This procedure is done a large number of times and the resulting distributions of the coefficients <span class="math inline">\(\hat{\beta}^*_i\)</span> and fitted values <span class="math inline">\(\hat{y}^*_i\)</span> can be used as estimates of the corresponding sampling distributions.</p>
+<p>If there is doubt in adequacy of the model, the variance <span class="math inline">\(\sigma^2\)</span> is not constant, and/or the predictor variables cannot be regarded as fixed, then we use <em>random <span class="math inline">\(x\)</span></em> sampling.</p>
+<p>In random <span class="math inline">\(x\)</span> sampling, the observations (including <span class="math inline">\(y\)</span> and the predictor variables) are bootstrapped and then the resulting bootstrapped sample is used to fit the model.</p>
+<div id="exm-21_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 21.2 (<code>fitness</code> data) </strong></span>We will examine the <code>fitness</code> dataset from the <code>olsrr</code> library.</p>
+<p>In this dataset, we want to predict the oxygen level of the participants based on six predictor variables.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(olsrr)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> fitness</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(oxygen<span class="sc">~</span>., <span class="at">data =</span> dat)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co"># Create bootstrap samples</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a>bootstraps <span class="ot">=</span> <span class="fu">bootstraps</span>(dat, <span class="at">times =</span> <span class="dv">10</span>)</span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit the model to each bootstrap sample</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>boot_results <span class="ot">&lt;-</span> bootstraps <span class="sc">%&gt;%</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">model =</span> <span class="fu">map</span>(splits, <span class="sc">~</span> <span class="fu">fit</span>(wf, <span class="at">data =</span> <span class="fu">analysis</span>(.x))),</span>
+<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a>    <span class="at">coeff =</span> <span class="fu">map</span>(model, <span class="sc">~</span> <span class="fu">tidy</span>(<span class="fu">extract_fit_parsnip</span>(.x))),</span>
+<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_pred =</span> <span class="fu">map</span>(splits, <span class="sc">~</span> <span class="fu">predict</span>(<span class="fu">fit</span>(wf, <span class="at">data =</span> <span class="fu">analysis</span>(.x)), <span class="fu">assessment</span>(.x))),</span>
+<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a>    <span class="at">pred_interval =</span> <span class="fu">map</span>(splits, <span class="sc">~</span> <span class="fu">predict</span>(<span class="fu">fit</span>(wf, <span class="at">data =</span> <span class="fu">analysis</span>(.x)), <span class="fu">assessment</span>(.x), <span class="at">interval =</span> <span class="st">"prediction"</span>))</span>
+<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a><span class="co"># Extract and calculate percentile CIs for coefficients</span></span>
+<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a>coefficients <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(boot_results<span class="sc">$</span>coeff)</span>
+<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>ci_coefficients <span class="ot">&lt;-</span> coefficients <span class="sc">%&gt;%</span></span>
+<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(term) <span class="sc">%&gt;%</span></span>
+<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a>    <span class="at">lower =</span> <span class="fu">quantile</span>(estimate, <span class="fl">0.025</span>),</span>
+<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>    <span class="at">upper =</span> <span class="fu">quantile</span>(estimate, <span class="fl">0.975</span>)</span>
+<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(ci_coefficients)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7 × 3
+  term         lower     upper
+  &lt;chr&gt;        &lt;dbl&gt;     &lt;dbl&gt;
+1 (Intercept) 75.8   128.     
+2 age         -0.444   0.00275
+3 maxpulse     0.113   0.418  
+4 restpulse   -0.212   0.0830 
+5 runpulse    -0.454  -0.238  
+6 runtime     -3.32   -1.65   
+7 weight      -0.171   0.00796</code></pre>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="weighted-least-squares" class="level3" data-number="21.2.5">
+<h3 data-number="21.2.5" class="anchored" data-anchor-id="weighted-least-squares"><span class="header-section-number">21.2.5</span> Weighted Least Squares</h3>
+<p>Sometimes a transformation on <span class="math inline">\(y\)</span>, such as a log transformation, can help stabilize nonconstant variance. However, if the linearity assumption between <span class="math inline">\(y\)</span> and the predictor variables seem reasonable, then transforming <span class="math inline">\(y\)</span> may violate the linearity assumption.</p>
+<p>If we cannot transform <span class="math inline">\(y\)</span>, we can adjust model <a href="11_Regression_Matrix.html#eq-w4_18">Equation&nbsp;<span>11.1</span></a> so that the variance term is allow to vary for different observations. Thus, we will have <span id="eq-w5_18"><span class="math display">\[
+\begin{align}
+{\textbf{Y}}= &amp; {\textbf{X}}{\boldsymbol{\beta}}+{\boldsymbol{\varepsilon}}\\
+&amp; \boldsymbol{\varepsilon} \overset{iid}{\sim} N\left(0,\sigma_i^{2}\right)
+\end{align}
+\tag{21.2}\]</span></span></p>
+<p>The least squares estimators <a href="11_Regression_Matrix.html#eq-w4_21">Equation&nbsp;<span>11.4</span></a> could still be used. These estimators are <em>unbiased</em> but they no longer have <em>minimum variance</em>. That is, they are no longer the BLUEs.</p>
+<p>To obtain unbiased estimators with minimum variance, we must take into account the different variances for the different <span class="math inline">\(y\)</span> observations. Observations with small variances provide more reliable information about the regression function than those with large variances.</p>
+<p>Therefore, we will want to <em>weight</em> the observations on the fit based on the variances of the observations.</p>
+</section>
+<section id="wls-estimators" class="level3" data-number="21.2.6">
+<h3 data-number="21.2.6" class="anchored" data-anchor-id="wls-estimators"><span class="header-section-number">21.2.6</span> WLS Estimators</h3>
+<p>If the variances <span class="math inline">\(\sigma_{i}^{2}\)</span> are known, we can specify the <em>weights</em> as <span id="eq-w5_19"><span class="math display">\[
+\begin{align}
+w_{i} &amp; =\frac{1}{\sigma_{i}^{2}}
+\end{align}
+\tag{21.3}\]</span></span></p>
+<p>We can specify diagonal weight matrix as <span id="eq-w5_20"><span class="math display">\[
+\begin{align}
+{\bf W} &amp; =\left[\begin{array}{cccc}
+w_{1} &amp; 0 &amp; \cdots &amp; 0\\
+0 &amp; w_{2} &amp; \cdots &amp; 0\\
+\vdots &amp; \vdots &amp; \ddots &amp; \vdots\\
+0 &amp; 0 &amp; \cdots &amp; w_{n}
+\end{array}\right]
+\end{align}
+\tag{21.4}\]</span></span></p>
+<p>These weights can be included in the least squares estimators as <span id="eq-w5_21"><span class="math display">\[
+\begin{align}
+{\bf b}_{w} &amp; =\left({\bf X}^{\prime}{\bf W}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf W}{\bf Y}
+\end{align}
+\tag{21.5}\]</span></span></p>
+<p>The estimated covariance matrix of the <em>weighted</em> least squares (wls) estimators is <span id="eq-w5_22"><span class="math display">\[
+\begin{align}
+{\bf s}^{2}\left[{\bf b}_{w}\right] &amp; =\left({\bf X}^{\prime}{\bf W}{\bf X}\right)^{-1}
+\end{align}
+\tag{21.6}\]</span></span></p>
+<p>Compare this to the estimated covariance matrix for the <em>ordinary</em> (un-weighted) least squares (ols) estimators in <a href="13_Inferences.html#eq-w4_31">Equation&nbsp;<span>13.3</span></a>. Instead of using MSE for an estimate of <span class="math inline">\(\sigma^{2}\)</span>, <a href="#eq-w5_22">Equation&nbsp;<span>21.6</span></a> uses the weight matrix which takes into account how the variance changes for different observations.</p>
+</section>
+<section id="the-variance-and-standard-deviation-functions" class="level3" data-number="21.2.7">
+<h3 data-number="21.2.7" class="anchored" data-anchor-id="the-variance-and-standard-deviation-functions"><span class="header-section-number">21.2.7</span> The Variance and Standard Deviation Functions</h3>
+<p>For the wls estimators in <a href="#eq-w5_22">Equation&nbsp;<span>21.6</span></a>, it is fairly straight forward if the variances <span class="math inline">\(\sigma^2_i\)</span> are known. In practice, these variances will be unknown and need to estimated.</p>
+<p>Most of the time, the variance will vary in some systematic pattern. For example, the cone shape.</p>
+<p>We can estimate a pattern like this by first fitting the model without any weights. We then examine the absolute values of the residuals vs the fitted values. We can regress these absolute residuals on the fitted values. This fitted model will be an estimate of the standard deviation function. Squaring these fitted values gives us an estimate of the variance function. The reciprocal of this variance function provides an estimate of the weights.</p>
+<p>Other systematic patterns in the residual plots may require other ways to obtain an estimated variance function.</p>
+<p>For example, if the plot of the residuals against <span class="math inline">\(x_2\)</span> suggests that the variance increases rapidly with increases in <span class="math inline">\(x_2\)</span> up to a point and then increases more slowly, then we should regress the absolute residuals against <span class="math inline">\(x_2\)</span> and <span class="math inline">\(x_2^2\)</span>.</p>
+<p>If the wls estimates differs greatly from the ols estimates, it is common to take the squared or absolute residuals from the wls fit and then re-estimate the variance function. This is done again until the changes in the estimates become small between iterations.</p>
+<p>This is known as <em>iteratively</em> <em>reweighted</em> least squares (irls).</p>
+<div id="exm-21_2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 21.3 (<code>bloodpressure</code> data) </strong></span>Let’s revisit the blood pressure data used in <a href="07_Checking.html#exm-w3_3_1">Example&nbsp;<span>7.2</span></a>.</p>
+<p>Let’s first fit a regression model using typical ordinary least squares.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"bloodpressure.txt"</span>, <span class="at">header=</span>T)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(dbp<span class="sc">~</span>age, <span class="at">data =</span> dat)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">linear_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"lm"</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>fit_ols <span class="ot">=</span> wf <span class="sc">|&gt;</span> <span class="fu">fit</span>(dat)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a>fit_ols <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   56.2      3.99       14.1  2.36e-19
+2 age            0.580    0.0970      5.98 2.05e- 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>fit_ols <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span>  <span class="fu">ols_plot_resid_fit</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="21_Residual_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We see clear evidence of heteroscedasticity. Let’s now use weighted least squares. We must first determine the weights. The absolute value of the residuals of the OLS fit is regressed on the fitted values of the OLS fit. The fitted values of this fit are then used to determine the weights.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co">#fit absolute residuals against fitted values</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> fit_ols <span class="sc">|&gt;</span> <span class="fu">extract_fit_engine</span>() <span class="sc">|&gt;</span> <span class="fu">augment</span>()</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>fit_res <span class="ot">=</span> <span class="fu">lm</span>(<span class="fu">abs</span>(.resid)<span class="sc">~</span>.fitted, <span class="at">data =</span> results)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#the fitted values will be used for the weights</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>w <span class="ot">=</span> <span class="dv">1</span><span class="sc">/</span>(<span class="fu">fitted.values</span>(fit_res)<span class="sc">^</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can now add these weights to the workflow. We first specify that these are weights by adding it to the dataframe using <code>importance_weights</code>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">weight =</span> <span class="fu">importance_weights</span>(w)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(dbp<span class="sc">~</span>age<span class="sc">+</span>weight, <span class="at">data =</span> dat) </span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_case_weights</span>(weight) <span class="sc">|&gt;</span> </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>fit_wls <span class="ot">=</span> wf <span class="sc">|&gt;</span> <span class="fu">fit</span>(dat)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>fit_wls <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   55.6      2.52       22.0  4.81e-28
+2 age            0.596    0.0792      7.53 7.19e-10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>fit_ols <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   56.2      3.99       14.1  2.36e-19
+2 age            0.580    0.0970      5.98 2.05e- 7</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>fit_wls <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.521         0.512  1.21      56.6 7.19e-10     1  -181.  369.  374.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>fit_ols <span class="sc">|&gt;</span> <span class="fu">glance</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 12
+  r.squared adj.r.squared sigma statistic     p.value    df logLik   AIC   BIC
+      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;       &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1     0.408         0.396  8.15      35.8 0.000000205     1  -189.  384.  390.
+# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+</div>
+</div>
+<p>Note the difference between the estimates for the weighted least squares and the estimates for the ordinary least squares. The <span class="math inline">\(R^2\)</span> value is also higher using weighted least squares.</p>
+</div>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./20_Outliers.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Outliers and Influential Observations</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+<footer class="footer">
+  <div class="nav-footer">
+    <div class="nav-footer-left">STA 3386</div>   
+    <div class="nav-footer-center">
+      &nbsp;
+    </div>
+    <div class="nav-footer-right">Fall 2024</div>
+  </div>
+</footer>
+
+
+
+</body></html>

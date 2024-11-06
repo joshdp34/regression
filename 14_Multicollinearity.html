@@ -247,7 +247,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./18_Stepwise.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regresion</span></span></a>
+ <span class="menu-text"><span class="chapter-number">18</span>&nbsp; <span class="chapter-title">Stepwise and Best Subsets Regression</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./19_Ridge.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">19</span>&nbsp; <span class="chapter-title">Ridge Regression and the LASSO</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./20_Outliers.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">20</span>&nbsp; <span class="chapter-title">Outliers and Influential Observations</span></span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./21_Residual.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">21</span>&nbsp; <span class="chapter-title">Residual Analysis and Remedial Measures</span></span></a>
   </div>
 </li>
     </ul>
@@ -284,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></h1>
+<h1 class="title"><span id="sec-multicollinearity" class="quarto-section-identifier"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multicollinearity and Principal Component Regression</span></span></h1>
 </div>
 
 
@@ -739,18 +757,18 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <pre><code># A tibble: 12 × 4
    terms                            value component id       
    &lt;chr&gt;                            &lt;dbl&gt;     &lt;int&gt; &lt;chr&gt;    
- 1 variance                      2.07             1 pca_onHNg
- 2 variance                      0.933            2 pca_onHNg
- 3 variance                      0.000727         3 pca_onHNg
- 4 cumulative variance           2.07             1 pca_onHNg
- 5 cumulative variance           3.00             2 pca_onHNg
- 6 cumulative variance           3                3 pca_onHNg
- 7 percent variance             68.9              1 pca_onHNg
- 8 percent variance             31.1              2 pca_onHNg
- 9 percent variance              0.0242           3 pca_onHNg
-10 cumulative percent variance  68.9              1 pca_onHNg
-11 cumulative percent variance 100.               2 pca_onHNg
-12 cumulative percent variance 100                3 pca_onHNg</code></pre>
+ 1 variance                      2.07             1 pca_I0IRC
+ 2 variance                      0.933            2 pca_I0IRC
+ 3 variance                      0.000727         3 pca_I0IRC
+ 4 cumulative variance           2.07             1 pca_I0IRC
+ 5 cumulative variance           3.00             2 pca_I0IRC
+ 6 cumulative variance           3                3 pca_I0IRC
+ 7 percent variance             68.9              1 pca_I0IRC
+ 8 percent variance             31.1              2 pca_I0IRC
+ 9 percent variance              0.0242           3 pca_I0IRC
+10 cumulative percent variance  68.9              1 pca_I0IRC
+11 cumulative percent variance 100.               2 pca_I0IRC
+12 cumulative percent variance 100                3 pca_I0IRC</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualize the explained variance</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>pca_results <span class="sc">|&gt;</span></span>
