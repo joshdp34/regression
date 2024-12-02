@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>STA 3386 Regression Analysis - 23&nbsp; Introduction to Logistic Regression</title>
+<title>STA 3386 Regression Analysis - 24&nbsp; Logistic Regression in Tidymodels</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -30,8 +64,7 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./24_Logistic2.html" rel="next">
-<link href="./22_Validation.html" rel="prev">
+<link href="./23_Logistic.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -77,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./23_Logistic.html"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span></a></li></ol></nav>
+      <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./24_Logistic2.html"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Logistic Regression in Tidymodels</span></a></li></ol></nav>
       <a class="flex-grow-1" role="button" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar,#quarto-sidebar-glass" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
       </a>
       <button type="button" class="btn quarto-search-button" aria-label="" onclick="window.quartoOpenSearch();">
@@ -242,13 +275,13 @@ ul.task-list li input[type="checkbox"] {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./23_Logistic.html" class="sidebar-item-text sidebar-link active">
+  <a href="./23_Logistic.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span></span></a>
   </div>
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./24_Logistic2.html" class="sidebar-item-text sidebar-link">
+  <a href="./24_Logistic2.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Logistic Regression in Tidymodels</span></span></a>
   </div>
 </li>
@@ -262,17 +295,11 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#binary-response-variable" id="toc-binary-response-variable" class="nav-link active" data-scroll-target="#binary-response-variable"><span class="header-section-number">23.1</span> Binary Response Variable</a>
-  <ul class="collapse">
-  <li><a href="#response-function-meaning" id="toc-response-function-meaning" class="nav-link" data-scroll-target="#response-function-meaning"><span class="header-section-number">23.1.1</span> Response Function Meaning</a></li>
-  <li><a href="#problems-when-response-is-binary" id="toc-problems-when-response-is-binary" class="nav-link" data-scroll-target="#problems-when-response-is-binary"><span class="header-section-number">23.1.2</span> Problems when response is binary</a></li>
-  </ul></li>
-  <li><a href="#sigmoidal-response-functions" id="toc-sigmoidal-response-functions" class="nav-link" data-scroll-target="#sigmoidal-response-functions"><span class="header-section-number">23.2</span> Sigmoidal Response Functions</a>
-  <ul class="collapse">
-  <li><a href="#probit-mean-response-function" id="toc-probit-mean-response-function" class="nav-link" data-scroll-target="#probit-mean-response-function"><span class="header-section-number">23.2.1</span> Probit Mean Response Function</a></li>
-  </ul></li>
-  <li><a href="#logistic-mean-response-function" id="toc-logistic-mean-response-function" class="nav-link" data-scroll-target="#logistic-mean-response-function"><span class="header-section-number">23.3</span> Logistic Mean Response Function</a></li>
-  <li><a href="#interpretation-of-the-coefficients" id="toc-interpretation-of-the-coefficients" class="nav-link" data-scroll-target="#interpretation-of-the-coefficients"><span class="header-section-number">23.4</span> Interpretation of the Coefficients</a></li>
+  <li><a href="#multiple-logistic-regression" id="toc-multiple-logistic-regression" class="nav-link active" data-scroll-target="#multiple-logistic-regression"><span class="header-section-number">24.1</span> Multiple Logistic Regression</a></li>
+  <li><a href="#example-using-tidymodels" id="toc-example-using-tidymodels" class="nav-link" data-scroll-target="#example-using-tidymodels"><span class="header-section-number">24.2</span> Example Using Tidymodels</a></li>
+  <li><a href="#predictions" id="toc-predictions" class="nav-link" data-scroll-target="#predictions"><span class="header-section-number">24.3</span> Predictions</a></li>
+  <li><a href="#confusion-matrix" id="toc-confusion-matrix" class="nav-link" data-scroll-target="#confusion-matrix"><span class="header-section-number">24.4</span> Confusion Matrix</a></li>
+  <li><a href="#roc-curves" id="toc-roc-curves" class="nav-link" data-scroll-target="#roc-curves"><span class="header-section-number">24.5</span> ROC Curves</a></li>
   </ul>
 </nav>
     </div>
@@ -281,7 +308,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span></h1>
+<h1 class="title"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Logistic Regression in Tidymodels</span></h1>
 </div>
 
 
@@ -297,381 +324,306 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 <blockquote class="blockquote">
-<p>“If all you have is a hammer, everything looks like a nail.” - Bernard Baruch</p>
+<p>“In God we trust, all others bring data.” - W Edwards Deming</p>
 </blockquote>
-<section id="binary-response-variable" class="level2" data-number="23.1">
-<h2 data-number="23.1" class="anchored" data-anchor-id="binary-response-variable"><span class="header-section-number">23.1</span> Binary Response Variable</h2>
-<p>In a variety of regression applications, the response variable of interest has only two possible <em>qualitative</em> outcomes, and therefore can be represented by a binary indicator variable taking on values 0 and 1.</p>
-<p>A binary response variable is said to involve binary responses or dichotomous responses.</p>
-<p>We consider first the meaning of the response function when the outcome variable is binary, and then we take up some special problems that arise with this type of response variable.</p>
-<section id="response-function-meaning" class="level3" data-number="23.1.1">
-<h3 data-number="23.1.1" class="anchored" data-anchor-id="response-function-meaning"><span class="header-section-number">23.1.1</span> Response Function Meaning</h3>
-<p>Consider the simple linear regression model <span class="math display">\[
-\begin{align*}
-y_{i} &amp; =\beta_{0}+\beta_{1}x_{i}+\varepsilon_{i}\qquad y_{i}=0,1
-\end{align*}
-\]</span> where the outcome <span class="math inline">\(y_{i}\)</span> is binary taking on the value of either 0 or 1.</p>
-<p>The expected response $E$ has a special meaning in this case.</p>
-<p>Since <span class="math inline">\(E\left[ \varepsilon_{i}\right] =0\)</span>, we have <span class="math display">\[
-\begin{align*}
-E\left[ y_{i}\right]  &amp; =\beta_{0}+\beta_{1}x_{i}
-\end{align*}
+<section id="multiple-logistic-regression" class="level2" data-number="24.1">
+<h2 data-number="24.1" class="anchored" data-anchor-id="multiple-logistic-regression"><span class="header-section-number">24.1</span> Multiple Logistic Regression</h2>
+<p>In the last chapter, we introduced logistic regression using a simple (one predictor) model. The simple logistic regression model is easily extended to more than one predictor variable.</p>
+<p>In fact, several predictor variables are usually required with logistic regression to obtain adequate description and useful predictions.</p>
+<p>In matrix notation, the logistic response function becomes <span class="math display">\[
+E\{Y\} = \frac{\exp{\left(\textbf{X}^\prime\boldsymbol{\beta}\right)}}{1+\exp{\left(\textbf{X}^\prime\boldsymbol{\beta}\right)}}
 \]</span></p>
-<p>Consider <span class="math inline">\(y_{i}\)</span> to be a Bernoulli random variable for which we can state the probability distribution as follows <span class="math display">\[
-\begin{align*}
-y_{i} &amp; \quad\textbf{ Probability}\\
-1 &amp; \quad P\left(y_{i}=1\right)={\pi_{i}}\\
-0 &amp; \quad P\left(y_{i}=0\right)={1-\pi_{i}}
-\end{align*}
-\]</span></p>
-<p>Thus, <span class="math inline">\(\pi_{i}\)</span> is the probability that <span class="math inline">\(y_{i}=1\)</span> and <span class="math inline">\(1-\pi_{i}\)</span> is the probability that <span class="math inline">\(y_{i}=0\)</span></p>
-<p>By the definition of a discrete random variable, we have <span class="math display">\[
-{\begin{align*}
-E\left[ y_{i}\right]  &amp; =1\left(\pi_{i}\right)+0\left(1-\pi_{i}\right)\\
-&amp; =\pi_{i}\\
-&amp; =P\left(y_{i}=1\right)
-\end{align*}}
-\]</span></p>
-<p>Thus, <span class="math display">\[
-{\begin{align*}
-E\left[ y_{i}\right]  &amp; =\beta_{0}+\beta_{1}x_{i}\\
-&amp; =\pi_{i}
-\end{align*}}
-\]</span></p>
-<p>The mean response <span class="math inline">\(E\{y_i\}\)</span> as given by the response function is therefore simply the probability that <span class="math inline">\(y_i = 1\)</span> when the level of the predictor variable is <span class="math inline">\(x_i\)</span>.</p>
-<p>This interpretation of the mean response applies whether the response function is a simple linear one, as here, or a complex multiple regression one.</p>
-<p>The mean response, when the outcome variable is a 0, 1 indicator variable, always represents the probability that <span class="math inline">\(Y = 1\)</span> for the given levels of the predictor variables.</p>
+<p>Like the simple logistic response function, the multiple logistic-response function is monotonic and sigmoidal in shape with respect to <span class="math inline">\(\textbf{X}^\prime\boldsymbol{\beta}\)</span> and is almost linear when <span class="math inline">\(\pi\)</span> is between .2 and .8.</p>
+<p>The <span class="math inline">\(X\)</span> variables may be different predictor variables, or some may represent curvature and/or interaction effects.</p>
+<p>Also, the predictor variables may be quantitative, or they may be qualitative and represented by indicator variables.</p>
+<p>This flexibility makes the multiple logistic regression model very useful.</p>
 </section>
-<section id="problems-when-response-is-binary" class="level3" data-number="23.1.2">
-<h3 data-number="23.1.2" class="anchored" data-anchor-id="problems-when-response-is-binary"><span class="header-section-number">23.1.2</span> Problems when response is binary</h3>
-<p>Special problems arise, unfortunately, when the response variable is an indicator variable. We consider three of these now, using a simple linear regression model as an illustration.</p>
-<ol type="1">
-<li><p><em>Nonnormal error terms</em>: For a binary 0, 1 response variable, each error term can take on only two values: <span class="math display">\[
+<section id="example-using-tidymodels" class="level2" data-number="24.2">
+<h2 data-number="24.2" class="anchored" data-anchor-id="example-using-tidymodels"><span class="header-section-number">24.2</span> Example Using Tidymodels</h2>
+<p>In a health study to investigate an epidemic outbreak of a disease that is spread by mosquitoes, individuals were randomly sampled within two sectors in a city to determine if the person had recently contracted the disease under study.</p>
+<p>This was ascertained by the interviewer, who asked pertinent questions to assess whether certain specific symptoms associated with the disease were present during the specified period.</p>
+<p>The response variable <span class="math inline">\(y\)</span> was coded 1 if this disease was determined to have been present, and 0 if not.</p>
+<p>Three predictor variables were included in the study, representing known or potential risk factors.</p>
+<p>They are age, socioeconomic status of household, and sector within city.</p>
+<p>Age (<span class="math inline">\(x_1\)</span>) is a quantitative variable. Socioeconomic status is a categorical variable with three levels. It is represented by two indicator variables (<span class="math inline">\(x_2\)</span> and <span class="math inline">\(x_3\)</span>), as follows: <span class="math display">\[
 \begin{align*}
-\text{When }y_{i}=1: &amp; \quad\varepsilon_{i}=1-\beta_{0}-\beta_{1}x_{i}\\
-\text{When }y_{i}=0: &amp; \quad\varepsilon_{i}=0-\beta_{0}-\beta_{1}x_{i}
+Class &amp;\quad x_2 &amp; x_3\\
+Upper &amp; \quad 0 &amp; 0\\
+Middle &amp; \quad 1 &amp; 0\\
+Lower &amp; \quad 0 &amp; 1
 \end{align*}
 \]</span></p>
-<p>Clearly, normal error regression model, which assumes that the <span class="math inline">\(\varepsilon_i\)</span> are normally distributed, is not appropriate.</p></li>
-<li><p><em>Nonconstant Error Variance</em>: Another problem with the error terms is that they do not have equal variances when the response variable is an indicator variable.</p>
-<p>To see this, note that <span class="math display">\[
-\begin{align*}
-Var[\varepsilon_i] = (\beta_{0}+\beta_{1}x_{i})(1-\beta_{0}-\beta_{1}x_{i})
-\end{align*}
-\]</span></p>
-<p>Note that <span class="math inline">\(Var\{\varepsilon_i\}\)</span> depends on <span class="math inline">\(x_i\)</span>. Hence, the error variances will differ at different levels of X, and ordinary least squares will no longer be optimal.</p></li>
-<li><p><em>Constraints one Response Function</em>: Since the response function represents probabilities when the outcome variable is a 0, 1 indicator variable, the mean responses should be constrained as follows: <span class="math display">\[
-0\le E\{Y\}=\pi \le 1
-\]</span></p>
-<p>The difficulties created by the need for the restriction on the response function are the most serious.</p>
-<p>One could use weighted least squares to handle the problem of unequal error variances.</p>
-<p>In addition, with large sample sizes the method of least squares provides estimators that are asymptotically normal under quite general conditions, even if the distribution of the error terms is far from normal.</p>
-<p>However, the constraint on the mean responses to fall between 0 and 1 frequently will rule out a linear response function.</p></li>
-</ol>
+<p>City sector is also a categorical variable. Since there were only two sectors in the study, one indicator variable (<span class="math inline">\(x_4\)</span>) was used, defined so that <span class="math inline">\(x_4 = 0\)</span> for sector 1 and <span class="math inline">\(x_4 = 1\)</span> for sector 2.</p>
+<p>We will first convert the response variable to a factor and then look at the scatterplot matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidymodels)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(GGally)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> <span class="fu">read.table</span>(<span class="st">"http://users.stat.ufl.edu/~rrandles/sta4210/Rclassnotes/data/textdatasets/KutnerData/Chapter%2014%20Data%20Sets/CH14TA03.txt"</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(dat) <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"id"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"Y"</span>)</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>dat <span class="ot">=</span> dat <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">Y =</span> <span class="fu">relevel</span>(<span class="fu">as.factor</span>(Y), <span class="at">ref=</span><span class="st">"1"</span>))</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="fu">ggpairs</span>(dat[,<span class="sc">-</span><span class="dv">1</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24_Logistic2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>We can now setup the recipe, model, and workflow to fit the model.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>dat_recipe <span class="ot">=</span> <span class="fu">recipe</span>(Y<span class="sc">~</span>X1<span class="sc">+</span>X2<span class="sc">+</span>X3<span class="sc">+</span>X4, <span class="at">data =</span> dat) </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>model <span class="ot">=</span> <span class="fu">logistic_reg</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">set_engine</span>(<span class="st">"glm"</span>)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>wf <span class="ot">=</span> <span class="fu">workflow</span>() <span class="sc">|&gt;</span> </span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_recipe</span>(dat_recipe) <span class="sc">|&gt;</span> </span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_model</span>(model)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">=</span> wf <span class="sc">|&gt;</span> <span class="fu">fit</span>(<span class="at">data=</span>dat)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   2.31      0.643      3.60  0.000319
+2 X1           -0.0298    0.0135    -2.20  0.0276  
+3 X2           -0.409     0.599     -0.682 0.495   
+4 X3            0.305     0.604      0.505 0.613   
+5 X4           -1.57      0.502     -3.14  0.00169 </code></pre>
+</div>
+</div>
+<p>The <code>tidy()</code> function returns the estimated values of the coefficients. Recall that we want to see the exponentials of the coefficients.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>fit <span class="sc">|&gt;</span> <span class="fu">tidy</span>(<span class="at">exponentiate=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)   10.1      0.643      3.60  0.000319
+2 X1             0.971    0.0135    -2.20  0.0276  
+3 X2             0.664    0.599     -0.682 0.495   
+4 X3             1.36     0.604      0.505 0.613   
+5 X4             0.207    0.502     -3.14  0.00169 </code></pre>
+</div>
+</div>
+<p>When we increase X1 (age) by one unit, we expect a 3% decrease in the odds of the disease being present, given the other predictors are held constant.</p>
+<p>For X2 being a 1 (middle class), we expect a 34% decrease in the odds of the disease being present, given the other predictors are held constant.</p>
+<p>For X3 being a 1 (lower class), we expect a 36% increase in the odds of the disease being present, given the other predictors are held constant.</p>
+<p>For X4 being a 1 (sector 2), we expect 79% decrease in the odds of the disease being present, given the other predictors are held constant.</p>
+<p>With the predict function, we can obtain the predicted probabilities of the fitted model.</p>
 </section>
+<section id="predictions" class="level2" data-number="24.3">
+<h2 data-number="24.3" class="anchored" data-anchor-id="predictions"><span class="header-section-number">24.3</span> Predictions</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>pred_prob <span class="ot">=</span> <span class="fu">predict</span>(fit,</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">new_data =</span> dat,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"prob"</span>)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>pred_prob</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 98 × 2
+   .pred_1 .pred_0
+     &lt;dbl&gt;   &lt;dbl&gt;
+ 1  0.209    0.791
+ 2  0.219    0.781
+ 3  0.106    0.894
+ 4  0.371    0.629
+ 5  0.111    0.889
+ 6  0.136    0.864
+ 7  0.0802   0.920
+ 8  0.273    0.727
+ 9  0.244    0.756
+10  0.309    0.691
+# ℹ 88 more rows</code></pre>
+</div>
+</div>
+<p>If we classify each observation based on which in the most likely prediction, we can obtain the predicted outcomes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pred_class <span class="ot">=</span> <span class="fu">predict</span>(fit,</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">new_data =</span> dat,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"class"</span>)</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>pred_class</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 98 × 1
+   .pred_class
+   &lt;fct&gt;      
+ 1 0          
+ 2 0          
+ 3 0          
+ 4 0          
+ 5 0          
+ 6 0          
+ 7 0          
+ 8 0          
+ 9 0          
+10 0          
+# ℹ 88 more rows</code></pre>
+</div>
+</div>
+<p>The value of the linear model can be obtained from the <code>predict</code> function. This value is what is obtained when the values of the predictor variables are substituted into the linear part of the model <span class="math display">\[
+\hat{\beta}_0+\hat{\beta}_1 x_1 + \hat{\beta}_2 x_2 + \hat{\beta}_3 x_3 + \hat{\beta}_4 x_4
+\]</span></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>pred_raw <span class="ot">=</span> <span class="fu">predict</span>(fit,</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                    <span class="at">new_data =</span> dat,</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>                    <span class="at">type =</span> <span class="st">"raw"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>pred_raw</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           1            2            3            4            5            6 
+ 1.331181765  1.271681581  2.134434261  0.527929270  2.082687707  1.844686968 
+           7            8            9           10           11           12 
+ 2.439688816  0.981891712  1.130642174  0.803391157  1.628682690  1.628682690 
+          13           14           15           16           17           18 
+ 1.509682320  2.045183984 -0.362567837  0.083683549 -1.255070610  0.500184843 
+          19           20           21           22           23           24 
+ 0.559685028  0.291934196 -0.295356597 -0.622607613  0.262184104  0.002144328 
+          25           26           27           28           29           30 
+ 0.626938844  0.061644512 -0.206106319  2.558689186  0.803433733  2.023187522 
+          31           32           33           34           35           36 
+ 2.142187892  1.636393745  0.862891342  2.193934446 -0.265563928  0.716189122 
+          37           38           39           40           41           42 
+ 0.240145067  0.864939584 -0.176356227  1.013690046 -1.247359554  0.351434381 
+          43           44           45           46           47           48 
+ 0.024183365 -1.344320887  0.567438660 -0.027605765  0.448438290 -0.890315869 
+          49           50           51           52           53           54 
+-0.860608353 -0.801108168 -1.693610940 -1.463321256  0.321684289 -0.065066913 
+          55           56           57           58           59           60 
+-0.184067282  0.202683919 -0.422068022 -0.749319038 -0.184067282 -1.076570055 
+          61           62           63           64           65           66 
+ 2.082687707  2.469438909  2.558689186  2.142187892  0.862933918  1.963687338 
+          67           68           69           70           71           72 
+ 1.598932597  1.420432043  0.944430564  1.479932227  1.509682320  1.509682320 
+          73           74           75           76           77           78 
+ 1.479932227  0.765930009  2.290938354  1.725644022  1.249685119  1.309142728 
+          79           80           81           82           83           84 
+ 2.223684538  1.368642913  1.160392266  2.439688816  0.684433363  1.100934657 
+          85           86           87           88           89           90 
+ 0.743890972  2.074934076  1.666143837  2.201688077  2.439688816  2.439688816 
+          91           92           93           94           95           96 
+ 2.409938724  2.499189001  2.380188631  1.636393745  1.666186413  2.052937615 
+          97           98 
+ 2.290938354  1.576936136 </code></pre>
+</div>
+</div>
+<p>These raw values can be used visualize the predicted probabilities and the actual values of the response variable.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> dat <span class="sc">|&gt;</span> </span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(Y) <span class="sc">|&gt;</span> </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">bind_cols</span>(pred_raw, pred_prob, pred_class)</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> </span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> pred_raw, <span class="at">y =</span> .pred_1, <span class="at">col =</span> Y))<span class="sc">+</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>()<span class="sc">+</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_hline</span>(<span class="at">yintercept =</span> <span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24_Logistic2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid" width="576"></p>
+</div>
+</div>
+<p>A line at 0.5 represents the value for which we would classify the predicted probabilities. Values above 0.5 would be classified as a 1 (disease present) and values below 0.5 would be classified as a 0 (disease not present). The color of the dots are the actual values of the response variable. If the model was able to predict the response variable perfectly, then all of the values above 0.5 would be blue and all the values below 0.5 would be red. Since there are some red above the line and some blue below the line, then we have missclassification.</p>
 </section>
-<section id="sigmoidal-response-functions" class="level2" data-number="23.2">
-<h2 data-number="23.2" class="anchored" data-anchor-id="sigmoidal-response-functions"><span class="header-section-number">23.2</span> Sigmoidal Response Functions</h2>
-<p>In this section, we will examine two response functions for modeling binary responses.</p>
-<p>These functions are bounded between 0 and 1, have a characteristic <em>sigmoidal</em>- or S-shape, and approach 0 and 1 asymptotically.</p>
-<p>These functions arise naturally when the binary response variable results from a zero-one recoding (or dichotomization) of an underlying continuous response variable, and they are often appropriate for discrete binary responses as well.</p>
-<section id="probit-mean-response-function" class="level3" data-number="23.2.1">
-<h3 data-number="23.2.1" class="anchored" data-anchor-id="probit-mean-response-function"><span class="header-section-number">23.2.1</span> Probit Mean Response Function</h3>
-<p>Consider a health researcher studying the effect of a mother’s use of alcohol (<span class="math inline">\(x\)</span> -an index of degree of alcohol use during pregnancy) on the duration of her pregnancy (<span class="math inline">\(y^C\)</span>).</p>
-<p>Here we use the superscript <span class="math inline">\(c\)</span> to emphasize that the response variable, pregnancy duration, is a <em>continuous</em> response.</p>
-<p>This can be represented by a simple linear regression model: <span class="math display">\[
-y^C_i = \beta_0^c+\beta_1^c x_i +\varepsilon_i^c
-\]</span> and we will assume that <span class="math inline">\(\varepsilon^c_i\)</span> is normally distributed with mean zero and variance <span class="math inline">\(\sigma^2_c\)</span>.</p>
-<p>If the continuous response variable, pregnancy duration, were available, we might proceed with the usual simple linear regression analysis. However, in this instance, researchers coded each pregnancy duration as preterm or full term using the following rule: <span class="math display">\[
-\begin{align*}
-y_{i} &amp; =\begin{cases}
-1 &amp; \text{ if }y_{i}^{c}\le38\text{ weeks (preterm)}\\
-0 &amp; \text{ if }y_{i}^{c}&gt;38\text{ weeks (full term)}
-\end{cases}
-\end{align*}
-\]</span></p>
-<p>It follows then that <span class="math display">\[
-\begin{align*}
-P\left(y_{i}=1\right)=\pi_{i} &amp; =P\left(y_{i}^{c}\le38\right)\\
-&amp; =P\left(\beta_{0}^{c}+\beta_{1}^{c}x_{i}+\varepsilon_{i}^{c}\le38\right)\\
-&amp; =P\left(\varepsilon_{i}^{c}\le38-\beta_{0}^{c}-\beta_{1}^{c}x_{i}\right)\\
-&amp; =P\left(\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\frac{38-\beta_{0}^{c}}{\sigma_{c}}-\frac{\beta_{1}^{c}}{\sigma_{c}}x_{i}\right)\\
-&amp; =P\left(Z\le\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
-\end{align*}
-\]</span> where <span class="math display">\[
-\begin{align*}
-\beta_{0}^{c} &amp; =\frac{38-\beta_{0}^{c}}{\sigma_{c}}\\
-\beta_{1}^{c} &amp; =-\frac{\beta_{1}^{c}}{\sigma_{c}}\\
-Z &amp; =\frac{\varepsilon_{i}^{c}}{\sigma_{c}}.
-\end{align*}
-\]</span></p>
-<p>Note that <span class="math inline">\(Z\)</span> follows a standard normal distribution.</p>
-<p>If we let <span class="math inline">\(P\left(Z\le z\right)=\Phi\left(z\right)\)</span>, we have <span class="math display">\[
-\begin{align*}
-P\left(y_{i}=1\right) &amp; =\Phi\left(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
-\end{align*}
-\]</span></p>
-<p>From this we have what is known as the probit mean response function <span class="math display">\[
-\begin{align*}
-E\left[ y_{i}\right]  &amp; =\pi_{i}=\Phi\left(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
-\end{align*}
-\]</span></p>
-<p>The inverse function <span class="math inline">\(\Phi^{-1}\)</span> of the standard normal cumulative distribution function is sometimes called the <em>probit transformation</em>.</p>
-<p>We solve for the linear predictor <span class="math inline">\(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\)</span> by applying the probit transformation to both sides of the expression: <span class="math display">\[
-\begin{align*}
-\Phi^{-1}\left(\pi_{i}\right) &amp; =\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}
-\end{align*}
-\]</span></p>
-<p>The resulting expression <span class="math inline">\(\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}\)</span> is called the probit response function, or more generally, the linear predictor.</p>
-<section id="example-beta_00" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_00">Example: <span class="math inline">\(\beta_0^*=0\)</span>}</h4>
-<p>black line: <span class="math inline">\(\beta_1^*=5\)</span></p>
-<p>red line: <span class="math inline">\(\beta_1^*=1\)</span></p>
-<p><img src="ex1.png" class="img-fluid"></p>
+<section id="confusion-matrix" class="level2" data-number="24.4">
+<h2 data-number="24.4" class="anchored" data-anchor-id="confusion-matrix"><span class="header-section-number">24.4</span> Confusion Matrix</h2>
+<p>To get a better idea of which is being missclassified, we can look at the confusion matrix.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">conf_mat</span>(results, <span class="at">truth =</span> Y,</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>         <span class="at">estimate =</span>  .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          Truth
+Prediction  1  0
+         1 12  9
+         0 19 58</code></pre>
+</div>
+</div>
+<p>We see from the confusion matrix that there are 9 observations that are predicted to have the disease but really did not (false positives). There were also 19 observations that were predicted to not have the disease but really did (false negatives).</p>
+<p>From this confusion matrix, we can calculate the probability of predicting a 1 given the observation is a 1 (a true positive). This is known as specificity or <em>True Positive Rate (TPR)</em>.</p>
+<p>Likewise, we can calculate the probability of prediction a 0 given the observation is a 0 (a true negative). This is known as specificity or <em>True Negative Rate (TNR)</em>.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sens</span>(results, <span class="at">truth =</span> Y,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 sens    binary         0.387</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">spec</span>(results, <span class="at">truth =</span> Y,</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>     <span class="at">estimate =</span> .pred_class)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 spec    binary         0.866</code></pre>
+</div>
+</div>
 </section>
-<section id="example-beta_1-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_1-1">Example: <span class="math inline">\(\beta_1^*=-1\)</span>}</h4>
-<p>black line: <span class="math inline">\(\beta_0^*=0\)</span></p>
-<p>red line: <span class="math inline">\(\beta_0^*=5\)</span></p>
-<p><img src="ex2.png" class="img-fluid"></p>
-</section>
-</section>
-</section>
-<section id="logistic-mean-response-function" class="level2" data-number="23.3">
-<h2 data-number="23.3" class="anchored" data-anchor-id="logistic-mean-response-function"><span class="header-section-number">23.3</span> Logistic Mean Response Function</h2>
-<p>We have seen that the assumption of normally distributed errors for the underlying continuous response variable led to the use of the standard normal cumulative distribution function, <span class="math inline">\(\Phi\)</span> to model <span class="math inline">\(\pi_i\)</span>.</p>
-<p>An alternative error distribution that is very similar to the normal distribution is the <em>logistic</em> distribution.</p>
-<p>Plots of the standard normal density function and the logistic density function, each with mean zero and variance one are nearly indistinguishable, although the logistic distribution has slightly heavier tails.</p>
-<p><img src="dists.png" class="img-fluid"></p>
-<p>Note the cumulative distribution function of a logistic random variable <span class="math inline">\(\varepsilon_{L}\)</span> having mean 0 and standard deviation <span class="math inline">\(\sigma=\pi/\sqrt{3}\)</span> is: <span class="math display">\[
-\begin{align*}
-F_{L}\left(\varepsilon_{L}\right) &amp; =\frac{\exp\left(\varepsilon_{L}\right)}{1+\exp\left(\varepsilon_{L}\right)}
-\end{align*}
-\]</span></p>
-<p>Suppose now that <span class="math inline">\(\varepsilon_{i}^{c}\)</span> has a logistic distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_{c}\)</span>. Then we have <span class="math display">\[
-\begin{align*}
-P\left(y_{i}=1\right) &amp; =P\left(\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\beta_{0}^{*}+\beta_{1}^{*}x_{1}\right)
-\end{align*}
-\]</span> where <span class="math inline">\(\varepsilon_{i}^{c}/\sigma_{c}\)</span> follows a logistic distribution with mean zero and standard deviation one.</p>
-<p>Multiplying both sides of the inequality inside the probability statement on the right by <span class="math inline">\(\pi/\sqrt{3}\)</span> gives us <span class="math display">\[
-\begin{align*}
-P\left(y_{i}=1\right)=\pi_{i} &amp; =P\left(\frac{\pi}{\sqrt{3}}\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\frac{\pi}{\sqrt{3}}\beta_{0}^{*}+\frac{\pi}{\sqrt{3}}\beta_{1}^{*}x_{i}\right)\\
-&amp; =P\left(\varepsilon_{L}\le\beta_{0}+\beta_{1}x_{i}\right)\\
-&amp; =F_{L}\left(\beta_{0}+\beta_{1}x_{i}\right)\\
-&amp; =\frac{\exp\left(\beta_{0}+\beta_{1}x_{i}\right)}{1+\exp\left(\beta_{0}+\beta_{1}x_{i}\right)}
-\end{align*}
-\]</span> where <span class="math display">\[
-\begin{align*}
-\beta_{0} &amp; =\frac{\pi}{\sqrt{3}}\beta_{0}^{*}\\
-\beta_{1} &amp; =\frac{\pi}{\sqrt{3}}\beta_{1}^{*}
-\end{align*}
-\]</span> denote the logistic regression parameters.</p>
-<p>To summarize, the logistic mean response function is <span class="math display">\[
-\begin{align*}
-E\left[ y_{i}\right]  &amp; =\pi_{i}\\
-&amp; =F_{L}\left(\beta_{0}+\beta_{1}x_{i}\right)\\
-&amp; =\frac{\exp\left(\beta_{0}+\beta_{1}x_{i}\right)}{1+\exp\left(\beta_{0}+\beta_{1}x_{i}\right)}\\
-&amp; =\frac{1}{1+\exp\left(-\beta_{0}-\beta_{1}x_{i}\right)}
-\end{align*}
-\]</span></p>
-<p>Applying the inverse of the cumulative distribution function <span class="math inline">\(F_{L}\)</span> gives <span class="math display">\[
-\begin{align*}
-F_{L}^{-1}\left(\pi_{i}\right) &amp; =\beta_{0}+\beta_{1}x_{1}=\pi_{i}^{\prime}
-\end{align*}
-\]</span></p>
-<p><span class="math inline">\(F_{L}^{-1}\left(\pi_{i}\right)\)</span> is called the <em>logit transformation</em> and is given by <span class="math display">\[
-\begin{align*}
-F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
-\end{align*}
-\]</span> where the ratio <span class="math inline">\(\pi_{i}/\left(1-\pi_{i}\right)\)</span> is called the <em>odds} </em>ratio}.</p>
-<section id="example-beta_00-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_00-1">Example: <span class="math inline">\(\beta_0^*=0\)</span></h4>
-<p>black line: <span class="math inline">\(\beta_1^*=5\)</span></p>
-<p>red line: <span class="math inline">\(\beta_1^*=1\)</span></p>
-<p><img src="ex3.png" class="img-fluid"></p>
-</section>
-<section id="example-beta_1-1-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_1-1-1">Example: <span class="math inline">\(\beta_1^*=-1\)</span></h4>
-<p>black line: <span class="math inline">\(\beta_0^*=0\)</span></p>
-<p>red line: <span class="math inline">\(\beta_0^*=5\)</span></p>
-<p><img src="ex4.png" class="img-fluid"></p>
-</section>
-</section>
-<section id="interpretation-of-the-coefficients" class="level2" data-number="23.4">
-<h2 data-number="23.4" class="anchored" data-anchor-id="interpretation-of-the-coefficients"><span class="header-section-number">23.4</span> Interpretation of the Coefficients</h2>
-<p>The interpretation of the estimated regression coefficient <span class="math inline">\(\hat{\beta}_1\)</span> in the fitted logistic response function is not the straightforward interpretation of the slope in a linear regression model.</p>
-<p>The reason is that the effect of a unit increase in <span class="math inline">\(x\)</span> varies for the logistic regression model according to the location of the starting point on the <span class="math inline">\(x\)</span> scale.</p>
-<p>An interpretation of <span class="math inline">\(\hat{\beta}_1\)</span> is found in the property of the fitted logistic function that the estimated odds <span class="math display">\[
-\frac{\hat{\pi}}{1-\hat{\pi}}
-\]</span> are multiplied by <span class="math display">\[
-\exp(\hat{\beta}_1)
-\]</span> for any unit increase in <span class="math inline">\(x\)</span>.</p>
-<p>To see this, we consider the value of the fitted logit response function at <span class="math inline">\(X = x_j\)</span>; <span class="math display">\[
-\hat{\pi}^\prime (x_j)={\hat{\beta}_0+\hat{\beta}_1 x_j}
-\]</span></p>
-<p>The notation <span class="math inline">\(\hat{\pi}^\prime (x_j)\)</span> indicates specifically the <span class="math inline">\(x\)</span> level associated with the fitted value.</p>
-<p>We also consider the value of the fitted logit response function at <span class="math inline">\(X = x_j + 1\)</span>; <span class="math display">\[
-\hat{\pi}^\prime (x_j+1)={\hat{\beta}_0+\hat{\beta}_1( x_j+1)}
-\]</span> The difference between the two fitted values is simply <span class="math display">\[
-{\begin{align*}
-\hat{\pi}^\prime (x_j+1)-\hat{\pi}^\prime (x_j)&amp; = \hat{\beta}_0+\hat{\beta}_1( x_j+1) - \hat{\beta}_0-\hat{\beta}_1 x_j \\
-&amp; = \hat{\beta}_1
-\end{align*}}
-\]</span></p>
-<p>Now <span class="math inline">\(\hat{\pi}^\prime (x_j)\)</span> is the logarithm of the estimated odds when <span class="math inline">\(X=x_j\)</span>; we shall denote it by <span class="math inline">\(\ln(\text{odds}_1)\)</span>.</p>
-<p>Similarly, <span class="math inline">\(\hat{\pi}^\prime (x_j+1)\)</span> is the logarithm of the estimated odds when <span class="math inline">\(X=x_j+1\)</span>; we shall denote it by <span class="math inline">\(\ln(\text{odds}_2)\)</span>.</p>
-<p>Hence, the difference between the two fitted logit response values can be expressed as follows: <span class="math display">\[
-\begin{align*}
-\ln(\text{odds}_2)-\ln(\text{odds}_1) = \ln\left(\frac{\text{odds}_2}{\text{odds}_1}\right) = \hat{\beta}_1
-\end{align*}
-\]</span></p>
-<p>Taking antilogs (exponentials) of each side, we see that the estimated ratio of the odds, called the odds ratio, <span class="math inline">\(\hat{OR}\)</span>, is <span class="math display">\[
-\hat{OR} = \frac{\text{odds}_2}{\text{odds}_1}=\exp(\hat{\beta}_1)
-\]</span></p>
-<!-- ## Multiple Logistic Regression} -->
-<!-- The simple logistic regression model  is easily extended to more than one predictor -->
-<!-- variable.  -->
-<!-- In fact, several predictor variables are usually required with logistic regression to -->
-<!-- obtain adequate description and useful predictions. -->
-<!-- In matrix notation, the logistic response function becomes -->
-<!-- $$ -->
-<!-- E\{Y\} = \frac{\exp{\left(\textbf{X}^\prime\boldsymbol{\beta}\right)}}{1+\exp{\left(\textbf{X}^\prime\boldsymbol{\beta}\right)}} -->
-<!-- $$ -->
-<!-- Like the simple logistic response function, the multiple logistic-response function -->
-<!-- is monotonic and sigmoidal in shape with respect to $\textbf{X}^\prime\boldsymbol{\beta}$ and is almost linear -->
-<!-- when $\pi$ is between .2 and .8.  -->
-<!-- \marginpar{} -->
-<!-- The X variables may be different predictor variables, or -->
-<!-- some may represent curvature and/or interaction effects.  -->
-<!-- Also, the predictor variables may -->
-<!-- be quantitative, or they may be qualitative and represented by indicator variables.  -->
-<!-- This -->
-<!-- flexibility makes the multiple logistic regression model very attractive. -->
-<!-- \begin{example} -->
-<!-- In a health study to investigate an epidemic outbreak of a disease that is spread by\\ mosquitoes, -->
-<!--                             individuals were randomly sampled within two sectors in a city to determine if the person -->
-<!--                             had recently contracted the disease under study.  -->
-<!--                             This was ascertained by the interviewer, -->
-<!--                             who asked pertinent questions to assess whether certain specific symptoms associated with -->
-<!--                             the disease were present during the specified period.  -->
-<!--                             The response variable Y was coded 1 -->
-<!--                             if this disease was determined to have been present, and 0 if not. -->
-<!--                             Three predictor variables were included in the study, representing known or potential -->
-<!--                             risk factors. -->
-<!--                             They are age, socioeconomic status of household, and sector within city.  -->
-<!-- \newpage -->
-<!--                             Age -->
-<!--                             ($x_1$) is a quantitative variable. Socioeconomic status is a categorical variable with three -->
-<!--                             levels. It is represented by two indicator variables ($x_2$ and $x_3$), as follows: -->
-<!--                             \begin{align*} -->
-<!--                             Class &\quad x_1 & x_2\\ -->
-<!--                             Upper & \quad 0 & 0\\ -->
-<!--                             Middle & \quad 1 & 0\\ -->
-<!--                             Lower & \quad 0 & 1 -->
-<!--                             \end{align*} -->
-<!--                             City sector is also a categorical variable. Since there were only two sectors in the study, -->
-<!--                             one indicator variable ($x_4$ ) was used, defined so that $x_4 = 0$ for sector 1 and $x_4 = 1$ for -->
-<!--                             sector 2. -->
-<!-- \marginpar{} -->
-<!-- \begin{lstlisting} -->
-<!-- library(boot) -->
-
-<!-- dat = read.table("http://users.stat.ufl.edu/~rrandles/sta4210/Rclassnotes/ -->
-<!--      data/textdatasets/KutnerData/Chapter%2014%20Data%20Sets/CH14TA03.txt") -->
-<!-- names(dat) = c("id", "X1", "X2", "X3", "X4", "Y") -->
-<!-- #fit a logistic regression model using glm -->
-<!-- fit = glm(Y~.-id, data=dat,family = binomial(link="logit")) -->
-<!-- pred.prob = fit %>% fitted.values() -->
-<!-- link = predict(fit, type="link") -->
-<!-- plot(link, pred.prob, col= dat$Y+1) -->
-<!-- \end{lstlisting} -->
-<!-- \includegraphics[scale=.7]{plots/ex08_01_01a.png} -->
-<!-- \begin{lstlisting}[firstnumber=last] -->
-<!-- #if we pedict probabilities greater than .5 as predicting a  -->
-<!-- #success (predict Y=1), then we can predict the outcomes as -->
-<!-- pred.y = ifelse(pred.prob >=.5, "Y","N") -->
-
-<!-- table(pred.y, dat$Y) -->
-<!-- pred.y  0  1 -->
-<!--      N 58 19 -->
-<!--      Y  9 12 -->
-<!-- summary(fit) -->
-<!-- Call: -->
-<!-- glm(formula = Y ~ . - id, family = binomial(link = "logit"),  -->
-<!--     data = dat) -->
-<!-- Deviance Residuals:  -->
-<!--     Min       1Q   Median       3Q      Max   -->
-<!-- -1.6552  -0.7529  -0.4788   0.8558   2.0977   -->
-<!-- Coefficients: -->
-<!--             Estimate Std. Error z value Pr(>|z|)     -->
-<!-- (Intercept) -2.31293    0.64259  -3.599 0.000319 *** -->
-<!-- X1           0.02975    0.01350   2.203 0.027577 *   -->
-<!-- X2           0.40879    0.59900   0.682 0.494954     -->
-<!-- X3          -0.30525    0.60413  -0.505 0.613362     -->
-<!-- X4           1.57475    0.50162   3.139 0.001693 **  -->
-<!-- --- -->
-<!-- Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 -->
-<!-- (Dispersion parameter for binomial family taken to be 1) -->
-<!--     Null deviance: 122.32  on 97  degrees of freedom -->
-<!-- Residual deviance: 101.05  on 93  degrees of freedom -->
-<!-- AIC: 111.05 -->
-<!-- Number of Fisher Scoring iterations: 4 -->
-<!-- fit %>% coef() %>% exp() -->
-<!-- (Intercept)          X1          X2          X3          X4  -->
-<!--  0.09897037  1.03019705  1.50499600  0.73693576  4.82953038  -->
-<!-- cv = cv.glm(dat, fit) -->
-<!-- cv$delta -->
-<!-- [1] 0.1962685 0.1961593 -->
-<!-- #compare with probit -->
-<!-- #fit a logistic regression model using glm -->
-<!-- fit = glm(Y~.-id, data=dat,family = binomial(link="probit")) -->
-<!-- pred.prob = fit %>% fitted.values() -->
-<!-- link = predict(fit, type="link") -->
-<!-- plot(link, pred.prob, col= dat$Y+1) -->
-<!-- \end{lstlisting} -->
-<!-- \marginpar{} -->
-<!-- \includegraphics[scale=.7]{plots/ex08_01_01b.png} -->
-<!-- \begin{lstlisting}[firstnumber=last] -->
-<!-- pred.y = ifelse(pred.prob >=.5, "Y","N") -->
-
-<!-- table(pred.y, dat$Y) -->
-<!-- pred.y  0  1 -->
-<!--      N 57 19 -->
-<!--      Y 10 12 -->
-<!-- cv = cv.glm(dat, fit) -->
-<!-- cv$delta -->
-<!-- [1] 0.1949919 0.1948840 -->
-<!-- \end{lstlisting} -->
-<!-- \end{example} -->
+<section id="roc-curves" class="level2" data-number="24.5">
+<h2 data-number="24.5" class="anchored" data-anchor-id="roc-curves"><span class="header-section-number">24.5</span> ROC Curves</h2>
+<p>A Receiver Operating Characteristic (ROC) curve is a graphical representation of the diagnostic ability of a binary classifier. Logistic regression is such a classifier.</p>
+<p>The ROC curve plots the TPR versus the False Positive Rate (1-specificity).</p>
+<p>The ROC curve is created by calculating TPR and FPR at various threshold values, ranging from 0 to 1.</p>
+<p>The <em>diagonal line</em> represents a random classifier (e.g., flipping a coin). A good classifier has a curve that bows significantly above this diagonal.</p>
+<p>The <em>upper-left corner</em> of the plot (TPR = 1, FPR = 0) represents a perfect classifier, achieving both 100% sensitivity and 100% specificity.</p>
+<section id="area-under-the-curve-auc" class="level4">
+<h4 class="anchored" data-anchor-id="area-under-the-curve-auc">Area Under the Curve (AUC)</h4>
+<p>The <em>Area Under the ROC Curve (AUC)</em> provides a single number summary of the model’s performance:</p>
+<p>AUC ranges from 0 to 1.</p>
+<ul>
+<li><strong>AUC = 1</strong>: Perfect model.</li>
+<li><strong>AUC = 0.5</strong>: Random guessing.</li>
+<li><strong>AUC &lt; 0.5</strong>: Worse than random guessing (usually indicates a problem with the model).</li>
+</ul>
+<p>An ROC curve helps assess how well logistic regression separates the two classes, independent of the specific threshold chosen. It provides insights into the trade-offs between sensitivity and specificity as you adjust the threshold. Comparing ROC curves or AUC values of different models can guide model selection and threshold optimization.</p>
+<p>To find the ROC curve:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>results <span class="sc">|&gt;</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">roc_curve</span>(<span class="at">truth =</span> Y, .pred_1) <span class="sc">|&gt;</span> </span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">autoplot</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="24_Logistic2_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid" width="576"></p>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">roc_auc</span>(results, <span class="at">truth =</span> Y, .pred_1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  .metric .estimator .estimate
+  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
+1 roc_auc binary         0.776</code></pre>
+</div>
+</div>
 <!--  \subsection*{Multinomial Logistic Regression} -->
 <!-- ## Nominal Response} -->
 <!-- \marginpar{} -->
 <!-- Logistic regression is most frequently used to model the relationship between a dichotomous -->
-<!--                             response variable and a set of predictor variables.  -->
+<!--                             response variable and a set of predictor variables. -->
 <!--                             On occasion, however. the response -->
-<!--                             variable may have *more} than two levels.  -->
+<!--                             variable may have *more} than two levels. -->
 <!--                             Logistic regression can still be employed by -->
 <!--                             means of a *polytomous}-or\\ *multinomial}-logistic regression model. -->
 <!--                             Multinomial logistic -->
 <!--                             regression models are used in many fields. In business, for instance, a market researcher -->
 <!--                             may wish to relate a consumer's choice of product (product A, product B. product C) to -->
 <!--                             the consumer's age, gender, geographic location and several other potential explanatory -->
-<!--                             variables.  -->
+<!--                             variables. -->
 <!--                             This is an example of nominal multinomial regression because the response -->
-<!--                             categories are purely qualitative and not *ordered} in any way.  -->
+<!--                             categories are purely qualitative and not *ordered} in any way. -->
 <!-- *Ordinal} response categories can -->
-<!--                             also be modeled using multinomial regression.  -->
+<!--                             also be modeled using multinomial regression. -->
 <!--                             For example, the relation between severity -->
 <!--                             of disease measured on an ordinal scale (mild, moderate, severe) and age of patient, gender -->
-<!--                             of patient, and some other explanatory variables may be of interest.  -->
-<!--                             The response variable $Y$ must be coded in the same way as indicator variables except we will need an indicator variable for each category of $Y$.  -->
+<!--                             of patient, and some other explanatory variables may be of interest. -->
+<!--                             The response variable $Y$ must be coded in the same way as indicator variables except we will need an indicator variable for each category of $Y$. -->
 <!--                             Instead of going through the details, we will illustrate with R. -->
 <!-- \begin{example} -->
 <!-- A study was undertaken to determine the strength of association between several risk factors -->
-<!--                             and the duration of pregnancies.  -->
+<!--                             and the duration of pregnancies. -->
 <!-- \marginpar{} -->
 <!--                             The risk factors considered were mother's age, nutritional -->
-<!--                             status, history of tobacco use, and history of alcohol use.  -->
+<!--                             status, history of tobacco use, and history of alcohol use. -->
 <!--                             The response of interest, pregnancy -->
 <!--                             duration, is a three-category variable that was coded as follows: -->
 <!--                             \begin{align*} -->
@@ -681,9 +633,9 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!--                             3 &\quad \text{Full term (38 weeks or greater)} -->
 <!--                             \end{align*} -->
 <!--                             Relevant data for 102 women who had recently given birth at a large metropolitan hospital -->
-<!--                             were obtained.  -->
-<!--                             X variables include:  -->
-<!--                             - Nutritional status ($x_1$), is an index of nutritional status (higher score denotes better nutritional status).  -->
+<!--                             were obtained. -->
+<!--                             X variables include: -->
+<!--                             - Nutritional status ($x_1$), is an index of nutritional status (higher score denotes better nutritional status). -->
 <!--                             - Age was categorized into three groups: less than 20 years of age (coded 1), from 21 -->
 <!--                             to 30 years of age (coded 2), and greater than 30 years of age (coded 3). It is represented by -->
 <!--                             two indicator variables (X2 and X3): -->
@@ -710,7 +662,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!-- \end{lstlisting} -->
 <!--                             Note that the Y variable is already coded with the variables Y1, Y2, and Y3 in the dataset. -->
 <!-- \marginpar{} -->
-<!--                             We do not have to do this ourselves, R will code the indicator variables for us if we tell R the variable is a factor.  -->
+<!--                             We do not have to do this ourselves, R will code the indicator variables for us if we tell R the variable is a factor. -->
 <!-- \begin{lstlisting} -->
 <!-- library(nnet) -->
 <!-- reg = multinom(factor(Y)~X1+X2+X3+X4+X5, data=dat) -->
@@ -725,12 +677,12 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!--   (Intercept)         X1        X2        X3        X4        X5 -->
 <!-- 2    2.047984 0.01631570 0.7373261 0.6943946 0.5869073 0.5856117 -->
 <!-- 3    2.271691 0.01823932 0.9644844 0.8947673 0.7097457 0.7315046 -->
-<!-- Residual Deviance: 168.6754  -->
-<!-- AIC: 192.6754  -->
+<!-- Residual Deviance: 168.6754 -->
+<!-- AIC: 192.6754 -->
 <!-- \end{lstlisting} -->
 <!--                             Note in the summary, we have two regression fits. What we actually have done is model the odds of the probability of being in category 2 to the probability of being in category 1. -->
-<!--                             We also modeled the odds of the probability of being in category 3 to the probability of being in category 1.  -->
-<!--                             So we call category 1 the baseline category.  -->
+<!--                             We also modeled the odds of the probability of being in category 3 to the probability of being in category 1. -->
+<!--                             So we call category 1 the baseline category. -->
 <!--                             To get the effect on the odds ratio for each coefficient: -->
 <!-- \begin{lstlisting}[firstnumber=last] -->
 <!-- exp(coef(reg)) -->
@@ -755,8 +707,8 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!--   (Intercept)         X1        X2        X3        X4        X5 -->
 <!-- 1    2.271677 0.01823916 0.9644921 0.8947727 0.7097461 0.7315106 -->
 <!-- 2    1.941063 0.01488581 0.8575544 0.8088255 0.6495262 0.6681955 -->
-<!-- Residual Deviance: 168.6754  -->
-<!-- AIC: 192.6754  -->
+<!-- Residual Deviance: 168.6754 -->
+<!-- AIC: 192.6754 -->
 <!-- #to get the predicted probability for each observation -->
 <!-- preds.nom = fitted(reg.nom) -->
 <!-- preds.nom[1:10,] -->
@@ -791,7 +743,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!-- \end{example} -->
 <!--  \subsection*{Ordinal Regression} -->
 <!-- ## Ordinal Response} -->
-<!-- When the response variable $Y$ takes on categorical responses that can be put into order, then  the multinomial logistic regression discussed in Section 8.2 can still be used.  -->
+<!-- When the response variable $Y$ takes on categorical responses that can be put into order, then  the multinomial logistic regression discussed in Section 8.2 can still be used. -->
 <!-- \marginpar{} -->
 <!--                             However, a more effective strategy, yielding a more parsimonious and more easily interpreted model, results if the *ordering} of the categories is taken into account explicitly. -->
 <!--                             The model that is usually employed is called the *proportional} *odds}  model -->
@@ -799,7 +751,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!--                             $$ -->
 <!--                             P(y_i\le j) -->
 <!--                             $$ -->
-<!--                             rather than the specific category probabilities  -->
+<!--                             rather than the specific category probabilities -->
 <!--                             $$ -->
 <!--                             P(y_i=j) -->
 <!--                             $$ -->
@@ -832,8 +784,8 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!--     Value   Std. Error t value -->
 <!-- 1|2  2.9301  1.4929     1.9627 -->
 <!-- 2|3  5.0249  1.5445     3.2535 -->
-<!-- Residual Deviance: 173.5122  -->
-<!-- AIC: 187.5122  -->
+<!-- Residual Deviance: 173.5122 -->
+<!-- AIC: 187.5122 -->
 <!-- #to get the predicted probability for each observation -->
 <!-- preds.ord = fitted(reg.ord) -->
 <!-- preds.ord[1:10,] -->
@@ -959,15 +911,15 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!-- summary(reg) -->
 <!-- Call: -->
 <!-- glm(formula = Y ~ ., family = "poisson", data = dat) -->
-<!-- Deviance Residuals:  -->
-<!--      Min        1Q    Median        3Q       Max   -->
-<!-- -2.93195  -0.58868  -0.00009   0.59269   2.23441   -->
+<!-- Deviance Residuals: -->
+<!--      Min        1Q    Median        3Q       Max -->
+<!-- -2.93195  -0.58868  -0.00009   0.59269   2.23441 -->
 <!-- Coefficients: -->
-<!--               Estimate Std. Error z value Pr(>|z|)     -->
+<!--               Estimate Std. Error z value Pr(>|z|) -->
 <!-- (Intercept)  2.942e+00  2.072e-01  14.198  < 2e-16 *** -->
 <!-- X1           6.058e-04  1.421e-04   4.262 2.02e-05 *** -->
 <!-- X2          -1.169e-05  2.112e-06  -5.534 3.13e-08 *** -->
-<!-- X3          -3.726e-03  1.782e-03  -2.091   0.0365 *   -->
+<!-- X3          -3.726e-03  1.782e-03  -2.091   0.0365 * -->
 <!-- X4           1.684e-01  2.577e-02   6.534 6.39e-11 *** -->
 <!-- X5          -1.288e-01  1.620e-02  -7.948 1.89e-15 *** -->
 <!-- --- -->
@@ -978,15 +930,16 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!-- AIC: 571.02 -->
 <!-- Number of Fisher Scoring iterations: 4 -->
 <!-- predict(reg) -->
-<!--        1        2        3        4        5        6        7  -->
-<!-- 2.512666 2.171006 3.336689 2.129078 1.982460 2.184004 1.458190  -->
-<!--        8        9       10  -->
-<!-- 2.397791 2.670277 2.453965  -->
+<!--        1        2        3        4        5        6        7 -->
+<!-- 2.512666 2.171006 3.336689 2.129078 1.982460 2.184004 1.458190 -->
+<!--        8        9       10 -->
+<!-- 2.397791 2.670277 2.453965 -->
 <!-- \end{lstlisting} -->
 <!-- \end{example} -->
 <!-- \marginpar{} -->
 
 
+</section>
 </section>
 
 </main> <!-- /main -->
@@ -1225,14 +1178,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./22_Validation.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Model Validation</span></span>
+      <a href="./23_Logistic.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./24_Logistic2.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">24</span>&nbsp; <span class="chapter-title">Logistic Regression in Tidymodels</span></span> <i class="bi bi-arrow-right-short"></i>
-      </a>
   </div>
 </nav>
 </div> <!-- /content -->
