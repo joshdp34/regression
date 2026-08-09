@@ -49,6 +49,16 @@ book:
 execute:
   freeze: auto
 
+custom-callout:
+  example:
+    title: "Example"
+    icon-symbol: "📈"
+    appearance: "simple"
+    color: "#008000"
+
+filters:
+  - custom-callout
+
 format:
   html:
     theme: cosmo

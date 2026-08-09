@@ -2,7 +2,7 @@
 
 > "Regression. It is a universal rule that the unknown kinsman in any degree of any specified man, is probably more mediocre than he." - Francis Galton
 
-The simplest model for relating a response variable $y$ to a single independent variable $x$ is a *straight line*.
+The simplest model for relating a response variable $y$ to a single predictor variable $x$ is a *straight line*.
 
 We will begin by discussing *simple linear* models and how to fit them to a dataset using the method of least squares.
 
@@ -13,6 +13,8 @@ This collection of methods is known as simple linear regression analysis.
 
 
 ## The Straight-Line Probabilistic Model
+
+::: {.example title="Example 2.1: CO₂ emissions as a probabilistic relationship"}
 
 When studying environmental science, consider modeling the monthly carbon dioxide (CO₂) emissions $y$ of a city as a function of its monthly industrial activity $x$.
 
@@ -32,6 +34,8 @@ $$
 
 The random error component,$\varepsilon$, captures all unexplained variations in emissions caused by omitted variables or unpredictable random factors.
 
+:::
+
 
 
 The random error plays a key role in hypothesis testing, determining confidence intervals for the model's deterministic portion, and estimating the prediction error when using the model to predict future values of $y$.
@@ -40,15 +44,15 @@ Let's start with the simplest probabilistic model—a *first-order* linear model
 
 ## A First-Order Linear Model
 
-The first-order linear model is expessed as
+The first-order linear model is expressed as
 $$
 y = \beta_0 + \beta_1 x + \varepsilon
 $$
 
 where:
 
-- $y$ is the *dependent* variable (also known as the response variable)
-- $x$ is the *independent* variable (used as a predictor of $y$)
+- $y$ is the *response* variable
+- $x$ is the *predictor* variable (sometimes called the independent variable)
 - $E(y) = \beta_0 + \beta_1 x$ is the *deterministic* component
 - $\varepsilon$  is the *random error* component
 - $\beta_0$ is the *y-intercept* of the line (the point where the line intersects the y-axis)
@@ -69,6 +73,8 @@ As discussed in @sec-regoverview, regression can be viewed as a six-step process
 
 ## Fitting the Model: The Method of Least Squares
 
+
+::: {.example title="Example 2.2: A small dataset for fitting a line"}
 
 Suppose we have the data shown in @tbl-table2_1 below and plotted in the scatterplot in @fig-2_1.
 
@@ -103,6 +109,8 @@ dat |>
 ```
 
 
+:::
+
 
 We hypothesize that a straight-line model relates *y* to *x*, as follows:
 
@@ -126,6 +134,8 @@ $y$ is the variable of interest, so we are focused on the differences between ob
 We calculate the magnitude of the *deviations* (the differences between observed and predicted values of $y$).
 
 These deviations, or prediction errors, represent the *vertical* distances between observed and predicted values of $y$.
+
+::: {.example title="Example 2.3: Comparing two possible fitted lines"}
 
 Suppose we try to fit the line
 $$
@@ -203,6 +213,8 @@ The fit results are shown in @tbl-table2_3.
 : Deviations and squared deviations of the line in @eq-02_02 and the data in @tbl-table2_1.  {#tbl-table2_3}
 
 The SSE for this line is 0.2727, which is lower than the SSE for the previous line, indicating a better fit.
+
+:::
 
 While we could try additional lines to achieve a lower SSE, there are infinitely many possibilities since *$\beta_0$* and *$\beta_1$* can take any real value.
 
@@ -335,6 +347,26 @@ The fitted line (also called the *least squares line*) is
 {\hat{y} = b_0 + b_1 x }
 \end{align*}
 
+::: {.example title="Example 2.4: Interpreting a fitted line"}
+
+Suppose the fitted line for a dataset is
+$$
+\hat y = 1.8 - 0.15x.
+$$
+
+The intercept is $b_0=1.8$. This is the predicted value of $y$ when $x=0$. Whether this interpretation is meaningful depends on whether $x=0$ is reasonable in the context of the data.
+
+The slope is $b_1=-0.15$. This means that for each 1-unit increase in $x$, the predicted value of $y$ decreases by 0.15 units.
+
+For example, when $x=6$, the fitted value is
+$$
+\hat y = 1.8 - 0.15(6) = 0.9.
+$$
+
+The fitted line gives predictions from the sample data. It is our estimate of the unknown line of means.
+
+:::
+
 For a given data point, $(x_i, y_i)$, the observed value of $y$ is denoted as $y_i$ and
 the predicted value of $y$ is obtained by substituting $x_i$ into the
 prediction equation:
@@ -351,5 +383,93 @@ $i$th *residual*, is
 \end{align*}
 Thus, SSE is just the sum of the squared residuals.
 
+::: {.callout-note collapse="false" title="Error terms vs. residuals"}
+
+The random error term $\varepsilon_i$ and the residual $y_i-\hat y_i$ are closely related, but they are not the same thing.
+
+- The **error term** $\varepsilon_i$ is the unobserved difference between an observation and the true mean response:
+  $$
+  \varepsilon_i = y_i - E(y_i).
+  $$
+- The **residual** is the observed difference between an observation and the fitted value from our sample model:
+  $$
+  e_i = y_i-\hat y_i.
+  $$
+
+In practice, we do not know the true mean response $E(y_i)$ because we do not know the true parameters $\beta_0$ and $\beta_1$. We use residuals as observable estimates of the errors after fitting the model.
+
+:::
 
 
+::: {.example title="Example 2.5: Interpreting a residual"}
+
+Using the first trial line in @eq-02_01, the observation with $x=1$ has observed value $y=2$ and predicted value $\hat y=1.8$. The residual is
+$$
+y-\hat y = 2-1.8 = 0.2.
+$$
+
+Because the residual is positive, the observed point is above the fitted line. If a residual is negative, the observed point is below the fitted line. A residual close to zero means the fitted line predicted that observation fairly well.
+
+Least squares chooses the line that makes the sum of squared residuals as small as possible. It does not make every residual equal to zero; that would usually be impossible unless all points fell exactly on one straight line.
+
+:::
+
+## Recap
+
+| **Keyword** | **Definition** |
+| ----------- | ---------- |
+| **Simple linear regression** | A regression model that relates a response variable $y$ to one predictor variable $x$. |
+| **First-order linear model** | A straight-line probabilistic model of the form $y=\beta_0+\beta_1x+\varepsilon$. |
+| **Mean response** | The expected value of $y$ for a given value of $x$, written as $E(y)=\beta_0+\beta_1x$. |
+| **Random error** | The part of an observed response not explained by the mean response function. |
+| **Parameter** | An unknown population quantity, such as $\beta_0$ or $\beta_1$. |
+| **Estimate** | A value computed from sample data to approximate a parameter, such as $b_0$ or $b_1$. |
+| **Intercept** | The predicted response when $x=0$; it should only be interpreted literally when $x=0$ is meaningful in context. |
+| **Slope** | The expected change in the predicted response for a 1-unit increase in $x$. |
+| **Fitted line** | The estimated regression line $\hat y=b_0+b_1x$ obtained from sample data. |
+| **Predicted value** | The value $\hat y_i$ produced by the fitted line for a particular $x_i$. |
+| **Residual** | The vertical difference between an observed value and its predicted value, $y_i-\hat y_i$. |
+| **SSE** | The sum of squared residuals, $\sum (y_i-\hat y_i)^2$, used to measure overall lack of fit. |
+| **Least squares line** | The fitted line that minimizes SSE among all possible straight lines. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why is the straight-line regression model called *probabilistic* rather than deterministic?
+
+2. In the model $y=\beta_0+\beta_1x+\varepsilon$, what is the difference between the line of means $E(y)=\beta_0+\beta_1x$ and an individual observed value of $y$?
+
+3. Why do residuals measure vertical distances rather than horizontal distances from the fitted line?
+
+4. Why does least squares minimize squared residuals instead of simply adding the residuals themselves?
+
+5. Explain the difference between $\beta_0,\beta_1$ and $b_0,b_1$.
+
+6. If one fitted line has a smaller SSE than another fitted line for the same data, what does that tell us? What does it *not* tell us?
+
+7. What is the difference between an error term $\varepsilon_i$ and a residual $e_i=y_i-\hat y_i$? Why can we observe one but not the other?
+
+8. Suppose a fitted line is $\hat y = 12 + 4x$. Interpret the slope in context-free language. What should you check before interpreting the intercept?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Probabilistic, not deterministic.** The model is probabilistic because it allows observations with the same value of $x$ to have different values of $y$. The line describes the mean response, while the error term represents random variation around that mean.
+
+2. **Mean response vs. observed response.** The line $E(y)=\beta_0+\beta_1x$ describes the average or expected value of $y$ at a given $x$. An individual observed value also includes random error, so it may fall above or below the mean response line.
+
+3. **Why vertical distances.** Regression is used to predict $y$ from $x$, so prediction error is measured in the response direction. For a given $x_i$, the fitted line gives one predicted value $\hat y_i$, and the residual $y_i-\hat y_i$ measures how far the observed response missed that prediction.
+
+4. **Why square residuals.** If we simply added residuals, positive and negative residuals could cancel each other out, making a poor fit look better than it is. Squaring residuals makes all contributions nonnegative and gives larger errors more influence.
+
+5. **Parameters vs. estimates.** The symbols $\beta_0$ and $\beta_1$ represent the unknown population intercept and slope. The symbols $b_0$ and $b_1$ are estimates computed from the sample data. Since we usually do not know the true population line, we use the fitted line based on $b_0$ and $b_1$.
+
+6. **Interpreting smaller SSE.** A smaller SSE means the fitted line has a smaller total squared residual error for that dataset, so it fits those observed points better by the least squares criterion. It does not automatically prove that the model is appropriate, that the relationship is causal, or that future predictions will be accurate.
+
+7. **Error vs. residual.** The error term $\varepsilon_i$ compares $y_i$ to the true mean response $E(y_i)$, which depends on the unknown population parameters. The residual compares $y_i$ to the fitted value $\hat y_i$, which we compute from the sample data. We can observe residuals after fitting a model, but the true errors remain unobserved because the true regression line is unknown.
+
+8. **Interpreting slope and intercept.** The slope of 4 means that for each 1-unit increase in $x$, the predicted value of $y$ increases by 4 units. Before interpreting the intercept, check whether $x=0$ is meaningful and within the range of the data. If $x=0$ is unrealistic or far outside the observed data, the intercept may be needed mathematically but not useful as a practical interpretation.
+
+:::

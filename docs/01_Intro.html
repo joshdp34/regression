@@ -72,6 +72,22 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<style>
+div.callout-example.callout {
+  border-left-color: #008000;
+}
+div.callout-example.callout-style-default > .callout-header {
+  background-color: rgba(0, 128, 0, 0.13);
+}
+div.callout-example .callout-toggle::before {  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(33, 37, 41)" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');}
+div.callout-example.callout-style-default .callout-icon::before, div.callout-example.callout-titled .callout-icon::before {
+  content: '📈';
+  background-image: none;
+}
+</style>
 
   <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
   <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
@@ -309,6 +325,8 @@ window.Quarto = {
   <li><a href="#the-probabilistic-model" id="toc-the-probabilistic-model" class="nav-link active" data-scroll-target="#the-probabilistic-model"><span class="header-section-number">1.1</span> The Probabilistic Model</a></li>
   <li><a href="#sec-regoverview" id="toc-sec-regoverview" class="nav-link" data-scroll-target="#sec-regoverview"><span class="header-section-number">1.2</span> Overview of Regression Analysis</a></li>
   <li><a href="#collecting-the-data-for-regression" id="toc-collecting-the-data-for-regression" class="nav-link" data-scroll-target="#collecting-the-data-for-regression"><span class="header-section-number">1.3</span> Collecting the Data for Regression</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">1.4</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">1.5</span> Check your understanding</a></li>
   </ul>
 </nav>
     </div>
@@ -365,10 +383,63 @@ window.Quarto = {
     E(y) =&amp; \text{ mean (or expected) value of } y\\
     \varepsilon =&amp; \text{ random error}
 \end{align*}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Mean plus error">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Mean plus error
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The basic regression idea can be summarized as:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A["Mean response E(y)&lt;br/&gt;(systematic part)"] --&gt; C["Observed response y"]
+  B["Random error epsilon&lt;br/&gt;(individual deviation)"] --&gt; C
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>The mean response is the part we try to explain with a model. The error term represents the leftover variation from one observation to another.</p>
+</div>
+</div>
+</div>
 <p>This model is referred to as a <em>probabilistic</em> model for <span class="math inline">\(y\)</span>. The term “probabilistic” is used because, under certain assumptions, we can make probability-based statements about the extent of the difference between <span class="math inline">\(y\)</span> and <span class="math inline">\(E(y)\)</span>.</p>
-<p>For example, we might assert that the error term, <span class="math display">\[
+<p>We might assert that the error term, <span class="math display">\[
     \varepsilon = y - E(y)
 \]</span> follows a normal distribution.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 1.1: Separating the typical value from random error
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose <span class="math inline">\(y\)</span> represents a student’s exam score. If a student studies 10 hours, the mean exam score for all students who study 10 hours might be <span class="math display">\[
+E(y) = 82.
+\]</span></p>
+<p>That does not mean every student who studies 10 hours earns exactly 82. One student may earn 88, another may earn 79, and another may earn 83. The difference between an individual student’s score and the mean score for students with the same study time is the random error: <span class="math display">\[
+\varepsilon = y - E(y).
+\]</span></p>
+<p>For the student who earns 88, <span class="math display">\[
+\varepsilon = 88 - 82 = 6.
+\]</span></p>
+<p>Regression models try to estimate the systematic part, <span class="math inline">\(E(y)\)</span>, while acknowledging that individual observations still vary around that mean.</p>
+</div>
+</div>
 <p>In practice, we will use sample data to estimate the parameters of the probabilistic model—specifically, the mean <span class="math inline">\(E(y)\)</span> and the random error <span class="math inline">\(\varepsilon\)</span>.</p>
 <p>We will later discuss a common assumption in regression: that the mean error is zero.</p>
 <p>In other words, <span class="math display">\[
@@ -382,19 +453,59 @@ window.Quarto = {
     \hat y = \bar y
 \end{align*}\]</span> where <span class="math inline">\(\hat y\)</span> denotes a predicted value of <span class="math inline">\(y\)</span>.</p>
 <p>This would be the case with <em>univariate</em> data (we only have one variable in our data: <span class="math inline">\(y\)</span>).</p>
-<p>Unfortunately, this simple model does not take into consideration a number of variables, called <em>independent</em> variables, that may help predict the response variable.</p>
-<p>Independent variables are also called <em>predictor</em> or <em>explanatory</em> variables.</p>
-<p>The process of identifying the mathematical model that describes the relationship between <span class="math inline">\(y\)</span> and a set of independent variables, and that best fits the data, is known as <em>regression analysis</em>.</p>
+<p>Unfortunately, this simple model does not take into consideration a number of variables, called <em>predictor</em> or <em>explanatory</em> variables, that may help predict the response variable.</p>
+<p>These variables are sometimes called <em>independent</em> variables, but in regression it is often clearer to call them predictors because they are not always independent of each other or controlled by the researcher.</p>
+<p>When there is only one predictor, a common starting point is the simple linear regression mean function <span class="math display">\[
+E(y) = \beta_0 + \beta_1x.
+\]</span> In this model, <span class="math inline">\(E(y)\)</span> changes linearly as <span class="math inline">\(x\)</span> changes. The full probabilistic version keeps the same mean structure but adds random error: <span class="math display">\[
+y = \beta_0 + \beta_1x + \varepsilon.
+\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Where this is heading">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Where this is heading
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Much of the course will focus on choosing a useful form for <span class="math inline">\(E(y)\)</span>, estimating the unknown <span class="math inline">\(\beta\)</span> parameters from data, and checking whether the error term behaves reasonably. The notation may look abstract now, but the core idea is simple: use predictors to model the mean response, then account for the fact that individual observations vary around that mean.</p>
+</div>
+</div>
+</div>
+<p>The process of identifying the mathematical model that describes the relationship between <span class="math inline">\(y\)</span> and a set of predictor variables, and that best fits the data, is known as <em>regression analysis</em>.</p>
 </section>
 <section id="sec-regoverview" class="level2" data-number="1.2">
 <h2 data-number="1.2" class="anchored" data-anchor-id="sec-regoverview"><span class="header-section-number">1.2</span> Overview of Regression Analysis</h2>
-<p>We will denote the independent variables as <span class="math display">\[\begin{align*}
+<p>We will denote the predictor variables as <span class="math display">\[\begin{align*}
     x_1, x_2, \ldots, x_k
-\end{align*}\]</span> where <span class="math inline">\(k\)</span> is the number of independent variables.</p>
-<p>The goal of regression analysis is to create a <em>prediction equation</em> that accurately relates <span class="math inline">\(y\)</span> to independent variables, allowing us to predict <span class="math inline">\(y\)</span> for given values of <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> with minimal prediction error.</p>
+\end{align*}\]</span> where <span class="math inline">\(k\)</span> is the number of predictor variables.</p>
+<p>The goal of regression analysis is to create a <em>prediction equation</em> that accurately relates <span class="math inline">\(y\)</span> to predictor variables, allowing us to predict <span class="math inline">\(y\)</span> for given values of <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> with minimal prediction error.</p>
 <p>When predicting <span class="math inline">\(y\)</span>, we also need a measure of the <em>reliability</em> of our prediction, indicating how large the prediction error might be.</p>
 <p>These elements form the core of regression analysis.</p>
-<p>Beyond predicting <span class="math inline">\(y\)</span>, a regression model can also <em>estimate</em> the mean value of <span class="math inline">\(y\)</span> for specific values of <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> and explore the <em>relationship</em> between <span class="math inline">\(y\)</span> and one or more independent variables.</p>
+<p>Beyond predicting <span class="math inline">\(y\)</span>, a regression model can also <em>estimate</em> the mean value of <span class="math inline">\(y\)</span> for specific values of <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> and explore the <em>relationship</em> between <span class="math inline">\(y\)</span> and one or more predictor variables.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 1.2: Three regression goals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose a university is studying the relationship between weekly study time (<span class="math inline">\(x\)</span>) and final exam score (<span class="math inline">\(y\)</span>).</p>
+<ul>
+<li><strong>Prediction:</strong> A student plans to study 12 hours. What final exam score should we predict for that individual student?</li>
+<li><strong>Estimation:</strong> Among all students who study 12 hours, what is the mean final exam score?</li>
+<li><strong>Explanation:</strong> Is there evidence that exam scores tend to increase as study time increases?</li>
+</ul>
+<p>These questions are related, but they are not identical. Prediction focuses on an individual outcome, estimation focuses on a mean response, and explanation focuses on understanding the relationship between variables.</p>
+</div>
+</div>
 <p>The process of regression analysis typically involves six key steps:</p>
 <ol type="1">
 <li>Hypothesize the form of the model for <span class="math inline">\(E(y)\)</span>.</li>
@@ -409,12 +520,22 @@ window.Quarto = {
 <h2 data-number="1.3" class="anchored" data-anchor-id="collecting-the-data-for-regression"><span class="header-section-number">1.3</span> Collecting the Data for Regression</h2>
 <p>The first step listed above will be discussed later.</p>
 <p>Once you’ve proposed a model for <span class="math inline">\(E(y)\)</span>, the next step is to gather sample data to estimate the model.</p>
-<p>This means collecting data on both the response variable <span class="math inline">\(y\)</span> and the independent variables <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> for each observation in your sample. In regression analysis, the sample includes data on multiple variables: <span class="math display">\[
+<p>This means collecting data on both the response variable <span class="math inline">\(y\)</span> and the predictor variables <span class="math inline">\(x_1, x_2, \ldots, x_k\)</span> for each observation in your sample. In regression analysis, the sample includes data on multiple variables: <span class="math display">\[
 y, x_1, x_2, \ldots, x_k
 \]</span> This is known as <em>multivariate</em> data.</p>
 <p>Regression data can be either observational or experimental:</p>
-<p>For <em>observational data</em> no control is exerted over the independent variables (<span class="math inline">\(x\)</span>’s). For example, recording people’s ages and their corresponding blood pressure levels without influencing either.</p>
-<p>For <em>experimental data</em> the independent variables are controlled or manipulated. For instance, setting different fertilizer amounts for crops to observe the impact on growth.</p>
+<p>For <em>observational data</em> no control is exerted over the predictor variables (<span class="math inline">\(x\)</span>’s).</p>
+<p>For <em>experimental data</em> the predictor variables are controlled or manipulated.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 1.3: Observational regression data for GPA
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Suppose you want to model a student’s annual GPA (<span class="math inline">\(y\)</span>). One approach is to randomly select a sample of <span class="math inline">\(n=100\)</span> students and record their GPA along with the values of each predictor variable.</p>
 <p>Data for the first three students in the sample are shown in <a href="#tbl-table1" class="quarto-xref">Table&nbsp;<span>1.1</span></a>.</p>
 <div id="tbl-table1" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -481,6 +602,26 @@ Table&nbsp;1.1: Values of the response variable and predictor variables for the 
 </figure>
 </div>
 <p>In this example, the <span class="math inline">\(x\)</span> values, like study hours, class attendance, and extracurricular activities, are not predetermined before observing GPA <span class="math inline">\(y\)</span>; thus, the <span class="math inline">\(x\)</span> values are uncontrolled. Therefore, the sample data are observational.</p>
+<p>This type of study can help us describe relationships and make predictions. However, because the <span class="math inline">\(x\)</span> values were not assigned by the researcher, we should be cautious about making cause-and-effect claims from the regression alone.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Association does not imply causation">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Association does not imply causation
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Regression is excellent for describing relationships and making predictions, but the study design matters. If the data are observational, a relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> may reflect confounding variables, selection effects, or other background differences rather than a direct cause-and-effect relationship.</p>
+<p>For example, students with higher attendance may also differ in motivation, preparation, work schedules, or access to support. Those factors can also affect GPA, so an attendance-GPA relationship by itself does not prove that changing attendance alone would change GPA.</p>
+</div>
+</div>
+</div>
 <section id="determining-sample-size-for-regression-with-observational-data" class="level4">
 <h4 class="anchored" data-anchor-id="determining-sample-size-for-regression-with-observational-data">Determining Sample Size for Regression with Observational Data</h4>
 <p>When applying regression to observational data, the required sample size for estimating the mean <span class="math inline">\(E(y)\)</span> depends on three key factors:</p>
@@ -489,7 +630,7 @@ Table&nbsp;1.1: Values of the response variable and predictor variables for the 
 <li>Confidence level</li>
 <li>Desired margin of error (half-width of the confidence interval)</li>
 </ul>
-<p>However, unlike the univariate case, <span class="math inline">\(E(y)\)</span> is modeled as a function of multiple independent variables, which adds complexity. The sample size must be large enough to estimate and test all parameters in the model.</p>
+<p>However, unlike the univariate case, <span class="math inline">\(E(y)\)</span> is modeled as a function of multiple predictor variables, which adds complexity. The sample size must be large enough to estimate and test all parameters in the model.</p>
 <p>To ensure a sufficient sample size, a common guideline is to select a sample size <span class="math inline">\(n\)</span> that is at least 10 times the number of parameters in the model.</p>
 <p>For instance, if a university registrar’s office uses the following model for the annual GPA <span class="math inline">\(y\)</span> of a current student:</p>
 <p><span class="math display">\[E(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_6 x_6\]</span></p>
@@ -499,12 +640,22 @@ Table&nbsp;1.1: Values of the response variable and predictor variables for the 
 </section>
 <section id="experimental-data" class="level4">
 <h4 class="anchored" data-anchor-id="experimental-data">Experimental Data</h4>
-<p>The second type of data in regression, <em>experimental</em> data, is generated through designed experiments where the independent variables are <em>set</em> in advance (i.e., controlled) before observing the value of <span class="math inline">\(y\)</span>.</p>
-<p>For instance, consider a scenario where a researcher wants to study the effect of two independent variables—say, fertilizer amount <span class="math inline">\(x_1\)</span> and irrigation level <span class="math inline">\(x_2\)</span>—on the growth rate <span class="math inline">\(y\)</span> of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the <span class="math inline">\(3\times 3=9\)</span> fertilizer–irrigation combinations (see <a href="#tbl-table1_2" class="quarto-xref">Table&nbsp;<span>1.2</span></a> below).</p>
+<p>The second type of data in regression, <em>experimental</em> data, is generated through designed experiments where the predictor variables are <em>set</em> in advance (i.e., controlled) before observing the value of <span class="math inline">\(y\)</span>.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 1.4: Experimental regression data for plant growth
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Consider a scenario where a researcher wants to study the effect of two predictor variables—say, fertilizer amount <span class="math inline">\(x_1\)</span> and irrigation level <span class="math inline">\(x_2\)</span>—on the growth rate <span class="math inline">\(y\)</span> of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the <span class="math inline">\(3\times 3=9\)</span> fertilizer–irrigation combinations (see <a href="#tbl-table1_2" class="quarto-xref">Table&nbsp;<span>1.2</span></a> below).</p>
 <div id="tbl-table1_2" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure">
 <figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-table1_2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1.2: Values of the response variable and two independent variables for the growth rate of plants.
+Table&nbsp;1.2: Values of the response variable and two predictor variables for the growth rate of plants.
 </figcaption>
 <div aria-describedby="tbl-table1_2-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <table class="caption-top table">
@@ -566,12 +717,133 @@ Table&nbsp;1.2: Values of the response variable and two independent variables fo
 </div>
 </figure>
 </div>
-<p>In this experiment, the settings of the independent variables are <em>controlled</em>, in contrast to the uncontrolled nature of observational data, like in the real estate sales example.</p>
+<p>In this experiment, the settings of the predictor variables are <em>controlled</em>, in contrast to the uncontrolled nature of observational data, like in the real estate sales example.</p>
+<p>Because the researcher assigns the fertilizer and irrigation levels before observing plant growth, this design gives stronger evidence about the effect of those variables on the response.</p>
+</div>
+</div>
 <p>In many studies, it is often not possible to control the values of the <span class="math inline">\(x\)</span>’s, so most data collected for regression are <em>observational</em>.</p>
 <p>So, why do we differentiate between these two types of data? We will learn that inferences from regression studies based on observational data have more <em>limitations</em> than those based on experimental data. Specifically, establishing a <em>cause-and-effect</em> relationship between variables is much more challenging with observational data than with experimental data.</p>
-
-
 </section>
+</section>
+<section id="recap" class="level2" data-number="1.4">
+<h2 data-number="1.4" class="anchored" data-anchor-id="recap"><span class="header-section-number">1.4</span> Recap</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><strong>Keyword</strong></th>
+<th><strong>Definition</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Random variable</strong></td>
+<td>A rule that assigns a numerical value to each outcome in a sample space.</td>
+</tr>
+<tr class="even">
+<td><strong>Response variable</strong></td>
+<td>The variable being predicted, modeled, or explained; usually denoted by <span class="math inline">\(y\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Expected value</strong></td>
+<td>The mean or typical value of a random variable; in regression, <span class="math inline">\(E(y)\)</span> represents the mean response.</td>
+</tr>
+<tr class="even">
+<td><strong>Random error</strong></td>
+<td>The difference between an observed value and its mean value, written as <span class="math inline">\(\varepsilon = y - E(y)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Probabilistic model</strong></td>
+<td>A model that represents an observation as a systematic mean component plus random error.</td>
+</tr>
+<tr class="even">
+<td><strong>Predictor variable</strong></td>
+<td>A variable used to help explain or predict the response; also called an independent or explanatory variable.</td>
+</tr>
+<tr class="odd">
+<td><strong>Simple linear regression</strong></td>
+<td>A regression model with one predictor where the mean response is modeled as <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Regression analysis</strong></td>
+<td>The process of building and evaluating a model that relates a response variable to one or more predictors.</td>
+</tr>
+<tr class="odd">
+<td><strong>Prediction equation</strong></td>
+<td>An estimated equation used to predict <span class="math inline">\(y\)</span> from values of the predictor variables.</td>
+</tr>
+<tr class="even">
+<td><strong>Multivariate data</strong></td>
+<td>Data containing measurements on two or more variables for each observation.</td>
+</tr>
+<tr class="odd">
+<td><strong>Observational data</strong></td>
+<td>Data collected without controlling or assigning the predictor variables.</td>
+</tr>
+<tr class="even">
+<td><strong>Experimental data</strong></td>
+<td>Data collected from a study in which the predictor variables are controlled or assigned before observing the response.</td>
+</tr>
+<tr class="odd">
+<td><strong>Association</strong></td>
+<td>A relationship or pattern between variables; an association alone does not prove that one variable causes another.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="check-your-understanding" class="level2" data-number="1.5">
+<h2 data-number="1.5" class="anchored" data-anchor-id="check-your-understanding"><span class="header-section-number">1.5</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>In the model <span class="math inline">\(y = E(y) + \varepsilon\)</span>, why do we need both <span class="math inline">\(E(y)\)</span> and <span class="math inline">\(\varepsilon\)</span>? What would be missing if we only described the mean response?</p></li>
+<li><p>Explain the difference between a response variable and a predictor variable using your own example.</p></li>
+<li><p>Why is the sample mean <span class="math inline">\(\bar y\)</span> a reasonable prediction when we only have measurements of <span class="math inline">\(y\)</span> and no predictor variables?</p></li>
+<li><p>A study finds that students who attend more classes tend to have higher GPAs. Why should we be careful about saying that attendance <em>causes</em> higher GPA if the data are observational?</p></li>
+<li><p>Why do experimental data generally provide stronger evidence for cause-and-effect relationships than observational data?</p></li>
+<li><p>In the simple linear regression mean function <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span>, what is being modeled: each individual value of <span class="math inline">\(y\)</span>, or the mean value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>? Explain why that distinction matters.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Mean plus individual variation.</strong> The expected value <span class="math inline">\(E(y)\)</span> describes the typical or systematic part of the response, while <span class="math inline">\(\varepsilon\)</span> represents the random deviation of an individual observation from that typical value. If we only described the mean response, we would ignore the fact that real observations vary.</p></li>
+<li><p><strong>Response vs.&nbsp;predictor.</strong> The response variable is the outcome we want to model or predict, while predictor variables are used to explain or predict that outcome. For example, if we model house price using square footage, number of bedrooms, and age of the house, then house price is the response and the others are predictors.</p></li>
+<li><p><strong>Using the mean without predictors.</strong> If no predictor variables are available, every observation receives the same prediction. The sample mean is a natural choice because it summarizes the center of the observed <span class="math inline">\(y\)</span> values and balances positive and negative deviations around that center.</p></li>
+<li><p><strong>Association is not causation.</strong> In observational data, students choose or experience their own attendance patterns. Other variables, such as motivation, course difficulty, work schedule, or prior preparation, may be related to both attendance and GPA. Regression can describe the association, but the study design alone may not justify a causal conclusion.</p></li>
+<li><p><strong>Control supports causal claims.</strong> In an experiment, the researcher assigns or controls the predictor values before observing the response. This helps isolate the effect of the predictor from other competing explanations. Observational studies often contain uncontrolled differences among individuals or units, which makes causal interpretation more limited.</p></li>
+<li><p><strong>Mean response, not every individual response.</strong> The expression <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span> models the mean value of <span class="math inline">\(y\)</span> for observations with a given value of <span class="math inline">\(x\)</span>. Individual observations may fall above or below that mean because of random error. This distinction matters because regression describes the typical response pattern while still allowing individual outcomes to vary.</p></li>
+</ol>
+</div>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

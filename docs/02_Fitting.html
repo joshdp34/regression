@@ -101,7 +101,20 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+}</script><style>
+div.callout-example.callout {
+  border-left-color: #008000;
+}
+div.callout-example.callout-style-default > .callout-header {
+  background-color: rgba(0, 128, 0, 0.13);
+}
+div.callout-example .callout-toggle::before {  background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="rgb(33, 37, 41)" class="bi bi-chevron-down" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');}
+div.callout-example.callout-style-default .callout-icon::before, div.callout-example.callout-titled .callout-icon::before {
+  content: '📈';
+  background-image: none;
+}
+</style>
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -323,6 +336,8 @@ window.Quarto = {
 <li><a href="#the-straight-line-probabilistic-model" id="toc-the-straight-line-probabilistic-model" class="nav-link active" data-scroll-target="#the-straight-line-probabilistic-model"><span class="header-section-number">2.1</span> The Straight-Line Probabilistic Model</a></li>
   <li><a href="#a-first-order-linear-model" id="toc-a-first-order-linear-model" class="nav-link" data-scroll-target="#a-first-order-linear-model"><span class="header-section-number">2.2</span> A First-Order Linear Model</a></li>
   <li><a href="#fitting-the-model-the-method-of-least-squares" id="toc-fitting-the-model-the-method-of-least-squares" class="nav-link" data-scroll-target="#fitting-the-model-the-method-of-least-squares"><span class="header-section-number">2.3</span> Fitting the Model: The Method of Least Squares</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">2.4</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">2.5</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -346,12 +361,22 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“Regression. It is a universal rule that the unknown kinsman in any degree of any specified man, is probably more mediocre than he.” - Francis Galton</p>
 </blockquote>
-<p>The simplest model for relating a response variable <span class="math inline">\(y\)</span> to a single independent variable <span class="math inline">\(x\)</span> is a <em>straight line</em>.</p>
+<p>The simplest model for relating a response variable <span class="math inline">\(y\)</span> to a single predictor variable <span class="math inline">\(x\)</span> is a <em>straight line</em>.</p>
 <p>We will begin by discussing <em>simple linear</em> models and how to fit them to a dataset using the method of least squares.</p>
 <p>Next, we will demonstrate how to determine whether a <em>relationship</em> exists between <span class="math inline">\(y\)</span> and <span class="math inline">\(x\)</span>, and how to use the model to either <em>estimate</em> <span class="math inline">\(E(y)\)</span>, the mean value of <span class="math inline">\(y\)</span>, or to <em>predict</em> a future value of <span class="math inline">\(y\)</span> for a given <span class="math inline">\(x\)</span>.</p>
 <p>This collection of methods is known as simple linear regression analysis.</p>
 <section id="the-straight-line-probabilistic-model" class="level2" data-number="2.1"><h2 data-number="2.1" class="anchored" data-anchor-id="the-straight-line-probabilistic-model">
 <span class="header-section-number">2.1</span> The Straight-Line Probabilistic Model</h2>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 2.1: CO₂ emissions as a probabilistic relationship
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>When studying environmental science, consider modeling the monthly carbon dioxide (CO₂) emissions <span class="math inline">\(y\)</span> of a city as a function of its monthly industrial activity <span class="math inline">\(x\)</span>.</p>
 <p>The first question to ask is: Do you believe an exact (<em>deterministic</em>) relationship exists between these two variables?</p>
 <p>In other words, can we predict the exact value of CO₂ emissions if industrial activity is known?</p>
@@ -362,19 +387,21 @@ window.Quarto = {
 y = E(y) + \varepsilon
 \]</span></p>
 <p>The random error component,<span class="math inline">\(\varepsilon\)</span>, captures all unexplained variations in emissions caused by omitted variables or unpredictable random factors.</p>
+</div>
+</div>
 <p>The random error plays a key role in hypothesis testing, determining confidence intervals for the model’s deterministic portion, and estimating the prediction error when using the model to predict future values of <span class="math inline">\(y\)</span>.</p>
 <p>Let’s start with the simplest probabilistic model—a <em>first-order</em> linear model that graphs as a straight line.</p>
 </section><section id="a-first-order-linear-model" class="level2" data-number="2.2"><h2 data-number="2.2" class="anchored" data-anchor-id="a-first-order-linear-model">
 <span class="header-section-number">2.2</span> A First-Order Linear Model</h2>
-<p>The first-order linear model is expessed as <span class="math display">\[
+<p>The first-order linear model is expressed as <span class="math display">\[
 y = \beta_0 + \beta_1 x + \varepsilon
 \]</span></p>
 <p>where:</p>
 <ul>
 <li>
-<span class="math inline">\(y\)</span> is the <em>dependent</em> variable (also known as the response variable)</li>
+<span class="math inline">\(y\)</span> is the <em>response</em> variable</li>
 <li>
-<span class="math inline">\(x\)</span> is the <em>independent</em> variable (used as a predictor of <span class="math inline">\(y\)</span>)</li>
+<span class="math inline">\(x\)</span> is the <em>predictor</em> variable (sometimes called the independent variable)</li>
 <li>
 <span class="math inline">\(E(y) = \beta_0 + \beta_1 x\)</span> is the <em>deterministic</em> component</li>
 <li>
@@ -401,6 +428,16 @@ y = \beta_0 + \beta_1 x + \varepsilon
 <p>As discussed in <a href="01_Intro.html#sec-regoverview" class="quarto-xref"><span>Section 1.2</span></a>, regression can be viewed as a six-step process. For now, we’ll focus on steps 2-6, using the simple linear regression model. We’ll explore more complex models later.</p>
 </section><section id="fitting-the-model-the-method-of-least-squares" class="level2" data-number="2.3"><h2 data-number="2.3" class="anchored" data-anchor-id="fitting-the-model-the-method-of-least-squares">
 <span class="header-section-number">2.3</span> Fitting the Model: The Method of Least Squares</h2>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 2.2: A small dataset for fitting a line
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Suppose we have the data shown in <a href="#tbl-table2_1" class="quarto-xref">Table&nbsp;<span>2.1</span></a> below and plotted in the scatterplot in <a href="#fig-2_1" class="quarto-xref">Figure&nbsp;<span>2.1</span></a>.</p>
 <div id="tbl-table2_1" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-table2_1-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -469,6 +506,8 @@ Figure&nbsp;2.1: Scatterplot of the data in <a href="#tbl-table2_1" class="quart
 </div>
 </div>
 </div>
+</div>
+</div>
 <p>We hypothesize that a straight-line model relates <em>y</em> to <em>x</em>, as follows:</p>
 <p><span class="math display">\[
 y = \beta_0 + \beta_1 x + \varepsilon
@@ -491,6 +530,16 @@ y = \beta_0 + \beta_1 x + \varepsilon
 </div>
 <p>We calculate the magnitude of the <em>deviations</em> (the differences between observed and predicted values of <span class="math inline">\(y\)</span>).</p>
 <p>These deviations, or prediction errors, represent the <em>vertical</em> distances between observed and predicted values of <span class="math inline">\(y\)</span>.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 2.3: Comparing two possible fitted lines
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Suppose we try to fit the line <span id="eq-02_01"><span class="math display">\[
     \hat{y} =2-.2x
 \tag{2.1}\]</span></span></p>
@@ -684,6 +733,8 @@ Table&nbsp;2.3: Deviations and squared deviations of the line in <a href="#eq-02
 </figure>
 </div>
 <p>The SSE for this line is 0.2727, which is lower than the SSE for the previous line, indicating a better fit.</p>
+</div>
+</div>
 <p>While we could try additional lines to achieve a lower SSE, there are infinitely many possibilities since <em><span class="math inline">\(\beta_0\)</span></em> and <em><span class="math inline">\(\beta_1\)</span></em> can take any real value.</p>
 <p>Using Calculus, we can attempt to minimize the SSE for the generic line <span class="math display">\[\begin{align*}
     \hat{y} = b_0 +b_1 x
@@ -693,7 +744,7 @@ Q=\sum \left(y_i-\hat{y}_i\right)^2
 \tag{2.3}\]</span></span></p>
 <p>We determine the “best” line as the one that minimizes <span class="math inline">\(Q\)</span>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -702,7 +753,7 @@ Q=\sum \left(y_i-\hat{y}_i\right)^2
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To minimize <span class="math inline">\(Q\)</span>, we differentiate it with respect to <span class="math inline">\(b_{0}\)</span> and <span class="math inline">\(b_{1}\)</span>: <span class="math display">\[\begin{align*}
 \frac{\partial Q}{\partial b_{0}} &amp; =-2\sum \left(y_{i}-\left(b_{0}+b_{1}x_{i}\right)\right)\\
@@ -748,7 +799,7 @@ b_1 &amp; =\frac{\sum \left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum
 \end{align}
 \tag{2.5}\]</span></span> are called the <em>least</em> <em>squares</em> <em>estimators</em>.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -757,7 +808,7 @@ b_1 &amp; =\frac{\sum \left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To show these estimators are the minimum, we take the second partial derivatives of <span class="math inline">\(Q\)</span>: <span class="math display">\[\begin{align*}
 \frac{\partial^{2}Q}{\partial\left(b_{0}\right)^{2}} &amp; =2n\\
@@ -783,12 +834,194 @@ SS_{xy} &amp;= \sum \left(x_i-\bar x\right)\left(y_i - \bar y\right)
 <p>The fitted line (also called the <em>least squares line</em>) is <span class="math display">\[\begin{align*}
 {\hat{y} = b_0 + b_1 x }
 \end{align*}\]</span></p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 2.4: Interpreting a fitted line
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose the fitted line for a dataset is <span class="math display">\[
+\hat y = 1.8 - 0.15x.
+\]</span></p>
+<p>The intercept is <span class="math inline">\(b_0=1.8\)</span>. This is the predicted value of <span class="math inline">\(y\)</span> when <span class="math inline">\(x=0\)</span>. Whether this interpretation is meaningful depends on whether <span class="math inline">\(x=0\)</span> is reasonable in the context of the data.</p>
+<p>The slope is <span class="math inline">\(b_1=-0.15\)</span>. This means that for each 1-unit increase in <span class="math inline">\(x\)</span>, the predicted value of <span class="math inline">\(y\)</span> decreases by 0.15 units.</p>
+<p>For example, when <span class="math inline">\(x=6\)</span>, the fitted value is <span class="math display">\[
+\hat y = 1.8 - 0.15(6) = 0.9.
+\]</span></p>
+<p>The fitted line gives predictions from the sample data. It is our estimate of the unknown line of means.</p>
+</div>
+</div>
 <p>For a given data point, <span class="math inline">\((x_i, y_i)\)</span>, the observed value of <span class="math inline">\(y\)</span> is denoted as <span class="math inline">\(y_i\)</span> and the predicted value of <span class="math inline">\(y\)</span> is obtained by substituting <span class="math inline">\(x_i\)</span> into the prediction equation: <span class="math display">\[\begin{align*}
 {\hat{y}_i = b_0 + b_1 x_i }
 \end{align*}\]</span></p>
 <p>The deviation of the <span class="math inline">\(i\)</span>th value of <span class="math inline">\(y\)</span> from its predicted value, called the <span class="math inline">\(i\)</span>th <em>residual</em>, is <span class="math display">\[\begin{align*}
 { \left(y_i-\hat{y}_i\right) }
 \end{align*}\]</span> Thus, SSE is just the sum of the squared residuals.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Error terms vs. residuals">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Error terms vs.&nbsp;residuals
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The random error term <span class="math inline">\(\varepsilon_i\)</span> and the residual <span class="math inline">\(y_i-\hat y_i\)</span> are closely related, but they are not the same thing.</p>
+<ul>
+<li>The <strong>error term</strong> <span class="math inline">\(\varepsilon_i\)</span> is the unobserved difference between an observation and the true mean response: <span class="math display">\[
+\varepsilon_i = y_i - E(y_i).
+\]</span>
+</li>
+<li>The <strong>residual</strong> is the observed difference between an observation and the fitted value from our sample model: <span class="math display">\[
+e_i = y_i-\hat y_i.
+\]</span>
+</li>
+</ul>
+<p>In practice, we do not know the true mean response <span class="math inline">\(E(y_i)\)</span> because we do not know the true parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. We use residuals as observable estimates of the errors after fitting the model.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 2.5: Interpreting a residual
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the first trial line in <a href="#eq-02_01" class="quarto-xref">Equation&nbsp;<span>2.1</span></a>, the observation with <span class="math inline">\(x=1\)</span> has observed value <span class="math inline">\(y=2\)</span> and predicted value <span class="math inline">\(\hat y=1.8\)</span>. The residual is <span class="math display">\[
+y-\hat y = 2-1.8 = 0.2.
+\]</span></p>
+<p>Because the residual is positive, the observed point is above the fitted line. If a residual is negative, the observed point is below the fitted line. A residual close to zero means the fitted line predicted that observation fairly well.</p>
+<p>Least squares chooses the line that makes the sum of squared residuals as small as possible. It does not make every residual equal to zero; that would usually be impossible unless all points fell exactly on one straight line.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="2.4"><h2 data-number="2.4" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">2.4</span> Recap</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 52%">
+<col style="width: 47%">
+</colgroup>
+<thead><tr class="header">
+<th><strong>Keyword</strong></th>
+<th><strong>Definition</strong></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Simple linear regression</strong></td>
+<td>A regression model that relates a response variable <span class="math inline">\(y\)</span> to one predictor variable <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>First-order linear model</strong></td>
+<td>A straight-line probabilistic model of the form <span class="math inline">\(y=\beta_0+\beta_1x+\varepsilon\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean response</strong></td>
+<td>The expected value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>, written as <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Random error</strong></td>
+<td>The part of an observed response not explained by the mean response function.</td>
+</tr>
+<tr class="odd">
+<td><strong>Parameter</strong></td>
+<td>An unknown population quantity, such as <span class="math inline">\(\beta_0\)</span> or <span class="math inline">\(\beta_1\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Estimate</strong></td>
+<td>A value computed from sample data to approximate a parameter, such as <span class="math inline">\(b_0\)</span> or <span class="math inline">\(b_1\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Intercept</strong></td>
+<td>The predicted response when <span class="math inline">\(x=0\)</span>; it should only be interpreted literally when <span class="math inline">\(x=0\)</span> is meaningful in context.</td>
+</tr>
+<tr class="even">
+<td><strong>Slope</strong></td>
+<td>The expected change in the predicted response for a 1-unit increase in <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Fitted line</strong></td>
+<td>The estimated regression line <span class="math inline">\(\hat y=b_0+b_1x\)</span> obtained from sample data.</td>
+</tr>
+<tr class="even">
+<td><strong>Predicted value</strong></td>
+<td>The value <span class="math inline">\(\hat y_i\)</span> produced by the fitted line for a particular <span class="math inline">\(x_i\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Residual</strong></td>
+<td>The vertical difference between an observed value and its predicted value, <span class="math inline">\(y_i-\hat y_i\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>SSE</strong></td>
+<td>The sum of squared residuals, <span class="math inline">\(\sum (y_i-\hat y_i)^2\)</span>, used to measure overall lack of fit.</td>
+</tr>
+<tr class="odd">
+<td><strong>Least squares line</strong></td>
+<td>The fitted line that minimizes SSE among all possible straight lines.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="2.5"><h2 data-number="2.5" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">2.5</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why is the straight-line regression model called <em>probabilistic</em> rather than deterministic?</p></li>
+<li><p>In the model <span class="math inline">\(y=\beta_0+\beta_1x+\varepsilon\)</span>, what is the difference between the line of means <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span> and an individual observed value of <span class="math inline">\(y\)</span>?</p></li>
+<li><p>Why do residuals measure vertical distances rather than horizontal distances from the fitted line?</p></li>
+<li><p>Why does least squares minimize squared residuals instead of simply adding the residuals themselves?</p></li>
+<li><p>Explain the difference between <span class="math inline">\(\beta_0,\beta_1\)</span> and <span class="math inline">\(b_0,b_1\)</span>.</p></li>
+<li><p>If one fitted line has a smaller SSE than another fitted line for the same data, what does that tell us? What does it <em>not</em> tell us?</p></li>
+<li><p>What is the difference between an error term <span class="math inline">\(\varepsilon_i\)</span> and a residual <span class="math inline">\(e_i=y_i-\hat y_i\)</span>? Why can we observe one but not the other?</p></li>
+<li><p>Suppose a fitted line is <span class="math inline">\(\hat y = 12 + 4x\)</span>. Interpret the slope in context-free language. What should you check before interpreting the intercept?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Probabilistic, not deterministic.</strong> The model is probabilistic because it allows observations with the same value of <span class="math inline">\(x\)</span> to have different values of <span class="math inline">\(y\)</span>. The line describes the mean response, while the error term represents random variation around that mean.</p></li>
+<li><p><strong>Mean response vs.&nbsp;observed response.</strong> The line <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span> describes the average or expected value of <span class="math inline">\(y\)</span> at a given <span class="math inline">\(x\)</span>. An individual observed value also includes random error, so it may fall above or below the mean response line.</p></li>
+<li><p><strong>Why vertical distances.</strong> Regression is used to predict <span class="math inline">\(y\)</span> from <span class="math inline">\(x\)</span>, so prediction error is measured in the response direction. For a given <span class="math inline">\(x_i\)</span>, the fitted line gives one predicted value <span class="math inline">\(\hat y_i\)</span>, and the residual <span class="math inline">\(y_i-\hat y_i\)</span> measures how far the observed response missed that prediction.</p></li>
+<li><p><strong>Why square residuals.</strong> If we simply added residuals, positive and negative residuals could cancel each other out, making a poor fit look better than it is. Squaring residuals makes all contributions nonnegative and gives larger errors more influence.</p></li>
+<li><p><strong>Parameters vs.&nbsp;estimates.</strong> The symbols <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> represent the unknown population intercept and slope. The symbols <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are estimates computed from the sample data. Since we usually do not know the true population line, we use the fitted line based on <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>.</p></li>
+<li><p><strong>Interpreting smaller SSE.</strong> A smaller SSE means the fitted line has a smaller total squared residual error for that dataset, so it fits those observed points better by the least squares criterion. It does not automatically prove that the model is appropriate, that the relationship is causal, or that future predictions will be accurate.</p></li>
+<li><p><strong>Error vs.&nbsp;residual.</strong> The error term <span class="math inline">\(\varepsilon_i\)</span> compares <span class="math inline">\(y_i\)</span> to the true mean response <span class="math inline">\(E(y_i)\)</span>, which depends on the unknown population parameters. The residual compares <span class="math inline">\(y_i\)</span> to the fitted value <span class="math inline">\(\hat y_i\)</span>, which we compute from the sample data. We can observe residuals after fitting a model, but the true errors remain unobserved because the true regression line is unknown.</p></li>
+<li><p><strong>Interpreting slope and intercept.</strong> The slope of 4 means that for each 1-unit increase in <span class="math inline">\(x\)</span>, the predicted value of <span class="math inline">\(y\)</span> increases by 4 units. Before interpreting the intercept, check whether <span class="math inline">\(x=0\)</span> is meaningful and within the range of the data. If <span class="math inline">\(x=0\)</span> is unrealistic or far outside the observed data, the intercept may be needed mathematically but not useful as a practical interpretation.</p></li>
+</ol>
+</div>
+</div>
+</div>
 
 
 </section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">

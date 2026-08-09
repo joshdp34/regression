@@ -37,13 +37,48 @@ where
     \varepsilon =& \text{ random error}
 \end{align*}
 
+::: {.callout-note collapse="false" title="Mean plus error"}
+
+The basic regression idea can be summarized as:
+
+```{mermaid}
+flowchart LR
+  A["Mean response E(y)<br/>(systematic part)"] --> C["Observed response y"]
+  B["Random error epsilon<br/>(individual deviation)"] --> C
+```
+
+The mean response is the part we try to explain with a model. The error term represents the leftover variation from one observation to another.
+
+:::
+
 This model is referred to as a *probabilistic* model for $y$. The term "probabilistic" is used because, under certain assumptions, we can make probability-based statements about the extent of the difference between $y$ and $E(y)$.
 
-For example, we might assert that the error term,
+We might assert that the error term,
 $$
     \varepsilon = y - E(y)
 $$
 follows a normal distribution.
+
+::: {.example title="Example 1.1: Separating the typical value from random error"}
+
+Suppose $y$ represents a student's exam score. If a student studies 10 hours, the mean exam score for all students who study 10 hours might be
+$$
+E(y) = 82.
+$$
+
+That does not mean every student who studies 10 hours earns exactly 82. One student may earn 88, another may earn 79, and another may earn 83. The difference between an individual student's score and the mean score for students with the same study time is the random error:
+$$
+\varepsilon = y - E(y).
+$$
+
+For the student who earns 88,
+$$
+\varepsilon = 88 - 82 = 6.
+$$
+
+Regression models try to estimate the systematic part, $E(y)$, while acknowledging that individual observations still vary around that mean.
+
+:::
 
 
 In practice, we will use sample data to estimate the parameters of the probabilistic model—specifically, the mean $E(y)$ and the random error $\varepsilon$.
@@ -73,31 +108,57 @@ where $\hat y$ denotes a predicted value of $y$.
 
 This would be the case with *univariate* data (we only have one variable in our data: $y$).
 
-Unfortunately, this simple model does not take into consideration a
-number of variables, called *independent* variables, that may help predict the response variable.
+Unfortunately, this simple model does not take into consideration a number of variables, called *predictor* or *explanatory* variables, that may help predict the response variable.
 
-Independent variables are also called *predictor* or *explanatory* variables.
+These variables are sometimes called *independent* variables, but in regression it is often clearer to call them predictors because they are not always independent of each other or controlled by the researcher.
 
-The process of identifying the mathematical model that describes the relationship between $y$ and a set of independent variables, and that best fits the data, is known as *regression analysis*.
+When there is only one predictor, a common starting point is the simple linear regression mean function
+$$
+E(y) = \beta_0 + \beta_1x.
+$$
+In this model, $E(y)$ changes linearly as $x$ changes. The full probabilistic version keeps the same mean structure but adds random error:
+$$
+y = \beta_0 + \beta_1x + \varepsilon.
+$$
+
+::: {.callout-note collapse="false" title="Where this is heading"}
+
+Much of the course will focus on choosing a useful form for $E(y)$, estimating the unknown $\beta$ parameters from data, and checking whether the error term behaves reasonably. The notation may look abstract now, but the core idea is simple: use predictors to model the mean response, then account for the fact that individual observations vary around that mean.
+
+:::
+
+The process of identifying the mathematical model that describes the relationship between $y$ and a set of predictor variables, and that best fits the data, is known as *regression analysis*.
 
 ## Overview of Regression Analysis {#sec-regoverview}
 
 
 
-We will denote the independent variables as
+We will denote the predictor variables as
 \begin{align*}
     x_1, x_2, \ldots, x_k
 \end{align*}
-where $k$ is the number of independent variables.
+where $k$ is the number of predictor variables.
 
 
-The goal of regression analysis is to create a *prediction equation* that accurately relates $y$ to independent variables, allowing us to predict $y$ for given values of $x_1, x_2, \ldots, x_k$ with minimal prediction error.
+The goal of regression analysis is to create a *prediction equation* that accurately relates $y$ to predictor variables, allowing us to predict $y$ for given values of $x_1, x_2, \ldots, x_k$ with minimal prediction error.
 
 When predicting $y$, we also need a measure of the *reliability* of our prediction, indicating how large the prediction error might be.
 
 These elements form the core of regression analysis.
 
-Beyond predicting $y$, a regression model can also *estimate* the mean value of $y$ for specific values of $x_1, x_2, \ldots, x_k$ and explore the *relationship* between $y$ and one or more independent variables.
+Beyond predicting $y$, a regression model can also *estimate* the mean value of $y$ for specific values of $x_1, x_2, \ldots, x_k$ and explore the *relationship* between $y$ and one or more predictor variables.
+
+::: {.example title="Example 1.2: Three regression goals"}
+
+Suppose a university is studying the relationship between weekly study time ($x$) and final exam score ($y$).
+
+- **Prediction:** A student plans to study 12 hours. What final exam score should we predict for that individual student?
+- **Estimation:** Among all students who study 12 hours, what is the mean final exam score?
+- **Explanation:** Is there evidence that exam scores tend to increase as study time increases?
+
+These questions are related, but they are not identical. Prediction focuses on an individual outcome, estimation focuses on a mean response, and explanation focuses on understanding the relationship between variables.
+
+:::
 
 The process of regression analysis typically involves six key steps:
 
@@ -117,7 +178,7 @@ The first step listed above will be discussed later.
 
 Once you've proposed a model for $E(y)$, the next step is to gather sample data to estimate the model.
 
-This means collecting data on both the response variable $y$ and the independent variables $x_1, x_2, \ldots, x_k$ for each observation in your sample. In regression analysis, the sample includes data on multiple variables:
+This means collecting data on both the response variable $y$ and the predictor variables $x_1, x_2, \ldots, x_k$ for each observation in your sample. In regression analysis, the sample includes data on multiple variables:
 $$
 y, x_1, x_2, \ldots, x_k
 $$
@@ -125,11 +186,13 @@ This is known as *multivariate* data.
 
 Regression data can be either observational or experimental:
 
-For *observational data* no control is exerted over the independent variables ($x$’s). For example, recording people’s ages and their corresponding blood pressure levels without influencing either.
+For *observational data* no control is exerted over the predictor variables ($x$’s).
 
-For *experimental data* the independent variables are controlled or manipulated. For instance, setting different fertilizer amounts for crops to observe the impact on growth.
+For *experimental data* the predictor variables are controlled or manipulated.
 
 
+
+::: {.example title="Example 1.3: Observational regression data for GPA"}
 
 Suppose you want to model a student's annual GPA ($y$). One approach is to randomly select a sample of $n=100$ students and record their GPA along with the values of each predictor variable.
 
@@ -150,6 +213,18 @@ Data for the first three students in the sample are shown in @tbl-table1.
 
 In this example, the $x$ values, like study hours, class attendance, and extracurricular activities, are not predetermined before observing GPA $y$; thus, the $x$ values are uncontrolled. Therefore, the sample data are observational.
 
+This type of study can help us describe relationships and make predictions. However, because the $x$ values were not assigned by the researcher, we should be cautious about making cause-and-effect claims from the regression alone.
+
+:::
+
+::: {.callout-warning collapse="false" title="Association does not imply causation"}
+
+Regression is excellent for describing relationships and making predictions, but the study design matters. If the data are observational, a relationship between $x$ and $y$ may reflect confounding variables, selection effects, or other background differences rather than a direct cause-and-effect relationship.
+
+For example, students with higher attendance may also differ in motivation, preparation, work schedules, or access to support. Those factors can also affect GPA, so an attendance-GPA relationship by itself does not prove that changing attendance alone would change GPA.
+
+:::
+
 
 
 
@@ -161,7 +236,7 @@ When applying regression to observational data, the required sample size for est
 - Confidence level
 - Desired margin of error (half-width of the confidence interval)
 
-However, unlike the univariate case, $E(y)$ is modeled as a function of multiple independent variables, which adds complexity. The sample size must be large enough to estimate and test all parameters in the model.
+However, unlike the univariate case, $E(y)$ is modeled as a function of multiple predictor variables, which adds complexity. The sample size must be large enough to estimate and test all parameters in the model.
 
 To ensure a sufficient sample size, a common guideline is to select a sample size $n$ that is at least 10 times the number of parameters in the model.
 
@@ -181,9 +256,11 @@ students in the sample.
 #### Experimental Data
 
 
-The second type of data in regression, *experimental* data, is generated through designed experiments where the independent variables are *set* in advance (i.e., controlled) before observing the value of $y$.
+The second type of data in regression, *experimental* data, is generated through designed experiments where the predictor variables are *set* in advance (i.e., controlled) before observing the value of $y$.
 
-For instance, consider a scenario where a researcher wants to study the effect of two independent variables—say, fertilizer amount $x_1$ and irrigation level $x_2$—on the growth rate $y$ of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the $3\times 3=9$ fertilizer–irrigation combinations (see @tbl-table1_2 below).
+::: {.example title="Example 1.4: Experimental regression data for plant growth"}
+
+Consider a scenario where a researcher wants to study the effect of two predictor variables—say, fertilizer amount $x_1$ and irrigation level $x_2$—on the growth rate $y$ of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the $3\times 3=9$ fertilizer–irrigation combinations (see @tbl-table1_2 below).
 
 | Fertilizer, $x_1$ | Irrigation, $x_2$ | Growth Rate, $y$ |
 |-------------------|-------------------|------------------|
@@ -197,13 +274,69 @@ For instance, consider a scenario where a researcher wants to study the effect o
 | 30g               | 2L                | 8.7              |
 | 30g               | 3L                | 8.1              |
 
-: Values of the response variable and two independent variables for the growth rate of plants. {#tbl-table1_2}
+: Values of the response variable and two predictor variables for the growth rate of plants. {#tbl-table1_2}
 
-In this experiment, the settings of the independent variables are *controlled*, in contrast to the uncontrolled nature of observational data, like in the real estate sales example.
+In this experiment, the settings of the predictor variables are *controlled*, in contrast to the uncontrolled nature of observational data, like in the real estate sales example.
+
+Because the researcher assigns the fertilizer and irrigation levels before observing plant growth, this design gives stronger evidence about the effect of those variables on the response.
+
+:::
 
 In many studies, it is often not possible to control the values of the $x$'s, so most data collected for regression are *observational*.
 
 So, why do we differentiate between these two types of data? We will learn that inferences from regression studies based on observational data have more *limitations* than those based on experimental data. Specifically, establishing a *cause-and-effect* relationship between variables is much more challenging with observational data than with experimental data.
+
+## Recap
+
+| **Keyword** | **Definition** |
+| ----------- | ---------- |
+| **Random variable** | A rule that assigns a numerical value to each outcome in a sample space. |
+| **Response variable** | The variable being predicted, modeled, or explained; usually denoted by $y$. |
+| **Expected value** | The mean or typical value of a random variable; in regression, $E(y)$ represents the mean response. |
+| **Random error** | The difference between an observed value and its mean value, written as $\varepsilon = y - E(y)$. |
+| **Probabilistic model** | A model that represents an observation as a systematic mean component plus random error. |
+| **Predictor variable** | A variable used to help explain or predict the response; also called an independent or explanatory variable. |
+| **Simple linear regression** | A regression model with one predictor where the mean response is modeled as $E(y)=\beta_0+\beta_1x$. |
+| **Regression analysis** | The process of building and evaluating a model that relates a response variable to one or more predictors. |
+| **Prediction equation** | An estimated equation used to predict $y$ from values of the predictor variables. |
+| **Multivariate data** | Data containing measurements on two or more variables for each observation. |
+| **Observational data** | Data collected without controlling or assigning the predictor variables. |
+| **Experimental data** | Data collected from a study in which the predictor variables are controlled or assigned before observing the response. |
+| **Association** | A relationship or pattern between variables; an association alone does not prove that one variable causes another. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. In the model $y = E(y) + \varepsilon$, why do we need both $E(y)$ and $\varepsilon$? What would be missing if we only described the mean response?
+
+2. Explain the difference between a response variable and a predictor variable using your own example.
+
+3. Why is the sample mean $\bar y$ a reasonable prediction when we only have measurements of $y$ and no predictor variables?
+
+4. A study finds that students who attend more classes tend to have higher GPAs. Why should we be careful about saying that attendance *causes* higher GPA if the data are observational?
+
+5. Why do experimental data generally provide stronger evidence for cause-and-effect relationships than observational data?
+
+6. In the simple linear regression mean function $E(y)=\beta_0+\beta_1x$, what is being modeled: each individual value of $y$, or the mean value of $y$ for a given value of $x$? Explain why that distinction matters.
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Mean plus individual variation.** The expected value $E(y)$ describes the typical or systematic part of the response, while $\varepsilon$ represents the random deviation of an individual observation from that typical value. If we only described the mean response, we would ignore the fact that real observations vary.
+
+2. **Response vs. predictor.** The response variable is the outcome we want to model or predict, while predictor variables are used to explain or predict that outcome. For example, if we model house price using square footage, number of bedrooms, and age of the house, then house price is the response and the others are predictors.
+
+3. **Using the mean without predictors.** If no predictor variables are available, every observation receives the same prediction. The sample mean is a natural choice because it summarizes the center of the observed $y$ values and balances positive and negative deviations around that center.
+
+4. **Association is not causation.** In observational data, students choose or experience their own attendance patterns. Other variables, such as motivation, course difficulty, work schedule, or prior preparation, may be related to both attendance and GPA. Regression can describe the association, but the study design alone may not justify a causal conclusion.
+
+5. **Control supports causal claims.** In an experiment, the researcher assigns or controls the predictor values before observing the response. This helps isolate the effect of the predictor from other competing explanations. Observational studies often contain uncontrolled differences among individuals or units, which makes causal interpretation more limited.
+
+6. **Mean response, not every individual response.** The expression $E(y)=\beta_0+\beta_1x$ models the mean value of $y$ for observations with a given value of $x$. Individual observations may fall above or below that mean because of random error. This distinction matters because regression describes the typical response pattern while still allowing individual outcomes to vary.
+
+:::
 
 
 
