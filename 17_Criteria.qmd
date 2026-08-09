@@ -1,0 +1,329 @@
+
+
+# Model Comparison Criteria
+
+> "When a measure becomes a target, it ceases to be a good measure." - Marilyn Strathern
+
+So far, we have discussed using the coefficient of determination, $R^2$ and adjusted coefficient of determination, $R^2_a$, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be use to help in the model building process.
+
+## Possible Models
+
+
+From any set of $p - 1$ predictors, $2^{p-1}$ 
+alternative models can be constructed. 
+
+
+This calculation is based on the fact that each predictor can be either included or excluded from the
+model. 
+
+For example, the 
+$$
+2^4 = 16
+$$
+different possible subset models that can be formed from
+the pool of four $X$ variables are 
+$$
+\begin{align*}
+& \text{None}\\
+& x_{1}\\
+& x_{2}\\
+& x_{3}\\
+& x_{4}\\
+& x_{1},x_{2}\\
+& x_{1},x_{3}\\
+& x_{1},x_{4}\\
+& x_{2},x_{3}\\
+& x_{2},x_{4}\\
+& x_{3},x_{4}\\
+& x_{1},x_{2},x_{3}\\
+& x_{1},x_{2},x_{4}\\
+& x_{1},x_{3},x_{4}\\
+& x_{2},x_{3},x_{4}\\
+& x_{1},x_{2},x_{3},x_{4}
+\end{align*}
+$$
+
+
+
+If there are 10 potential predictor variables, there there would be 
+$$
+2^{10} = 1024
+$$
+possible subset models. 
+
+
+
+
+Model selection procedures, also known as *subset* *selection* or *variables* *selection* *procedures*,
+have been developed to identify a small group of regression models that are "good"
+according to a specified *criterion*. 
+
+
+
+This limited number might consist of three to six "good"
+subsets according to the criteria specified, so the investigator can then carefully study these
+regression models for choosing the final model.
+
+
+While many criteria for comparing the regression models have been developed, we will
+focus on six:
+$$
+\begin{align*}
+& R_{p}^{2}\\
+& R_{a,p}^{2}\\
+& AIC_{p}\\
+& SBC_{p}\\
+& PRESS_{p}
+\end{align*}
+$$
+
+## Notation
+
+
+Before discussing the criteria, we will need to
+develop some notation. We will denote the number of potential $X$ variables in the pool by
+$P-1$. 
+
+
+We assume that all regression models contain an intercept
+term $\beta_0$. 
+
+
+
+Hence, the regression function containing all potential $X$ variables contains $P$
+parameters, and the function with no $X$ variables contains one parameter ($\beta_0$).
+
+
+The number of $X$ variables in a subset will be denoted by $p-1$, as always, so that there
+are $p$ parameters in the regression function for this subset of $X$ variables. Thus, we have:
+$$
+1\le p \le P < n
+$$
+
+## Coefficient of Determination and SSE
+
+
+Clearly, we would like models that fit the data well. Thus we would like a coefficient of *multiple determiantion*, $R^2$, to be high. 
+
+
+We will denote the number of parameters in the potential model as a subscript and write the coefficient of determination as $R^2_p$. 
+
+
+
+
+
+The $R^2_p$ criterion is equivalent to using the error sum of squares $SSE_p$ as the criterion. The $R^2_p$ criterion is not intended to identify the subsets that maximize this criterion.
+
+
+We know that $R^2_p$ can never decrease as additional $X$ variables are included in the model. Hence, $R^2_p$ will be a maximum when all $P - 1$ potential X variables are included in the
+regression model. 
+
+
+
+
+The intent in using the $R^2_p$ criterion is to find the point where adding more
+$X$ variables is not worthwhile because it leads to a very small increase in $R^2_p$. 
+
+
+Often, this
+point is reached when only a limited number of $X$ variables are included in the regression
+model.
+
+## Adjusted Coefficient of Determination and MSE
+
+
+Since $R^2_{p}$ does not take account of the number of parameters in the regression model
+and since max($R^2_{p}$) can never decrease as $p$ increases, the *adjusted* coefficient of multiple
+determination $R^2_{a,p}$ has been suggested as an alternative criterion.
+
+
+This coefficient takes the number of parameters in the regression model into account through
+the degrees of freedom.
+
+
+Users of the $R^2_{a,p}$  criterion
+seek to find a few subsets for which $R^2_{a,p}$  is at the maximum or so close to the maximum
+that adding more variables is not worthwhile.
+
+
+The $R^2_{a,p}$ criterion is equivalent to using the mean square error $SSE_p$ as the criterion. This come from the relationship in @eq-w4_44
+$$
+\begin{align*}
+R_{a}^{2} & =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
+& =1-\left(\frac{n-1}{n-p}\right)\frac{SSE}{SSTO}\\
+& = 1-\frac{MSE}{\frac{SSTO}{n-1}}
+\end{align*}
+$$
+
+## AIC and BIC
+
+
+We have seen that $R_{a,p}^2$ is a criterion that penalizes models
+having large numbers of predictors. 
+
+
+Two popular alternatives that also provide penalties
+for adding predictors are *Akaike's information criterion* ($AIC_p$) and *Schwarz' Bayesian criterion* ($SBC_p$). 
+
+
+
+
+
+A more popular name for $SBC_p$ is *Bayesian information criterion* ($BIC_p$).
+
+
+
+
+
+We search for models that have small values of $AIC_p$, or $BIC_p$, where
+these criteria are given by:
+$$
+\begin{align}
+AIC_{p} & =n\ln SSE_{p}-n\ln n+2p\\
+BIC_{p} & =n\ln SSE_{p}-n\ln n+\left(\ln n\right)p
+\end{align}
+$${#eq-w7_2}
+
+
+
+Notice that for both of these measures, the first term is 
+$$
+n\ln SSE_{p}
+$$
+which decreases as $p$
+increases.
+
+
+The second term is fixed (for a given sample size $n$), and the third term increases
+with the number of parameters, $p$. 
+
+
+Models with small $SSE_p$ will do well by these criteria
+as long as the penalties
+$$
+\begin{align*}
+2p & \text{ for }AIC_p \\
+(\ln n)p & \text{ for }BIC_p 
+\end{align*}
+$$
+are not too large. 
+
+
+
+
+
+If $n \ge 8$
+the penalty for $BIC_p$ is larger than that for $AIC_p$; hence the $BIC_p$ criterion tends to favor
+more *parsimonious* models. 
+
+
+
+
+
+A parsimonious model is a model that accomplishes a desired level of explanation or prediction with as few predictor variables as possible.
+
+
+
+We consider the "best" models the ones with the lowest $AIC_p$ or $BIC_p$.
+
+
+## Criteria for Prediction
+
+
+The $PRESS_p$ (*prediction sum of squares*) criterion is a measure of how well the use of the
+fitted values for a subset model can predict the observed responses $y_i$. 
+
+
+
+
+The PRESS measure differs from SSE
+in that each fitted value $\hat{y}_i$ for the PRESS criterion is obtained by 
+
+
+1. deleting the $i$th case from the data set
+
+2. estimating the regression function for the subset model from the remaining $n - 1$ cases, and 
+
+3. then using the fitted regression function to obtain the predicted value $\hat{y}_{i(i)}$ for the $i$th case.
+
+
+
+We use the notation $\hat{y}_{i(i)}$ now for the fitted value to indicate, by the first
+subscript $i$, that it is a predicted value for the $i$th case and, by the second subscript $(i)$, that
+the $i$th case was omitted when the regression function was fitted.
+
+
+
+The PRESS prediction error for the $i$th case then is:
+$$
+y_i - \hat{y}_{i(i)} 
+$$
+and the $PRESS_p$ criterion is the sum of the squared prediction errors over all $n$ cases:
+$$
+\begin{align}
+PRESS_p = \sum_{i=1}^n\left(y_i - \hat{y}_{i(i)} \right)^2
+\end{align}
+$${#eq-w7_7}
+
+
+
+Models with small $PRESS_p$ values are considered good candidate models. The reason is
+that when the prediction errors $y_i - \hat{y}_{i(i)}$ are small, so are the squared prediction errors and
+the sum of the squared prediction errors. 
+
+
+
+Thus, models with small $PRESS_p$ values fit well
+in the sense of having small prediction errors.
+
+
+Another measure of prediction is the *predicted* $R^{2}$. Is is related
+to PRESS by
+$$
+\begin{align}
+\text{pred }R_{p}^{2} & =1-\frac{PRESS_{p}}{SSTO}
+\end{align}
+$${#eq-w7_8}
+Large values of pred $R_{p}^{2}$ indicates a model that is "good"
+at prediction.
+
+::: {#exm-17_1}
+
+We can obtain $R^2$, $R^2_a$, $AIC$, and $BIC$ using the `glance` function after fitting a model. Let's examine the fit to `mtcars` in @exm-16_2. 
+
+
+```{r warning=FALSE, message=FALSE}
+library(tidymodels)
+
+dat_recipe = recipe(mpg ~ disp + hp + drat + wt + qsec, data = mtcars) |> 
+  step_mutate(
+    log_disp = log(disp),
+    log_hp = log(hp),
+    log_wt = log(wt)
+  ) |> 
+  step_rm(disp, hp, wt)
+
+lm_model <- linear_reg() |>
+  set_engine("lm")
+
+wf = workflow() |> 
+  add_recipe(dat_recipe) |> 
+  add_model(lm_model)
+
+fit <- wf |> fit(mtcars)
+
+fit |> glance()
+
+```
+
+To obtain the PRESS statistic, we can use the `PRESS` function from the `MPV` library.
+
+
+```{r warning=FALSE, message=FALSE}
+library(MPV)
+fit |> extract_fit_engine() |> PRESS()
+
+```
+
+
+:::

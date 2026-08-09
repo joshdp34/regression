@@ -1,0 +1,473 @@
+---
+editor: 
+  markdown: 
+    wrap: 72
+---
+
+# Model Assumptions and the ANOVA F-test
+
+> "Regression analysis is the hydrogen bomb of the statistics
+> arsenal." - Charles Wheelan
+
+The steps we followed in developing a simple linear model are applicable
+to the multiple regression model.
+
+**Analyzing a Multiple Regression Model**
+
+1.  Collect the *sample data* (i.e., the value of $y$, $x_1$, $x_2$,
+    ..., $x_k$) for each unit in the sample.
+2.  Hypothesize the *form* of the model (i.e., the deterministic
+    component), $E(y)$. This involves choosing which independent
+    variables to include in the model.
+3.  Use the method of least squares to *estimate* the unknown
+    *parameters*.
+4.  Specify the probability distribution of the random error component
+    $\varepsilon$ and estimate its *variance* $\sigma^2$.
+5.  Statistically evaluate the *utility* of the model.
+6.  Check that the *assumptions* on $\varepsilon$ are satisfied and make
+    model modifications, if necessary.
+7.  Finally, if the model is deemed adequate, use the fitted model to
+    estimate the *mean* value of $y$ or to *predict* a particular value
+    of $y$ for given values of the independent variables, and to make
+    other inferences.
+
+We will first assume the model is known and the assumptions hold. We
+will then come back to step 2 and step 6 later. Let's first discuss what
+the assumptions are.
+
+## Model Assumptions
+
+The assumptions for the multiple regression model are the same as the
+simple linear model. That is,
+
+-   *Linearity* - We assume the model is linear in the *parameters* but
+    not necessarily linear in the *predictor* variables. Thus, some of
+    the predictor variables may need to be transformed.
+-   *constant* *variance*
+-   *normality*
+-   *independence*
+
+The inferences on the multiple regression model will depend on these
+assumptions holding. We will discuss how to check these later.
+
+## A First-Order Model with Quantitative Predictors
+
+Recall that a *first-order* model means that none of the predictor
+variables are functions of any other predictor variables.
+
+When the independent variables are quantitative, the $\beta$ parameters
+in the first-order model have similar interpretations as the simple
+regression model. The difference is that when we interpret the $\beta$
+that multiplies one of the variables (e.g., $x_1$), we must be certain
+to hold the values of the remaining independent variables (e.g., $x_2$,
+$x_3$) *fixed*.
+
+## Testing the Utility of a Model: The Analysis of Variance $F$-Test
+
+The objective of step 5 in a multiple regression analysis is to conduct
+a test of the *utility* of the model—that is, a test to determine
+whether the model is adequate for predicting $y$.
+
+Later, we will examine how to conduct $t$-tests on each $\beta$
+parameter in a model, where $$
+\begin{align*}
+    H_0: \beta_j = 0, \qquad j=1, 2, \ldots, p-1
+\end{align*}
+$$
+
+However, this approach is generally not a good way to determine whether
+the *overall* model is contributing information for the prediction of
+$y$. If we were to conduct a series of $t$-tests to determine whether
+the independent variables are contributing to the predictive
+relationship, we would be very likely to make one or more errors in
+deciding which terms to retain in the model and which to exclude.
+
+Suppose you fit a first-order model with 10 quantitative independent
+variables, $x_1, x_2,..., x_{10}$, and decide to conduct $t$-tests on
+all 10 individual $\beta$’s in the model, each at $\alpha = .05$.
+
+For any one test, the probability of making a type I error is 0.05: $$
+\begin{align*}
+    P(\text{Reject } H_0|\beta_j=0) &= {0.05}\\
+    & {= 1 - 0.95}
+\end{align*}
+$$ If we were to do ten of these tests (one for each predictor
+variable), then the probability that at least one is a type I error is
+$$
+\begin{align*}
+    P(\text{Reject at least one } H_0|\beta_1=\beta_2=\cdots=\beta_{p-1}=0)
+    & = 1-[(1-\alpha)^{10}]\\
+    & {= 1-(0.95)^{10}}\\
+    &{ = 0.401}
+\end{align*}
+$$
+
+Even if all the $\beta$ parameters (except $\beta_0$) in the model are
+equal to 0, approximately 40% of the time you will incorrectly reject
+the null hypothesis at least once and conclude that some $\beta$
+parameter is nonzero. In other words, the overall Type I error is about
+.40, not .05.
+
+To illustrate this inflated type I error, let's look at the following
+example.
+
+::: {#exm-12_1}
+We will simulate a sample of size 200 with a response variable $y$ and
+ten predictor variables $x_1, x_2, \ldots, x_{10}$. The random error
+term $\varepsilon$ will be a standard normal random variable.
+
+The true model will have each coefficient $\beta$ set to 0, with the
+exception of $\beta_0$ which will be 20. We will conduct a $t$-test for
+each coefficient (except $\beta_0$). Since the true coefficient is 0, we
+expect to see p-values greater than 0.05 for each coefficient.
+
+We will fit the model and test the coefficients 1000 times. We will
+count the number of times at least one of the coefficients was less than
+0.05 (which would lead to a Type I error).
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+
+set.seed(3430)
+
+n = 200
+
+type1error = numeric(1000)
+
+for(i in 1:1000){
+  
+  x = runif(n*10) |> matrix(ncol = 10)
+  
+  eps = rnorm(n)
+  
+  y = 20 + 0*x[,1] + 0*x[,2] + 0*x[,3] + 0*x[,4] +
+    0*x[,5] + 0*x[,6] + 0*x[,7] + 0*x[,8] + 0*x[,9] +
+    0*x[,10] + eps
+  
+  dat = tibble(y, x1 = x[,1], x2 = x[,2], x3 = x[,3],
+               x4 = x[,4], x5 = x[,5], x6 = x[,6], x7 = x[,7],
+               x8 = x[,8], x9 = x[,9], x10 = x[,10],)
+  
+  fit = lm(y~., data = dat)
+  
+  type1error[i] = any(summary(fit)$coefficients[-1,4] < 0.05)
+}
+
+mean(type1error)
+
+```
+
+We see that 41.4% of the time, we had at least one coefficient have a
+p-value smaller than 0.05. This corresponds to the probability of at
+least one Type I error of around 0.401.
+:::
+
+In multiple regression models for which a large number of independent
+variables are being considered, conducting a series of $t$-tests may
+cause the experimenter to include a large number of insignificant
+variables and exclude some useful ones. If we want to test the utility
+of a multiple regression model, we will need a *global* *test* (one that
+encompasses all the $\beta$ parameters).
+
+### Partitioning the Sum of Squares
+
+Recall when we discussed the coefficient of determination that we used
+$SS_{yy}$ to denote the variability of the response variable $y$ from
+its mean $\bar y$ (without regard to the model involving $x$).
+
+Another name for $SS_{yy}$ is the *sum of squares total* (SSTO). We call
+it this since it gives us a measure of total variability in $y$.
+
+In multiple regression, SSTO is still the same as $SS_{yy}$. In matrix
+notation this can be expressed as $$
+\begin{align}
+SSTO & ={\bf Y}^{\prime}{\bf Y}-\left(\frac{1}{n}\right){\bf Y}^{\prime}{\bf J}{\bf Y}
+\end{align}
+$$ {#eq-w4-34}
+
+#### Sum of Square Error (SSE)
+
+Also recall the variability of $y$ about the regression line (in simple
+linear regression) was expressed by SSE. We can think of this as the
+variability of $y$ remaining after exampling some of the variability
+with the regression model.
+
+In multiple regression, SSE is still the sum of the square distances
+between the response $y$ and the fitted model $\hat{y}$. Now, the fitted
+model is the fitted *hyperplane* instead of a line.
+
+The SSE can be expressed in matrix terms as $$
+\begin{align}
+SSE & =\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)\\
+& ={\bf Y}^{\prime}{\bf Y}-{\bf b}^{\prime}{\bf X}^{\prime}{\bf Y}
+\end{align}
+$$ {#eq-w3_35}
+
+#### Sum of Square Regression (SSR)
+
+If SSTO is the total variability of $y$ (without of regard to the
+predictor variables), and SSE is the variability of $y$ left over after
+explaining the variability of $y$ with the model (including the
+predictor variables), we might want to know the variability of $y$
+explained by the model.
+
+We call the variability explained by the regression model the *sum of
+squares regression* (SSR).
+
+We will show below that SSR can be expressed as $$
+\begin{align}
+SSR & =\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}
+\end{align}
+$$ {#eq-w4_36} which can be expressed in matrix terms as $$
+\begin{align}
+SSR & ={\bf b}^{\prime}{\bf X}^{\prime}{\bf Y}-\left(\frac{1}{n}\right){\bf Y}^{\prime}{\bf J}{\bf Y}
+\end{align}
+$$ {#eq-w4_37}
+
+#### Components of SSTO
+
+To see how SSTO, SSR, and SSE relate to each other, consider how SSTO is
+a sum of squares of $y$ from its mean $\bar{y}$: $$
+\begin{align*}
+y_{i}-\bar{y}
+\end{align*}
+$$
+
+We can add and subtract the fitted value $\hat{y}_{i}$ to get $$
+\begin{align*}
+y_{i}-\bar{y} & =y_{i}-\hat{y}_{i}+\hat{y}_{i}-\bar{y}\\
+& =\left(y_{i}-\hat{y}_{i}\right)+\left(\hat{y}_{i}-\bar{y}\right)
+\end{align*}
+$$
+
+Squaring both sides gives us $$
+\begin{align*}
+\left(y_{i}-\bar{y}\right)^{2} & =\left[\left(y_{i}-\hat{y}_{i}\right)+\left(\hat{y}_{i}-\bar{y}\right)\right]^{2}\\
+& =\left(y_{i}-\hat{y}_{i}\right)^{2}+\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\left(y_{i}-\hat{y}_{i}\right)\left(\hat{y}_{i}-\bar{y}\right)
+\end{align*}
+$$
+
+Summing both sides gives us $$
+\begin{align*}
+\sum\left(y_{i}-\bar{y}\right)^{2} & =\sum\left(y_{i}-\hat{y}_{i}\right)^{2}+\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\sum\left(y_{i}-\hat{y}_{i}\right)\left(\hat{y}_{i}-\bar{y}\right)\\
+& =\sum\left(y_{i}-\hat{y}_{i}\right)^{2}+\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+2\sum\hat{y}_{i}e_{i}-2\bar{y}\sum e_{i}
+\end{align*}
+$$
+
+Note that $\sum\hat{y}_{i}e_{i}=0$ 
+<!-- from @eq-w1_22  -->
+and $\sum e_{i}=0$.
+<!-- from @eq-w1_20. -->
+
+Therefore, we have $$
+\begin{align*}
+\sum\left(y_{i}-\bar{y}\right)^{2} & =\sum\left(\hat{y}_{i}-\bar{y}\right)^{2}+\sum\left(y_{i}-\hat{y}_{i}\right)^{2}\\
+SSTO & =SSR+SSE 
+\end{align*}
+$$ {#eq-4_38}
+
+We call this the *decomposition* of SSTO.
+
+#### Degrees of Freedom
+
+The degrees of freedom can be decomposed as well. Note that the degrees
+of freedom for SSTO is $$
+\begin{align*}
+df_{SSTO} & =n-1
+\end{align*}
+$$ since the mean of $y$ is needed to be estimated with $\bar{y}$.
+
+The degrees of freedom for SSE is $$
+\begin{align*}
+df_{SSE} & =n-p
+\end{align*}
+$$ since the $p$ coefficients $\beta_{0},\ldots,\beta_{p-1}$ need to be
+estimated with $\hat{\beta}_{0},\ldots,\hat{\beta}_{p-1}.$
+
+For SSR, the degrees of freedom is $$
+\begin{align*}
+df_{SSR} & =p-1
+\end{align*}
+$$ since there are $p$ estimated coefficients
+$\hat{\beta}_{0},\ldots,\hat{\beta}_{p-1}$ but need to estimate the mean
+of $y$ with $\bar{y}$.
+
+Decomposing the degrees of freedom give us $$
+\begin{align}
+n-1 & =p-1+n-p\\
+df_{SSTO} & =df_{SSR}+df_{SSE}
+\end{align}
+$$ {#eq-w4_29}
+
+### The Analysis of Variance (ANOVA) Table
+
+The sums of squares and degrees of freedom are commonly displayed in an
+analysis of variance (ANOVA) table:
+
+|   Source   |     df      |   SS   | MS  |  F  | p-value |
+|:----------:|:-----------:|:------:|:---:|:---:|:-------:|
+| Regression | $df_{SSR}$  | $SSR$  |     |     |         |
+|   Error    | $df_{SSE}$  | $SSE$  |     |     |         |
+|   Total    | $df_{SSTO}$ | $SSTO$ |     |     |         |
+
+
+
+#### Mean Squares
+
+Recall that if we divide SSE by its degrees of freedom, we obtain the
+mean square error: 
+$$
+\begin{align}
+MSE & =\frac{SSE}{n-p}
+\end{align}
+$${#eq-w4_40}
+
+
+Likewise, if we divide SSR by its degrees of freedom, we obtain the
+*mean square regression*: 
+$$
+\begin{align}
+MSR & =\frac{SSR}{p-1}
+\end{align} 
+$${#eq-w4_41}
+
+These values are also included in the ANOVA table:
+
+|   Source   |     df      |   SS   | MS  |  F  | p-value |
+|:----------:|:-----------:|:------:|:---:|:---:|:-------:|
+| Regression | $df_{SSR}$  | $SSR$  |  $MSR$   |     |         |
+|   Error    | $df_{SSE}$  | $SSE$  | $MSE$    |     |         |
+|   Total    | $df_{SSTO}$ | $SSTO$ |     |     |         |
+
+
+Note that although the sum of squares and degrees of freedom decompose,
+the mean squares do not. That is 
+$$
+\begin{align*}
+\frac{SSTO}{n-1} & \ne MSR+MSE
+\end{align*}
+$$
+
+In fact, the mean square for the total ($SSTO/n-1$) does
+not usually show up on the ANOVA table.
+
+### The ANOVA F-test
+
+We tested the slope in simple regression to see if there is a
+significant linear relationship between $X$ and $Y$.
+
+In multiple regression, we will want to see if there is any significant
+linear relationship between any of the $x$s and $y$. Thus, we want to
+test the hypotheses 
+$$
+\begin{align*}
+H_{0}: & \beta_{1}=\beta_{2}=\cdots=\beta_{p-1}=0\\
+H_{a}: & \text{at least one } \beta \text{ is not equal to zero}
+\end{align*}
+$$
+
+To construct a test statistic, we first note that 
+$$
+\begin{align*}
+\frac{SSE}{\sigma^{2}} & \sim\chi^{2}\left(n-p\right)
+\end{align*}
+$$
+Also, if $H_{0}$ is true, then 
+$$
+\begin{align*}
+\frac{SSR}{\sigma^{2}} & \sim\chi^{2}\left(p-1\right)
+\end{align*}
+$$
+
+The ratio of two independent chi-square random variables divided by
+their degrees of freedom give a statistic that follows a F-distribution.
+
+Since $SSE/\sigma^{2}$ and $SSR/\sigma^{2}$ are independent (proof not
+give here), then under $H_{0}$, we can construct a test statistic as
+$$
+\begin{align}
+F^{*} & =\left(\frac{\frac{SSR}{\sigma^{2}}}{p-1}\right)\div\left(\frac{\frac{SSE}{\sigma^{2}}}{n-p}\right)\\
+& =\left(\frac{SSR}{p-1}\right)\div\left(\frac{SSE}{n-p}\right)\\
+& =\frac{MSR}{MSE}
+\end{align}
+$${#eq-w4_42}
+
+
+Large values of $F^{*}$ indicate evidence for $H_{a}$.
+
+
+
+
+The test statistic and p-value are the last two components of the ANOVA
+table:
+
+|   Source   |     df      |   SS   | MS  |  F  | p-value |
+|:----------:|:-----------:|:------:|:---:|:---:|:-------:|
+| Regression | $df_{SSR}$  | $SSR$  |  $MSR$   | $F^{*}$    |  $P\left(Z\ge Z^{*}\right)$       |
+|   Error    | $df_{SSE}$  | $SSE$  | $MSE$    |     |         |
+|   Total    | $df_{SSTO}$ | $SSTO$ |     |     |         |
+
+
+
+
+
+::: {#exm-12_2}
+We will fit a multiple regression model to the `trees` dataset. The tidymodels framework will be used. 
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(tidymodels)
+
+data(trees)
+
+#prepare data
+dat_recipe = recipe(Volume ~ Girth + Height, data = trees) 
+
+#setup model
+lm_model = linear_reg() |>
+  set_engine("lm")
+
+#setup the workflow
+lm_workflow = workflow() |>
+  add_recipe(dat_recipe) |> 
+  add_model(lm_model)
+
+#fit the model
+lm_fit = lm_workflow |>
+  fit(data = trees)
+
+#to get the coefficients
+lm_fit |> tidy()
+```
+
+The fitted model is
+$$
+\hat{y} = -57.988 + 4.708x_1 + 0.339x_2
+$$
+For every one inch increase in Girth, the average Volume increases by 4.708 cubit ft, keeping Height fixed. 
+
+For every one ft increase in Height, the average Volume increases by 0.339 cubit ft, keeping Girth fixed. 
+
+
+```{r warning=FALSE, message=FALSE}
+#to get the global F-test p-value
+lm_fit |> glance()
+
+#To get the ANOVA table
+#Note that SSR is split into individual predictors
+lm_fit |> extract_fit_engine() |> anova()
+```
+
+
+Since the p-value of $1.071\times 10^{-18}$ is less than 0.05, there is sufficient evidence to conclude that at least one of the coefficients is not zero.
+
+:::
+
+
+
+
+
+
+
+
+

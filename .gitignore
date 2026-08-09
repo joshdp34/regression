@@ -1,0 +1,52 @@
+# Quarto working files
+/.quarto/
+/_book/
+
+# Keep these committed for GitHub Pages / Quarto freeze:
+# /docs/
+# /_freeze/
+
+# Root-level PDF/LaTeX artifacts from local book builds
+/index.aux
+/index.log
+/index.out
+/index.pdf
+/index.tex
+/index.toc
+
+# Local diagnostics from manual render troubleshooting
+/.git-stale-*/
+/.quarto-render.pid
+/quarto-debug.log
+/quarto-render*.log
+/docs-test/
+docs/docs-test/
+/_codex_quarto_smoke/
+
+# Local render caches and notebook cruft
+/*_cache/
+/*_files/
+/.ipynb_checkpoints/
+
+# R / RStudio local state
+/.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+
+# Python local state
+__pycache__/
+*.py[cod]
+/.venv/
+/venv/
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+desktop.ini
+~$*
+*.tmp
+*.bak
+
+**/*.quarto_ipynb

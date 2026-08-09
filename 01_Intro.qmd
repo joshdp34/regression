@@ -1,0 +1,210 @@
+# Introduction to Regression Analysis
+
+> "Math is the logic of certainty; statistics is the logic of uncertainty." - Joe Blitzstein
+
+## The Probabilistic Model
+
+Most students who take an intro stats course are familiar with the idea of a *random variable*. Students are usually introduced to random variables using the notation $X$. 
+
+
+
+In the technical sense, capital $X$ should denote the random variable (that is, the function itself), while lowercase $x$ denotes the values of that random variable. We will be loose on that convention, so you will see the lowercase used almost extensively even when discussing the random variable itself.
+
+::: {.callout-note}
+## Review: Random Variable
+A random variable is a function that assigns a numeric value to the outcomes in the sample space.
+:::
+
+
+In regression, the random variable of interest is usually denoted as
+$y$.
+
+We want to predict or model (explain) this variable. Thus, we call this the *response* (or  *dependent*) variable.
+
+
+If we have measurements of this random variable, then we can express each value $y$ as the *mean* value of $y$ plus some *random error*.
+
+
+That is, we can model the variable as
+$$
+    y = E(y) + \varepsilon 
+$${#eq-01_01}
+
+where
+\begin{align*}
+    y = &\text{ dependent variable}\\
+    E(y) =& \text{ mean (or expected) value of } y\\
+    \varepsilon =& \text{ random error}
+\end{align*}
+
+This model is referred to as a *probabilistic* model for $y$. The term "probabilistic" is used because, under certain assumptions, we can make probability-based statements about the extent of the difference between $y$ and $E(y)$.
+
+For example, we might assert that the error term,
+$$
+    \varepsilon = y - E(y)
+$$
+follows a normal distribution.
+
+
+In practice, we will use sample data to estimate the parameters of the probabilistic model—specifically, the mean $E(y)$ and the random error $\varepsilon$.
+
+We will later discuss a common assumption in regression: that the mean error is zero.
+
+In other words,
+$$
+    E(\varepsilon) = 0
+$$
+
+Given this assumption, our best estimate of $\varepsilon$ is zero. Therefore, we only need to estimate $E(y)$.
+
+
+
+
+The simplest method of estimating $E(y)$ is to use the sample mean of $y$ which we will denote as
+\begin{align*}
+    \bar y= \frac{1}{n}\sum_{i=1}^n y_i
+\end{align*}
+
+If we desired to predict a value of $y$, then our best prediction would be just the sample mean:
+\begin{align*}
+    \hat y = \bar y
+\end{align*}
+where $\hat y$ denotes a predicted value of $y$.
+
+This would be the case with *univariate* data (we only have one variable in our data: $y$).
+
+Unfortunately, this simple model does not take into consideration a
+number of variables, called *independent* variables, that may help predict the response variable.
+
+Independent variables are also called *predictor* or *explanatory* variables.
+
+The process of identifying the mathematical model that describes the relationship between $y$ and a set of independent variables, and that best fits the data, is known as *regression analysis*.
+
+## Overview of Regression Analysis {#sec-regoverview}
+
+
+
+We will denote the independent variables as
+\begin{align*}
+    x_1, x_2, \ldots, x_k
+\end{align*}
+where $k$ is the number of independent variables.
+
+
+The goal of regression analysis is to create a *prediction equation* that accurately relates $y$ to independent variables, allowing us to predict $y$ for given values of $x_1, x_2, \ldots, x_k$ with minimal prediction error.
+
+When predicting $y$, we also need a measure of the *reliability* of our prediction, indicating how large the prediction error might be.
+
+These elements form the core of regression analysis.
+
+Beyond predicting $y$, a regression model can also *estimate* the mean value of $y$ for specific values of $x_1, x_2, \ldots, x_k$ and explore the *relationship* between $y$ and one or more independent variables.
+
+The process of regression analysis typically involves six key steps:
+
+1. Hypothesize the form of the model for $E(y)$.
+2. Collect sample data.
+3. Estimate the model's unknown parameters using the sample data.
+4. Define the probability distribution of the random error term, estimate any unknown parameters, and validate the assumptions made about this distribution.
+5. Statistically assess the model's usefulness.
+6. If the model is effective, use it for prediction, estimation, and other purposes.
+
+
+
+## Collecting the Data for Regression
+
+The first step listed above will be discussed later.
+
+
+Once you've proposed a model for $E(y)$, the next step is to gather sample data to estimate the model.
+
+This means collecting data on both the response variable $y$ and the independent variables $x_1, x_2, \ldots, x_k$ for each observation in your sample. In regression analysis, the sample includes data on multiple variables:
+$$
+y, x_1, x_2, \ldots, x_k
+$$
+This is known as *multivariate* data.
+
+Regression data can be either observational or experimental:
+
+For *observational data* no control is exerted over the independent variables ($x$’s). For example, recording people’s ages and their corresponding blood pressure levels without influencing either.
+
+For *experimental data* the independent variables are controlled or manipulated. For instance, setting different fertilizer amounts for crops to observe the impact on growth.
+
+
+
+Suppose you want to model a student's annual GPA ($y$). One approach is to randomly select a sample of $n=100$ students and record their GPA along with the values of each predictor variable.
+
+Data for the first three students in the sample are shown in @tbl-table1.
+
+|                              | Student 1 | Student 2 | Student 3 |
+|------------------------------|-----------|-----------|-----------|
+| Annual GPA $y$                | 3.8       | 2.7       | 3.5       |
+| Study Hours per Week, $x_1$   | 15        | 5         | 10        |
+| Class Attendance, $x_2$ (days)| 30        | 20        | 25        |
+| Extracurriculars, $x_3$       | 2         | 1         | 3         |
+| Age, $x_4$ (years)            | 21        | 19        | 22        |
+| Employed, $x_5$ (1 if yes, 0 if no) | 0     | 1         | 0         |
+| Lives On Campus, $x_6$ (1 if yes, 0 if no) | 1 | 0   | 1         |
+
+: Values of the response variable and predictor variables for the first three students.  {#tbl-table1}
+
+
+In this example, the $x$ values, like study hours, class attendance, and extracurricular activities, are not predetermined before observing GPA $y$; thus, the $x$ values are uncontrolled. Therefore, the sample data are observational.
+
+
+
+
+#### Determining Sample Size for Regression with Observational Data
+
+When applying regression to observational data, the required sample size for estimating the mean $E(y)$ depends on three key factors:
+
+- Estimated population standard deviation
+- Confidence level
+- Desired margin of error (half-width of the confidence interval)
+
+However, unlike the univariate case, $E(y)$ is modeled as a function of multiple independent variables, which adds complexity. The sample size must be large enough to estimate and test all parameters in the model.
+
+To ensure a sufficient sample size, a common guideline is to select a sample size $n$ that is at least 10 times the number of parameters in the model.
+
+For instance, if a university registrar's office uses the following model for the annual GPA $y$ of a current student:
+
+$$E(y) = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \cdots + \beta_6 x_6$$
+
+where $x_1, x_2, \dots, x_6$ are defined in @tbl-table1, the model includes six $\beta$ parameters (excluding $\beta_0$). Therefore, they should include at least:
+
+$$ 10 \times 6 = 60 $$
+
+students in the sample.
+
+
+
+
+#### Experimental Data
+
+
+The second type of data in regression, *experimental* data, is generated through designed experiments where the independent variables are *set* in advance (i.e., controlled) before observing the value of $y$.
+
+For instance, consider a scenario where a researcher wants to study the effect of two independent variables—say, fertilizer amount $x_1$ and irrigation level $x_2$—on the growth rate $y$ of plants. The researcher could choose three levels of fertilizer (10g, 20g, and 30g) and three levels of irrigation (1L, 2L, and 3L) and measure the growth rate in one plant for each of the $3\times 3=9$ fertilizer–irrigation combinations (see @tbl-table1_2 below).
+
+| Fertilizer, $x_1$ | Irrigation, $x_2$ | Growth Rate, $y$ |
+|-------------------|-------------------|------------------|
+| 10g               | 1L                | 5.2              |
+| 10g               | 2L                | 6.1              |
+| 10g               | 3L                | 5.8              |
+| 20g               | 1L                | 7.0              |
+| 20g               | 2L                | 7.5              |
+| 20g               | 3L                | 7.3              |
+| 30g               | 1L                | 8.4              |
+| 30g               | 2L                | 8.7              |
+| 30g               | 3L                | 8.1              |
+
+: Values of the response variable and two independent variables for the growth rate of plants. {#tbl-table1_2}
+
+In this experiment, the settings of the independent variables are *controlled*, in contrast to the uncontrolled nature of observational data, like in the real estate sales example.
+
+In many studies, it is often not possible to control the values of the $x$'s, so most data collected for regression are *observational*.
+
+So, why do we differentiate between these two types of data? We will learn that inferences from regression studies based on observational data have more *limitations* than those based on experimental data. Specifically, establishing a *cause-and-effect* relationship between variables is much more challenging with observational data than with experimental data.
+
+
+
+

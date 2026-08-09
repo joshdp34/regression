@@ -1,0 +1,393 @@
+
+
+# Stepwise and Best Subsets Regression
+
+> "Statistics cannot be any smarter than the people who use them. And in some cases, they can make smart people do dumb things." - Charles Wheelan
+
+
+
+We now discuss ways to determine a several potential subsets of predictor variables. 
+
+We start by discussing the criteria that could be used for comparing different models. 
+
+
+
+
+## Best Subsets Procedure
+
+
+
+
+As noted previously, the number of possible models, 
+$$
+2^{p-1}
+$$
+grows rapidly with
+the number of predictors. 
+
+
+Evaluating all of the possible alternatives can be a daunting
+endeavor. However, for small $p$ and a sample size that is not too large, we can fit all the possible models. From all of the models, we can pick a few models that are close in some criterion that we can examine further.
+
+
+
+When the pool of potential predictor variables is very large,
+the "best" subset algorithms may require excessive computer time. 
+
+
+
+
+
+Under these conditions,
+one of the stepwise regression procedures, described next, may need to be
+employed to assist in the selection of predictor variables.
+
+
+
+::: {#exm-18_1}
+
+## Surgical Unit data
+
+The surgical unit data is available from the `olsrr` library. This library also has functions for conducting subsets regression.
+
+This data is originally from Kutner[^1^]. It consists of data about survival of patients undergoing a liver operation. The response variable is number of days the patient survived after the operation. We will actually model the natural log of the survival time. The predictor variables are:
+
+- `bcs`: blood clotting score
+- `pindex`: prognistic index
+- `enzyme_test`: enzyme function test score
+- `liver_test`: liver function test score
+- `age`: age, in years
+- `gender`: indicator variable for gender (0=male, 1=female)
+- `alc_mod`: indicator variable for history of alcohol use (1=Moderate, 0=otherwise)
+- `alc_heavy`: indicator variable for history of alcohol use (1=Heavy, 0=otherwise)
+
+[^1^]: Kutner, M. H., Nachtsheim, C. J., Neter, J., & Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences. 
+
+The `tidymodels` library does not have functions to do subsets regression (we will use `olsrr` instead). 
+
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(olsrr)
+library(GGally)
+
+dat = surgical |> 
+  mutate(
+    ln_y = log(y)
+  )
+
+dat |> ggpairs()
+
+
+```
+
+No obvious nonlinear relationships seen from the scatterplot matrix.
+
+Let's first fit all $2^8=258$ models using the `ols_step_all_possible` function. 
+
+```{r warning=FALSE, message=FALSE}
+
+fit = lm(ln_y ~ bcs + pindex + enzyme_test + liver_test+
+                      age + gender + alc_mod + alc_heavy, data = dat)
+
+fits = ols_step_all_possible(fit)
+
+plot(fits)
+
+```
+
+
+From these plots, we can determine a few models that may be of interest to us. Suppose that we want the model 93 which appears to be the best model with four predictors by all of the criteria. We can find this model in the subsets with the following code.
+
+```{r warning=FALSE, message=FALSE}
+fits$result |> 
+  filter(mindex == 93)
+```
+
+
+If we want to just examine the best subset of predictors for each value of $p$, then we can use the `ols_step_best_subset` function. This will return the criteria for only the best combination of predictors for each $p$. The difference between `ols_step_best_subset` and `ols_step_all_possible` is that `ols_step_all_possible` does return every possible model whereas `ols_step_best_subset` returns only the best models. 
+
+
+```{r warning=FALSE, message=FALSE}
+subset = ols_step_best_subset(fit) 
+subset
+
+plot(subset)
+```
+
+This dataset does not take too long to run with all possible models. However, some datasets will have many more possible predictors and more observations. Using `ols_step_all_possible` will take too long. We can then use an automatic search method. 
+
+:::
+
+
+
+
+### Choosing a Subset of Models
+
+
+The best subsets regressions procedure leads to the identification of a small number of
+subsets that are "good" according to a specified criterion. 
+
+
+
+
+
+
+
+Sometimes, one may wish  to consider more
+than one criterion in evaluating possible subsets of predictor variables.
+
+
+
+Once the investigator has identified a few "good" subsets for intensive examination, a
+final choice of the model variables must be made. 
+
+
+
+
+
+This choice is aided by examining outliers, checking model assumptions, and by the investigator's knowledge of the subject under study, and
+is finally confirmed through model validation studies.
+
+
+## Stepwise Regression Procedures
+
+
+### Stepwise Regression
+
+
+In those occasional cases when the pool of potential predictor variables contains 30 to 40 or even
+more variables, use of a "best" subsets algorithm may not be feasible. 
+
+
+An automatic search
+procedure that develops the "best" subset of $X$ variables *sequentially* may then be helpful.
+
+
+
+
+
+The *forward* *stepwise* *regression* procedure is probably the most widely used of the automatic
+search methods. 
+
+
+
+
+
+It was developed to economize on computational efforts as compared with
+the various all-possible-regressions procedures. Essentially, this search method develops a
+sequence of regression models, at each step *adding* or *deleting* an $X$ variable.
+
+
+
+
+
+The criterion
+for adding or deleting an $X$ variable can be stated equivalently in terms of error sum of
+squares reduction, $t^*$ statistic, $F^*$ statistic, AIC, or BIC.
+
+### Limitations of Stepwise Methods
+
+
+An essential difference between stepwise procedures and the "best" subsets algorithm is
+that stepwise search procedures end with the identification of a *single* regression model as
+"best." 
+
+
+
+
+
+With the "best" subsets algorithm, on the other hand. several regression models can
+be identified as "good" for final consideration. 
+
+
+
+
+The identification of a single regression model
+as "best" by the stepwise procedures is a major weakness of these procedures.
+
+
+
+
+
+Experience
+has shown that each of the stepwise search procedures can sometimes err by identifying a
+suboptimal regression model as "best." 
+
+
+
+
+
+In addition, the identification of a single regression
+model may hide the fact that several other regression models may also be "good."
+
+
+
+
+
+Finally,
+the "goodness" of a regression model can only be established by a thorough examination
+using a variety of diagnostics.
+
+
+
+
+
+What then can we do on those occasions when the pool of potential $X$ variables is very
+large and an automatic search procedure must be utilized? Basically, we should use the
+subset identified by the automatic search procedure as a starting point for searching for
+other "good" subsets. 
+
+
+
+
+
+One possibility is to treat the number of $X$ variables in the regression
+model identified by the automatic search procedure as being about the right subset size and
+then use the "best" subsets procedure for subsets of this and nearby sizes.
+
+### Forward Stepwise Regression
+
+
+We shall describe the forward stepwise regression search algorithm in terms of the AIC statistic.
+
+- The stepwise regression routine first fits a simple linear regression model for each of the $P - 1$ potential $X$ variables. 
+
+
+    For each simple linear regression model, the AIC statistic is obtained.
+
+
+    The X variable with the smallest AIC is the candidate for first addition. 
+
+
+- Assume $x_7$ is the variable entered at step 1. The stepwise regression routine now fits all regression models with two $X$ variables, where $x_7$ is one of the pair. 
+
+
+    For each such regression model, the AIC corresponding to the newly added predictor $x_k$ is obtained. 
+
+
+    The $X$ variable with the smallest AIC is the candidate for addition at the second stage. 
+
+    If the AIC is smaller than AIC for model in the previous step (in this case, the model with only $x_7$), then that variable is added to the model that already has $x_7$. Otherwise, the program terminates. 
+
+- Suppose $x_3$ is added at the second stage. Now the stepwise regression routine examines whether any of the other $X$ variables already in the model should be dropped. 
+
+    For our illustration, there is at this stage only one other $X$ variable in the model, $x_7$. At later stages, there would be a number of  variables in the model besides the one last added. 
+
+
+    The variable with the largest AIC is the candidate for deletion. If this AIC exceeds the AIC for when the variable is not in the model, the variable is dropped from the model; otherwise, it is retained.
+
+- Suppose $x_7$ is retained so that both $x_3$ and $x_7$ are now in the model. 
+
+
+    The stepwise regression routine now examines which $X$ variable is the next candidate for addition, then examines whether any of the variables already in the model should now be dropped, and so on until no further $X$ variables can either be added or deleted, at which point the search terminates.
+
+
+Note that the stepwise regression algorithm allows a predictor variable, brought into the model
+at an earlier stage, to be dropped subsequently if it is no longer helpful in conjunction with
+variables added at later stages.
+
+
+### Other Stepwise Procedures
+
+
+Other stepwise procedures are available to find a ``best" subset of predictor variables. We
+mention two of these.
+
+
+#### Forward Selection
+
+
+The *forward* *selection*  search procedure is a simplified version of
+forward stepwise regression, omitting the test whether a variable once entered into the
+model should be dropped.
+
+#### Backward Elimination
+
+
+The *backward* *elimination* search procedure is the opposite of
+forward selection. 
+
+
+It begins with the model containing all potential $X$ variables and identifies
+the one with the largest AIC. If the maximum AIC is greater than the full model, that $X$ variable is dropped. 
+
+
+
+The model with the remaining $P - 2$ $X$ variables is
+then fitted, and the next candidate for dropping is identified. 
+
+
+
+
+
+This process continues until
+no further $X$ variables can be dropped. 
+
+
+
+
+
+A stepwise modification can also be adapted that
+allows variables eliminated earlier to be added later: this modification is called the *backward* *stepwise* regression procedure.
+
+
+
+
+
+::: {#exm-18_2}
+
+## @exm-18_1 revisted
+
+Let use forward stepwise to find a model.
+
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(olsrr)
+
+dat = surgical |> 
+  mutate(
+    ln_y = log(y)
+  )
+
+forward_step = ols_step_both_aic(fit, details = TRUE)
+
+
+```
+
+
+Let's now use forward selection:
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(olsrr)
+
+forward_sel = ols_step_forward_aic(fit, details = TRUE)
+
+
+```
+
+Notice that forward selection results in the same model as forward stepwise. 
+
+Let's now try backward elimnation.
+
+```{r warning=FALSE, message=FALSE}
+
+backward_elim = ols_step_backward_aic(fit, details = TRUE)
+
+
+```
+
+
+Note that `olsrr` does not provide the ability to do backward stepwise.
+
+:::
+
+
+
+
+
+
+
+

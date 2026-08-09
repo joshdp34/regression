@@ -1,0 +1,11 @@
+# Introduction {.unnumbered}
+
+These are the lecture notes for STA 3386 - Regression Analysis.
+
+**Prerequisites:** MTH 2311 - Linear Algebra, MTH 2321 - Calculus III, and STA 3381 - Probability and Statistics
+    
+#### Course Description:
+
+A development of regression techniques including simple linear regression, multiple regression, logistic regression and Poisson regression with emphasis on model assumptions, parameter estimation, variable selection and diagnostics.
+
+

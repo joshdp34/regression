@@ -1,0 +1,423 @@
+# The Regression Model in Matrix Terms 
+
+> "The essence of mathematics is not to make simple things complicated, but to make complicated things simple." - S. Gudder
+
+
+
+
+
+
+
+## The Matrices for the Different Components
+
+
+Recall the regression model is
+\begin{align*}
+y_{i}= & \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\cdots+\beta_{p-1}x_{i,p-1}+\varepsilon_{i}\\
+& \varepsilon\overset{iid}{\sim}N\left(0,\sigma^{2}\right)
+\end{align*}
+for $i=1,\ldots,n$.
+
+
+
+
+This implies:
+\begin{align*}
+y_{1} & =\beta_{0}+\beta_{1}x_{11}+\beta_{2}x_{12}+\cdots+\beta_{p-1}x_{1,p-1}+\varepsilon_{1}\\
+y_{2} & =\beta_{0}+\beta_{1}x_{21}+\beta_{2}x_{22}+\cdots+\beta_{p-1}x_{2,p-1}+\varepsilon_{2}\\
+& \vdots\\
+y_{n} & =\beta_{0}+\beta_{1}x_{n1}+\beta_{2}x_{n2}+\cdots+\beta_{p-1}x_{n,p-1}+\varepsilon_{n}
+\end{align*}
+
+
+
+
+
+### Response Vector
+
+We define the response vector as 
+\begin{align*}
+\underset{{n\times1}}{\textbf{Y}}=\left[\begin{array}{c}
+y_{1}\\
+y_{2}\\
+\vdots\\
+y_{n}
+\end{array}\right]
+\end{align*}
+
+
+
+
+### Random Error Vector
+
+We define the vector of random errors as 
+\begin{align*}
+\underset{{n\times1}}{\boldsymbol{\varepsilon}}=\left[\begin{array}{c}
+\varepsilon_{1}\\
+\varepsilon_{2}\\
+\vdots\\
+\varepsilon_{n}
+\end{array}\right]
+\end{align*}
+
+
+
+
+
+### Vector of Coefficients
+
+We define the vector of Coefficients as 
+\begin{align*}
+\underset{{p\times1}}{\boldsymbol{\beta}}=\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\vdots\\
+\beta_{p-1}
+\end{array}\right]
+\end{align*}
+
+
+
+
+### The Design Matrix
+
+We define the matrix of the predictor variables as 
+\begin{align*}
+\underset{{n\times p}}{\textbf{X}}=\left[\begin{array}{ccccc}
+1 & x_{11} & x_{12} & \cdots & x_{1,p-1}\\
+1 & x_{21} & x_{22} & \cdots & x_{2,p-1}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & x_{n1} & x_{n2} & \cdots & x_{n,p-1}
+\end{array}\right]
+\end{align*}
+
+Note that the first column of $\bf{X}$ is a vector of ones. This column will represent the coefficient of the $y$-intercept in the model. 
+
+
+
+
+
+
+
+
+## The Model
+
+We can now write the model as
+
+\begin{align*}
+\underset{{n\times1}}{\textbf{Y}} & =\underset{{n\times p}}{\textbf{X}}\underset{{p\times 1}}{\boldsymbol{\beta}}+\underset{{n\times1}}{\boldsymbol{\varepsilon}}
+\end{align*}
+since:
+\begin{align*}
+\left[\begin{array}{c}
+y_{1}\\
+y_{2}\\
+\vdots\\
+y_{n}
+\end{array}\right] & =\left[\begin{array}{ccccc}
+1 & x_{11} & x_{12} & \cdots & x_{1,p-1}\\
+1 & x_{21} & x_{22} & \cdots & x_{2,p-1}\\
+\vdots & \vdots & \vdots & \ddots & \vdots\\
+1 & x_{n1} & x_{n2} & \cdots & x_{n,p-1}
+\end{array}\right]\left[\begin{array}{c}
+\beta_{0}\\
+\beta_{1}\\
+\vdots\\
+\beta_{p-1}
+\end{array}\right]+\left[\begin{array}{c}
+\varepsilon_{1}\\
+\varepsilon_{2}\\
+\vdots\\
+\varepsilon_{n}
+\end{array}\right]\\
+& =\left[\begin{array}{c}
+\beta_{0}+\beta_{1}x_{11}+\beta_2x_{12}+\cdots+\beta_{p-1}x_{1,p-1}\\
+\beta_{0}+\beta_{1}x_{21}+\beta_2x_{22}+\cdots+\beta_{p-1}x_{2,p-1}\\
+\vdots\\
+\beta_{0}+\beta_{1}x_{n1}+\beta_2x_{n2}+\cdots+\beta_{p-1}x_{n,p-1}
+\end{array}\right]+\left[\begin{array}{c}
+\varepsilon_{1}\\
+\varepsilon_{2}\\
+\vdots\\
+\varepsilon_{n}
+\end{array}\right]\\
+& =\left[\begin{array}{c}
+\beta_{0}+\beta_{1}x_{11}+\beta_2x_{12}+\cdots+\beta_{p-1}x_{1,p-1}+\varepsilon_{1}\\
+\beta_{0}+\beta_{1}x_{21}+\beta_2x_{22}+\cdots+\beta_{p-1}x_{2,p-1}+\varepsilon_{2}\\
+\vdots\\
+\beta_{0}+\beta_{1}x_{n1}+\beta_2x_{n2}+\cdots+\beta_{p-1}x_{n,p-1}+\varepsilon_{n}
+\end{array}\right]
+\end{align*}
+
+
+
+
+### Multivariate Normal Distribution
+
+The assumption on the normal error model for the random error term
+is
+\begin{align*}
+\varepsilon\overset{iid}{\sim} & N\left(0,\sigma^{2}\right).
+\end{align*}
+In matrix notation, this can be expressed with the \blank{multivariate} normal
+distribution. 
+
+
+
+
+Note that the univariate normal distribution has a probability density
+function expressed as
+\begin{align*}
+f\left(x\right) & =\frac{1}{\sigma\sqrt{2\pi}}\exp\left[-\frac{1}{2\sigma^{2}}\left(x-\mu\right)^{2}\right]
+\end{align*}
+where $\mu$ is the mean of the distribution and $\sigma$ is the
+standard deviation.
+
+
+
+
+The multivariate normal distribution is expressed as
+\begin{align*}
+f\left({\bf Y}\right) & =\frac{1}{\left(2\pi\right)^{n/2}\left|\boldsymbol{\Sigma}\right|^{1/2}}\exp\left[-\frac{1}{2}\left({\bf Y}-\boldsymbol{\mu}\right)^{\prime}\boldsymbol{\Sigma}^{-1}\left({\bf Y}-\boldsymbol{\mu}\right)\right]
+\end{align*}
+where ${\bf Y}$ is a $n\times1$ vector, $\boldsymbol{\mu}$ is a
+$n\times1$ vector of means, and $\boldsymbol{\Sigma}$ is the $n\times n$
+covariance matrix. 
+
+
+
+
+
+We denote the multivariate normal distribution of a random vector
+${\bf Y}$ as
+\begin{align*}
+{\bf Y} & \sim N_{n}\left(\boldsymbol{\mu},\boldsymbol{\Sigma}\right).
+\end{align*}
+
+For the normal error model, the mean vector of the random vector $\boldsymbol{\varepsilon}$
+is a vector of zeros (${\bf 0}$) and the covariance matrix is
+\begin{align*}
+{\bf Cov}\left(\boldsymbol{\varepsilon}\right) & =\left[\begin{array}{cccc}
+\sigma^{2} & 0 & \cdots & 0\\
+0 & \sigma^{2} & \cdots & 0\\
+\vdots & \vdots & \ddots & \vdots\\
+0 & 0 & \cdots & \sigma^{2}
+\end{array}\right]\\
+& =\sigma^{2}{\bf I}.
+\end{align*}
+
+
+
+
+
+### The Model in Matrix Notation
+
+We now represent the *normal* *errors* multiple regression model as
+$$
+\begin{align}
+{\textbf{Y}}= & {\textbf{X}}{\boldsymbol{\beta}}+{\boldsymbol{\varepsilon}}\\
+& \boldsymbol{\varepsilon} \sim N_{n}\left({\bf 0},\sigma^{2}{\bf I}\right)
+\end{align} 
+$${#eq-w4_18}
+
+Note that 
+\begin{align*}
+\textbf{E}\left(\textbf{Y}\right) & =\textbf{X}\boldsymbol{\beta}
+\end{align*}
+
+
+
+## Least Squares and Inferences Using Matrices
+
+
+
+
+
+
+
+### Least Squares Estimators
+
+For the model in @eq-w4_18
+ we want to minimize the squared distances between the observed $y_i$ and the fitted $\hat{y}_i$. 
+
+
+
+
+We will express the sum of the squared distances in @eq-w4_3
+ in matrix terms as
+ $$
+\begin{align}
+Q & =\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)
+\end{align}
+$${#eq-w4_19}
+where ${\bf Y}$ is the response vector, ${\bf X}$ is the design
+matrix, and ${\bf b}$ is the vector of estimators
+\begin{align*}
+{\bf b} & =\left[\begin{array}{c}
+b_{0}\\
+b_{1}\\
+\vdots\\
+b_{p-1}
+\end{array}\right]
+\end{align*}
+
+
+
+
+
+### Minimizing the Sums of Squares
+
+We will minimize $Q$ in @eq-w4_19 by taking the derivative with respect
+to ${\bf b}$ and setting it equal to the vector of zeros. The derivative
+is done using the properties listed in @sec-multiple and using the
+chain rule:
+\begin{align*}
+\frac{\partial\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)}{\partial{\bf b}} & =-2{\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)
+\end{align*}
+
+Setting this derivative equal to the vector of zeros gives us
+\begin{align*}
+-2{\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)={\bf 0} & \Longrightarrow{\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)={\bf 0}
+\end{align*}
+
+
+
+
+
+### The Normal Equations
+
+We can distribute ${\bf X}^{\prime}$ through the parentheses
+$$
+\begin{align}
+{\bf X}^{\prime}\left({\bf Y}-{\bf X}{\bf b}\right)={\bf 0} & \Longrightarrow{\bf X}^{\prime}{\bf Y}-{\bf X}^{\prime}{\bf X}{\bf b}={\bf 0}\\
+& \Longrightarrow{\bf X}^{\prime}{\bf X}{\bf b}={\bf X}^{\prime}{\bf Y}
+\end{align}
+$${#eq-w4_20}
+Equation @eq-w4_20 represents the *normal equations* in matrix format.
+
+
+
+
+### The Estimators
+
+Solving the normal equations for ${\bf b}$ gives us the \blank{least squares}
+estimators:
+$$
+\begin{align}
+{\bf X}^{\prime}{\bf X}{\bf b}={\bf X}^{\prime}{\bf Y} & \Longrightarrow\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf X}{\bf b}=\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf Y}\\
+& \Longrightarrow{\bf b}=\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf Y}
+\end{align}
+$${#eq-w4_21}
+
+
+
+
+
+
+
+### Fitted Values
+
+The fitted values are
+$$
+\begin{align}
+\hat{{\bf Y}} & ={\bf X}{\bf b}
+\end{align}
+$${#eq-w4_22}
+
+Substituting @eq-w4_21 for ${\bf b}$ gives us
+$$
+\begin{align}
+\hat{{\bf Y}}={\bf X}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}{\bf Y}
+\end{align}
+$${#eq-w4_23}
+
+The $n\times n$ matrix ${\bf X}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}$
+pops up a number of times in multiple regression analysis. We call
+this matrix the *hat matrix* and denote it as
+$$
+\begin{align}
+{\bf H} & ={\bf X}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}^{\prime}
+\end{align}
+$${#eq-w4_24}
+
+Thus, the fitted values can be expressed as
+$$
+\begin{align}
+\hat{{\bf Y}} & ={\bf H}{\bf Y}
+\end{align}
+$${#eq-w4_25}
+
+
+
+
+### Residuals
+
+The residuals can be expressed in matrix terms as
+$$
+\begin{align}
+{\bf e} & ={\bf Y}-\hat{{\bf Y}}\\
+& ={\bf Y}-{\bf X}{\bf b}
+\end{align}
+$${#eq-w4_26}
+
+Using @eq-w4_25, the residuals can be expressed in terms of the hat matrix
+as well
+$$
+\begin{align}
+{\bf e} & ={\bf Y}-{\bf H}{\bf Y}\\
+& =\left({\bf I}-{\bf H}\right){\bf Y}
+\end{align}
+$${#eq-w4_27}
+
+
+
+
+### Estimator for the Variance
+
+We have seen in simple regression
+ that $s^{2}$ is an estimate of the variance
+$\sigma^{2}$. Recall that we call $s^{2}$ the MSE which is just
+the SSE divided by the degrees of freedom ($n-2$ in simple linear
+regression). 
+
+
+
+In matrix terms, we can express SSE as
+$$
+\begin{align}
+SSE & ={\bf e}^{\prime}{\bf e}\\
+& ={\bf Y}^{\prime}\left({\bf I}-{\bf H}\right)^{\prime}\left({\bf I}-{\bf H}\right){\bf Y}\\
+& ={\bf Y}^{\prime}\left({\bf I}-{\bf H}\right){\bf Y}
+\end{align}
+$${#eq-w4_28}
+
+The term $\left({\bf I}-{\bf H}\right)^{\prime}\left({\bf I}-{\bf H}\right)$ simplifies to $\left({\bf I}-{\bf H}\right)$ since $\left({\bf I}-{\bf H}\right)$ is idempotent[^1]
+
+
+[^1]: Idempotent matrix is a square matrix which when multiplied by itself, gives back the same matrix.
+
+
+
+
+The MSE is
+\begin{align*}
+MSE & =\frac{SSE}{n-p}
+\end{align*}
+
+Here the degrees of freedom are now $n-p$ since there are $p$ parameters
+$\left(\beta_{0},\beta_{1},\ldots,\beta_{p-1}\right)$ that need to
+be estimated first in order to get $SSE$. As before, MSE is an estimator
+for $\sigma^{2}$.
+
+
+
+
+
+
+
+
+
+
+
+
+

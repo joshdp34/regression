@@ -1,0 +1,65 @@
+project:
+  type: book
+  output-dir: docs
+  resources:
+    - .nojekyll
+
+book:
+  title: |
+    STA 3386 Regression Analysis
+  sidebar:
+    style: "docked"
+    search: true
+    title: " "
+    background: "#326565"
+    foreground: "#F5F5EF"
+  page-footer: 
+    left: |
+      STA 3386
+    right: |
+      Fall 2024
+  chapters:
+    - index.qmd
+    - 01_Intro.qmd
+    - 02_Fitting.qmd
+    - 03_Properties.qmd
+    - 04_Sampling.qmd
+    - 05_Correlation.qmd
+    - 06_Using.qmd
+    - 07_Checking.qmd
+    - 08_Checking2.qmd
+    - 09_Tidymodels.qmd
+    - 10_Intro_Multiple.qmd
+    - 11_Regression_Matrix.qmd
+    - 12_ANOVA.qmd
+    - 13_Inferences.qmd
+    - 14_Multicollinearity.qmd
+    - 15_Indicator.qmd
+    - 16_Linearity.qmd
+    - 17_Criteria.qmd
+    - 18_Stepwise.qmd
+    - 19_Ridge.qmd
+    - 20_Outliers.qmd
+    - 21_Residual.qmd
+    - 22_Validation.qmd
+    - 23_Logistic.qmd
+    - 24_Logistic2.qmd
+    - 25_Multinomial.qmd
+
+execute:
+  freeze: auto
+
+format:
+  html:
+    theme: cosmo
+    code-link: true
+    css: styles.css
+    fig-width: 6
+    fig-height: 3
+    number-depth: 3
+  # pdf:
+  #   number-depth: 3
+  #   keep-tex: true
+  #   output-file: index.pdf
+
+editor: visual

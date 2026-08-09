@@ -1,0 +1,36 @@
+#!/usr/bin/env sh
+set -eu
+
+if [ "${SKIP_QUARTO_RENDER:-}" = "1" ]; then
+  echo "Skipping Quarto render because SKIP_QUARTO_RENDER=1."
+  exit 0
+fi
+
+QUARTO_BIN="${QUARTO_BIN:-}"
+
+if [ -z "$QUARTO_BIN" ]; then
+  if [ -x "/c/Program Files/RStudio/resources/app/bin/quarto/bin/quarto.exe" ]; then
+    QUARTO_BIN="/c/Program Files/RStudio/resources/app/bin/quarto/bin/quarto.exe"
+  elif [ -x "/c/Program Files/Quarto/bin/quarto.exe" ]; then
+    QUARTO_BIN="/c/Program Files/Quarto/bin/quarto.exe"
+  elif command -v quarto >/dev/null 2>&1; then
+    QUARTO_BIN="quarto"
+  else
+    echo "Quarto was not found on PATH or in the standard Windows/RStudio install locations."
+    echo "Install Quarto or set QUARTO_BIN to the full path of quarto.exe/quarto.cmd, then commit again."
+    exit 1
+  fi
+fi
+
+echo "Rendering Quarto book locally before commit..."
+"$QUARTO_BIN" render
+
+mkdir -p docs
+: > docs/.nojekyll
+
+git add docs .nojekyll
+if [ -d _freeze ]; then
+  git add _freeze
+fi
+
+echo "Quarto render complete; staged docs/ and _freeze/ if present."
