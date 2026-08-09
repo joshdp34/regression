@@ -101,7 +101,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><style>
+}</script><script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+<style>
 div.callout-example.callout {
   border-left-color: #008000;
 }
@@ -357,6 +358,8 @@ window.Quarto = {
   </ul>
 </li>
   <li><a href="#sec-modelutility" id="toc-sec-modelutility" class="nav-link" data-scroll-target="#sec-modelutility"><span class="header-section-number">4.6</span> Assessing the Utility of the Model: Making Inferences About the Slope</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">4.7</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">4.8</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -378,40 +381,47 @@ window.Quarto = {
 
 
 </header><blockquote class="blockquote">
-<p>“If you do not know how to ask the right question, you discover nothing.” - W. E. Demining</p>
+<p>“If you do not know how to ask the right question, you discover nothing.” - W. Edwards Deming</p>
 </blockquote>
+<p>In the previous chapter, we saw that the least squares estimators <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> can be written as linear combinations of the observed response values. That fact gives us a path toward studying their long-run behavior.</p>
+<p>This chapter focuses on three connected ideas:</p>
+<ol type="1">
+<li>why <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are unbiased estimators,</li>
+<li>how much <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> vary from sample to sample, and</li>
+<li>how the sampling distribution of <span class="math inline">\(b_1\)</span> leads to a hypothesis test for the slope.</li>
+</ol>
 <section id="properties-of-the-constants-k_i-and-c_i" class="level2" data-number="4.1"><h2 data-number="4.1" class="anchored" data-anchor-id="properties-of-the-constants-k_i-and-c_i">
 <span class="header-section-number">4.1</span> Properties of the constants <span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span>
 </h2>
-<p>In the previous section, we examined how the least squares estimators are linear combinations of the response variable <span class="math inline">\(y\)</span>. Let’s know look at the properties of the coefficients in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6" class="quarto-xref">Equation&nbsp;<span>3.2</span></a>. We will not present the proofs in this course but they are not complicated.</p>
-<p>The coefficients <span class="math inline">\(k_{i}\)</span> have the following properties: <span id="eq-w1_7"><span class="math display">\[
+<p>In the previous section, we examined how the least squares estimators are linear combinations of the response variable <span class="math inline">\(y\)</span>. Now we look at properties of the coefficients in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6" class="quarto-xref">Equation&nbsp;<span>3.2</span></a>. We will not prove each property in this course, but they are useful because they make the expected values and variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> much easier to derive.</p>
+<p>The coefficients <span class="math inline">\(k_i\)</span> have the following properties: <span id="eq-w1_7"><span class="math display">\[
 \begin{align}
-\sum k_{i} &amp; =0
+\sum k_i &amp; = 0
 \end{align}
 \tag{4.1}\]</span></span></p>
 <p><span id="eq-w1_8"><span class="math display">\[
 \begin{align}
-\sum k_{i}x_i &amp; =1
+\sum k_i x_i &amp; = 1
 \end{align}
 \tag{4.2}\]</span></span></p>
 <p><span id="eq-w1_9"><span class="math display">\[
 \begin{align}
-\sum k_{i}^{2} &amp; =\frac{1}{\sum \left(x_i-\bar{x}\right)^{2}}
+\sum k_i^2 &amp; = \frac{1}{\sum (x_i-\bar{x})^2}
 \end{align}
 \tag{4.3}\]</span></span></p>
-<p>Likewise, the coefficients <span class="math inline">\(c_{i}\)</span> have the following properties: <span id="eq-w1_10"><span class="math display">\[
+<p>Likewise, the coefficients <span class="math inline">\(c_i\)</span> have the following properties: <span id="eq-w1_10"><span class="math display">\[
 \begin{align}
-\sum c_{i} &amp; =1
+\sum c_i &amp; = 1
 \end{align}
 \tag{4.4}\]</span></span></p>
 <p><span id="eq-w1_11"><span class="math display">\[
 \begin{align}
-\sum c_{i}x_i &amp; =0
+\sum c_i x_i &amp; = 0
 \end{align}
 \tag{4.5}\]</span></span></p>
 <p><span id="eq-w1_12"><span class="math display">\[
 \begin{align}
-\sum c_{i}^{2} &amp; =\frac{1}{n}+\frac{\left(\bar{x}\right)^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
+\sum c_i^2 &amp; = \frac{1}{n}+\frac{\bar{x}^2}{\sum (x_i-\bar{x})^2}
 \end{align}
 \tag{4.6}\]</span></span></p>
 <div class="callout callout-style-default callout-note callout-titled">
@@ -424,24 +434,63 @@ window.Quarto = {
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Recall that the expected value of a linear combination of the random variable <span class="math inline">\(Y\)</span> is <span class="math display">\[
-E(aY+b)=aE(Y)+b
+<p>Recall that the expected value of a linear combination of a random variable <span class="math inline">\(Y\)</span> is <span class="math display">\[
+E(aY+b)=aE(Y)+b,
 \]</span> where <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> are constants.</p>
+<p>More generally, <span class="math display">\[
+E\left(\sum a_iY_i\right)=\sum a_iE(Y_i).
+\]</span></p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.1: Checking the weights for $b_1$
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose the predictor values are <span class="math display">\[\begin{align*}
+x_1=1,\qquad x_2=2,\qquad x_3=4.
+\end{align*}\]</span></p>
+<p>From chapter 03, the weights for the slope estimator are <span class="math display">\[\begin{align*}
+k_i=\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}.
+\end{align*}\]</span></p>
+<p>Here, <span class="math inline">\(\bar{x}=7/3\)</span> and <span class="math inline">\(\sum (x_i-\bar{x})^2=14/3\)</span>, so <span class="math display">\[\begin{align*}
+k_1=-\frac{2}{7},\qquad
+k_2=-\frac{1}{14},\qquad
+k_3=\frac{5}{14}.
+\end{align*}\]</span></p>
+<p>Now check two of the key properties: <span class="math display">\[\begin{align*}
+\sum k_i
+&amp;= -\frac{2}{7}-\frac{1}{14}+\frac{5}{14}\\
+&amp;=0,
+\end{align*}\]</span> and <span class="math display">\[\begin{align*}
+\sum k_ix_i
+&amp;= \left(-\frac{2}{7}\right)(1)+\left(-\frac{1}{14}\right)(2)+\left(\frac{5}{14}\right)(4)\\
+&amp;=1.
+\end{align*}\]</span></p>
+<p>These properties are not just algebra trivia. They are exactly what allow the expected value of <span class="math inline">\(b_1\)</span> to simplify to <span class="math inline">\(\beta_1\)</span>.</p>
 </div>
 </div>
 </section><section id="expected-values-of-b_0-and-b_1" class="level2" data-number="4.2"><h2 data-number="4.2" class="anchored" data-anchor-id="expected-values-of-b_0-and-b_1">
 <span class="header-section-number">4.2</span> Expected Values of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>
 </h2>
-<p>Before finding the expectations, recall <span class="math inline">\(E\left(y_i\right)=\beta_{0}+\beta_{1}x_i\)</span>.</p>
+<p>Before finding the expectations, recall that <span class="math display">\[\begin{align*}
+E(y_i)=\beta_0+\beta_1x_i.
+\end{align*}\]</span></p>
 <section id="expected-value-of-b_1" class="level3" data-number="4.2.1"><h3 data-number="4.2.1" class="anchored" data-anchor-id="expected-value-of-b_1">
 <span class="header-section-number">4.2.1</span> Expected Value of <span class="math inline">\(b_1\)</span>
 </h3>
 <p>The expected value of <span class="math inline">\(b_1\)</span> is <span class="math display">\[
 \begin{align*}
-E\left[b_1\right] &amp; =E\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
-&amp; =\sum k_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-&amp; =\beta_{0}\underbrace{\sum k_{i}}_{(4.1)}+\beta_{1}\underbrace{\sum k_{i}x_i}_{(4.2)}\\
-&amp; =\beta_{1}
+E(b_1)
+&amp;=E\left(\underbrace{\sum k_i y_i}_{(3.1)}\right)\\
+&amp;=\sum k_i(\beta_0+\beta_1x_i)\\
+&amp;=\beta_0\underbrace{\sum k_i}_{(4.1)}+\beta_1\underbrace{\sum k_ix_i}_{(4.2)}\\
+&amp;=\beta_1.
 \end{align*}
 \]</span></p>
 </section><section id="expected-value-of-b_0" class="level3" data-number="4.2.2"><h3 data-number="4.2.2" class="anchored" data-anchor-id="expected-value-of-b_0">
@@ -449,13 +498,14 @@ E\left[b_1\right] &amp; =E\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
 </h3>
 <p>The expected value of <span class="math inline">\(b_0\)</span> is <span class="math display">\[
 \begin{align*}
-E\left[b_0\right] &amp; =E\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\\
-&amp; =\sum c_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-&amp; =\beta_{0}\underbrace{\sum c_{i}}_{(4.4)}+\beta_{1}\underbrace{\sum c_{i}x_i}_{(4.5)}\\
-&amp; =\beta_{0}
+E(b_0)
+&amp;=E\left(\underbrace{\sum c_i y_i}_{(3.2)}\right)\\
+&amp;=\sum c_i(\beta_0+\beta_1x_i)\\
+&amp;=\beta_0\underbrace{\sum c_i}_{(4.4)}+\beta_1\underbrace{\sum c_ix_i}_{(4.5)}\\
+&amp;=\beta_0.
 \end{align*}
 \]</span></p>
-<p>Therefore, <span class="math inline">\(b_0\)</span> is an <em>unbiased</em> estimator of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(b_1\)</span> is an <em>unbiased</em> estimator of <span class="math inline">\(\beta_1\)</span>.</p>
+<p>Therefore, <span class="math inline">\(b_0\)</span> is an <em>unbiased</em> estimator of <span class="math inline">\(\beta_0\)</span>, and <span class="math inline">\(b_1\)</span> is an <em>unbiased</em> estimator of <span class="math inline">\(\beta_1\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -466,24 +516,45 @@ E\left[b_0\right] &amp; =E\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\\
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Recall that an unbiased estimator for some parameter is an estimator that has an expected value equal to that parameter.</p>
+<p>An unbiased estimator for a parameter is an estimator whose expected value equals that parameter.</p>
+<p>Unbiased does not mean the estimate from one sample is guaranteed to equal the parameter. It means that, across repeated samples, the estimator is centered at the parameter.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.2: What unbiasedness means
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Imagine repeatedly taking samples from the same population and fitting a new regression line each time. The estimated slopes might look like this:</p>
+<p><span class="math display">\[
+1.7,\quad 2.2,\quad 1.9,\quad 2.4,\quad 1.8,\quad 2.0,\quad \ldots
+\]</span></p>
+<p>If the true population slope is <span class="math inline">\(\beta_1=2\)</span>, then an unbiased estimator does not mean every sample slope equals 2. Instead, it means the long-run average of the sample slopes is 2.</p>
+<p>So if one sample gives <span class="math inline">\(b_1=1.7\)</span>, that estimate may be wrong for that sample, but the method itself can still be unbiased.</p>
 </div>
 </div>
 </section></section><section id="variances-of-b_0-and-b_1" class="level2" data-number="4.3"><h2 data-number="4.3" class="anchored" data-anchor-id="variances-of-b_0-and-b_1">
 <span class="header-section-number">4.3</span> Variances of <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>
 </h2>
-<p>To find the variances, we will use a result from mathematical statistics: Let <span class="math inline">\(Y_{1},\ldots,Y_{n}\)</span> be uncorrelated random variables and let <span class="math inline">\(a_{1},\ldots,a_{n}\)</span> be constants. Then <span id="eq-w1_13"><span class="math display">\[
+<p>To find the variances, we will use a result from mathematical statistics. Let <span class="math inline">\(Y_1,\ldots,Y_n\)</span> be uncorrelated random variables, and let <span class="math inline">\(a_1,\ldots,a_n\)</span> be constants. Then <span id="eq-w1_13"><span class="math display">\[
 \begin{align}
-Var\left[\sum a_{i}Y_i\right] &amp; =\sum a_{i}^{2}Var\left[Y_i\right]
+Var\left(\sum a_iY_i\right) &amp; = \sum a_i^2Var(Y_i).
 \end{align}
 \tag{4.7}\]</span></span></p>
-<p>Recall that we assume the response variables <span class="math inline">\(y_i\)</span>’s are <em>independent</em>.</p>
-<p>Technically, we assume the <span class="math inline">\(y_i\)</span>’s are <em>uncorrelated</em>. In general, uncorrelated does not imply independent. However, if the random variables are jointly normally distributed (recall our third assumption of the model), then uncorrelated does imply independent.</p>
-<p>Also, note that <span class="math display">\[
+<p>For this variance result, uncorrelated errors are enough. The simple linear regression model usually assumes the stronger condition that the errors are independent.</p>
+<p>Also, since <span class="math display">\[\begin{align*}
+Y=\beta_0+\beta_1x+\varepsilon,
+\end{align*}\]</span> and <span class="math inline">\(\beta_0+\beta_1x\)</span> is fixed for a given value of <span class="math inline">\(x\)</span>, we have <span class="math display">\[
 \begin{align*}
-    Var\left[Y\right]&amp; = Var\left[\beta_0 + \beta_1 x + \varepsilon\right]\\
-    &amp; = Var\left[\varepsilon\right]\\
-    &amp; = \sigma^2
+Var(Y)
+&amp;=Var(\beta_0+\beta_1x+\varepsilon)\\
+&amp;=Var(\varepsilon)\\
+&amp;=\sigma^2.
 \end{align*}
 \]</span></p>
 <section id="variance-of-b_1" class="level3" data-number="4.3.1"><h3 data-number="4.3.1" class="anchored" data-anchor-id="variance-of-b_1">
@@ -491,9 +562,10 @@ Var\left[\sum a_{i}Y_i\right] &amp; =\sum a_{i}^{2}Var\left[Y_i\right]
 </h3>
 <p>The variance of <span class="math inline">\(b_1\)</span> is <span id="eq-w1_14"><span class="math display">\[
 \begin{align}
-Var\left[b_1\right] &amp; =Var\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
-&amp; =\underbrace{\sum k_{i}^{2}}_{(4.3)}Var\left[y_i\right]\\
-&amp; =\frac{\sigma^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
+Var(b_1)
+&amp;=Var\left(\underbrace{\sum k_i y_i}_{(3.1)}\right)\\
+&amp;=\underbrace{\sum k_i^2}_{(4.3)}Var(y_i)\\
+&amp;=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
 \end{align}
 \tag{4.8}\]</span></span></p>
 </section><section id="variance-of-b_0" class="level3" data-number="4.3.2"><h3 data-number="4.3.2" class="anchored" data-anchor-id="variance-of-b_0">
@@ -501,27 +573,78 @@ Var\left[b_1\right] &amp; =Var\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
 </h3>
 <p>The variance of <span class="math inline">\(b_0\)</span> is <span id="eq-w1_15"><span class="math display">\[
 \begin{align}
-Var\left[b_0\right] &amp; =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\nonumber\\
-&amp; =\underbrace{\sum c_{i}^{2}}_{(4.6)}Var\left[y_i\right]\\
-&amp; =\sigma^{2}\left[\frac{1}{n}+\frac{\left(\bar{x}\right)^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}\right]
+Var(b_0)
+&amp;=Var\left(\underbrace{\sum c_i y_i}_{(3.2)}\right)\nonumber\\
+&amp;=\underbrace{\sum c_i^2}_{(4.6)}Var(y_i)\\
+&amp;=\sigma^2\left[\frac{1}{n}+\frac{\bar{x}^2}{\sum (x_i-\bar{x})^2}\right].
 \end{align}
 \tag{4.9}\]</span></span></p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.3: Why spread in $x$ matters
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The variance of the slope estimator is <span class="math display">\[\begin{align*}
+Var(b_1)=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
+\end{align*}\]</span></p>
+<p>The denominator, <span class="math display">\[\begin{align*}
+SS_{xx}=\sum (x_i-\bar{x})^2,
+\end{align*}\]</span> measures how spread out the predictor values are.</p>
+<p>Suppose two studies have the same error variance, <span class="math inline">\(\sigma^2=16\)</span>.</p>
+<p>For Study A, suppose <span class="math inline">\(SS_{xx}=8\)</span>. Then <span class="math display">\[\begin{align*}
+Var(b_1)=\frac{16}{8}=2.
+\end{align*}\]</span></p>
+<p>For Study B, suppose <span class="math inline">\(SS_{xx}=40\)</span>. Then <span class="math display">\[\begin{align*}
+Var(b_1)=\frac{16}{40}=0.4.
+\end{align*}\]</span></p>
+<p>The slope estimate is more precise in Study B because the predictor values are more spread out. Intuitively, it is easier to estimate the steepness of a line when we have data over a wider range of <span class="math inline">\(x\)</span> values.</p>
+</div>
+</div>
 </section></section><section id="best-linear-unbiased-estimators-blues" class="level2" data-number="4.4"><h2 data-number="4.4" class="anchored" data-anchor-id="best-linear-unbiased-estimators-blues">
 <span class="header-section-number">4.4</span> Best Linear Unbiased Estimators (BLUEs)</h2>
-<p>We see from <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are <em>linear</em> estimators.</p>
-<p>Any estimator for <span class="math inline">\(\beta_{1}\)</span>, which we will denote as <span class="math inline">\(\hat{\beta}_{0}\)</span>, that takes the form <span class="math display">\[
+<p>We see from <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <a href="03_Properties.html#eq-w1_6" class="quarto-xref">Equation&nbsp;<span>3.2</span></a> that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are linear estimators.</p>
+<p>Any estimator for <span class="math inline">\(\beta_1\)</span> that takes the form <span class="math display">\[
 \begin{align*}
-\hat{\beta}_{1} &amp; =\sum a_{i}y_i
+\hat{\beta}_1 &amp; = \sum a_i y_i
 \end{align*}
-\]</span> where <span class="math inline">\(a_{i}\)</span> is some constant, is called a <em>linear estimator</em>.</p>
-<p>Of all linear estimators for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that are <em>unbiased</em>, the least squares estimators, <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>, have the smallest variance.</p>
-<p>This is summarized in the following well known theorem:</p>
+\]</span> where <span class="math inline">\(a_i\)</span> is some constant, is called a <em>linear estimator</em>.</p>
+<p>Of all linear estimators for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> that are unbiased, the least squares estimators, <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>, have the smallest variance.</p>
+<p>This is summarized in the following well-known theorem:</p>
 <div id="thm-gauss" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 4.1 (Gauss Markov Theorem)</strong></span> For the simple linear regression model, the least squares estimators <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are unbiased and have minimum variance among all unbiased linear estimators.</p>
+<p><span class="theorem-title"><strong>Theorem 4.1 (Gauss-Markov Theorem)</strong></span> For the simple linear regression model, the least squares estimators <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are unbiased and have minimum variance among all unbiased linear estimators.</p>
 </div>
 <p>An estimator that is linear, unbiased, and has the smallest variance of all unbiased linear estimators is called the <em>best linear unbiased estimator</em> (BLUE).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="What BLUE does and does not promise">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What BLUE does and does not promise
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>BLUE is a very specific kind of “best.”</p>
+<p>It means least squares has the smallest variance among estimators that are both linear and unbiased. It does not mean:</p>
+<ul>
+<li>the fitted line is always close to the true line for every sample,</li>
+<li>the model assumptions are automatically satisfied,</li>
+<li>the relationship is causal, or</li>
+<li>no other estimator could be useful under different goals or assumptions.</li>
+</ul>
+<p>Also, normality is not required for the Gauss-Markov Theorem itself. Normality becomes especially important when we want exact small-sample <span class="math inline">\(t\)</span> tests and confidence intervals.</p>
+</div>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -530,118 +653,198 @@ Var\left[b_0\right] &amp; =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\no
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Proof of the Gauss Markov Theorem:</p>
+<p>Proof of the Gauss-Markov Theorem for <span class="math inline">\(b_1\)</span>:</p>
 <p>For all linear estimators that are unbiased, we must have <span class="math display">\[
 \begin{align*}
-E\left[\hat{\beta}_{1}\right] &amp; =E\left[\sum a_{i}y_i\right]\\
-&amp; =\sum a_{i}E\left[y_i\right]\\
-&amp; =\beta_{1}
-\end{align*}
-\]</span> Since <span class="math inline">\(E\left[y_i\right]=\beta_{0}+\beta_{1}x_i\)</span>, then we must have <span class="math display">\[
-\begin{align*}
-E\left[\hat{\beta}_{1}\right] &amp; =\sum a_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-&amp; =\beta_{0}\sum a_{i}+\beta_{1}\sum a_{i}x_i\\
-&amp; =\beta_{1}
-\end{align*}
-\]</span> Therefore, <span class="math display">\[
-\begin{align*}
-\sum a_{i} &amp; =0\\
-\sum a_{i}x_i &amp; =1
-\end{align*}
-\]</span> We now examine the variance of <span class="math inline">\(\hat{\beta}_{1}\)</span>: <span class="math display">\[
-\begin{align*}
-Var\left[\hat{\beta}_{1}\right] &amp; =\sum a_{i}^{2}Var\left[y_i\right]\\
-&amp; =\sigma^{2}\sum a_{i}^{2}
-\end{align*}
-\]</span> Let’s now define <span class="math inline">\(a_{i}=k_{i}+d_{i}\)</span> where <span class="math inline">\(k_{i}\)</span> is defined in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a>. and <span class="math inline">\(d_{i}\)</span> is some arbitrary constant.</p>
-<p>We will show that adding a constant (whether negative or positive) to <span class="math inline">\(k_i\)</span> cannot make the variance smaller. Thus, the smallest variance of the linear estimator <span class="math inline">\(\hat{\beta}_1\)</span> is when <span class="math inline">\(a_i=k_i\)</span>.</p>
-<p>The variance of <span class="math inline">\(\hat{\beta}_{1}\)</span> can now be written as <span class="math display">\[
-\begin{align*}
-Var\left[\hat{\beta}_{1}\right] &amp; =\sigma^{2}\sum a_{i}^{2}\\
-&amp; =\sigma^{2}\sum\left(k_{i}+d_{i}\right)^{2}\\
-&amp; =\sigma^{2}\sum\left(k_{i}^{2}+2k_{i}d_{i}+d_{i}^{2}\right)\\
-&amp; =Var\left[b_1\right]+2\sigma^{2}\sum k_{i}d_{i}+\sigma^{2}\sum d_{i}^{2}
-\end{align*}
-\]</span> Examining the second term and using the expression of <span class="math inline">\(k_{i}\)</span> in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math display">\[
-\begin{align*}
-\sum k_{i}d_{i} &amp; =\sum k_{i}\left(a_{i}-k_{i}\right)\\
-&amp; =\sum a_{i}k_{i}-\underbrace{\sum k_{i}^{2}}_{(4.3)}\\
-&amp; =\sum a_{i}\frac{x_i-\bar{x}}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-&amp; =\frac{\sum a_{i}x_i-\bar{x}\sum a_{i}}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-&amp; =\frac{1-\bar{x}\left(0\right)}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-&amp; =0
+E(\hat{\beta}_1)
+&amp;=E\left(\sum a_i y_i\right)\\
+&amp;=\sum a_iE(y_i)\\
+&amp;=\beta_1.
 \end{align*}
 \]</span></p>
-<p>We now have the variance of <span class="math inline">\(\hat{\beta}_{1}\)</span> as <span class="math display">\[
+<p>Since <span class="math inline">\(E(y_i)=\beta_0+\beta_1x_i\)</span>, then <span class="math display">\[
 \begin{align*}
-Var\left[\hat{\beta}_{1}\right] &amp; =Var\left[b_1\right]+\sigma^{2}\sum d_{i}^{2}
+E(\hat{\beta}_1)
+&amp;=\sum a_i(\beta_0+\beta_1x_i)\\
+&amp;=\beta_0\sum a_i+\beta_1\sum a_ix_i\\
+&amp;=\beta_1.
 \end{align*}
-\]</span> This variance is minimized when <span class="math inline">\(\sum d_{i}^{2}=0\)</span> which only happens when <span class="math inline">\(d_{i}=0\)</span>.</p>
-<p>Thus, the unbiased linear estimator with the smallest variance is when <span class="math inline">\(a_{i}=k_{i}\)</span>. That is, the least squares estimator <span class="math inline">\(b_1\)</span> in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_{1}\)</span>.</p>
-<p>A similar argument can be used to show that <span class="math inline">\(b_0\)</span> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_{0}\)</span>.</p>
+\]</span></p>
+<p>Therefore, <span class="math display">\[
+\begin{align*}
+\sum a_i &amp;=0,\\
+\sum a_ix_i &amp;=1.
+\end{align*}
+\]</span></p>
+<p>Now examine the variance of <span class="math inline">\(\hat{\beta}_1\)</span>: <span class="math display">\[
+\begin{align*}
+Var(\hat{\beta}_1)
+&amp;=\sum a_i^2Var(y_i)\\
+&amp;=\sigma^2\sum a_i^2.
+\end{align*}
+\]</span></p>
+<p>Define <span class="math inline">\(a_i=k_i+d_i\)</span>, where <span class="math inline">\(k_i\)</span> is defined in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> and <span class="math inline">\(d_i\)</span> is some arbitrary constant.</p>
+<p>We will show that adding a constant, whether negative or positive, to <span class="math inline">\(k_i\)</span> cannot make the variance smaller. Thus, the smallest variance of the linear estimator <span class="math inline">\(\hat{\beta}_1\)</span> occurs when <span class="math inline">\(a_i=k_i\)</span>.</p>
+<p>The variance of <span class="math inline">\(\hat{\beta}_1\)</span> can now be written as <span class="math display">\[
+\begin{align*}
+Var(\hat{\beta}_1)
+&amp;=\sigma^2\sum a_i^2\\
+&amp;=\sigma^2\sum(k_i+d_i)^2\\
+&amp;=\sigma^2\sum(k_i^2+2k_id_i+d_i^2)\\
+&amp;=Var(b_1)+2\sigma^2\sum k_id_i+\sigma^2\sum d_i^2.
+\end{align*}
+\]</span></p>
+<p>Examining the second term and using the expression of <span class="math inline">\(k_i\)</span> in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math display">\[
+\begin{align*}
+\sum k_id_i
+&amp;=\sum k_i(a_i-k_i)\\
+&amp;=\sum a_ik_i-\underbrace{\sum k_i^2}_{(4.3)}\\
+&amp;=\sum a_i\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&amp;=\frac{\sum a_ix_i-\bar{x}\sum a_i}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&amp;=\frac{1-\bar{x}(0)}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&amp;=0.
+\end{align*}
+\]</span></p>
+<p>We now have <span class="math display">\[
+\begin{align*}
+Var(\hat{\beta}_1) &amp;= Var(b_1)+\sigma^2\sum d_i^2.
+\end{align*}
+\]</span></p>
+<p>This variance is minimized when <span class="math inline">\(\sum d_i^2=0\)</span>, which only happens when <span class="math inline">\(d_i=0\)</span> for every <span class="math inline">\(i\)</span>.</p>
+<p>Thus, the unbiased linear estimator with the smallest variance occurs when <span class="math inline">\(a_i=k_i\)</span>. That is, the least squares estimator <span class="math inline">\(b_1\)</span> in <a href="03_Properties.html#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_1\)</span>.</p>
+<p>A similar argument can be used to show that <span class="math inline">\(b_0\)</span> has the smallest variance of all unbiased linear estimators of <span class="math inline">\(\beta_0\)</span>.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.4: Interpreting BLUE in plain language
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose two different unbiased methods estimate the slope <span class="math inline">\(\beta_1\)</span>.</p>
+<ul>
+<li>Method A usually produces estimates close to the true slope.</li>
+<li>Method B produces estimates that are unbiased on average, but its estimates jump around much more from sample to sample.</li>
+</ul>
+<p>If both methods are linear and unbiased, the Gauss-Markov Theorem says the least squares slope estimator has the smallest possible variance among methods of that type. In plain language, among linear unbiased estimators, least squares gives the most stable slope estimates.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Big picture: from assumptions to inference">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Big picture: from assumptions to inference
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The pieces in this chapter fit together like this:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"></figure><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+  A["Model assumptions&lt;br/&gt;mean zero errors&lt;br/&gt;constant variance&lt;br/&gt;normality&lt;br/&gt;independence"] --&gt; B["Properties of least squares&lt;br/&gt;unbiased estimators&lt;br/&gt;variance formulas&lt;br/&gt;BLUE"]
+  B --&gt; C["Sampling distribution&lt;br/&gt;how b1 varies&lt;br/&gt;from sample to sample"]
+  C --&gt; D["Studentized score&lt;br/&gt;replace unknown sigma&lt;br/&gt;with estimated s"]
+  D --&gt; E["Slope inference&lt;br/&gt;t test for beta1&lt;br/&gt;confidence interval"]
+</pre>
+</div>
+<p></p>
+</div>
+</div>
+</div>
+<p>The important story is not just that formulas exist. The assumptions give us a probability model for the data; that probability model gives us a sampling distribution for <span class="math inline">\(b_1\)</span>; and that sampling distribution makes hypothesis tests and confidence intervals possible.</p>
 </div>
 </div>
 </div>
 </section><section id="sampling-distribution-for-b_1" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="sampling-distribution-for-b_1">
 <span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span>
 </h2>
-<p>Now that we see that the least squares estimator <span class="math inline">\(b_1\)</span> is the BLUE for <span class="math inline">\(\beta_{1}\)</span>, we will now examine the sampling distribution for <span class="math inline">\(b_1\)</span>.</p>
-<p>We previously discussed that the mean of the sampling distribution of <span class="math inline">\(b_1\)</span> is <span class="math display">\[
-E[b_1]=\beta_1
-\]</span> with a variance of <span id="eq-w1_14"><span class="math display">\[
+<p>Now that we know the least squares estimator <span class="math inline">\(b_1\)</span> is BLUE for <span class="math inline">\(\beta_1\)</span>, we can examine the sampling distribution of <span class="math inline">\(b_1\)</span>.</p>
+<p>We previously showed that the mean of the sampling distribution of <span class="math inline">\(b_1\)</span> is <span class="math display">\[
+E(b_1)=\beta_1
+\]</span> with variance <span class="math display">\[
+\begin{align*}
+Var(b_1)
+&amp;=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
+\end{align*}
+\]</span></p>
+<p>Under the model assumptions, <span class="math inline">\(y\)</span> is normally distributed: <span id="eq-4_10"><span class="math display">\[
 \begin{align}
-Var\left[b_1\right]
-&amp; =\frac{\sigma^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
+y\sim N(\beta_0+\beta_1x,\sigma^2).
 \end{align}
 \tag{4.10}\]</span></span></p>
-<p>Note that in our model with our four assumptions, <span class="math inline">\(y\)</span> is normally distributed. That is, <span id="eq-4_10"><span class="math display">\[
-\begin{align}
-    y\sim N\left(\beta_0+\beta_1 x, \sigma^2\right)
-\end{align}
-\tag{4.11}\]</span></span></p>
-<p>To learn about the sampling distributions of the least squares estimators, we will use the following theorems from mathematical statistics:</p>
+<p>To learn about the sampling distributions of the least squares estimators, we will use the following theorems from mathematical statistics.</p>
 <div id="thm-4_1" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 4.2 (Sum of Independent Normal Random Variables)</strong></span> If <span class="math display">\[
-Y_i\sim N\left(\mu_i,\sigma_i^2\right)
-\]</span> are independent, then the linear combination <span class="math inline">\(\sum_i a_iY_i\)</span> is also normally distributed where <span class="math inline">\(a_i\)</span> are constants. In particular <span class="math display">\[
-\sum_i a_iY_i \sim N\left(\sum_i a_i\mu_i, \sum_i a_i^2\sigma_i^2\right)
+Y_i\sim N(\mu_i,\sigma_i^2)
+\]</span> are independent, then the linear combination <span class="math inline">\(\sum_i a_iY_i\)</span> is also normally distributed, where the <span class="math inline">\(a_i\)</span> values are constants. In particular, <span class="math display">\[
+\sum_i a_iY_i \sim N\left(\sum_i a_i\mu_i, \sum_i a_i^2\sigma_i^2\right).
 \]</span></p>
 </div>
 <div id="thm-4_2" class="theorem">
 <p><span class="theorem-title"><strong>Theorem 4.3 (Adding a Constant to a Normal Random Variable)</strong></span> If <span class="math display">\[
-Y\sim N\left(\mu,\sigma^2\right)
+Y\sim N(\mu,\sigma^2),
 \]</span> then for any real constant <span class="math inline">\(c\)</span>, <span class="math display">\[
-Y+c\sim N\left(\mu+c,\sigma^2\right)
+Y+c\sim N(\mu+c,\sigma^2).
 \]</span></p>
 </div>
-<p>Since <span class="math inline">\(Y\)</span> is normally distributed by <a href="#eq-4_10" class="quarto-xref">Equation&nbsp;<span>4.11</span></a>, then we can apply <a href="#thm-4_1" class="quarto-xref">Theorem&nbsp;<span>4.2</span></a> which implies that <span class="math inline">\(b_1\)</span> is normally distributed. That is, <span id="eq-w2_3"><span class="math display">\[
+<p>Since <span class="math inline">\(Y\)</span> is normally distributed by <a href="#eq-4_10" class="quarto-xref">Equation&nbsp;<span>4.10</span></a>, we can apply <a href="#thm-4_1" class="quarto-xref">Theorem&nbsp;<span>4.2</span></a>, which implies that <span class="math inline">\(b_1\)</span> is normally distributed. That is, <span id="eq-w2_3"><span class="math display">\[
 \begin{align}
-b_1 &amp; \sim N\left(\beta_{1},\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}\right)
+b_1 &amp; \sim N\left(\beta_1,\frac{\sigma^2}{\sum (x_i-\bar{x})^2}\right).
 \end{align}
-\tag{4.12}\]</span></span></p>
+\tag{4.11}\]</span></span></p>
 <section id="standardized-score" class="level3" data-number="4.5.1"><h3 data-number="4.5.1" class="anchored" data-anchor-id="standardized-score">
 <span class="header-section-number">4.5.1</span> Standardized Score</h3>
-<p>Since <span class="math inline">\(b_1\)</span> is normally distributed, we can <em>standardize</em> it so that the resulting statistic will have a standard normal distribution.</p>
-<p>Therefore, we have <span id="eq-w2_4"><span class="math display">\[
+<p>Since <span class="math inline">\(b_1\)</span> is normally distributed, we can <em>standardize</em> it so the resulting statistic has a standard normal distribution: <span id="eq-w2_4"><span class="math display">\[
 \begin{align}
-z=\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} &amp; \sim N\left(0,1\right)
+z=\frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}} &amp; \sim N(0,1).
 \end{align}
-\tag{4.13}\]</span></span></p>
+\tag{4.12}\]</span></span></p>
 </section><section id="studentized-score" class="level3" data-number="4.5.2"><h3 data-number="4.5.2" class="anchored" data-anchor-id="studentized-score">
 <span class="header-section-number">4.5.2</span> Studentized Score</h3>
-<p>In practice, the standardized score <span class="math inline">\(z\)</span> is not useful since we do not know the value of <span class="math inline">\(\sigma^{2}\)</span>. We can estimate <span class="math inline">\(\sigma^{2}\)</span> with the statistic <span class="math display">\[
-s^2 = \frac{SSE}{n-2}
+<p>In practice, the standardized score <span class="math inline">\(z\)</span> is not useful because we do not know <span class="math inline">\(\sigma^2\)</span>. We estimate <span class="math inline">\(\sigma^2\)</span> with <span class="math display">\[
+s^2 = \frac{SSE}{n-2}.
 \]</span></p>
-<p>Using this estimate for <span class="math inline">\(\sigma^2\)</span> leads us to a <span class="math inline">\(t\)</span>-score: <span id="eq-w2_4b"><span class="math display">\[
+<p>Using this estimate for <span class="math inline">\(\sigma^2\)</span> leads to a <span class="math inline">\(t\)</span>-score: <span id="eq-w2_4b"><span class="math display">\[
 \begin{align}
-t=\frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} &amp; \sim t\left(n-2\right)
+t=\frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}} &amp; \sim t(n-2).
 \end{align}
-\tag{4.14}\]</span></span></p>
-<p>We call this <span class="math inline">\(t\)</span> statistic, the <em>studentized</em> score.</p>
+\tag{4.13}\]</span></span></p>
+<p>We call this <span class="math inline">\(t\)</span> statistic the <em>studentized</em> score.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.5: Standardizing versus studentizing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The standardized score compares the estimated slope <span class="math inline">\(b_1\)</span> to a hypothesized slope <span class="math inline">\(\beta_1\)</span> using the true error standard deviation <span class="math inline">\(\sigma\)</span>: <span class="math display">\[\begin{align*}
+z=\frac{b_1-\beta_1}{\sqrt{\sigma^2/SS_{xx}}}.
+\end{align*}\]</span></p>
+<p>But <span class="math inline">\(\sigma\)</span> is almost never known in real applications. So we replace <span class="math inline">\(\sigma\)</span> with its estimate <span class="math inline">\(s\)</span>, which gives <span class="math display">\[\begin{align*}
+t=\frac{b_1-\beta_1}{\sqrt{s^2/SS_{xx}}}.
+\end{align*}\]</span></p>
+<p>That replacement adds extra uncertainty, so we use a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom instead of a standard normal distribution.</p>
+</div>
+</div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -650,68 +853,111 @@ t=\frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} &a
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>It is important to note the following theorem from math stats presented here without proof:</p>
+<p>It is important to note the following theorem from mathematical statistics, presented here without proof.</p>
 <div id="thm-04_3" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 4.4 (Distribution of the sample variance of the residuals)</strong></span> For the sample variance of the residuals <span class="math inline">\(s^{2}\)</span>, the quantity <span class="math display">\[\begin{align*}
-\frac{\left(n-2\right)s^{2}}{\sigma^{2}} &amp; =\frac{SSE}{\sigma^{2}}
+<p><span class="theorem-title"><strong>Theorem 4.4 (Distribution of the sample variance of the residuals)</strong></span> For the sample variance of the residuals <span class="math inline">\(s^2\)</span>, the quantity <span class="math display">\[\begin{align*}
+\frac{(n-2)s^2}{\sigma^2} &amp;= \frac{SSE}{\sigma^2}
 \end{align*}\]</span> is distributed as a chi-square distribution with <span class="math inline">\(n-2\)</span> degrees of freedom. That is, <span class="math display">\[\begin{align*}
-\frac{SSE}{\sigma^{2}} &amp; \sim\chi^{2}\left(n-2\right)
+\frac{SSE}{\sigma^2} &amp;\sim\chi^2(n-2).
 \end{align*}\]</span></p>
 </div>
-<p>We will use another important theorem form math stats (again presented without proof):</p>
+<p>We will use another important theorem from mathematical statistics, again presented without proof.</p>
 <div id="thm-04_4" class="theorem">
-<p><span class="theorem-title"><strong>Theorem 4.5 (Ratio of independent standard normal and chi-square statistics)</strong></span> If <span class="math inline">\(Z\sim N\left(0,1\right)\)</span> and <span class="math inline">\(W\sim\chi^{2}\left(\nu\right)\)</span>, and <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span> are independent, then the statistic <span class="math display">\[\begin{align*}
-\frac{Z}{\sqrt{\frac{W}{\nu}}}
+<p><span class="theorem-title"><strong>Theorem 4.5 (Ratio of independent standard normal and chi-square statistics)</strong></span> If <span class="math inline">\(Z\sim N(0,1)\)</span> and <span class="math inline">\(W\sim\chi^2(\nu)\)</span>, and if <span class="math inline">\(Z\)</span> and <span class="math inline">\(W\)</span> are independent, then the statistic <span class="math display">\[\begin{align*}
+\frac{Z}{\sqrt{W/\nu}}
 \end{align*}\]</span> is distributed as a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(\nu\)</span> degrees of freedom.</p>
 </div>
-<p>We will take the standardized score in <a href="#eq-w2_4" class="quarto-xref">Equation&nbsp;<span>4.13</span></a> and divide by <span class="math display">\[\begin{align*}
-\sqrt{\frac{\frac{\left(n-2\right)s^{2}}{\sigma^{2}}}{\left(n-2\right)}} &amp; =\sqrt{\frac{s^{2}}{\sigma^{2}}}
+<p>We take the standardized score in <a href="#eq-w2_4" class="quarto-xref">Equation&nbsp;<span>4.12</span></a> and divide by <span class="math display">\[\begin{align*}
+\sqrt{\frac{\frac{(n-2)s^2}{\sigma^2}}{n-2}} &amp;= \sqrt{\frac{s^2}{\sigma^2}}
 \end{align*}\]</span> to give us <span class="math display">\[\begin{align*}
-t &amp; =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}}{\sqrt{\frac{s^{2}}{\sigma^{2}}}}\\
-&amp; =\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}\sqrt{\frac{s^{2}}{\sigma^{2}}}}\\
-&amp; =\frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}
-\end{align*}\]</span> which will have a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
+t
+&amp;= \frac{\frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}}}{\sqrt{\frac{s^2}{\sigma^2}}}\\
+&amp;= \frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}\sqrt{\frac{s^2}{\sigma^2}}}\\
+&amp;= \frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}},
+\end{align*}\]</span> which has a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
 </div>
 </div>
 </div>
 </section></section><section id="sec-modelutility" class="level2" data-number="4.6"><h2 data-number="4.6" class="anchored" data-anchor-id="sec-modelutility">
 <span class="header-section-number">4.6</span> Assessing the Utility of the Model: Making Inferences About the Slope</h2>
-<p>Suppose that the independent variable <span class="math inline">\(x\)</span> is completely unrelated to the dependent variable <span class="math inline">\(y\)</span>.</p>
+<p>Suppose the predictor variable <span class="math inline">\(x\)</span> is completely unrelated to the response variable <span class="math inline">\(y\)</span>.</p>
 <p>What could be said about the values of <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> in the hypothesized probabilistic model <span class="math display">\[\begin{align*}
-    y = \beta_0 +\beta_1 x + \varepsilon
-\end{align*}\]</span> if <span class="math inline">\(x\)</span> contributes no information for the prediction of <span class="math inline">\(y\)</span>?</p>
-<p>The implication is that the mean of <span class="math inline">\(y\)</span>, does not change as <span class="math inline">\(x\)</span> changes. In other words, the line would just be a <em>horizontal</em> line.</p>
-<p>If <span class="math inline">\(E(y)\)</span> does not change as <span class="math inline">\(x\)</span> increases, then using <span class="math inline">\(x\)</span> to predict <span class="math inline">\(y\)</span> in the linear model is not <em>useful</em>.</p>
-<p>Regardless of the value of <span class="math inline">\(x\)</span>, you always predict the same value of <span class="math inline">\(y\)</span>. In the straight-line model, this means that the true slope, <span class="math inline">\(\beta_1\)</span>, is equal to 0.</p>
-<p>Therefore, to test the null hypothesis that <span class="math inline">\(x\)</span> contributes no information for the prediction of <span class="math inline">\(y\)</span> against the alternative hypothesis that these variables are <em>linearly</em> related with a slope differing from 0, we test <span class="math display">\[\begin{align*}
-    H_0:\beta_1 = 0\\
-    H_a:\beta_1\ne 0
+y = \beta_0+\beta_1x+\varepsilon
+\end{align*}\]</span> if <span class="math inline">\(x\)</span> contributes no information for predicting <span class="math inline">\(y\)</span>?</p>
+<p>If <span class="math inline">\(x\)</span> contributes no information, then the mean of <span class="math inline">\(y\)</span> does not change as <span class="math inline">\(x\)</span> changes. In other words, the line would be horizontal.</p>
+<p>If <span class="math inline">\(E(y)\)</span> does not change as <span class="math inline">\(x\)</span> increases, then using <span class="math inline">\(x\)</span> to predict <span class="math inline">\(y\)</span> in the linear model is not useful. Regardless of the value of <span class="math inline">\(x\)</span>, we would always predict the same mean value of <span class="math inline">\(y\)</span>. In the straight-line model, this means the true slope, <span class="math inline">\(\beta_1\)</span>, is equal to 0.</p>
+<p>Therefore, to test the null hypothesis that <span class="math inline">\(x\)</span> contributes no information for predicting <span class="math inline">\(y\)</span> against the alternative hypothesis that these variables are linearly related with a slope differing from 0, we test <span class="math display">\[\begin{align*}
+H_0 &amp;: \beta_1 = 0\\
+H_a &amp;: \beta_1 \ne 0.
 \end{align*}\]</span></p>
-<p>If the data support the alternative hypothesis, we conclude that <span class="math inline">\(x\)</span> does contribute information for the prediction of <span class="math inline">\(y\)</span> using the straight-line model (although the true relationship between <span class="math inline">\(E(y)\)</span> and <span class="math inline">\(x\)</span> could be more complex than a straight line). Thus, to some extent, this is a test of the <em>utility</em> of the hypothesized model.</p>
-<p>The appropriate test statistic is the studentized score given above: <span id="eq-4_14"><span class="math display">\[
+<p>If the data support the alternative hypothesis, we conclude that <span class="math inline">\(x\)</span> contributes information for predicting <span class="math inline">\(y\)</span> using the straight-line model. However, the true relationship between <span class="math inline">\(E(y)\)</span> and <span class="math inline">\(x\)</span> could still be more complex than a straight line. Thus, to some extent, this is a test of the utility of the hypothesized linear model.</p>
+<p>The appropriate test statistic is the studentized score given above. Under the null hypothesis, <span class="math inline">\(\beta_1=0\)</span>, so <span id="eq-4_14"><span class="math display">\[
 \begin{align}
-    t &amp;= \frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}\\
-    &amp;=\frac{b_1}{\sqrt{\frac{s^{2}}{SS_{xx}}}}
+t
+&amp;= \frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}}\\
+&amp;= \frac{b_1}{\sqrt{\frac{s^2}{SS_{xx}}}}.
 \end{align}
-\tag{4.15}\]</span></span></p>
-<p>Another way to make inferences about the slope <span class="math inline">\(\beta_1\)</span> is to estimate it using a <em>confidence</em> <em>interval</em> <span id="eq-4_15"><span class="math display">\[
+\tag{4.14}\]</span></span></p>
+<p>Another way to make inferences about the slope <span class="math inline">\(\beta_1\)</span> is to estimate it using a confidence interval: <span id="eq-4_15"><span class="math display">\[
 \begin{align}
-    b_1 \pm \left(t_{\alpha/2}\right)s_{b_1}
+b_1 \pm t_{\alpha/2}s_{b_1}
 \end{align}
-\tag{4.16}\]</span></span> where <span class="math display">\[\begin{align*}
-    s_{b_1} = \frac{s}{\sqrt{SS_{xx}}}
-\end{align*}\]</span></p>
-<p>We can obtain the p-value for the hypothesis test by using the <code>summary</code> function with an <code>lm</code> object. For the previous example consisting of the <code>mtcars</code> data.</p>
-<div id="exm-4_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 4.1 (<a href="03_Properties.html#exm-3_1" class="quarto-xref">Example&nbsp;<span>3.1</span></a> - revisited)</strong></span> &nbsp;</p>
+\tag{4.15}\]</span></span> where <span class="math display">\[\begin{align*}
+s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
+\end{align*}\]</span> and <span class="math inline">\(t_{\alpha/2}\)</span> is the appropriate critical value from a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="What the slope test does not say">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What the slope test does not say
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Rejecting <span class="math inline">\(H_0:\beta_1=0\)</span> means the data provide evidence of a nonzero linear association between <span class="math inline">\(x\)</span> and the mean of <span class="math inline">\(y\)</span>.</p>
+<p>It does not automatically prove causation, and it does not guarantee that a straight-line model is the best possible description of the relationship.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Common mistake: nonsignificant does not mean no relationship">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Common mistake: nonsignificant does not mean no relationship
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>If we fail to reject <span class="math inline">\(H_0:\beta_1=0\)</span>, we should not say, “There is no relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.”</p>
+<p>A nonsignificant slope test means the data did not provide strong enough evidence of a nonzero <em>linear</em> slope under the model assumptions. There may be no relationship, but there may also be a weak relationship, a noisy dataset, a small sample size, or a relationship that is not well described by a straight line.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 4.6: Testing the slope in the `mtcars` model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can obtain the p-value for the hypothesis test by using the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function with an <code>lm</code> object. We will revisit the <code>mtcars</code> model from <a href="03_Properties.html#exm-3_1" class="quarto-xref">Example&nbsp;<span>3.1</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">~</span><span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>We find the least squares estimates as</p>
+<p>We find the least squares estimates and test statistics with:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -735,8 +981,29 @@ Multiple R-squared:  0.7528,    Adjusted R-squared:  0.7446
 F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 </div>
 </div>
-<p>From the output, we see the p-value is <span class="math inline">\(1.29\times 10^{-10}\)</span>. So we have sufficient evidence to conclude that the true population slope is different than zero.</p>
-<p>To find the confidence interval, we can use the <code>confint</code> function with the <code>lm</code> object.</p>
+<p>From the output, the p-value for testing <span class="math display">\[\begin{align*}
+H_0 &amp;: \beta_1=0\\
+H_a &amp;: \beta_1\ne 0
+\end{align*}\]</span> is approximately <span class="math inline">\(1.29e-10\)</span>.</p>
+<p>Because this p-value is very small, we have strong evidence that the true population slope relating automobile weight to fuel economy is different from 0.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Statistical significance vs. practical importance">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Statistical significance vs.&nbsp;practical importance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A small p-value tells us there is evidence that the population slope is not 0. It does not, by itself, tell us whether the effect is large enough to matter in practice.</p>
+<p>To judge practical importance, we should also interpret the estimated slope, the response units, the predictor units, the confidence interval, and the scientific or real-world context.</p>
+</div>
+</div>
+</div>
+<p>To find a confidence interval, we can use the <code><a href="https://rdrr.io/r/stats/confint.html">confint()</a></code> function with the <code>lm</code> object.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/confint.html">confint</a></span><span class="op">(</span><span class="va">fit</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -745,7 +1012,121 @@ F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 wt          -6.486308 -4.202635</code></pre>
 </div>
 </div>
-<p>We 95% confident that the true population slope is in the interval <span class="math inline">\((-6.486, -4.203)\)</span></p>
+<p>We are 95% confident that the true population slope is in the interval <span class="math display">\[\begin{align*}
+(-6.486,\ -4.203).
+\end{align*}\]</span></p>
+<p>In context, this interval estimates the change in mean fuel economy, in mpg, associated with a 1-unit increase in <code>wt</code>. Since <code>wt</code> is measured in thousands of pounds, this is the estimated change in mean mpg for each additional 1000 pounds of automobile weight.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="4.7"><h2 data-number="4.7" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">4.7</span> Recap</h2>
+<p>This chapter used the structure of the least squares estimators to explain why we can make inference about the slope.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong><span class="math inline">\(k_i\)</span> and <span class="math inline">\(c_i\)</span> weights</strong></td>
+<td>Constants determined by the observed predictor values.</td>
+</tr>
+<tr class="even">
+<td><strong>Unbiased estimator</strong></td>
+<td>An estimator whose sampling distribution is centered at the true parameter.</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="math inline">\(E(b_1)=\beta_1\)</span></strong></td>
+<td>The least squares slope is unbiased for the population slope.</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(E(b_0)=\beta_0\)</span></strong></td>
+<td>The least squares intercept is unbiased for the population intercept.</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="math inline">\(Var(b_1)\)</span></strong></td>
+<td>The sample-to-sample variability of the estimated slope. It decreases as <span class="math inline">\(SS_{xx}\)</span> increases.</td>
+</tr>
+<tr class="even">
+<td><strong>BLUE</strong></td>
+<td>Best linear unbiased estimator; among linear unbiased estimators, least squares has minimum variance.</td>
+</tr>
+<tr class="odd">
+<td><strong>Sampling distribution of <span class="math inline">\(b_1\)</span></strong></td>
+<td>Under the model assumptions, <span class="math inline">\(b_1\)</span> is normally distributed around <span class="math inline">\(\beta_1\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Studentized score</strong></td>
+<td>A <span class="math inline">\(t\)</span> statistic created by replacing unknown <span class="math inline">\(\sigma\)</span> with estimated <span class="math inline">\(s\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Slope test</strong></td>
+<td>A test of whether the predictor contributes linear information for predicting the response.</td>
+</tr>
+<tr class="even">
+<td><strong>Practical importance</strong></td>
+<td>The question of whether the estimated effect is large enough to matter in context. This is not answered by the p-value alone.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="4.8"><h2 data-number="4.8" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">4.8</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why do the properties <span class="math inline">\(\sum k_i=0\)</span> and <span class="math inline">\(\sum k_ix_i=1\)</span> matter when finding <span class="math inline">\(E(b_1)\)</span>?</p></li>
+<li><p>What does it mean to say that <span class="math inline">\(b_1\)</span> is an unbiased estimator of <span class="math inline">\(\beta_1\)</span>? What does it not mean?</p></li>
+<li><p>Why does a larger value of <span class="math inline">\(SS_{xx}=\sum(x_i-\bar{x})^2\)</span> make the slope estimator more precise?</p></li>
+<li><p>What does BLUE stand for? Be precise about what “best” means in this phrase.</p></li>
+<li><p>Why do we use a <span class="math inline">\(t\)</span> distribution instead of a standard normal distribution when testing the slope in practice?</p></li>
+<li><p>In the hypothesis test <span class="math inline">\(H_0:\beta_1=0\)</span> versus <span class="math inline">\(H_a:\beta_1\ne0\)</span>, what does the null hypothesis say about the usefulness of <span class="math inline">\(x\)</span>?</p></li>
+<li><p>If a slope test gives a very small p-value, what can we conclude? What should we avoid concluding?</p></li>
+<li><p>How are the slope hypothesis test and the confidence interval for <span class="math inline">\(\beta_1\)</span> connected?</p></li>
+<li><p>If a slope test is not statistically significant, why is it too strong to say that there is definitely no relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>?</p></li>
+<li><p>Why should a statistically significant slope still be interpreted in terms of practical importance?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>They make the expectation simplify.</strong> When <span class="math inline">\(E(b_1)\)</span> is expanded, the term involving <span class="math inline">\(\beta_0\)</span> is multiplied by <span class="math inline">\(\sum k_i\)</span>, which equals 0, and the term involving <span class="math inline">\(\beta_1\)</span> is multiplied by <span class="math inline">\(\sum k_ix_i\)</span>, which equals 1. That leaves <span class="math inline">\(E(b_1)=\beta_1\)</span>.</p></li>
+<li><p><strong>Centered at the truth.</strong> Saying <span class="math inline">\(b_1\)</span> is unbiased means its sampling distribution is centered at the true population slope <span class="math inline">\(\beta_1\)</span>. It does not mean that the slope from one sample must equal <span class="math inline">\(\beta_1\)</span>.</p></li>
+<li><p><strong>More horizontal spread gives more information about slope.</strong> Since <span class="math inline">\(Var(b_1)=\sigma^2/SS_{xx}\)</span>, increasing <span class="math inline">\(SS_{xx}\)</span> decreases the variance of <span class="math inline">\(b_1\)</span>. A wider range of predictor values makes it easier to estimate how steep the line is.</p></li>
+<li><p><strong>Best linear unbiased estimator.</strong> BLUE means the estimator is linear, unbiased, and has the smallest variance among all estimators that are both linear and unbiased. “Best” does not mean best among every possible estimator under every possible condition.</p></li>
+<li><p><strong>Because <span class="math inline">\(\sigma\)</span> is unknown.</strong> If the true error standard deviation <span class="math inline">\(\sigma\)</span> were known, we could use a standardized normal statistic. In practice, we estimate <span class="math inline">\(\sigma\)</span> with <span class="math inline">\(s\)</span>, and that extra uncertainty leads to a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p></li>
+<li><p><strong>No linear contribution.</strong> The null hypothesis says the mean response does not change linearly as <span class="math inline">\(x\)</span> changes. If <span class="math inline">\(\beta_1=0\)</span>, the regression line is horizontal, so <span class="math inline">\(x\)</span> contributes no linear information for predicting <span class="math inline">\(y\)</span>.</p></li>
+<li><p><strong>Evidence of linear association, not proof of causation.</strong> A very small p-value provides evidence that the population slope is different from 0. We should avoid concluding that <span class="math inline">\(x\)</span> causes <span class="math inline">\(y\)</span>, that the model assumptions are automatically satisfied, or that the relationship must be exactly linear.</p></li>
+<li><p><strong>They answer the same slope question in related ways.</strong> For a two-sided test at significance level <span class="math inline">\(\alpha\)</span>, rejecting <span class="math inline">\(H_0:\beta_1=0\)</span> is equivalent to a <span class="math inline">\((1-\alpha)100\%\)</span> confidence interval for <span class="math inline">\(\beta_1\)</span> that does not contain 0.</p></li>
+<li><p><strong>Nonsignificant is not the same as no relationship.</strong> A nonsignificant result means the data did not provide strong enough evidence of a nonzero linear slope under the model assumptions. The study may have too little data, too much noise, or a relationship that is nonlinear rather than absent.</p></li>
+<li><p><strong>Statistical significance is not the whole story.</strong> With enough data, even a very small slope can be statistically significant. Practical importance asks whether the estimated change in the response is meaningful in the real context of the problem.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 

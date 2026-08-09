@@ -336,8 +336,8 @@ window.Quarto = {
 <li>
 <a href="#using-the-model-for-estimation-and-prediction" id="toc-using-the-model-for-estimation-and-prediction" class="nav-link active" data-scroll-target="#using-the-model-for-estimation-and-prediction"><span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</a>
   <ul class="collapse">
-<li><a href="#the-sampling-distribution-of-haty" id="toc-the-sampling-distribution-of-haty" class="nav-link" data-scroll-target="#the-sampling-distribution-of-haty"><span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span></a></li>
-  <li><a href="#linear-combination-of-y" id="toc-linear-combination-of-y" class="nav-link" data-scroll-target="#linear-combination-of-y"><span class="header-section-number">6.1.2</span> Linear Combination of <span class="math inline">\(y\)</span></a></li>
+<li><a href="#the-sampling-distribution-of-haty_h" id="toc-the-sampling-distribution-of-haty_h" class="nav-link" data-scroll-target="#the-sampling-distribution-of-haty_h"><span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}_h\)</span></a></li>
+  <li><a href="#linear-combination-of-the-observed-responses" id="toc-linear-combination-of-the-observed-responses" class="nav-link" data-scroll-target="#linear-combination-of-the-observed-responses"><span class="header-section-number">6.1.2</span> Linear Combination of the Observed Responses</a></li>
   <li><a href="#the-mean-of-haty_h" id="toc-the-mean-of-haty_h" class="nav-link" data-scroll-target="#the-mean-of-haty_h"><span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span></a></li>
   <li><a href="#the-variance-of-haty_h" id="toc-the-variance-of-haty_h" class="nav-link" data-scroll-target="#the-variance-of-haty_h"><span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span></a></li>
   <li><a href="#confidence-interval-for-the-mean-response" id="toc-confidence-interval-for-the-mean-response" class="nav-link" data-scroll-target="#confidence-interval-for-the-mean-response"><span class="header-section-number">6.1.5</span> Confidence Interval for the Mean Response</a></li>
@@ -346,13 +346,15 @@ window.Quarto = {
   <li>
 <a href="#predicting-the-response" id="toc-predicting-the-response" class="nav-link" data-scroll-target="#predicting-the-response"><span class="header-section-number">6.2</span> Predicting the Response</a>
   <ul class="collapse">
-<li><a href="#the-predicted-response" id="toc-the-predicted-response" class="nav-link" data-scroll-target="#the-predicted-response"><span class="header-section-number">6.2.1</span> The Predicted Response</a></li>
-  <li><a href="#prediction-when-the-true-line-is-known" id="toc-prediction-when-the-true-line-is-known" class="nav-link" data-scroll-target="#prediction-when-the-true-line-is-known"><span class="header-section-number">6.2.2</span> Prediction When the True Line is Known</a></li>
-  <li><a href="#predicting-when-the-true-line-is-unknown" id="toc-predicting-when-the-true-line-is-unknown" class="nav-link" data-scroll-target="#predicting-when-the-true-line-is-unknown"><span class="header-section-number">6.2.3</span> Predicting When the True Line is Unknown</a></li>
-  <li><a href="#the-variance-of-the-predicted-response" id="toc-the-variance-of-the-predicted-response" class="nav-link" data-scroll-target="#the-variance-of-the-predicted-response"><span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</a></li>
+<li><a href="#prediction-when-the-true-line-is-known" id="toc-prediction-when-the-true-line-is-known" class="nav-link" data-scroll-target="#prediction-when-the-true-line-is-known"><span class="header-section-number">6.2.1</span> Prediction When the True Line is Known</a></li>
+  <li><a href="#prediction-when-the-true-line-is-unknown" id="toc-prediction-when-the-true-line-is-unknown" class="nav-link" data-scroll-target="#prediction-when-the-true-line-is-unknown"><span class="header-section-number">6.2.2</span> Prediction When the True Line is Unknown</a></li>
+  <li><a href="#the-variance-of-the-predicted-response" id="toc-the-variance-of-the-predicted-response" class="nav-link" data-scroll-target="#the-variance-of-the-predicted-response"><span class="header-section-number">6.2.3</span> The Variance of the Predicted Response</a></li>
+  <li><a href="#prediction-interval" id="toc-prediction-interval" class="nav-link" data-scroll-target="#prediction-interval"><span class="header-section-number">6.2.4</span> Prediction Interval</a></li>
   <li><a href="#extrapolation-and-precision" id="toc-extrapolation-and-precision" class="nav-link" data-scroll-target="#extrapolation-and-precision"><span class="header-section-number">6.2.5</span> Extrapolation and Precision</a></li>
   </ul>
 </li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">6.3</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">6.4</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -376,46 +378,130 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“I try not to get involved in the business of prediction. It’s a quick way to look like an idiot.” - Warren Ellis</p>
 </blockquote>
+<p>After fitting a simple linear regression model and assessing the model’s usefulness, we can use the fitted model for two closely related purposes:</p>
+<ol type="1">
+<li>estimating the mean response at a particular value of <span class="math inline">\(x\)</span>, and</li>
+<li>predicting one individual response at a particular value of <span class="math inline">\(x\)</span>.</li>
+</ol>
+<p>These two goals sound similar, but they require different intervals.</p>
 <section id="using-the-model-for-estimation-and-prediction" class="level2" data-number="6.1"><h2 data-number="6.1" class="anchored" data-anchor-id="using-the-model-for-estimation-and-prediction">
 <span class="header-section-number">6.1</span> Using the Model for Estimation and Prediction</h2>
-<p>Now that we have fit the model<br><span class="math display">\[
-y = {\beta}_0 + {\beta}_1 x + \varepsilon
-\]</span> and assessed how good of fit the model is, we can now use the model <em>estimation</em> and <em>prediction</em>.</p>
-<p>Recall that the mean of <span class="math inline">\(y_{i}\)</span> for some value of <span class="math inline">\(x_{i}\)</span> is the population line <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span> evaluated at <span class="math inline">\(x_{i}\)</span>.</p>
-<p>So we can <em>estimate</em> the mean of <span class="math inline">\(y_{i}\)</span> for some value of <span class="math inline">\(x_{i}\)</span> by evaluating the model estimated with the least squares estimators: <span class="math display">\[\begin{align*}
-\hat{y}_{i} &amp; =b_0+b_1x_{i}
+<p>Suppose we have fit the model <span class="math display">\[
+y=\beta_0+\beta_1x+\varepsilon.
+\]</span></p>
+<p>Recall that the mean of <span class="math inline">\(y\)</span> for a particular value <span class="math inline">\(x_h\)</span> is the population regression line evaluated at <span class="math inline">\(x_h\)</span>: <span class="math display">\[\begin{align*}
+E(y_h)=\beta_0+\beta_1x_h.
 \end{align*}\]</span></p>
-<p>We say <span class="math inline">\(\hat{y}_{i}\)</span> is a <em>point estimator</em> for the population mean <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span>.</p>
-<section id="the-sampling-distribution-of-haty" class="level3" data-number="6.1.1"><h3 data-number="6.1.1" class="anchored" data-anchor-id="the-sampling-distribution-of-haty">
-<span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}\)</span>
-</h3>
-<p>We will want to make an inference for the population mean response at some value of the predictor variable <span class="math inline">\(x_{i}\)</span>.</p>
-<p>We have a point estimator <span class="math inline">\(\hat{y}_{i}\)</span>. We will now examine the <em>sampling distribution</em> of <span class="math inline">\(\hat{y}_{i}\)</span> and use it to make a confidence interval for the mean response <span class="math inline">\(\beta_{0}+\beta_{1}x_{i}\)</span>.</p>
-</section><section id="linear-combination-of-y" class="level3" data-number="6.1.2"><h3 data-number="6.1.2" class="anchored" data-anchor-id="linear-combination-of-y">
-<span class="header-section-number">6.1.2</span> Linear Combination of <span class="math inline">\(y\)</span>
-</h3>
-<p>We will denote the value of <span class="math inline">\(x\)</span> at which we want to estimate the mean response as <span class="math inline">\(x_{h}\)</span>. So the value of <span class="math inline">\(y\)</span> at <span class="math inline">\(x_{h}\)</span> will be <span class="math inline">\(y_{h}\)</span></p>
-<p>We write <span class="math inline">\(\hat{y}_{h}\)</span> as <span class="math display">\[\begin{align*}
-\hat{y}_{h} &amp; =\underbrace{b_0}_{(3.2)}+\underbrace{b_1}_{(3.1)}x_{h}\\
-&amp; =\sum c_{i}y_{i}+\sum k_{i}y_{h}x_{h}\\
-&amp; =\sum\left(c_{i}+k_{i}x_{h}\right)y_{h}
+<p>Since <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> are unknown, we estimate this mean response with <span class="math display">\[\begin{align*}
+\hat{y}_h=b_0+b_1x_h.
 \end{align*}\]</span></p>
-<p>Thus, <span class="math inline">\(\hat{y}_{j}\)</span> is a linear combination of the observed <span class="math inline">\(y_{i}\)</span> which are normally distributed. Then by <a href="04_Sampling.html#thm-4_1" class="quarto-xref">Theorem&nbsp;<span>4.2</span></a>, <span class="math inline">\(\hat{y}_{j}\)</span> is normally distributed.</p>
+<p>We say <span class="math inline">\(\hat y_h\)</span> is a <em>point estimator</em> for the population mean response <span class="math inline">\(\beta_0+\beta_1x_h\)</span>.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.1: Mean response versus individual response
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose <span class="math inline">\(x\)</span> is hours studied and <span class="math inline">\(y\)</span> is exam score. If <span class="math inline">\(x_h=10\)</span>, there are two different questions we might ask:</p>
+<ol type="1">
+<li>
+<strong>Mean response question:</strong> What is the mean exam score for all students who study 10 hours?</li>
+<li>
+<strong>Prediction question:</strong> What exam score will one particular student earn if they study 10 hours?</li>
+</ol>
+<p>The first question is about the average outcome for a group of similar individuals. The second question is about one individual outcome.</p>
+<p>The same fitted value <span class="math inline">\(\hat y_h\)</span> is used as the center for both intervals, but the prediction interval is wider because one individual response includes extra random variation around the mean.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Same center, different uncertainty">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Same center, different uncertainty
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Both a confidence interval for the mean response and a prediction interval for one individual response are centered at <span class="math inline">\(\hat y_h\)</span>.</p>
+<p>The difference is the amount of uncertainty:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Goal</th>
+<th>Quantity</th>
+<th>Interval type</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Estimate the average response at <span class="math inline">\(x_h\)</span>
+</td>
+<td><span class="math inline">\(\beta_0+\beta_1x_h\)</span></td>
+<td>Confidence interval</td>
+</tr>
+<tr class="even">
+<td>Predict one new response at <span class="math inline">\(x_h\)</span>
+</td>
+<td><span class="math inline">\(y_h\)</span></td>
+<td>Prediction interval</td>
+</tr>
+</tbody>
+</table>
+<p>The prediction interval is wider because an individual response varies around the mean response.</p>
+</div>
+</div>
+</div>
+<section id="the-sampling-distribution-of-haty_h" class="level3" data-number="6.1.1"><h3 data-number="6.1.1" class="anchored" data-anchor-id="the-sampling-distribution-of-haty_h">
+<span class="header-section-number">6.1.1</span> The Sampling Distribution of <span class="math inline">\(\hat{y}_h\)</span>
+</h3>
+<p>We want to make an inference for the population mean response at some value of the predictor variable. We denote that value by <span class="math inline">\(x_h\)</span>.</p>
+<p>We have the point estimator <span class="math inline">\(\hat y_h\)</span>. To build a confidence interval for the mean response, we need the sampling distribution of <span class="math inline">\(\hat y_h\)</span>.</p>
+</section><section id="linear-combination-of-the-observed-responses" class="level3" data-number="6.1.2"><h3 data-number="6.1.2" class="anchored" data-anchor-id="linear-combination-of-the-observed-responses">
+<span class="header-section-number">6.1.2</span> Linear Combination of the Observed Responses</h3>
+<p>Using the least squares formulas from chapter 03, <span class="math display">\[\begin{align*}
+b_0 &amp;= \sum c_iy_i,\\
+b_1 &amp;= \sum k_iy_i.
+\end{align*}\]</span></p>
+<p>Therefore, <span class="math display">\[\begin{align*}
+\hat{y}_h
+&amp;=b_0+b_1x_h\\
+&amp;=\sum c_iy_i+x_h\sum k_iy_i\\
+&amp;=\sum (c_i+x_hk_i)y_i.
+\end{align*}\]</span></p>
+<p>Thus, <span class="math inline">\(\hat y_h\)</span> is a linear combination of the observed response values <span class="math inline">\(y_i\)</span>. Since the <span class="math inline">\(y_i\)</span> values are normally distributed under the model assumptions, <a href="04_Sampling.html#thm-4_1" class="quarto-xref">Theorem&nbsp;<span>4.2</span></a> implies that <span class="math inline">\(\hat y_h\)</span> is also normally distributed.</p>
 </section><section id="the-mean-of-haty_h" class="level3" data-number="6.1.3"><h3 data-number="6.1.3" class="anchored" data-anchor-id="the-mean-of-haty_h">
 <span class="header-section-number">6.1.3</span> The Mean of <span class="math inline">\(\hat{y}_h\)</span>
 </h3>
-<p>Using <a href="04_Sampling.html#thm-4_1" class="quarto-xref">Theorem&nbsp;<span>4.2</span></a>, we have the mean as <span class="math display">\[\begin{align*}
-\sum\left(c_{i}+k_{i}x_{h}\right)E\left[y_{h}\right] &amp; =\left(\underbrace{\sum c_{i}}_{=1}+x_{h}\underbrace{\sum k_{i}}_{=0}\right)\left(\beta_{0}+\beta_{1}x_{h}\right)\\
-&amp; =\beta_{0}+\beta_{1}x_{h}
+<p>The expected value of <span class="math inline">\(\hat y_h\)</span> is <span class="math display">\[\begin{align*}
+E(\hat y_h)
+&amp;=E\left[\sum (c_i+x_hk_i)y_i\right]\\
+&amp;=\sum (c_i+x_hk_i)E(y_i)\\
+&amp;=\sum (c_i+x_hk_i)(\beta_0+\beta_1x_i)\\
+&amp;=\beta_0\left(\sum c_i+x_h\sum k_i\right)
+  +\beta_1\left(\sum c_ix_i+x_h\sum k_ix_i\right)\\
+&amp;=\beta_0(1+x_h\cdot 0)+\beta_1(0+x_h\cdot 1)\\
+&amp;=\beta_0+\beta_1x_h.
 \end{align*}\]</span></p>
+<p>Therefore, <span class="math inline">\(\hat y_h\)</span> is an unbiased estimator of the mean response at <span class="math inline">\(x_h\)</span>.</p>
 </section><section id="the-variance-of-haty_h" class="level3" data-number="6.1.4"><h3 data-number="6.1.4" class="anchored" data-anchor-id="the-variance-of-haty_h">
 <span class="header-section-number">6.1.4</span> The Variance of <span class="math inline">\(\hat{y}_h\)</span>
 </h3>
-<p>Using <a href="04_Sampling.html#thm-4_2" class="quarto-xref">Theorem&nbsp;<span>4.3</span></a>, we have the variance as <span class="math display">\[\begin{align*}
-Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
+<p>The variance of <span class="math inline">\(\hat y_h\)</span> is <span class="math display">\[\begin{align*}
+Var(\hat y_h)
+&amp;=\sigma^2\left(\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right).
 \end{align*}\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -424,148 +510,281 @@ Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><span class="math display">\[\begin{align*}
-Var\left[\hat{y}_{h}\right] &amp; =\sum\left(c_{i}+k_{i}x_{h}\right)^{2}{Var\left[y_{h}\right]}\\
-&amp; =\sum\left(\frac{1}{n}-\bar{x}\frac{\left(x_{i}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}+\frac{\left(x_{i}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}x_{h}\right)^{2}\sigma^{2}\\
-&amp; =\sigma^{2}\sum\left(\frac{1}{n}+\frac{\left(x_{i}-\bar{x}\right)\left(x_{h}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)^{2}\\
-&amp; =\sigma^{2}\sum\left(\frac{1}{n^{2}}+2\left(\frac{1}{n}\right)\frac{\left(x_{i}-\bar{x}\right)\left(x_{h}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}+\frac{\left(x_{i}-\bar{x}\right)^{2}\left(x_{h}-\bar{x}\right)^{2}}{\left(\sum\left(x_{i}-\bar{x}\right)^{2}\right)^{2}}\right)\\
-&amp; =\sigma^{2}\left(\frac{1}{n}+2\left(\frac{1}{n}\right)\frac{\left(x_{h}-\bar{x}\right)\sum\left(x_{i}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}+\frac{\left(x_{h}-\bar{x}\right)^{2}\sum\left(x_{i}-\bar{x}\right)^{2}}{\left(\sum\left(x_{i}-\bar{x}\right)^{2}\right)^{2}}\right)\\
-&amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
+Var(\hat y_h)
+&amp;=\sum (c_i+k_ix_h)^2Var(y_i)\\
+&amp;=\sum\left(\frac{1}{n}-\bar{x}\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}
+  +x_h\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}\right)^2\sigma^2\\
+&amp;=\sigma^2\sum\left(\frac{1}{n}
+  +\frac{(x_i-\bar{x})(x_h-\bar{x})}{\sum (x_i-\bar{x})^2}\right)^2\\
+&amp;=\sigma^2\sum\left[
+  \frac{1}{n^2}
+  +2\left(\frac{1}{n}\right)\frac{(x_i-\bar{x})(x_h-\bar{x})}{\sum (x_i-\bar{x})^2}
+  +\frac{(x_i-\bar{x})^2(x_h-\bar{x})^2}{\left(\sum (x_i-\bar{x})^2\right)^2}
+  \right]\\
+&amp;=\sigma^2\left[
+  \frac{1}{n}
+  +2\left(\frac{1}{n}\right)\frac{(x_h-\bar{x})\sum (x_i-\bar{x})}{\sum (x_i-\bar{x})^2}
+  +\frac{(x_h-\bar{x})^2\sum (x_i-\bar{x})^2}{\left(\sum (x_i-\bar{x})^2\right)^2}
+  \right]\\
+&amp;=\sigma^2\left(\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right).
 \end{align*}\]</span></p>
 </div>
 </div>
 </div>
-<p>So the sampling distribution of <span class="math inline">\(\hat{y}_{h}\)</span> is <span id="eq-w2_19"><span class="math display">\[
+<p>So the sampling distribution of <span class="math inline">\(\hat y_h\)</span> is <span id="eq-w2_19"><span class="math display">\[
 \begin{align}
-\hat{y}_{h} &amp; \sim N\left(\beta_{0}+\beta_{1}x_{h},\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)\right)
+\hat y_h
+&amp;\sim N\left(
+\beta_0+\beta_1x_h,\,
+\sigma^2\left[\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right]
+\right).
 \end{align}
 \tag{6.1}\]</span></span></p>
-<p>We will need to estimate <span class="math inline">\(\sigma^{2}\)</span> with <span class="math inline">\(s^{2}\)</span>. This will mean that the confidence interval is a <span class="math inline">\(t\)</span> interval.</p>
+<p>We estimate <span class="math inline">\(\sigma^2\)</span> with <span class="math inline">\(s^2\)</span>, so the confidence interval uses a <span class="math inline">\(t\)</span> critical value.</p>
 </section><section id="confidence-interval-for-the-mean-response" class="level3" data-number="6.1.5"><h3 data-number="6.1.5" class="anchored" data-anchor-id="confidence-interval-for-the-mean-response">
 <span class="header-section-number">6.1.5</span> Confidence Interval for the Mean Response</h3>
-<p>A <span class="math inline">\(\left(100-\alpha\right)100\%\)</span> confidence interval for the mean response is <span id="eq-w2_20"><span class="math display">\[
+<p>A <span class="math inline">\((1-\alpha)100\%\)</span> confidence interval for the mean response at <span class="math inline">\(x_h\)</span> is <span id="eq-w2_20"><span class="math display">\[
 \begin{align}
-\hat{y}_{h} \pm t_{\alpha/2}\sqrt{s^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)}
+\hat y_h
+\pm
+t_{\alpha/2}
+\sqrt{
+s^2\left(
+\frac{1}{n}
++\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}
+\right)
+}.
 \end{align}
 \tag{6.2}\]</span></span></p>
-</section></section><section id="predicting-the-response" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="predicting-the-response">
-<span class="header-section-number">6.2</span> Predicting the Response</h2>
-<section id="the-predicted-response" class="level3" data-number="6.2.1"><h3 data-number="6.2.1" class="anchored" data-anchor-id="the-predicted-response">
-<span class="header-section-number">6.2.1</span> The Predicted Response</h3>
-<p>Previously, we <em>estimated</em> the mean of all <span class="math inline">\(y\)</span>s for some value of <span class="math inline">\(x_{h}\)</span>.</p>
-<p>Suppose we want to <em>predict</em> one value of the response variable <span class="math inline">\(y\)</span> for some value of <span class="math inline">\(x_{h}\)</span>. We will denote this predicted value as <span class="math inline">\(y_{h\left(pred\right)}\)</span>.</p>
-</section><section id="prediction-when-the-true-line-is-known" class="level3" data-number="6.2.2"><h3 data-number="6.2.2" class="anchored" data-anchor-id="prediction-when-the-true-line-is-known">
-<span class="header-section-number">6.2.2</span> Prediction When the True Line is Known</h3>
-<p>Our best point predictor will be the mean (since it is the most likely value). If we knew the the true regression line, then we could predict at <span class="math display">\[\begin{align*}
-y_{h\left(pred\right)} &amp; =\beta_{0}+\beta_{1}x_{h}
-\end{align*}\]</span></p>
-<p>The variance of <span class="math inline">\(y_{h\left(pred\right)}\)</span> would be <span class="math display">\[\begin{align*}
-Var\left[y_{h}\right] &amp; =\sigma^{2}
-\end{align*}\]</span></p>
-<p>Then we can be <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> confident that the predicted value <span class="math inline">\(y_{h\left(pred\right)}\)</span> is <span class="math display">\[\begin{align*}
-z_{\alpha/2}\sigma
-\end{align*}\]</span> units away from the line.</p>
-<p>If we don’t know <span class="math inline">\(\sigma\)</span>, then we could estimate it with <span class="math inline">\(s\)</span> and we can be <span class="math inline">\(\left(1-\alpha\right)100\%\)</span> confident that the predicted value <span class="math inline">\(y_{h\left(pred\right)}\)</span> is <span class="math display">\[\begin{align*}
-t_{\alpha/2}s
-\end{align*}\]</span> units away from the line.</p>
-</section><section id="predicting-when-the-true-line-is-unknown" class="level3" data-number="6.2.3"><h3 data-number="6.2.3" class="anchored" data-anchor-id="predicting-when-the-true-line-is-unknown">
-<span class="header-section-number">6.2.3</span> Predicting When the True Line is Unknown</h3>
-<p>Of course, we do not know the true regression line. We will need to estimate it first.</p>
-<p>Using the least squares estimators, we will predict at <span class="math display">\[\begin{align*}
-\hat{y}_{h} &amp; =b_0+b_1x_{h}
-\end{align*}\]</span></p>
-</section><section id="the-variance-of-the-predicted-response" class="level3" data-number="6.2.4"><h3 data-number="6.2.4" class="anchored" data-anchor-id="the-variance-of-the-predicted-response">
-<span class="header-section-number">6.2.4</span> The Variance of the Predicted Response</h3>
-<p>Since <span class="math inline">\(\hat{y}_{h}\)</span> is a random variable, it will have a sampling distribution. From <a href="#eq-w2_19" class="quarto-xref">Equation&nbsp;<span>6.1</span></a>, that sampling distribution has a variance of <span class="math display">\[\begin{align*}
-Var\left[\hat{y}_{h}\right] &amp; =\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
-\end{align*}\]</span></p>
-<p>Thus, the variance of the prediction of <span class="math inline">\(y_{h\left(pred\right)}\)</span> will be the sum of the variance of the response variable: <span class="math display">\[\begin{align*}
-\sigma^{2}
-\end{align*}\]</span> and the variance of the fitted line: <span class="math display">\[\begin{align*}
-\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
-\end{align*}\]</span></p>
-<p>So the variance of <span class="math inline">\(y_{h\left(pred\right)}\)</span> is <span class="math display">\[\begin{align*}
-Var\left[y_{h\left(pred\right)}\right] &amp; =\sigma^{2}+\sigma^{2}\left(\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)\\
-&amp; =\sigma^{2}\left(1+\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)
-\end{align*}\]</span></p>
-<p>Since <span class="math inline">\(y\)</span> is normally distributed, then we have a <span class="math inline">\(\left(100-\alpha\right)100\%\)</span> prediction interval for <span class="math inline">\(y_{h\left(pred\right)}\)</span> as <span class="math display">\[
-\begin{align}
-{\hat{y}_{h} \pm t_{\alpha/2}\sqrt{s^{2}\left(1+\frac{1}{n}+\frac{\left(x_{h}-\bar{x}\right)^{2}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)}}
-\end{align}
-\]</span>#eq-w2_21</p>
-<div id="exm-5_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 6.1 (<a href="05_Correlation.html#exm-5_2" class="quarto-xref">Example&nbsp;<span>5.2</span></a> revisited)</strong></span> Let’s examine the <code>trees</code> data from <a href="05_Correlation.html#exm-5_2" class="quarto-xref">Example&nbsp;<span>5.2</span></a>.</p>
-<p>Recall the least squares fit:</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.2: Interval width near and far from $\bar{x}$
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The confidence interval for the mean response is narrowest near <span class="math inline">\(\bar{x}\)</span> and wider farther from <span class="math inline">\(\bar{x}\)</span>. We can see this in the <code>trees</code> data by plotting the half-width of the confidence interval across possible <code>Girth</code> values.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>,se <span class="op">=</span> <span class="cn">F</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Volume</span> <span class="op">~</span> <span class="va">Girth</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">girth_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  Girth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">Girth</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">Girth</span><span class="op">)</span>, length.out <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ci_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">girth_grid</span>, interval <span class="op">=</span> <span class="st">"confidence"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">girth_grid</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ci_half_width <span class="op">=</span> <span class="op">(</span><span class="va">upr</span> <span class="op">-</span> <span class="va">lwr</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">girth_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">trees</span><span class="op">$</span><span class="va">Girth</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">ci_grid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Girth</span>, y <span class="op">=</span> <span class="va">ci_half_width</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">girth_mean</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Girth"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Confidence interval half-width"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"The confidence interval is narrowest near the mean of the observed predictor values"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="06_Using_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Volume</span><span class="op">~</span><span class="va">Girth</span>, data<span class="op">=</span><span class="va">trees</span><span class="op">)</span></span>
-<span><span class="va">fit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>
-Call:
-lm(formula = Volume ~ Girth, data = trees)
-
-Coefficients:
-(Intercept)        Girth  
-    -36.943        5.066  </code></pre>
+</div>
+<p>The dashed red line marks <span class="math inline">\(\bar{x}\)</span>. The further <span class="math inline">\(x_h\)</span> moves away from <span class="math inline">\(\bar{x}\)</span>, the larger the term <span class="math inline">\((x_h-\bar{x})^2\)</span> becomes, so the interval gets wider.</p>
 </div>
 </div>
-<p>To find the confidence and prediction intervals, we must construct a new data frame with the value of <span class="math inline">\(X_h\)</span>. This value is then used, along with the <code>lm</code> object, to the <code>predict</code> function. If no value of <span class="math inline">\(X_h\)</span> is provided, then <code>predict</code> will provide intervals for all values of <span class="math inline">\(x\)</span> found in the data used in <code>lm</code>.</p>
-<p>Recall the least squares fit:</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.3: Confidence interval for mean tree volume
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s return to the <code>trees</code> data from <a href="05_Correlation.html#exm-5_2" class="quarto-xref">Example&nbsp;<span>5.2</span></a>. Suppose we want to estimate the mean <code>Volume</code> for black cherry trees with <code>Girth = 16</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># get a 95% confidence interval for the mean Volume</span></span>
-<span><span class="co"># when girth is 16</span></span>
-<span><span class="va">xh</span><span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Girth<span class="op">=</span><span class="fl">16</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">datasets</span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">xh</span>,interval<span class="op">=</span><span class="st">"confidence"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       fit      lwr      upr
-1 44.11024 42.01796 46.20252</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># 95% prediction interval for one value of Volume when</span></span>
-<span><span class="co"># girth is 16</span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">xh</span>,interval<span class="op">=</span><span class="st">"prediction"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>       fit     lwr      upr
-1 44.11024 35.1658 53.05469</code></pre>
-</div>
-</div>
-<p>We can plot the confidence interval for all values of <span class="math inline">\(x\)</span> by using the <code>geom_smooth</code> command in <code>ggplot</code>:</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Volume</span> <span class="op">~</span> <span class="va">Girth</span>, data <span class="op">=</span> <span class="va">trees</span><span class="op">)</span></span>
+<span><span class="va">xh</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>Girth <span class="op">=</span> <span class="fl">16</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ci_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">xh</span>, interval <span class="op">=</span> <span class="st">"confidence"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">ci_tree</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="06_Using_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">fit</th>
+<th style="text-align: right;">lwr</th>
+<th style="text-align: right;">upr</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">44.11</td>
+<td style="text-align: right;">42.018</td>
+<td style="text-align: right;">46.203</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>The fitted value is 44.11. We are 95% confident that the mean volume for all black cherry trees with girth 16 inches is between 42.018 and 46.203 cubic feet, assuming the linear model is appropriate.</p>
+<p>This interval estimates a population mean response. It is not trying to capture one individual tree.</p>
+</div>
+</div>
+</section></section><section id="predicting-the-response" class="level2" data-number="6.2"><h2 data-number="6.2" class="anchored" data-anchor-id="predicting-the-response">
+<span class="header-section-number">6.2</span> Predicting the Response</h2>
+<p>Previously, we estimated the mean of all responses for a given value <span class="math inline">\(x_h\)</span>. Now suppose we want to predict one new response value for a single observation with predictor value <span class="math inline">\(x_h\)</span>.</p>
+<p>We still use the fitted value <span class="math display">\[\begin{align*}
+\hat y_h=b_0+b_1x_h
+\end{align*}\]</span> as the point prediction, but the uncertainty is larger.</p>
+<section id="prediction-when-the-true-line-is-known" class="level3" data-number="6.2.1"><h3 data-number="6.2.1" class="anchored" data-anchor-id="prediction-when-the-true-line-is-known">
+<span class="header-section-number">6.2.1</span> Prediction When the True Line is Known</h3>
+<p>If we knew the true regression line, then our best point predictor at <span class="math inline">\(x_h\)</span> would be <span class="math display">\[\begin{align*}
+y_{h(pred)}=\beta_0+\beta_1x_h.
+\end{align*}\]</span></p>
+<p>The variance of an individual response around the true mean line is <span class="math display">\[\begin{align*}
+Var(y_h)=\sigma^2.
+\end{align*}\]</span></p>
+<p>If <span class="math inline">\(\sigma\)</span> were known, we could describe how far an individual response is likely to fall from the true mean line using <span class="math inline">\(z_{\alpha/2}\sigma\)</span>.</p>
+<p>If <span class="math inline">\(\sigma\)</span> were unknown, we would estimate it with <span class="math inline">\(s\)</span> and use a <span class="math inline">\(t\)</span> critical value.</p>
+</section><section id="prediction-when-the-true-line-is-unknown" class="level3" data-number="6.2.2"><h3 data-number="6.2.2" class="anchored" data-anchor-id="prediction-when-the-true-line-is-unknown">
+<span class="header-section-number">6.2.2</span> Prediction When the True Line is Unknown</h3>
+<p>In practice, we do not know the true regression line. We estimate it first, then predict with <span class="math display">\[\begin{align*}
+\hat y_h=b_0+b_1x_h.
+\end{align*}\]</span></p>
+</section><section id="the-variance-of-the-predicted-response" class="level3" data-number="6.2.3"><h3 data-number="6.2.3" class="anchored" data-anchor-id="the-variance-of-the-predicted-response">
+<span class="header-section-number">6.2.3</span> The Variance of the Predicted Response</h3>
+<p>For an individual prediction, there are two sources of uncertainty:</p>
+<ol type="1">
+<li>uncertainty from estimating the mean response, and</li>
+<li>random variation of an individual response around that mean.</li>
+</ol>
+<p>From <a href="#eq-w2_19" class="quarto-xref">Equation&nbsp;<span>6.1</span></a>, the variance of the fitted mean response is <span class="math display">\[\begin{align*}
+Var(\hat y_h)
+&amp;=\sigma^2\left(\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right).
+\end{align*}\]</span></p>
+<p>The variance of an individual response around the mean is <span class="math display">\[\begin{align*}
+\sigma^2.
+\end{align*}\]</span></p>
+<p>So the variance for predicting one individual response is <span class="math display">\[\begin{align*}
+Var(y_{h(pred)})
+&amp;=\sigma^2+
+\sigma^2\left(\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right)\\
+&amp;=\sigma^2\left(1+\frac{1}{n}+\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}\right).
+\end{align*}\]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Why prediction intervals are wider">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why prediction intervals are wider
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The confidence interval for the mean response only accounts for uncertainty in estimating the regression line.</p>
+<p>The prediction interval accounts for that same uncertainty plus the natural variability of one individual response around the regression line. This extra source of variation is the <code>1</code> inside the prediction interval formula.</p>
 </div>
 </div>
 </div>
-<p>We can plot prediction intervals by adding them manually:</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Intervals depend on the regression assumptions">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Intervals depend on the regression assumptions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Confidence intervals and prediction intervals are model-based. They are only reliable if the regression model is a reasonable description of the data.</p>
+<p>Before trusting these intervals, we should check whether the linearity, independence, constant variance, and normality assumptions are reasonable. A beautifully calculated interval can still be misleading if the model assumptions are badly violated.</p>
+</div>
+</div>
+</div>
+</section><section id="prediction-interval" class="level3" data-number="6.2.4"><h3 data-number="6.2.4" class="anchored" data-anchor-id="prediction-interval">
+<span class="header-section-number">6.2.4</span> Prediction Interval</h3>
+<p>Since <span class="math inline">\(y\)</span> is normally distributed under the model assumptions, a <span class="math inline">\((1-\alpha)100\%\)</span> prediction interval for one response at <span class="math inline">\(x_h\)</span> is <span id="eq-w2_21"><span class="math display">\[
+\begin{align}
+\hat y_h
+\pm
+t_{\alpha/2}
+\sqrt{
+s^2\left(
+1+\frac{1}{n}
++\frac{(x_h-\bar{x})^2}{\sum (x_i-\bar{x})^2}
+\right)
+}.
+\end{align}
+\tag{6.3}\]</span></span></p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.4: Prediction interval for one tree
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Now suppose we want to predict the <code>Volume</code> of one individual black cherry tree with <code>Girth = 16</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pred_int</span> <span class="op">=</span> <span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>interval<span class="op">=</span><span class="st">"prediction"</span>,level<span class="op">=</span><span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">trees</span>, <span class="va">pred_int</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pi_tree</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">xh</span>, interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data<span class="op">=</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Girth</span>, y<span class="op">=</span><span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">pi_tree</span>, digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">fit</th>
+<th style="text-align: right;">lwr</th>
+<th style="text-align: right;">upr</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">44.11</td>
+<td style="text-align: right;">35.166</td>
+<td style="text-align: right;">53.055</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>The point prediction is the same as in the confidence interval example: 44.11 cubic feet.</p>
+<p>The 95% prediction interval is much wider: from 35.166 to 53.055 cubic feet.</p>
+<p>This wider interval is appropriate because an individual tree may be above or below the mean volume for trees with the same girth.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.5: Plotting confidence and prediction intervals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can plot the fitted line and confidence interval for the mean response using <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">trees</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Girth</span>, y <span class="op">=</span> <span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">'lm'</span>,formula<span class="op">=</span><span class="va">y</span><span class="op">~</span><span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">lwr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y<span class="op">=</span><span class="va">upr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="va">lm</span>, se<span class="op">=</span><span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="06_Using_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
@@ -573,21 +792,235 @@ Coefficients:
 </div>
 </div>
 </div>
-<p>Note that the prediction interval (the red dashed lines) is wider than the prediction interval. This is because the prediction interval has the extra source of variability.</p>
+<p>To show prediction intervals, we can compute them manually and add them to the plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pred_int</span> <span class="op">&lt;-</span> <span class="va">fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>interval <span class="op">=</span> <span class="st">"prediction"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">trees</span>, <span class="va">pred_int</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Girth</span>, y <span class="op">=</span> <span class="va">Volume</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">lwr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">upr</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"red"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="06_Using_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The shaded region from <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> shows pointwise confidence intervals for the mean response across many values of <code>Girth</code>. The red dashed lines show prediction intervals for individual tree volumes. The prediction intervals are wider because they include individual response variation.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Pointwise confidence interval versus confidence band">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Pointwise confidence interval versus confidence band
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A <strong>pointwise confidence interval</strong> estimates the mean response at one specific value <span class="math inline">\(x_h\)</span>.</p>
+<p>A <strong>confidence band</strong> is stronger: it is designed to cover the entire mean response line over a range of <span class="math inline">\(x\)</span> values with a specified confidence level.</p>
+<p>The shaded region produced by <code><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth()</a></code> is best interpreted as a collection of pointwise confidence intervals, not as a simultaneous confidence band for the whole regression line.</p>
+</div>
+</div>
 </div>
 </section><section id="extrapolation-and-precision" class="level3" data-number="6.2.5"><h3 data-number="6.2.5" class="anchored" data-anchor-id="extrapolation-and-precision">
 <span class="header-section-number">6.2.5</span> Extrapolation and Precision</h3>
-<p>When using the least squares prediction equation to estimate the mean value of <span class="math inline">\(y\)</span> or to predict a particular value of <span class="math inline">\(y\)</span> for values of <span class="math inline">\(x\)</span> outside the range of your sample data, you may encounter much larger errors than expected. This practice is known as <em>extrapolation</em>.</p>
-<p>Even though the least squares model might fit the data well within the range of sample <span class="math inline">\(x\)</span> values, it can poorly represent the true model for values of <span class="math inline">\(x\)</span> outside this range.</p>
-<p>As the sample size <span class="math inline">\(n\)</span> increases, the width of the confidence interval decreases. In theory, you can achieve as precise an estimate of the mean value of <span class="math inline">\(y\)</span> as desired for any given <span class="math inline">\(x\)</span> by selecting a large enough sample.</p>
-<p>Similarly, the prediction interval for a new value of <span class="math inline">\(y\)</span> also becomes narrower as <span class="math inline">\(n\)</span> increases. However, the prediction interval has a lower limit, which is reflected in the formula:</p>
-<p><span class="math display">\[
-\hat{y} \pm z_{\alpha/2} \sigma
-\]</span></p>
-<p>This means that no matter how large the sample, the interval can’t shrink below a certain size unless you reduce the standard deviation of the regression model, <span class="math inline">\(\sigma\)</span>. To make more accurate predictions for new values of <span class="math inline">\(y\)</span>, you must improve the model—either by using a curvilinear relationship with <span class="math inline">\(x\)</span>, adding new independent variables, or both.</p>
+<p>When using the least squares prediction equation to estimate the mean value of <span class="math inline">\(y\)</span> or to predict a particular value of <span class="math inline">\(y\)</span> for values of <span class="math inline">\(x\)</span> outside the range of the sample data, you may encounter much larger errors than expected. This practice is known as <em>extrapolation</em>.</p>
+<p>Even if the least squares model fits the data well within the observed range of <span class="math inline">\(x\)</span> values, it may poorly represent the true relationship outside that range.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.6: Why extrapolation can be risky
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the <code>trees</code> data, the observed <code>Girth</code> values range from 8.3 to 20.6 inches.</p>
+<p>Predicting the volume of a tree with <code>Girth = 16</code> is interpolation because 16 is inside the observed range.</p>
+<p>Predicting the volume of a tree with <code>Girth = 35</code> would be extrapolation because 35 is far outside the observed range. Even if the fitted line describes the observed trees well, we do not know whether the same linear pattern continues for trees that large.</p>
+</div>
+</div>
+<p>As the sample size <span class="math inline">\(n\)</span> increases, the width of a confidence interval for the mean response decreases. In theory, we can estimate the mean response as precisely as desired for a fixed value of <span class="math inline">\(x_h\)</span> by selecting a large enough sample.</p>
+<p>Prediction intervals for individual responses also become narrower as <span class="math inline">\(n\)</span> increases, but they have a natural lower limit because an individual response still varies around the mean. Even with an extremely large sample, the prediction interval cannot shrink below the variation caused by the error term unless <span class="math inline">\(\sigma\)</span> is reduced.</p>
+<p>To make more accurate predictions for new individual responses, we must improve the model. Possible improvements include using a more appropriate functional form, adding useful predictor variables, or reducing measurement error.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 6.7: Which interval should I use?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Use the question being asked to decide which interval is appropriate.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Scenario</th>
+<th>Use this interval</th>
+<th>Reason</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Estimate the average tree volume for all trees with <code>Girth = 16</code>.</td>
+<td>Confidence interval for the mean response</td>
+<td>The question asks about an average for a population of similar trees.</td>
+</tr>
+<tr class="even">
+<td>Predict the volume of one newly measured tree with <code>Girth = 16</code>.</td>
+<td>Prediction interval</td>
+<td>The question asks about one individual tree.</td>
+</tr>
+<tr class="odd">
+<td>Estimate the average house price for all 2000-square-foot homes in a city.</td>
+<td>Confidence interval for the mean response</td>
+<td>The question asks about a mean price for a group of homes.</td>
+</tr>
+<tr class="even">
+<td>Predict the sale price of one particular 2000-square-foot home.</td>
+<td>Prediction interval</td>
+<td>The question asks about one individual home, which can vary around the mean.</td>
+</tr>
+<tr class="odd">
+<td>Describe the fitted mean response over a range of <span class="math inline">\(x\)</span> values.</td>
+<td>Pointwise confidence intervals or a confidence band</td>
+<td>Pointwise intervals describe individual <span class="math inline">\(x_h\)</span> values; a confidence band describes the whole fitted mean curve over a range.</td>
+</tr>
+</tbody>
+</table>
+<p>The quick rule: use a confidence interval for an average response, and use a prediction interval for one individual response.</p>
+</div>
+</div>
+</section></section><section id="recap" class="level2" data-number="6.3"><h2 data-number="6.3" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">6.3</span> Recap</h2>
+<p>This chapter distinguished estimation of a mean response from prediction of one individual response.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Mean response at <span class="math inline">\(x_h\)</span></strong></td>
+<td>The average value of <span class="math inline">\(y\)</span> for all observations with predictor value <span class="math inline">\(x_h\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Point estimator</strong></td>
+<td>The fitted value <span class="math inline">\(\hat y_h=b_0+b_1x_h\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Confidence interval for mean response</strong></td>
+<td>An interval estimating <span class="math inline">\(\beta_0+\beta_1x_h\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Pointwise confidence interval</strong></td>
+<td>A confidence interval for the mean response at one specific value of <span class="math inline">\(x_h\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Confidence band</strong></td>
+<td>An interval band intended to cover the mean response line over a range of <span class="math inline">\(x\)</span> values.</td>
+</tr>
+<tr class="even">
+<td><strong>Prediction interval</strong></td>
+<td>An interval for one individual response at <span class="math inline">\(x_h\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Why prediction intervals are wider</strong></td>
+<td>They include uncertainty in the fitted mean plus individual random error.</td>
+</tr>
+<tr class="even">
+<td><strong>Extrapolation</strong></td>
+<td>Using the fitted model outside the range of observed <span class="math inline">\(x\)</span> values.</td>
+</tr>
+<tr class="odd">
+<td><strong>Model assumptions</strong></td>
+<td>The interval formulas depend on the regression assumptions being reasonable.</td>
+</tr>
+<tr class="even">
+<td><strong>Precision</strong></td>
+<td>Confidence intervals can shrink substantially with larger <span class="math inline">\(n\)</span>; prediction intervals have a lower limit due to random individual variation.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="6.4"><h2 data-number="6.4" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">6.4</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What is the difference between estimating a mean response and predicting one individual response?</p></li>
+<li><p>Why are the confidence interval and prediction interval centered at the same fitted value <span class="math inline">\(\hat y_h\)</span>?</p></li>
+<li><p>Why is a prediction interval wider than a confidence interval for the mean response at the same <span class="math inline">\(x_h\)</span>?</p></li>
+<li><p>In the confidence interval formula, why does the interval become wider when <span class="math inline">\(x_h\)</span> is far from <span class="math inline">\(\bar{x}\)</span>?</p></li>
+<li><p>What is extrapolation, and why can it be dangerous?</p></li>
+<li><p>Why can increasing the sample size make confidence intervals for the mean response very narrow, but not make prediction intervals shrink to zero width?</p></li>
+<li><p>Suppose a model predicts mean house price from square footage. Which interval would you use to estimate the average price of all 2000-square-foot homes? Which interval would you use to predict the price of one particular 2000-square-foot home?</p></li>
+<li><p>What model assumption is especially important when using these intervals to make probability-based statements?</p></li>
+<li><p>What is the difference between a pointwise confidence interval and a confidence band?</p></li>
+<li><p>Why should we check model assumptions before trusting confidence intervals and prediction intervals?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Mean versus individual.</strong> Estimating a mean response asks about the average value of <span class="math inline">\(y\)</span> for all observations with a given <span class="math inline">\(x_h\)</span>. Predicting an individual response asks about one new observation with that value of <span class="math inline">\(x_h\)</span>.</p></li>
+<li><p><strong>Same best point estimate.</strong> In both cases, the fitted line gives the best point estimate at <span class="math inline">\(x_h\)</span>, so both intervals are centered at <span class="math inline">\(\hat y_h=b_0+b_1x_h\)</span>.</p></li>
+<li><p><strong>Extra individual variation.</strong> A confidence interval only accounts for uncertainty in estimating the mean response. A prediction interval also includes the random variation of one individual response around the mean, so it is wider.</p></li>
+<li><p><strong>Less information far from the center.</strong> The term <span class="math inline">\((x_h-\bar{x})^2\)</span> grows as <span class="math inline">\(x_h\)</span> moves farther from the center of the observed predictor values. The fitted line is estimated most precisely near <span class="math inline">\(\bar{x}\)</span> and less precisely farther away.</p></li>
+<li><p><strong>Predicting outside the data range.</strong> Extrapolation means using the fitted model for <span class="math inline">\(x\)</span> values outside the observed range. It is risky because the relationship may change outside the range where we actually collected data.</p></li>
+<li><p><strong>Individual randomness remains.</strong> Larger samples help us estimate the mean response more precisely, but an individual response still has random error around the mean. That individual-level variation prevents prediction intervals from shrinking to zero.</p></li>
+<li><p><strong>Use different intervals for different goals.</strong> To estimate the average price of all 2000-square-foot homes, use a confidence interval for the mean response. To predict the price of one particular 2000-square-foot home, use a prediction interval.</p></li>
+<li><p><strong>Normality and the full regression model assumptions matter.</strong> The formulas rely on the regression assumptions, including linear mean structure, independent errors, constant variance, and normal errors for exact <span class="math inline">\(t\)</span>-based intervals.</p></li>
+<li><p><strong>One value versus a range.</strong> A pointwise confidence interval estimates the mean response at one specific value of <span class="math inline">\(x_h\)</span>. A confidence band is intended to cover the mean response line over a range of <span class="math inline">\(x\)</span> values with a specified confidence level.</p></li>
+<li><p><strong>Intervals inherit model problems.</strong> Confidence intervals and prediction intervals are calculated from the fitted regression model. If the model has serious problems, such as nonlinearity, nonconstant variance, dependent errors, or strongly non-normal errors, then the interval may not have the reliability its confidence level suggests.</p></li>
+</ol>
+</div>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

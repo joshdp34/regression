@@ -343,6 +343,8 @@ window.Quarto = {
 </li>
   <li><a href="#model-assumptions" id="toc-model-assumptions" class="nav-link" data-scroll-target="#model-assumptions"><span class="header-section-number">3.2</span> Model Assumptions</a></li>
   <li><a href="#an-estimator-of-sigma2" id="toc-an-estimator-of-sigma2" class="nav-link" data-scroll-target="#an-estimator-of-sigma2"><span class="header-section-number">3.3</span> An Estimator of <span class="math inline">\(\sigma^2\)</span></a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">3.4</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">3.5</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -367,11 +369,21 @@ window.Quarto = {
 <p>“The most important questions of life are, for the most part, really only problems of probability.” - Pierre Simon, Marquis de Laplace</p>
 </blockquote>
 <p>In the simple linear regression model <span class="math display">\[\begin{align*}
-y = \beta_0 + \beta_1 x +\varepsilon
-\end{align*}\]</span> we have previously discussed how to estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> with sample data using the least squares estimators. Below is an example of finding the least squares estimates with R.</p>
-<div id="exm-3_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.1 (The <code>mtcars</code> dataset)</strong></span> The <code>mtcars</code> data was extracted from the 1974 Motor Trend US magazine, and comprises fuel consumption and 10 aspects of automobile design and performance for 32 automobiles (1973–74 models).</p>
-<p>We first will make a scatterplot of <code>mpg</code> versus <code>wt</code>.</p>
+y = \beta_0 + \beta_1 x + \varepsilon
+\end{align*}\]</span> we have already discussed how to estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> from sample data using least squares. In this chapter, we take the next step: we ask what kind of estimators least squares produces, what assumptions make those estimators reliable, and how we estimate the amount of random variation around the regression line.</p>
+<div id="exm-3_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 3.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting the `mtcars` regression line in R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>mtcars</code> data were extracted from the 1974 <em>Motor Trend</em> US magazine and contain fuel consumption and several automobile design and performance measurements for 32 automobiles from the 1973-1974 model years.</p>
+<p>We first make a scatterplot of <code>mpg</code> versus <code>wt</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
@@ -387,12 +399,10 @@ y = \beta_0 + \beta_1 x +\varepsilon
 </div>
 </div>
 </div>
-<p>We see a linear relationship makes sense for modeling <code>mpg</code> based on <code>wt</code>.</p>
-<p>Let’s find the least squares estimates using the <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> function in <code>R</code>. Note that in this function, the model is specified with a <code>formula</code>. We specify the <code>formula</code> with the response variable, followed by a <code>~</code>, then the predictor variables. Here, we only have one predictor variable (<code>wt</code>).</p>
+<p>A linear relationship appears reasonable for modeling <code>mpg</code> based on <code>wt</code>.</p>
+<p>Now fit the least squares line using the <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> function in R. The model is specified with a formula: the response variable appears to the left of <code>~</code>, and the predictor variable appears to the right.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">~</span><span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span><span class="va">fit</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
@@ -404,27 +414,50 @@ Coefficients:
      37.285       -5.344  </code></pre>
 </div>
 </div>
-<p>The fitted line (or prediction equation): <span class="math display">\[\begin{align*}
-\hat{y} = 37.285 - 5.344 x
-\end{align*}\]</span></p>
+<p>The fitted line, or prediction equation, is approximately <span class="math display">\[\begin{align*}
+\hat{y} = 37.285 - 5.344x
+\end{align*}\]</span> where <span class="math inline">\(x\)</span> is automobile weight, measured in thousands of pounds, and <span class="math inline">\(\hat y\)</span> is the predicted miles per gallon.</p>
+<p>The slope tells us that heavier cars tend to have lower fuel economy: for each additional thousand pounds of weight, the predicted fuel economy decreases by about 5.344 mpg.</p>
+</div>
 </div>
 <section id="properties-of-the-least-squares-estimators" class="level2" data-number="3.1"><h2 data-number="3.1" class="anchored" data-anchor-id="properties-of-the-least-squares-estimators">
 <span class="header-section-number">3.1</span> Properties of the Least Squares Estimators</h2>
 <section id="linear-estimators" class="level3" data-number="3.1.1"><h3 data-number="3.1.1" class="anchored" data-anchor-id="linear-estimators">
 <span class="header-section-number">3.1.1</span> Linear Estimators</h3>
-<p>Note that the least squares estimators are <em>linear functions</em> of the observations <span class="math inline">\(y_{1},\ldots,y_{n}\)</span>. That is, both <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> can be written as a linear combination of the <span class="math inline">\(y\)</span>’s.</p>
-<p>Since <span class="math inline">\(y\)</span> is the variable that we want to model, we call an estimator for some parameter that takes the form of a linear combination of <span class="math inline">\(y\)</span> a <em>linear estimator</em>.</p>
+<p>The least squares estimators are <em>linear functions</em> of the observations <span class="math inline">\(y_1,\ldots,y_n\)</span>. That means both <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> can be written as linear combinations of the observed response values.</p>
+<p>Since <span class="math inline">\(y\)</span> is the variable we want to model, an estimator for a parameter that takes the form of a linear combination of the <span class="math inline">\(y\)</span> values is called a <em>linear estimator</em>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Two meanings of linear">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Two meanings of linear
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The phrase <em>linear estimator</em> does not mean the same thing as <em>linear relationship</em>.</p>
+<ul>
+<li>A <strong>linear relationship</strong> means the mean response follows a straight-line pattern, such as <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span>.</li>
+<li>A <strong>linear estimator</strong> means an estimate can be written as a weighted sum of the observed response values, such as <span class="math inline">\(\sum a_i y_i\)</span>.</li>
+</ul>
+<p>In this chapter, when we say <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are linear estimators, we mean the second idea.</p>
+</div>
+</div>
+</div>
 </section><section id="b_1-as-a-linear-estimator" class="level3" data-number="3.1.2"><h3 data-number="3.1.2" class="anchored" data-anchor-id="b_1-as-a-linear-estimator">
 <span class="header-section-number">3.1.2</span> <span class="math inline">\(b_1\)</span> as a Linear Estimator</h3>
 <p>We can express <span class="math inline">\(b_1\)</span> as <span id="eq-w1_5"><span class="math display">\[
 \begin{align}
-b_1 &amp; =\sum k_{i}y_{i}
+b_1 &amp; = \sum k_i y_i
 \end{align}
 \tag{3.1}\]</span></span> where <span class="math display">\[\begin{align*}
-k_{i} &amp; =\frac{x_{i}-\bar{x}}{\sum \left(x_{i}-\bar{x}\right)^{2}}
+k_i &amp; = \frac{x_i-\bar{x}}{\sum \left(x_i-\bar{x}\right)^2}
 \end{align*}\]</span></p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -433,31 +466,32 @@ k_{i} &amp; =\frac{x_{i}-\bar{x}}{\sum \left(x_{i}-\bar{x}\right)^{2}}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>We first note that <span class="math inline">\(\sum\left(x_{i}-\bar{x}\right)=0\)</span>.</p>
+<p>We first note that <span class="math inline">\(\sum(x_i-\bar{x})=0\)</span>.</p>
 <p>We now rewrite <span class="math inline">\(b_1\)</span> as <span class="math display">\[\begin{align*}
-b_1 &amp; =\frac{\sum\left(x_{i}-\bar{x}\right)\left(y_{i}-\bar{y}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
-&amp; =\frac{\sum\left(x_{i}-\bar{x}\right)y_{i}-\bar{y}\sum\left(x_{i}-\bar{x}\right)}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
-&amp; =\frac{\sum\left(x_{i}-\bar{x}\right)y_{i}}{\sum\left(x_{i}-\bar{x}\right)^{2}}\\
-&amp; =\left(\frac{1}{\sum\left(x_{i}-\bar{x}\right)^{2}}\right)\sum\left(x_{i}-\bar{x}\right)y_{i}
+b_1
+&amp;= \frac{\sum (x_i-\bar{x})(y_i-\bar{y})}{\sum (x_i-\bar{x})^2}\\
+&amp;= \frac{\sum (x_i-\bar{x})y_i-\bar{y}\sum (x_i-\bar{x})}{\sum (x_i-\bar{x})^2}\\
+&amp;= \frac{\sum (x_i-\bar{x})y_i}{\sum (x_i-\bar{x})^2}\\
+&amp;= \left(\frac{1}{\sum (x_i-\bar{x})^2}\right)\sum (x_i-\bar{x})y_i.
 \end{align*}\]</span></p>
 </div>
 </div>
 </div>
-<p>From <a href="#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a>, we see that <span class="math inline">\(b_1\)</span> is a linear combination of the <span class="math inline">\(y\)</span>’s since <span class="math inline">\(k_{i}\)</span> are known constants (recall that <span class="math inline">\(x_{i}\)</span> are treated as known constants).</p>
+<p>From <a href="#eq-w1_5" class="quarto-xref">Equation&nbsp;<span>3.1</span></a>, <span class="math inline">\(b_1\)</span> is a linear combination of the <span class="math inline">\(y\)</span> values because the <span class="math inline">\(k_i\)</span> values are known constants. In regression, the observed <span class="math inline">\(x_i\)</span> values are treated as fixed once the data have been collected.</p>
 </section><section id="b_0-as-a-linear-estimator" class="level3" data-number="3.1.3"><h3 data-number="3.1.3" class="anchored" data-anchor-id="b_0-as-a-linear-estimator">
 <span class="header-section-number">3.1.3</span> <span class="math inline">\(b_0\)</span> as a Linear Estimator</h3>
 <p>We can write <span class="math inline">\(b_0\)</span> as <span id="eq-w1_6"><span class="math display">\[
 \begin{align}
-b_0 &amp; =\sum c_{i}y_{i}
+b_0 &amp; = \sum c_i y_i
 \end{align}
 \tag{3.2}\]</span></span> where <span class="math display">\[\begin{align*}
-c_{i} &amp; =\frac{1}{n}-\bar{x}k_{i}
+c_i &amp; = \frac{1}{n}-\bar{x}k_i.
 \end{align*}\]</span></p>
-<p>Therefore, <span class="math inline">\(b_0\)</span> is a linear combination of <span class="math inline">\(y_{i}\)</span>.</p>
+<p>Therefore, <span class="math inline">\(b_0\)</span> is also a linear combination of the observed response values.</p>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -466,28 +500,100 @@ c_{i} &amp; =\frac{1}{n}-\bar{x}k_{i}
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We can rewrite <span class="math inline">\(b_0\)</span> as <span class="math display">\[\begin{align*}
-b_0 &amp; =\bar{y}-b_{1}\bar{x}\\
-&amp; =\frac{1}{n}\sum y_{i}-\bar{x}\sum k_{i}y_{i}\\
-&amp; =\sum\left(\frac{1}{n}-\bar{x}k_{i}\right)y_{i}
+b_0
+&amp;= \bar{y}-b_1\bar{x}\\
+&amp;= \frac{1}{n}\sum y_i-\bar{x}\sum k_i y_i\\
+&amp;= \sum\left(\frac{1}{n}-\bar{x}k_i\right)y_i.
 \end{align*}\]</span></p>
 </div>
 </div>
 </div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 3.2: Seeing $b_0$ and $b_1$ as weighted sums
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose we have three observations with predictor values <span class="math display">\[\begin{align*}
+x_1=1,\qquad x_2=2,\qquad x_3=4.
+\end{align*}\]</span></p>
+<p>Then <span class="math inline">\(\bar{x}=7/3\)</span>, and <span class="math display">\[\begin{align*}
+\sum (x_i-\bar{x})^2 = \frac{14}{3}.
+\end{align*}\]</span></p>
+<p>The weights for <span class="math inline">\(b_1\)</span> are <span class="math display">\[\begin{align*}
+k_1=-\frac{2}{7},\qquad
+k_2=-\frac{1}{14},\qquad
+k_3=\frac{5}{14}.
+\end{align*}\]</span></p>
+<p>So the slope estimator is <span class="math display">\[\begin{align*}
+b_1 = -\frac{2}{7}y_1-\frac{1}{14}y_2+\frac{5}{14}y_3.
+\end{align*}\]</span></p>
+<p>If the observed response values are <span class="math inline">\(y_1=3\)</span>, <span class="math inline">\(y_2=5\)</span>, and <span class="math inline">\(y_3=8\)</span>, then <span class="math display">\[\begin{align*}
+b_1
+&amp;= -\frac{2}{7}(3)-\frac{1}{14}(5)+\frac{5}{14}(8)\\
+&amp;= \frac{23}{14}\\
+&amp;\approx 1.64.
+\end{align*}\]</span></p>
+<p>For the intercept, <span class="math display">\[\begin{align*}
+c_i=\frac{1}{n}-\bar{x}k_i,
+\end{align*}\]</span> which gives <span class="math display">\[\begin{align*}
+c_1=1,\qquad c_2=\frac{1}{2},\qquad c_3=-\frac{1}{2}.
+\end{align*}\]</span></p>
+<p>Thus <span class="math display">\[\begin{align*}
+b_0 = y_1+\frac{1}{2}y_2-\frac{1}{2}y_3
+= 3+\frac{1}{2}(5)-\frac{1}{2}(8)
+= 1.5.
+\end{align*}\]</span></p>
+<p>The key idea is that the <span class="math inline">\(x\)</span> values determine the weights. Once those weights are fixed, <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are built from the observed <span class="math inline">\(y\)</span> values.</p>
+</div>
+</div>
+<p>The practical payoff is that <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are themselves random variables. If we repeatedly collected new samples from the same population, the observed <span class="math inline">\(y\)</span> values would change, so the fitted intercept and slope would also change. The model assumptions below help us describe that sample-to-sample variation.</p>
 </section></section><section id="model-assumptions" class="level2" data-number="3.2"><h2 data-number="3.2" class="anchored" data-anchor-id="model-assumptions">
 <span class="header-section-number">3.2</span> Model Assumptions</h2>
-<p>Let’s now focus on the random component <span class="math inline">\(\varepsilon\)</span> in the probabilistic model and its connection to the errors in estimating <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
-<p>Specifically, we’ll explore how the <em>probability</em> distribution of <span class="math inline">\(\varepsilon\)</span> influences the accuracy of the model in representing the true relationship between the dependent variable <span class="math inline">\(y\)</span> and the independent variable <span class="math inline">\(x\)</span>.</p>
+<p>Now let’s focus on the random component <span class="math inline">\(\varepsilon\)</span> in the probabilistic model and its connection to the errors in estimating <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>.</p>
+<p>Specifically, we want to understand how the probability distribution of <span class="math inline">\(\varepsilon\)</span> influences how accurately the fitted model represents the true relationship between the response variable <span class="math inline">\(y\)</span> and the predictor variable <span class="math inline">\(x\)</span>.</p>
 <p>We make four key assumptions about the probability distribution of <span class="math inline">\(\varepsilon\)</span>:</p>
 <ol type="1">
-<li><p>The <em>mean</em> of <span class="math inline">\(\varepsilon\)</span>’s probability distribution is 0. This means that, on average, the errors cancel out over an infinitely large number of experiments for each value of the independent variable <span class="math inline">\(x\)</span>. Consequently, the mean value of <span class="math inline">\(y\)</span>, <span class="math inline">\(E(y)\)</span>, for a given <span class="math inline">\(x\)</span> is <span class="math inline">\(E(y) = \beta_0 + \beta_1 x\)</span>.</p></li>
-<li><p>The <em>variance</em> of <span class="math inline">\(\varepsilon\)</span>’s probability distribution is <em>constant</em> across all values of the independent variable <span class="math inline">\(x\)</span>. For our linear model, this implies that the variance of <span class="math inline">\(\varepsilon\)</span> is a constant, say, <span class="math inline">\(\sigma^2\)</span>, regardless of the value of <span class="math inline">\(x\)</span>.</p></li>
-<li><p>The probability distribution of <span class="math inline">\(\varepsilon\)</span> is <em>normal</em>.</p></li>
-<li><p>The errors for different observations are <em>independent</em>. In other words, the error for one value of <span class="math inline">\(y\)</span> does not influence the errors for other <span class="math inline">\(y\)</span> values.</p></li>
+<li><p>The mean of the error distribution is 0. This means that, on average, the errors cancel out for each value of the predictor variable <span class="math inline">\(x\)</span>. Consequently, the mean value of <span class="math inline">\(y\)</span> for a given <span class="math inline">\(x\)</span> is <span class="math display">\[\begin{align*}
+E(y) = \beta_0 + \beta_1x.
+\end{align*}\]</span></p></li>
+<li><p>The variance of the error distribution is constant across all values of <span class="math inline">\(x\)</span>. For our linear model, this means the variance of <span class="math inline">\(\varepsilon\)</span> is the same value, <span class="math inline">\(\sigma^2\)</span>, regardless of the value of <span class="math inline">\(x\)</span>.</p></li>
+<li><p>The probability distribution of <span class="math inline">\(\varepsilon\)</span> is normal.</p></li>
+<li><p>The errors for different observations are independent. In other words, the error for one observation does not influence the errors for other observations.</p></li>
 </ol>
-<p>The implications of the first three assumptions can be seen in <a href="#fig-3_8" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>;, which shows distributions of errors for four particular values of <span class="math inline">\(x\)</span>.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 3.3: Translating the model assumptions into plain language
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose <span class="math inline">\(x\)</span> is study time and <span class="math inline">\(y\)</span> is exam score. The simple linear regression model says that students with the same study time may still have different exam scores because of random error.</p>
+<p>The four assumptions would mean:</p>
+<ul>
+<li>
+<strong>Mean zero:</strong> Among all students who studied the same number of hours, the positive and negative errors balance out around the mean score.</li>
+<li>
+<strong>Constant variance:</strong> The spread of exam scores around the mean score is about the same for students who studied 2 hours, 6 hours, or 10 hours.</li>
+<li>
+<strong>Normality:</strong> At each study-time value, the errors are approximately mound-shaped and symmetric around 0.</li>
+<li>
+<strong>Independence:</strong> One student’s error does not determine another student’s error.</li>
+</ul>
+<p>The assumptions are not saying that all exam scores are normally distributed. They are statements about the errors around the regression line.</p>
+</div>
+</div>
+<p>The implications of the first three assumptions can be seen in <a href="#fig-3_8" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>, which shows distributions of errors for four particular values of <span class="math inline">\(x\)</span>.</p>
 <div class="cell">
 <div class="cell-output-display">
 <div id="fig-3_8" class="quarto-float quarto-figure quarto-figure-center anchored">
@@ -500,33 +606,64 @@ Figure&nbsp;3.1: The probability distribution of <span class="math inline">\(\va
 </div>
 </div>
 </div>
-<p>From <a href="#fig-3_8" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>, we see that the probability distributions of the errors are <em>normal</em>, with a mean of 0 and a <em>constant</em> variance <span class="math inline">\(\sigma^2\)</span>.</p>
-<p>The line in the middle of the curve that goes to the regression line represents the mean value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. The line of means is given by the equation: <span class="math display">\[
-E(y) = \beta_0 + \beta_1 x
+<p>From <a href="#fig-3_8" class="quarto-xref">Figure&nbsp;<span>3.1</span></a>, the error distributions are normal, centered at 0, and have constant variance <span class="math inline">\(\sigma^2\)</span>.</p>
+<p>The line in the middle of each curve represents the mean value of <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. The line of means is given by <span class="math display">\[
+E(y) = \beta_0 + \beta_1x.
 \]</span></p>
-<p>These assumptions allow us to create measures of <em>reliability</em> for the least squares estimators and to develop hypothesis tests to evaluate the utility of the least squares line.</p>
-<p>Various diagnostic techniques are available for checking the validity of these assumptions, and these diagnostics suggest remedies when the assumptions seem invalid.</p>
-<p>Therefore, it is crucial to apply these diagnostic tools in every regression analysis. We will discuss these techniques in detail later.</p>
-<p>In practice, the assumptions do not need to hold <em>exactly</em> for least squares estimators and test statistics to have the reliability we expect from a regression analysis. The assumptions will be sufficiently satisfied for many real-world applications.</p>
+<p>These assumptions allow us to create measures of reliability for the least squares estimators and to develop hypothesis tests for evaluating the usefulness of the least squares line.</p>
+<p>Various diagnostic techniques are available for checking the validity of these assumptions, and those diagnostics suggest remedies when the assumptions seem unreasonable. Therefore, it is important to use diagnostic tools in every regression analysis. We will discuss these techniques in detail later.</p>
+<p>In practice, the assumptions do not need to hold exactly for least squares estimators and test statistics to have the reliability we expect from a regression analysis. The assumptions will be sufficiently satisfied for many real-world applications.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 3.4: Recognizing assumption problems from a residual plot
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose a residual plot shows small residuals for low values of <span class="math inline">\(x\)</span> but much larger residuals for high values of <span class="math inline">\(x\)</span>. The plot has a funnel shape.</p>
+<p>This pattern mainly raises concern about the <strong>constant variance</strong> assumption. The model may still capture the general direction of the relationship, but our usual formulas for standard errors, confidence intervals, and hypothesis tests may no longer be trustworthy without adjustment.</p>
+<p>If the residual plot instead showed a curved pattern, the concern would be different: it would suggest that the mean relationship may not be linear. If residuals from nearby time periods tended to have the same sign, the concern would be independence.</p>
+</div>
+</div>
 </section><section id="an-estimator-of-sigma2" class="level2" data-number="3.3"><h2 data-number="3.3" class="anchored" data-anchor-id="an-estimator-of-sigma2">
 <span class="header-section-number">3.3</span> An Estimator of <span class="math inline">\(\sigma^2\)</span>
 </h2>
-<p>The variability of random error, measured by its variance <span class="math inline">\(\sigma^2\)</span>, plays a crucial role in the accuracy of estimating model parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, as well as in the precision of predictions when using <span class="math inline">\(\hat{y}\)</span> to estimate <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. As a result, it is expected that <span class="math inline">\(\sigma^2\)</span> will appear in the formulas for confidence intervals and test statistics.</p>
-<p>In most real-world scenarios, <span class="math inline">\(\sigma^2\)</span> is <em>unknown</em> and must be estimated using the available data. The best estimate for <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(s^2\)</span>, calculated by dividing the sum of squares of residuals by the associated <em>degrees of freedom</em> (df). The sum of squares of residuals is given by: <span class="math display">\[
-SSE = \sum \left(y_i - \hat{y}_i\right)^2
+<p>The variability of random error, measured by its variance <span class="math inline">\(\sigma^2\)</span>, plays a crucial role in the accuracy of estimating model parameters <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>, as well as in the precision of predictions when using <span class="math inline">\(\hat{y}\)</span> to estimate <span class="math inline">\(y\)</span> for a given value of <span class="math inline">\(x\)</span>. As a result, <span class="math inline">\(\sigma^2\)</span> appears in the formulas for confidence intervals and test statistics.</p>
+<p>In most real-world scenarios, <span class="math inline">\(\sigma^2\)</span> is unknown and must be estimated using the available data. The best estimate for <span class="math inline">\(\sigma^2\)</span> is <span class="math inline">\(s^2\)</span>, calculated by dividing the sum of squared residuals by the associated degrees of freedom. The sum of squared residuals is <span class="math display">\[
+SSE = \sum \left(y_i-\hat{y}_i\right)^2.
 \]</span></p>
-<p>In a simple linear regression model, 2 degrees of freedom are used to estimate the y-intercept and slope, leaving <span class="math inline">\((n - 2)\)</span> degrees of freedom for estimating the error variance. Thus, the estimate of <span class="math inline">\(\sigma^2\)</span> is: <span class="math display">\[
+<p>In a simple linear regression model, 2 degrees of freedom are used to estimate the y-intercept and slope, leaving <span class="math inline">\(n-2\)</span> degrees of freedom for estimating the error variance. Thus, the estimate of <span class="math inline">\(\sigma^2\)</span> is <span class="math display">\[
 \begin{align*}
-s^2 &amp;= \frac{SSE}{n-2}\\
-&amp;= \frac{\sum \left(y_i - \hat{y}_ i\right)^2}{n-2}
+s^2
+&amp;= \frac{SSE}{n-2}\\
+&amp;= \frac{\sum \left(y_i-\hat{y}_i\right)^2}{n-2}.
 \end{align*}
 \]</span></p>
-<p>This <span class="math inline">\(s^2\)</span> serves as the basis for further statistical analysis, including the construction of confidence intervals and hypothesis testing.</p>
-<p>The value of <span class="math inline">\(s^2\)</span> is referred to as the <em>mean square error</em> (MSE).</p>
+<p>The value of <span class="math inline">\(s^2\)</span> is called the <em>mean square error</em> (MSE).</p>
 <p>The value <span class="math display">\[\begin{align*}
 s &amp;= \sqrt{s^2}
-\end{align*}\]</span> is referred to as the <em>standard error</em> of the regression model or as the <em>root</em> MSE (RMSE).</p>
-<p>Using the empirical rule, we expect approximately 95% of the observed <span class="math inline">\(y\)</span> values to lie within <span class="math inline">\(2s\)</span> of their respective least squares predicted values, <span class="math inline">\(\hat y\)</span>.</p>
+\end{align*}\]</span> is called the <em>standard error of the regression model</em> or the <em>root mean square error</em> (RMSE).</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Units matter">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Units matter
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>SSE and MSE are measured in squared response units because residuals are squared. RMSE is measured in the original response units, which often makes it easier to interpret.</p>
+<p>For example, if the response variable is mpg, then RMSE is also measured in mpg.</p>
+</div>
+</div>
+</div>
+<p>Using the empirical rule, when the model assumptions are reasonable, we expect approximately 95% of observed <span class="math inline">\(y\)</span> values to lie within about <span class="math inline">\(2s\)</span> of their respective least squares predicted values, <span class="math inline">\(\hat y\)</span>.</p>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -537,13 +674,22 @@ s &amp;= \sqrt{s^2}
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Recall the empirical rule applies to distributions that are mound-shaped and symmetric. It state that approximately 68% of the distribution is within one standard deviation of the mean, approximately 95% of the distribution is within two standard deviations of the mean, and approximatley 99.7% of the distribution is withing three standard deviations of the mean. Since we assume <span class="math inline">\(\varepsilon\)</span> is normally distributed, then the empirical rule holds.</p>
+<p>The empirical rule applies to distributions that are mound-shaped and symmetric. It states that approximately 68% of the distribution is within one standard deviation of the mean, approximately 95% is within two standard deviations of the mean, and approximately 99.7% is within three standard deviations of the mean. Since we assume <span class="math inline">\(\varepsilon\)</span> is normally distributed, the empirical rule can help us interpret the typical size of prediction errors.</p>
 </div>
 </div>
-<div id="exm-3_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 3.2 (<a href="#exm-3_1" class="quarto-xref">Example&nbsp;<span>3.1</span></a> - revisited)</strong></span> We can use the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function with the fit from <code>lm</code> to obtain the summary stats of the fit.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example 3.5: Estimating $\sigma$ with the `mtcars` model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can use the <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code> function with the fitted <code><a href="https://rdrr.io/r/stats/lm.html">lm()</a></code> object to obtain summary statistics for the regression model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">~</span><span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -567,8 +713,8 @@ Multiple R-squared:  0.7528,    Adjusted R-squared:  0.7446
 F-statistic: 91.38 on 1 and 30 DF,  p-value: 1.294e-10</code></pre>
 </div>
 </div>
-<p>The standard error (RMSE) of the fit is 3.046.</p>
-<p>We can obtain the MSE with the following code:</p>
+<p>The residual standard error, or RMSE, is approximately 3.046 mpg.</p>
+<p>We can obtain the ANOVA table for the fitted model with the following code:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
@@ -582,7 +728,113 @@ Residuals 30 278.32    9.28
 Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</code></pre>
 </div>
 </div>
-<p>The MSE is 9.28.</p>
+<p>The MSE is approximately 9.28. Notice that <span class="math display">\[\begin{align*}
+\sqrt{9.28} \approx 3.05,
+\end{align*}\]</span> which matches the residual standard error reported by <code><a href="https://rdrr.io/r/base/summary.html">summary()</a></code>.</p>
+<p>In context, the fitted model’s typical prediction error is about 3 mpg. Using the rough <span class="math inline">\(2s\)</span> guideline, many observed cars would be expected to have fuel economies within about <span class="math inline">\(2(3.046)=6.092\)</span> mpg of their fitted values, assuming the model assumptions are reasonable.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="3.4"><h2 data-number="3.4" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">3.4</span> Recap</h2>
+<p>In this chapter, we moved from fitting a least squares line to understanding why that line can be used for inference.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Least squares estimators</strong></td>
+<td>The formulas used to estimate <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span> from sample data.</td>
+</tr>
+<tr class="even">
+<td><strong>Linear estimator</strong></td>
+<td>An estimator that can be written as a weighted sum of the observed response values.</td>
+</tr>
+<tr class="odd">
+<td><strong>Sampling variation</strong></td>
+<td>Different samples usually produce different fitted intercepts and slopes.</td>
+</tr>
+<tr class="even">
+<td><strong>Mean-zero error</strong></td>
+<td>The regression line describes the mean response because errors average to 0 at each value of <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Constant variance</strong></td>
+<td>The spread of errors is the same across values of <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Normal errors</strong></td>
+<td>The error distribution is assumed to be approximately normal, which supports common inference procedures.</td>
+</tr>
+<tr class="odd">
+<td><strong>Independent errors</strong></td>
+<td>The error from one observation does not influence the error from another observation.</td>
+</tr>
+<tr class="even">
+<td><strong>MSE</strong></td>
+<td>The estimate <span class="math inline">\(s^2=SSE/(n-2)\)</span> of the error variance <span class="math inline">\(\sigma^2\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>RMSE</strong></td>
+<td>The estimate <span class="math inline">\(s=\sqrt{s^2}\)</span> of the error standard deviation, measured in the original units of <span class="math inline">\(y\)</span>.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="3.5"><h2 data-number="3.5" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">3.5</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why are <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> considered random variables, even though they are calculated from formulas?</p></li>
+<li><p>What does it mean to say that <span class="math inline">\(b_1\)</span> is a linear estimator? Does this mean the relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> must be linear?</p></li>
+<li><p>In the expression <span class="math inline">\(b_1=\sum k_i y_i\)</span>, why are the <span class="math inline">\(k_i\)</span> values treated as constants?</p></li>
+<li><p>Explain why the assumption <span class="math inline">\(E(\varepsilon)=0\)</span> connects the regression line to the mean response <span class="math inline">\(E(y)\)</span>.</p></li>
+<li><p>A residual plot has a clear funnel shape. Which regression assumption is most directly in question, and why does that matter?</p></li>
+<li><p>Why is the normality assumption mainly important for inference rather than for simply drawing the least squares line?</p></li>
+<li><p>Why do we divide SSE by <span class="math inline">\(n-2\)</span> rather than by <span class="math inline">\(n\)</span> when estimating <span class="math inline">\(\sigma^2\)</span> in simple linear regression?</p></li>
+<li><p>A model has RMSE <span class="math inline">\(s=4.2\)</span>. Interpret this value in context-free language. Why is RMSE often easier to explain than MSE?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>They vary from sample to sample.</strong> Once a sample is collected, <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span> are fixed numbers. But before sampling, the response values are random, so the fitted intercept and slope are random too. A different sample would usually produce a different fitted line.</p></li>
+<li><p><strong>A weighted sum of responses.</strong> Saying <span class="math inline">\(b_1\)</span> is a linear estimator means it can be written as a weighted sum of the observed response values, <span class="math inline">\(b_1=\sum k_i y_i\)</span>. This is different from saying the mean relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> is linear. One statement is about the form of the estimator; the other is about the form of the model.</p></li>
+<li><p><strong>The weights come from the predictor values.</strong> The <span class="math inline">\(k_i\)</span> values depend only on the observed <span class="math inline">\(x\)</span> values. Once the data’s predictor values are fixed, the weights are fixed, so the randomness in <span class="math inline">\(b_1\)</span> comes from the response values.</p></li>
+<li><p><strong>Mean-zero error centers the model on the regression line.</strong> If <span class="math inline">\(y=\beta_0+\beta_1x+\varepsilon\)</span> and <span class="math inline">\(E(\varepsilon)=0\)</span>, then the average value of <span class="math inline">\(y\)</span> at a given <span class="math inline">\(x\)</span> is <span class="math inline">\(E(y)=\beta_0+\beta_1x\)</span>. The error term explains why individual observations vary around that mean line.</p></li>
+<li><p><strong>Constant variance.</strong> A funnel shape suggests that the spread of residuals changes as <span class="math inline">\(x\)</span> changes. This matters because standard errors, confidence intervals, and hypothesis tests rely on assumptions about the variability of the errors.</p></li>
+<li><p><strong>The line can be fit without normal errors.</strong> Least squares can compute a fitted line whether or not the errors are normal. The normality assumption becomes more important when we use the fitted model to make probability-based statements, such as confidence intervals and hypothesis tests.</p></li>
+<li><p><strong>Two parameters have been estimated.</strong> In simple linear regression, we estimate both an intercept and a slope. That uses 2 degrees of freedom, leaving <span class="math inline">\(n-2\)</span> degrees of freedom to estimate the error variance.</p></li>
+<li><p><strong>Typical error size.</strong> An RMSE of 4.2 means that observed responses typically differ from their fitted values by about 4.2 response units. RMSE is easier to explain than MSE because RMSE is in the original units of the response variable, while MSE is in squared units.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 

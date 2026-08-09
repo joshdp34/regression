@@ -1,132 +1,189 @@
 # Sampling Distribution of the Least Squares Estimators and Testing the Slope
 
-> "If you do not know how to ask the right question, you discover nothing." - W. E. Demining
+> "If you do not know how to ask the right question, you discover nothing." - W. Edwards Deming
 
+In the previous chapter, we saw that the least squares estimators $b_0$ and $b_1$ can be written as linear combinations of the observed response values. That fact gives us a path toward studying their long-run behavior.
 
+This chapter focuses on three connected ideas:
 
-
+1. why $b_0$ and $b_1$ are unbiased estimators,
+2. how much $b_0$ and $b_1$ vary from sample to sample, and
+3. how the sampling distribution of $b_1$ leads to a hypothesis test for the slope.
 
 ## Properties of the constants $k_i$ and $c_i$
 
-In the previous section, we examined how the least squares estimators are linear combinations of the response variable $y$. Let's know look at the properties of the coefficients in @eq-w1_5 and @eq-w1_6. We will not present the proofs in this course but they are not complicated. 
+In the previous section, we examined how the least squares estimators are linear combinations of the response variable $y$. Now we look at properties of the coefficients in @eq-w1_5 and @eq-w1_6. We will not prove each property in this course, but they are useful because they make the expected values and variances of $b_0$ and $b_1$ much easier to derive.
 
-
-The coefficients $k_{i}$ have the following properties:
+The coefficients $k_i$ have the following properties:
 $$
 \begin{align}
-\sum k_{i} & =0
+\sum k_i & = 0
 \end{align}
 $${#eq-w1_7}
 
 $$
 \begin{align}
-\sum k_{i}x_i & =1 
+\sum k_i x_i & = 1
 \end{align}
 $${#eq-w1_8}
 
-
 $$
 \begin{align}
-\sum k_{i}^{2} & =\frac{1}{\sum \left(x_i-\bar{x}\right)^{2}}
+\sum k_i^2 & = \frac{1}{\sum (x_i-\bar{x})^2}
 \end{align}
 $${#eq-w1_9}
 
-Likewise, the coefficients $c_{i}$ have the following properties:
+Likewise, the coefficients $c_i$ have the following properties:
 $$
 \begin{align}
-\sum c_{i} & =1 
+\sum c_i & = 1
 \end{align}
 $${#eq-w1_10}
 
 $$
 \begin{align}
-\sum c_{i}x_i & =0 
+\sum c_i x_i & = 0
 \end{align}
 $${#eq-w1_11}
 
 $$
 \begin{align}
-\sum c_{i}^{2} & =\frac{1}{n}+\frac{\left(\bar{x}\right)^{2}}{\sum \left(x_i-\bar{x}\right)^{2}} 
+\sum c_i^2 & = \frac{1}{n}+\frac{\bar{x}^2}{\sum (x_i-\bar{x})^2}
 \end{align}
 $${#eq-w1_12}
-
-
 
 ::: {.callout-note}
 ## Review: The Expected Value of a Linear Combination
 
-Recall that the expected value of a linear combination of the random variable $Y$ is
+Recall that the expected value of a linear combination of a random variable $Y$ is
 $$
-E(aY+b)=aE(Y)+b
+E(aY+b)=aE(Y)+b,
 $$
 where $a$ and $b$ are constants.
 
+More generally,
+$$
+E\left(\sum a_iY_i\right)=\sum a_iE(Y_i).
+$$
+
 :::
 
+::: {.example title="Example 4.1: Checking the weights for $b_1$"}
 
-## Expected Values of $b_0$ and  $b_1$
+Suppose the predictor values are
+\begin{align*}
+x_1=1,\qquad x_2=2,\qquad x_3=4.
+\end{align*}
 
-Before finding the expectations, recall $E\left(y_i\right)=\beta_{0}+\beta_{1}x_i$.
+From chapter 03, the weights for the slope estimator are
+\begin{align*}
+k_i=\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}.
+\end{align*}
+
+Here, $\bar{x}=7/3$ and $\sum (x_i-\bar{x})^2=14/3$, so
+\begin{align*}
+k_1=-\frac{2}{7},\qquad
+k_2=-\frac{1}{14},\qquad
+k_3=\frac{5}{14}.
+\end{align*}
+
+Now check two of the key properties:
+\begin{align*}
+\sum k_i
+&= -\frac{2}{7}-\frac{1}{14}+\frac{5}{14}\\
+&=0,
+\end{align*}
+and
+\begin{align*}
+\sum k_ix_i
+&= \left(-\frac{2}{7}\right)(1)+\left(-\frac{1}{14}\right)(2)+\left(\frac{5}{14}\right)(4)\\
+&=1.
+\end{align*}
+
+These properties are not just algebra trivia. They are exactly what allow the expected value of $b_1$ to simplify to $\beta_1$.
+
+:::
+
+## Expected Values of $b_0$ and $b_1$
+
+Before finding the expectations, recall that
+\begin{align*}
+E(y_i)=\beta_0+\beta_1x_i.
+\end{align*}
 
 ### Expected Value of $b_1$
 
 The expected value of $b_1$ is
 $$
 \begin{align*}
-E\left[b_1\right] & =E\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
-& =\sum k_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-& =\beta_{0}\underbrace{\sum k_{i}}_{(4.1)}+\beta_{1}\underbrace{\sum k_{i}x_i}_{(4.2)}\\
-& =\beta_{1}
+E(b_1)
+&=E\left(\underbrace{\sum k_i y_i}_{(3.1)}\right)\\
+&=\sum k_i(\beta_0+\beta_1x_i)\\
+&=\beta_0\underbrace{\sum k_i}_{(4.1)}+\beta_1\underbrace{\sum k_ix_i}_{(4.2)}\\
+&=\beta_1.
 \end{align*}
 $$
 
 ### Expected Value of $b_0$
 
-
 The expected value of $b_0$ is
 $$
 \begin{align*}
-E\left[b_0\right] & =E\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\\
-& =\sum c_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-& =\beta_{0}\underbrace{\sum c_{i}}_{(4.4)}+\beta_{1}\underbrace{\sum c_{i}x_i}_{(4.5)}\\
-& =\beta_{0}
+E(b_0)
+&=E\left(\underbrace{\sum c_i y_i}_{(3.2)}\right)\\
+&=\sum c_i(\beta_0+\beta_1x_i)\\
+&=\beta_0\underbrace{\sum c_i}_{(4.4)}+\beta_1\underbrace{\sum c_ix_i}_{(4.5)}\\
+&=\beta_0.
 \end{align*}
 $$
 
-Therefore, $b_0$ is an *unbiased* estimator of $\beta_0$ and $b_1$ is an *unbiased* estimator of $\beta_1$.
+Therefore, $b_0$ is an *unbiased* estimator of $\beta_0$, and $b_1$ is an *unbiased* estimator of $\beta_1$.
 
 ::: {.callout-note}
 ## Review: Unbiased Estimator
 
-Recall that an unbiased estimator for some parameter is an estimator that has an expected value equal to that parameter.
+An unbiased estimator for a parameter is an estimator whose expected value equals that parameter.
+
+Unbiased does not mean the estimate from one sample is guaranteed to equal the parameter. It means that, across repeated samples, the estimator is centered at the parameter.
+
 :::
 
+::: {.example title="Example 4.2: What unbiasedness means"}
 
+Imagine repeatedly taking samples from the same population and fitting a new regression line each time. The estimated slopes might look like this:
 
+$$
+1.7,\quad 2.2,\quad 1.9,\quad 2.4,\quad 1.8,\quad 2.0,\quad \ldots
+$$
+
+If the true population slope is $\beta_1=2$, then an unbiased estimator does not mean every sample slope equals 2. Instead, it means the long-run average of the sample slopes is 2.
+
+So if one sample gives $b_1=1.7$, that estimate may be wrong for that sample, but the method itself can still be unbiased.
+
+:::
 
 ## Variances of $b_0$ and $b_1$
 
-To find the variances, we will use a result from mathematical statistics:
-Let $Y_{1},\ldots,Y_{n}$ be uncorrelated random variables and let
-$a_{1},\ldots,a_{n}$ be constants. Then
+To find the variances, we will use a result from mathematical statistics. Let $Y_1,\ldots,Y_n$ be uncorrelated random variables, and let $a_1,\ldots,a_n$ be constants. Then
 $$
 \begin{align}
-Var\left[\sum a_{i}Y_i\right] & =\sum a_{i}^{2}Var\left[Y_i\right]
+Var\left(\sum a_iY_i\right) & = \sum a_i^2Var(Y_i).
 \end{align}
 $${#eq-w1_13}
 
+For this variance result, uncorrelated errors are enough. The simple linear regression model usually assumes the stronger condition that the errors are independent.
 
-Recall that we assume the response variables $y_i$'s are *independent*.
-
-Technically, we assume the $y_i$'s are *uncorrelated*. In general, uncorrelated does not imply independent. However, if the random variables are jointly normally distributed (recall our third assumption of the model), then uncorrelated does imply independent.
-
-
-Also, note that
+Also, since
+\begin{align*}
+Y=\beta_0+\beta_1x+\varepsilon,
+\end{align*}
+and $\beta_0+\beta_1x$ is fixed for a given value of $x$, we have
 $$
 \begin{align*}
-    Var\left[Y\right]& = Var\left[\beta_0 + \beta_1 x + \varepsilon\right]\\
-    & = Var\left[\varepsilon\right]\\
-    & = \sigma^2
+Var(Y)
+&=Var(\beta_0+\beta_1x+\varepsilon)\\
+&=Var(\varepsilon)\\
+&=\sigma^2.
 \end{align*}
 $$
 
@@ -135,9 +192,10 @@ $$
 The variance of $b_1$ is
 $$
 \begin{align}
-Var\left[b_1\right] & =Var\left[\underbrace{\sum k_{i}y_i}_{(3.1)}\right]\\
-& =\underbrace{\sum k_{i}^{2}}_{(4.3)}Var\left[y_i\right]\\
-& =\frac{\sigma^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
+Var(b_1)
+&=Var\left(\underbrace{\sum k_i y_i}_{(3.1)}\right)\\
+&=\underbrace{\sum k_i^2}_{(4.3)}Var(y_i)\\
+&=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
 \end{align}
 $${#eq-w1_14}
 
@@ -146,176 +204,219 @@ $${#eq-w1_14}
 The variance of $b_0$ is
 $$
 \begin{align}
-Var\left[b_0\right] & =Var\left[\underbrace{\sum c_{i}y_i}_{(3.2)}\right]\nonumber\\
-& =\underbrace{\sum c_{i}^{2}}_{(4.6)}Var\left[y_i\right]\\
-& =\sigma^{2}\left[\frac{1}{n}+\frac{\left(\bar{x}\right)^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}\right]
+Var(b_0)
+&=Var\left(\underbrace{\sum c_i y_i}_{(3.2)}\right)\nonumber\\
+&=\underbrace{\sum c_i^2}_{(4.6)}Var(y_i)\\
+&=\sigma^2\left[\frac{1}{n}+\frac{\bar{x}^2}{\sum (x_i-\bar{x})^2}\right].
 \end{align}
 $${#eq-w1_15}
 
-## Best Linear Unbiased Estimators (BLUEs)
+::: {.example title="Example 4.3: Why spread in $x$ matters"}
 
-
-
-We see from @eq-w1_5 and @eq-w1_6 that $b_0$ and $b_1$
-are *linear* estimators.
-
-
-
-Any estimator for $\beta_{1}$, which we will
-denote as $\hat{\beta}_{0}$, that takes the form
-$$
+The variance of the slope estimator is
 \begin{align*}
-\hat{\beta}_{1} & =\sum a_{i}y_i
+Var(b_1)=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
 \end{align*}
-$$
-where $a_{i}$ is some constant, is called a *linear estimator*.
 
+The denominator,
+\begin{align*}
+SS_{xx}=\sum (x_i-\bar{x})^2,
+\end{align*}
+measures how spread out the predictor values are.
 
-Of all linear estimators for $\beta_0$ and $\beta_1$ that are *unbiased*, the least squares estimators, $b_0$ and $b_1$, have the smallest variance.
+Suppose two studies have the same error variance, $\sigma^2=16$.
 
-This is summarized in the following well known theorem:
+For Study A, suppose $SS_{xx}=8$. Then
+\begin{align*}
+Var(b_1)=\frac{16}{8}=2.
+\end{align*}
 
-::: {#thm-gauss}
+For Study B, suppose $SS_{xx}=40$. Then
+\begin{align*}
+Var(b_1)=\frac{16}{40}=0.4.
+\end{align*}
 
-## Gauss Markov Theorem
-
-For the simple linear regression model, the least squares
-estimators $b_0$ and $b_1$ are unbiased and have minimum
-variance among all unbiased linear estimators.
+The slope estimate is more precise in Study B because the predictor values are more spread out. Intuitively, it is easier to estimate the steepness of a line when we have data over a wider range of $x$ values.
 
 :::
 
+## Best Linear Unbiased Estimators (BLUEs)
 
+We see from @eq-w1_5 and @eq-w1_6 that $b_0$ and $b_1$ are linear estimators.
 
+Any estimator for $\beta_1$ that takes the form
+$$
+\begin{align*}
+\hat{\beta}_1 & = \sum a_i y_i
+\end{align*}
+$$
+where $a_i$ is some constant, is called a *linear estimator*.
 
+Of all linear estimators for $\beta_0$ and $\beta_1$ that are unbiased, the least squares estimators, $b_0$ and $b_1$, have the smallest variance.
 
+This is summarized in the following well-known theorem:
 
+::: {#thm-gauss}
+
+## Gauss-Markov Theorem
+
+For the simple linear regression model, the least squares estimators $b_0$ and $b_1$ are unbiased and have minimum variance among all unbiased linear estimators.
+
+:::
 
 An estimator that is linear, unbiased, and has the smallest variance of all unbiased linear estimators is called the *best linear unbiased estimator* (BLUE).
 
+::: {.callout-note collapse="false" title="What BLUE does and does not promise"}
+
+BLUE is a very specific kind of "best."
+
+It means least squares has the smallest variance among estimators that are both linear and unbiased. It does not mean:
+
+- the fitted line is always close to the true line for every sample,
+- the model assumptions are automatically satisfied,
+- the relationship is causal, or
+- no other estimator could be useful under different goals or assumptions.
+
+Also, normality is not required for the Gauss-Markov Theorem itself. Normality becomes especially important when we want exact small-sample $t$ tests and confidence intervals.
+
+:::
 
 ::: {.callout-tip collapse="true"}
 ## For those who want to see the math:
 
-Proof of the Gauss Markov Theorem:
+Proof of the Gauss-Markov Theorem for $b_1$:
 
 For all linear estimators that are unbiased, we must have
 $$
 \begin{align*}
-E\left[\hat{\beta}_{1}\right] & =E\left[\sum a_{i}y_i\right]\\
-& =\sum a_{i}E\left[y_i\right]\\
-& =\beta_{1}
+E(\hat{\beta}_1)
+&=E\left(\sum a_i y_i\right)\\
+&=\sum a_iE(y_i)\\
+&=\beta_1.
 \end{align*}
 $$
-Since $E\left[y_i\right]=\beta_{0}+\beta_{1}x_i$, then we must have
+
+Since $E(y_i)=\beta_0+\beta_1x_i$, then
 $$
 \begin{align*}
-E\left[\hat{\beta}_{1}\right] & =\sum a_{i}\left(\beta_{0}+\beta_{1}x_i\right)\\
-& =\beta_{0}\sum a_{i}+\beta_{1}\sum a_{i}x_i\\
-& =\beta_{1}
+E(\hat{\beta}_1)
+&=\sum a_i(\beta_0+\beta_1x_i)\\
+&=\beta_0\sum a_i+\beta_1\sum a_ix_i\\
+&=\beta_1.
 \end{align*}
 $$
+
 Therefore,
 $$
 \begin{align*}
-\sum a_{i} & =0\\
-\sum a_{i}x_i & =1
+\sum a_i &=0,\\
+\sum a_ix_i &=1.
 \end{align*}
 $$
-We now examine the variance of $\hat{\beta}_{1}$:
+
+Now examine the variance of $\hat{\beta}_1$:
 $$
 \begin{align*}
-Var\left[\hat{\beta}_{1}\right] & =\sum a_{i}^{2}Var\left[y_i\right]\\
-& =\sigma^{2}\sum a_{i}^{2}
+Var(\hat{\beta}_1)
+&=\sum a_i^2Var(y_i)\\
+&=\sigma^2\sum a_i^2.
 \end{align*}
 $$
-Let's now define $a_{i}=k_{i}+d_{i}$ where $k_{i}$ is defined in
-@eq-w1_5.
-and $d_{i}$ is some arbitrary constant.
 
+Define $a_i=k_i+d_i$, where $k_i$ is defined in @eq-w1_5 and $d_i$ is some arbitrary constant.
 
-We will show that adding
-a constant (whether negative or positive) to $k_i$ cannot make the
-variance smaller. Thus, the smallest variance of the linear estimator $\hat{\beta}_1$ is when $a_i=k_i$.
+We will show that adding a constant, whether negative or positive, to $k_i$ cannot make the variance smaller. Thus, the smallest variance of the linear estimator $\hat{\beta}_1$ occurs when $a_i=k_i$.
 
-The variance of $\hat{\beta}_{1}$ can now be written as
+The variance of $\hat{\beta}_1$ can now be written as
 $$
 \begin{align*}
-Var\left[\hat{\beta}_{1}\right] & =\sigma^{2}\sum a_{i}^{2}\\
-& =\sigma^{2}\sum\left(k_{i}+d_{i}\right)^{2}\\
-& =\sigma^{2}\sum\left(k_{i}^{2}+2k_{i}d_{i}+d_{i}^{2}\right)\\
-& =Var\left[b_1\right]+2\sigma^{2}\sum k_{i}d_{i}+\sigma^{2}\sum d_{i}^{2}
+Var(\hat{\beta}_1)
+&=\sigma^2\sum a_i^2\\
+&=\sigma^2\sum(k_i+d_i)^2\\
+&=\sigma^2\sum(k_i^2+2k_id_i+d_i^2)\\
+&=Var(b_1)+2\sigma^2\sum k_id_i+\sigma^2\sum d_i^2.
 \end{align*}
 $$
-Examining the second term and using the expression of $k_{i}$
-in @eq-w1_5, we see that
+
+Examining the second term and using the expression of $k_i$ in @eq-w1_5, we see that
 $$
 \begin{align*}
-\sum k_{i}d_{i} & =\sum k_{i}\left(a_{i}-k_{i}\right)\\
-& =\sum a_{i}k_{i}-\underbrace{\sum k_{i}^{2}}_{(4.3)}\\
-& =\sum a_{i}\frac{x_i-\bar{x}}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-& =\frac{\sum a_{i}x_i-\bar{x}\sum a_{i}}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-& =\frac{1-\bar{x}\left(0\right)}{\sum\left(x_i-\bar{x}\right)^{2}}-\frac{1}{\sum\left(x_i-\bar{x}\right)^{2}}\\
-& =0
+\sum k_id_i
+&=\sum k_i(a_i-k_i)\\
+&=\sum a_ik_i-\underbrace{\sum k_i^2}_{(4.3)}\\
+&=\sum a_i\frac{x_i-\bar{x}}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&=\frac{\sum a_ix_i-\bar{x}\sum a_i}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&=\frac{1-\bar{x}(0)}{\sum (x_i-\bar{x})^2}-\frac{1}{\sum (x_i-\bar{x})^2}\\
+&=0.
 \end{align*}
 $$
 
-We now have the variance of $\hat{\beta}_{1}$ as
+We now have
 $$
 \begin{align*}
-Var\left[\hat{\beta}_{1}\right] & =Var\left[b_1\right]+\sigma^{2}\sum d_{i}^{2}
+Var(\hat{\beta}_1) &= Var(b_1)+\sigma^2\sum d_i^2.
 \end{align*}
 $$
-This variance is minimized when $\sum d_{i}^{2}=0$ which only happens
-when $d_{i}=0$.
 
+This variance is minimized when $\sum d_i^2=0$, which only happens when $d_i=0$ for every $i$.
 
-Thus, the unbiased linear estimator with the smallest
-variance is when $a_{i}=k_{i}$. That is, the least squares estimator
-$b_1$ in @eq-w1_5 has the smallest variance of all unbiased
-linear estimators of $\beta_{1}$.
+Thus, the unbiased linear estimator with the smallest variance occurs when $a_i=k_i$. That is, the least squares estimator $b_1$ in @eq-w1_5 has the smallest variance of all unbiased linear estimators of $\beta_1$.
 
-
-
-A similar argument can be used to show that $b_0$ has the smallest variance of all unbiased
-linear estimators of $\beta_{0}$.
+A similar argument can be used to show that $b_0$ has the smallest variance of all unbiased linear estimators of $\beta_0$.
 
 :::
 
+::: {.example title="Example 4.4: Interpreting BLUE in plain language"}
 
+Suppose two different unbiased methods estimate the slope $\beta_1$.
 
+- Method A usually produces estimates close to the true slope.
+- Method B produces estimates that are unbiased on average, but its estimates jump around much more from sample to sample.
 
+If both methods are linear and unbiased, the Gauss-Markov Theorem says the least squares slope estimator has the smallest possible variance among methods of that type. In plain language, among linear unbiased estimators, least squares gives the most stable slope estimates.
+
+:::
+
+::: {.callout-note collapse="false" title="Big picture: from assumptions to inference"}
+
+The pieces in this chapter fit together like this:
+
+```{mermaid}
+flowchart LR
+  A["Model assumptions<br/>mean zero errors<br/>constant variance<br/>normality<br/>independence"] --> B["Properties of least squares<br/>unbiased estimators<br/>variance formulas<br/>BLUE"]
+  B --> C["Sampling distribution<br/>how b1 varies<br/>from sample to sample"]
+  C --> D["Studentized score<br/>replace unknown sigma<br/>with estimated s"]
+  D --> E["Slope inference<br/>t test for beta1<br/>confidence interval"]
+```
+
+The important story is not just that formulas exist. The assumptions give us a probability model for the data; that probability model gives us a sampling distribution for $b_1$; and that sampling distribution makes hypothesis tests and confidence intervals possible.
+
+:::
 
 ## Sampling Distribution for $b_1$
 
+Now that we know the least squares estimator $b_1$ is BLUE for $\beta_1$, we can examine the sampling distribution of $b_1$.
 
-Now that we see that the least squares estimator $b_1$
-is the BLUE for $\beta_{1}$, we will now examine the sampling distribution for $b_1$.
-
-
-We previously discussed  that the mean of the sampling distribution of $b_1$
-is
+We previously showed that the mean of the sampling distribution of $b_1$ is
 $$
-E[b_1]=\beta_1
+E(b_1)=\beta_1
 $$
-with a variance of
+with variance
 $$
-\begin{align}
-Var\left[b_1\right]
-& =\frac{\sigma^{2}}{\sum \left(x_i-\bar{x}\right)^{2}}
-\end{align}
-$${#eq-w1_14}
+\begin{align*}
+Var(b_1)
+&=\frac{\sigma^2}{\sum (x_i-\bar{x})^2}.
+\end{align*}
+$$
 
-
-
-Note that in our model with our four assumptions, $y$ is normally distributed. That is,
+Under the model assumptions, $y$ is normally distributed:
 $$
 \begin{align}
-    y\sim N\left(\beta_0+\beta_1 x, \sigma^2\right)
+y\sim N(\beta_0+\beta_1x,\sigma^2).
 \end{align}
 $${#eq-4_10}
 
-To learn about the sampling distributions of the least squares estimators, we will use the following theorems from mathematical statistics:
+To learn about the sampling distributions of the least squares estimators, we will use the following theorems from mathematical statistics.
 
 ::: {#thm-4_1}
 
@@ -323,248 +424,307 @@ To learn about the sampling distributions of the least squares estimators, we wi
 
 If
 $$
-Y_i\sim N\left(\mu_i,\sigma_i^2\right)
+Y_i\sim N(\mu_i,\sigma_i^2)
 $$
-are independent, then the linear combination $\sum_i a_iY_i$
-is also normally distributed where $a_i$ are constants. In particular
+are independent, then the linear combination $\sum_i a_iY_i$ is also normally distributed, where the $a_i$ values are constants. In particular,
 $$
-\sum_i a_iY_i \sim N\left(\sum_i a_i\mu_i, \sum_i a_i^2\sigma_i^2\right)
+\sum_i a_iY_i \sim N\left(\sum_i a_i\mu_i, \sum_i a_i^2\sigma_i^2\right).
 $$
 
 :::
-
 
 ::: {#thm-4_2}
 
 ## Adding a Constant to a Normal Random Variable
 
-
 If
 $$
-Y\sim N\left(\mu,\sigma^2\right)
+Y\sim N(\mu,\sigma^2),
 $$
 then for any real constant $c$,
 $$
-Y+c\sim N\left(\mu+c,\sigma^2\right)
+Y+c\sim N(\mu+c,\sigma^2).
 $$
 
 :::
 
-
-
-
-
-
-
-Since $Y$
-is normally distributed by @eq-4_10, then we can apply @thm-4_1  which
-implies that $b_1$ is normally distributed. That is,
+Since $Y$ is normally distributed by @eq-4_10, we can apply @thm-4_1, which implies that $b_1$ is normally distributed. That is,
 $$
 \begin{align}
-b_1 & \sim N\left(\beta_{1},\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}\right)
+b_1 & \sim N\left(\beta_1,\frac{\sigma^2}{\sum (x_i-\bar{x})^2}\right).
 \end{align}
 $${#eq-w2_3}
 
 ### Standardized Score
 
-Since $b_1$ is normally distributed, we can *standardize* it so that
-the resulting statistic will have a standard normal distribution.
-
-
-Therefore, we have
+Since $b_1$ is normally distributed, we can *standardize* it so the resulting statistic has a standard normal distribution:
 $$
 \begin{align}
-z=\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} & \sim N\left(0,1\right)
+z=\frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}} & \sim N(0,1).
 \end{align}
 $${#eq-w2_4}
 
-
 ### Studentized Score
 
-In practice, the standardized score $z$ is not useful since we do
-not know the value of $\sigma^{2}$. We can estimate
-$\sigma^{2}$ with the statistic
+In practice, the standardized score $z$ is not useful because we do not know $\sigma^2$. We estimate $\sigma^2$ with
 $$
-s^2 = \frac{SSE}{n-2}
+s^2 = \frac{SSE}{n-2}.
 $$
 
-Using this estimate for $\sigma^2$  leads us to a $t$-score:
+Using this estimate for $\sigma^2$ leads to a $t$-score:
 $$
 \begin{align}
-t=\frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\bar{x}\right)^{2}}}} & \sim t\left(n-2\right)
+t=\frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}} & \sim t(n-2).
 \end{align}
 $${#eq-w2_4b}
 
-We call this $t$ statistic, the *studentized* score.
+We call this $t$ statistic the *studentized* score.
+
+::: {.example title="Example 4.5: Standardizing versus studentizing"}
+
+The standardized score compares the estimated slope $b_1$ to a hypothesized slope $\beta_1$ using the true error standard deviation $\sigma$:
+\begin{align*}
+z=\frac{b_1-\beta_1}{\sqrt{\sigma^2/SS_{xx}}}.
+\end{align*}
+
+But $\sigma$ is almost never known in real applications. So we replace $\sigma$ with its estimate $s$, which gives
+\begin{align*}
+t=\frac{b_1-\beta_1}{\sqrt{s^2/SS_{xx}}}.
+\end{align*}
+
+That replacement adds extra uncertainty, so we use a $t$ distribution with $n-2$ degrees of freedom instead of a standard normal distribution.
+
+:::
 
 ::: {.callout-tip collapse="true"}
 ## For those who want to see the math:
 
-It is important to note the following theorem from math stats presented
-here without proof:
+It is important to note the following theorem from mathematical statistics, presented here without proof.
 
 ::: {#thm-04_3}
 
 ## Distribution of the sample variance of the residuals
 
-For the sample variance of the residuals $s^{2}$, the quantity
+For the sample variance of the residuals $s^2$, the quantity
 \begin{align*}
-\frac{\left(n-2\right)s^{2}}{\sigma^{2}} & =\frac{SSE}{\sigma^{2}}
+\frac{(n-2)s^2}{\sigma^2} &= \frac{SSE}{\sigma^2}
 \end{align*}
-is distributed as a chi-square distribution with $n-2$ degrees of
-freedom. That is,
+is distributed as a chi-square distribution with $n-2$ degrees of freedom. That is,
 \begin{align*}
-\frac{SSE}{\sigma^{2}} & \sim\chi^{2}\left(n-2\right)
+\frac{SSE}{\sigma^2} &\sim\chi^2(n-2).
 \end{align*}
 
 :::
 
-
-We will use another important theorem form math stats (again presented
-without proof):
+We will use another important theorem from mathematical statistics, again presented without proof.
 
 ::: {#thm-04_4}
 
 ## Ratio of independent standard normal and chi-square statistics
 
-If $Z\sim N\left(0,1\right)$ and $W\sim\chi^{2}\left(\nu\right)$,
-and $Z$ and $W$ are independent, then the statistic
+If $Z\sim N(0,1)$ and $W\sim\chi^2(\nu)$, and if $Z$ and $W$ are independent, then the statistic
 \begin{align*}
-\frac{Z}{\sqrt{\frac{W}{\nu}}}
+\frac{Z}{\sqrt{W/\nu}}
 \end{align*}
-is distributed as a Student's $t$ distribution with $\nu$ degrees
-of freedom.
+is distributed as a Student's $t$ distribution with $\nu$ degrees of freedom.
 
 :::
 
-
-
-We will take the standardized score in @eq-w2_4 and divide by
+We take the standardized score in @eq-w2_4 and divide by
 \begin{align*}
-\sqrt{\frac{\frac{\left(n-2\right)s^{2}}{\sigma^{2}}}{\left(n-2\right)}} & =\sqrt{\frac{s^{2}}{\sigma^{2}}}
+\sqrt{\frac{\frac{(n-2)s^2}{\sigma^2}}{n-2}} &= \sqrt{\frac{s^2}{\sigma^2}}
 \end{align*}
 to give us
 \begin{align*}
-t & =\frac{\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}}{\sqrt{\frac{s^{2}}{\sigma^{2}}}}\\
-& =\frac{b_1-\beta_{1}}{\sqrt{\frac{\sigma^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}\sqrt{\frac{s^{2}}{\sigma^{2}}}}\\
-& =\frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}
+t
+&= \frac{\frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}}}{\sqrt{\frac{s^2}{\sigma^2}}}\\
+&= \frac{b_1-\beta_1}{\sqrt{\frac{\sigma^2}{\sum (x_i-\bar{x})^2}}\sqrt{\frac{s^2}{\sigma^2}}}\\
+&= \frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}},
 \end{align*}
-which will have a Student's $t$ distribution with $n-2$ degrees
-of freedom.
+which has a Student's $t$ distribution with $n-2$ degrees of freedom.
 
 :::
 
-
-
-
-
-
 ## Assessing the Utility of the Model: Making Inferences About the Slope {#sec-modelutility}
 
+Suppose the predictor variable $x$ is completely unrelated to the response variable $y$.
 
-Suppose
-that the independent variable $x$ is completely unrelated to
-the dependent variable $y$.
-
-What could be said about the values of
-$\beta_0$ and $\beta_1$ in the hypothesized probabilistic model
+What could be said about the values of $\beta_0$ and $\beta_1$ in the hypothesized probabilistic model
 \begin{align*}
-    y = \beta_0 +\beta_1 x + \varepsilon
+y = \beta_0+\beta_1x+\varepsilon
 \end{align*}
-if $x$ contributes no information for the prediction of $y$?
+if $x$ contributes no information for predicting $y$?
 
+If $x$ contributes no information, then the mean of $y$ does not change as $x$ changes. In other words, the line would be horizontal.
 
+If $E(y)$ does not change as $x$ increases, then using $x$ to predict $y$ in the linear model is not useful. Regardless of the value of $x$, we would always predict the same mean value of $y$. In the straight-line model, this means the true slope, $\beta_1$, is equal to 0.
 
-The
-implication is that the mean of $y$, does not change as $x$ changes.
- In other words, the line would just be a *horizontal* line.
-
-
-
-
-
-
-If $E(y)$ does not change as $x$ increases, then using $x$ to predict $y$ in the linear model is not *useful*.
-
-
-
-Regardless
-of the value of $x$, you always predict the same value of $y$. In the
-straight-line model, this means that the true slope, $\beta_1$, is equal to 0.
-
-Therefore, to test the null hypothesis that $x$
-contributes no information for the prediction of $y$ against the
-alternative hypothesis that these variables are *linearly* related with a
-slope differing from 0, we test
+Therefore, to test the null hypothesis that $x$ contributes no information for predicting $y$ against the alternative hypothesis that these variables are linearly related with a slope differing from 0, we test
 \begin{align*}
-    H_0:\beta_1 = 0\\
-    H_a:\beta_1\ne 0
+H_0 &: \beta_1 = 0\\
+H_a &: \beta_1 \ne 0.
 \end{align*}
 
+If the data support the alternative hypothesis, we conclude that $x$ contributes information for predicting $y$ using the straight-line model. However, the true relationship between $E(y)$ and $x$ could still be more complex than a straight line. Thus, to some extent, this is a test of the utility of the hypothesized linear model.
 
-
-If the data support the alternative hypothesis, we conclude that $x$
-does contribute information for the prediction of $y$ using the straight-line model (although the true relationship between $E(y)$ and $x$ could
-be more complex than a straight line). Thus, to some extent, this is
-a test of the *utility* of the hypothesized model.
-
-The appropriate test statistic is the studentized score given above:
+The appropriate test statistic is the studentized score given above. Under the null hypothesis, $\beta_1=0$, so
 $$
 \begin{align}
-    t &= \frac{b_1-\beta_{1}}{\sqrt{\frac{s^{2}}{\sum\left(x_i-\overline{X}\right)^{2}}}}\\
-    &=\frac{b_1}{\sqrt{\frac{s^{2}}{SS_{xx}}}}
+t
+&= \frac{b_1-\beta_1}{\sqrt{\frac{s^2}{\sum (x_i-\bar{x})^2}}}\\
+&= \frac{b_1}{\sqrt{\frac{s^2}{SS_{xx}}}}.
 \end{align}
 $${#eq-4_14}
 
-
-
-
-Another way to make inferences about the slope $\beta_1$ is to estimate it
-using a *confidence* *interval*
+Another way to make inferences about the slope $\beta_1$ is to estimate it using a confidence interval:
 $$
 \begin{align}
-    b_1 \pm \left(t_{\alpha/2}\right)s_{b_1}
+b_1 \pm t_{\alpha/2}s_{b_1}
 \end{align}
 $${#eq-4_15}
 where
 \begin{align*}
-    s_{b_1} = \frac{s}{\sqrt{SS_{xx}}}
+s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
 \end{align*}
+and $t_{\alpha/2}$ is the appropriate critical value from a $t$ distribution with $n-2$ degrees of freedom.
 
+::: {.callout-note collapse="false" title="What the slope test does not say"}
 
+Rejecting $H_0:\beta_1=0$ means the data provide evidence of a nonzero linear association between $x$ and the mean of $y$.
 
-
-We can obtain the p-value for the hypothesis test by using the `summary` function with an `lm` object. For the previous example consisting of the `mtcars` data.
-
-::: {#exm-4_1}
-
-## @exm-3_1 - revisited
-
-
-```{r message=FALSE, warning=F}
-library(tidyverse)
-
-fit = lm(mpg~wt, data = mtcars)
-
-```
-
-We find the least squares estimates as
-
-```{r message=FALSE, warning=F}
-summary(fit)
-```
-
-From the output, we see the p-value is
-$1.29\times 10^{-10}$. So we have sufficient evidence to conclude that the true population slope is different than zero.
-
-To find the confidence interval, we can use the `confint` function with the `lm` object. 
-
-```{r message=FALSE, warning=F}
-confint(fit, level = 0.95)
-```
-
-
-We 95% confident that the true population slope is in the interval $`r paste0("(",round(confint(fit, level = 0.95)[2, 1], 3), ", ", round(confint(fit, level = 0.95)[2, 2],3), ")")`$
+It does not automatically prove causation, and it does not guarantee that a straight-line model is the best possible description of the relationship.
 
 :::
 
+::: {.callout-warning collapse="false" title="Common mistake: nonsignificant does not mean no relationship"}
+
+If we fail to reject $H_0:\beta_1=0$, we should not say, "There is no relationship between $x$ and $y$."
+
+A nonsignificant slope test means the data did not provide strong enough evidence of a nonzero *linear* slope under the model assumptions. There may be no relationship, but there may also be a weak relationship, a noisy dataset, a small sample size, or a relationship that is not well described by a straight line.
+
+:::
+
+::: {.example title="Example 4.6: Testing the slope in the `mtcars` model"}
+
+We can obtain the p-value for the hypothesis test by using the `summary()` function with an `lm` object. We will revisit the `mtcars` model from @exm-3_1.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+fit <- lm(mpg ~ wt, data = mtcars)
+```
+
+We find the least squares estimates and test statistics with:
+
+```{r}
+summary(fit)
+```
+
+```{r}
+#| echo: false
+
+slope_p_value <- coef(summary(fit))["wt", "Pr(>|t|)"]
+slope_ci <- confint(fit, "wt", level = 0.95)
+```
+
+From the output, the p-value for testing
+\begin{align*}
+H_0 &: \beta_1=0\\
+H_a &: \beta_1\ne 0
+\end{align*}
+is approximately $`r format(slope_p_value, scientific = TRUE, digits = 3)`$.
+
+Because this p-value is very small, we have strong evidence that the true population slope relating automobile weight to fuel economy is different from 0.
+
+::: {.callout-note collapse="false" title="Statistical significance vs. practical importance"}
+
+A small p-value tells us there is evidence that the population slope is not 0. It does not, by itself, tell us whether the effect is large enough to matter in practice.
+
+To judge practical importance, we should also interpret the estimated slope, the response units, the predictor units, the confidence interval, and the scientific or real-world context.
+
+:::
+
+To find a confidence interval, we can use the `confint()` function with the `lm` object.
+
+```{r}
+confint(fit, level = 0.95)
+```
+
+We are 95% confident that the true population slope is in the interval
+\begin{align*}
+(`r round(slope_ci[1, 1], 3)`,\ `r round(slope_ci[1, 2], 3)`).
+\end{align*}
+
+In context, this interval estimates the change in mean fuel economy, in mpg, associated with a 1-unit increase in `wt`. Since `wt` is measured in thousands of pounds, this is the estimated change in mean mpg for each additional 1000 pounds of automobile weight.
+
+:::
+
+## Recap
+
+This chapter used the structure of the least squares estimators to explain why we can make inference about the slope.
+
+| Idea | Meaning |
+|---|---|
+| **$k_i$ and $c_i$ weights** | Constants determined by the observed predictor values. |
+| **Unbiased estimator** | An estimator whose sampling distribution is centered at the true parameter. |
+| **$E(b_1)=\beta_1$** | The least squares slope is unbiased for the population slope. |
+| **$E(b_0)=\beta_0$** | The least squares intercept is unbiased for the population intercept. |
+| **$Var(b_1)$** | The sample-to-sample variability of the estimated slope. It decreases as $SS_{xx}$ increases. |
+| **BLUE** | Best linear unbiased estimator; among linear unbiased estimators, least squares has minimum variance. |
+| **Sampling distribution of $b_1$** | Under the model assumptions, $b_1$ is normally distributed around $\beta_1$. |
+| **Studentized score** | A $t$ statistic created by replacing unknown $\sigma$ with estimated $s$. |
+| **Slope test** | A test of whether the predictor contributes linear information for predicting the response. |
+| **Practical importance** | The question of whether the estimated effect is large enough to matter in context. This is not answered by the p-value alone. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why do the properties $\sum k_i=0$ and $\sum k_ix_i=1$ matter when finding $E(b_1)$?
+
+2. What does it mean to say that $b_1$ is an unbiased estimator of $\beta_1$? What does it not mean?
+
+3. Why does a larger value of $SS_{xx}=\sum(x_i-\bar{x})^2$ make the slope estimator more precise?
+
+4. What does BLUE stand for? Be precise about what "best" means in this phrase.
+
+5. Why do we use a $t$ distribution instead of a standard normal distribution when testing the slope in practice?
+
+6. In the hypothesis test $H_0:\beta_1=0$ versus $H_a:\beta_1\ne0$, what does the null hypothesis say about the usefulness of $x$?
+
+7. If a slope test gives a very small p-value, what can we conclude? What should we avoid concluding?
+
+8. How are the slope hypothesis test and the confidence interval for $\beta_1$ connected?
+
+9. If a slope test is not statistically significant, why is it too strong to say that there is definitely no relationship between $x$ and $y$?
+
+10. Why should a statistically significant slope still be interpreted in terms of practical importance?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **They make the expectation simplify.** When $E(b_1)$ is expanded, the term involving $\beta_0$ is multiplied by $\sum k_i$, which equals 0, and the term involving $\beta_1$ is multiplied by $\sum k_ix_i$, which equals 1. That leaves $E(b_1)=\beta_1$.
+
+2. **Centered at the truth.** Saying $b_1$ is unbiased means its sampling distribution is centered at the true population slope $\beta_1$. It does not mean that the slope from one sample must equal $\beta_1$.
+
+3. **More horizontal spread gives more information about slope.** Since $Var(b_1)=\sigma^2/SS_{xx}$, increasing $SS_{xx}$ decreases the variance of $b_1$. A wider range of predictor values makes it easier to estimate how steep the line is.
+
+4. **Best linear unbiased estimator.** BLUE means the estimator is linear, unbiased, and has the smallest variance among all estimators that are both linear and unbiased. "Best" does not mean best among every possible estimator under every possible condition.
+
+5. **Because $\sigma$ is unknown.** If the true error standard deviation $\sigma$ were known, we could use a standardized normal statistic. In practice, we estimate $\sigma$ with $s$, and that extra uncertainty leads to a $t$ distribution with $n-2$ degrees of freedom.
+
+6. **No linear contribution.** The null hypothesis says the mean response does not change linearly as $x$ changes. If $\beta_1=0$, the regression line is horizontal, so $x$ contributes no linear information for predicting $y$.
+
+7. **Evidence of linear association, not proof of causation.** A very small p-value provides evidence that the population slope is different from 0. We should avoid concluding that $x$ causes $y$, that the model assumptions are automatically satisfied, or that the relationship must be exactly linear.
+
+8. **They answer the same slope question in related ways.** For a two-sided test at significance level $\alpha$, rejecting $H_0:\beta_1=0$ is equivalent to a $(1-\alpha)100\%$ confidence interval for $\beta_1$ that does not contain 0.
+
+9. **Nonsignificant is not the same as no relationship.** A nonsignificant result means the data did not provide strong enough evidence of a nonzero linear slope under the model assumptions. The study may have too little data, too much noise, or a relationship that is nonlinear rather than absent.
+
+10. **Statistical significance is not the whole story.** With enough data, even a very small slope can be statistically significant. Practical importance asks whether the estimated change in the response is meaningful in the real context of the problem.
+
+:::
