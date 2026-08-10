@@ -338,7 +338,14 @@ window.Quarto = {
   <li><a href="#coefficient-of-determination-and-sse" id="toc-coefficient-of-determination-and-sse" class="nav-link" data-scroll-target="#coefficient-of-determination-and-sse"><span class="header-section-number">17.3</span> Coefficient of Determination and SSE</a></li>
   <li><a href="#adjusted-coefficient-of-determination-and-mse" id="toc-adjusted-coefficient-of-determination-and-mse" class="nav-link" data-scroll-target="#adjusted-coefficient-of-determination-and-mse"><span class="header-section-number">17.4</span> Adjusted Coefficient of Determination and MSE</a></li>
   <li><a href="#aic-and-bic" id="toc-aic-and-bic" class="nav-link" data-scroll-target="#aic-and-bic"><span class="header-section-number">17.5</span> AIC and BIC</a></li>
-  <li><a href="#criteria-for-prediction" id="toc-criteria-for-prediction" class="nav-link" data-scroll-target="#criteria-for-prediction"><span class="header-section-number">17.6</span> Criteria for Prediction</a></li>
+  <li>
+<a href="#criteria-for-prediction" id="toc-criteria-for-prediction" class="nav-link" data-scroll-target="#criteria-for-prediction"><span class="header-section-number">17.6</span> Criteria for Prediction</a>
+  <ul class="collapse">
+<li><a href="#press-and-leave-one-out-cross-validation" id="toc-press-and-leave-one-out-cross-validation" class="nav-link" data-scroll-target="#press-and-leave-one-out-cross-validation"><span class="header-section-number">17.6.1</span> PRESS and Leave-One-Out Cross-Validation</a></li>
+  </ul>
+</li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">17.7</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">17.8</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -362,11 +369,37 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“When a measure becomes a target, it ceases to be a good measure.” - Marilyn Strathern</p>
 </blockquote>
-<p>So far, we have discussed using the coefficient of determination, <span class="math inline">\(R^2\)</span> and adjusted coefficient of determination, <span class="math inline">\(R^2_a\)</span>, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be use to help in the model building process.</p>
+<p>So far, we have discussed using the coefficient of determination, <span class="math inline">\(R^2\)</span> and adjusted coefficient of determination, <span class="math inline">\(R^2_a\)</span>, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be used to help in the model building process.</p>
 <section id="possible-models" class="level2" data-number="17.1"><h2 data-number="17.1" class="anchored" data-anchor-id="possible-models">
 <span class="header-section-number">17.1</span> Possible Models</h2>
 <p>From any set of <span class="math inline">\(p - 1\)</span> predictors, <span class="math inline">\(2^{p-1}\)</span> alternative models can be constructed.</p>
 <p>This calculation is based on the fact that each predictor can be either included or excluded from the model.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Counting possible subset models
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If there are 4 possible predictors, each predictor has two choices:</p>
+<ul>
+<li>included in the model</li>
+<li>excluded from the model</li>
+</ul>
+<p>This gives</p>
+<p><span class="math display">\[
+2^4 = 16
+\]</span></p>
+<p>possible subset models. If there are 10 possible predictors, there are</p>
+<p><span class="math display">\[
+2^{10}=1024
+\]</span></p>
+<p>possible subset models. The number of possible models grows quickly, which is why model-selection criteria are useful.</p>
+</div>
+</div>
 <p>For example, the <span class="math display">\[
 2^4 = 16
 \]</span> different possible subset models that can be formed from the pool of four <span class="math inline">\(X\)</span> variables are <span class="math display">\[
@@ -389,10 +422,7 @@ window.Quarto = {
 &amp; x_{1},x_{2},x_{3},x_{4}
 \end{align*}
 \]</span></p>
-<p>If there are 10 potential predictor variables, there there would be <span class="math display">\[
-2^{10} = 1024
-\]</span> possible subset models.</p>
-<p>Model selection procedures, also known as <em>subset</em> <em>selection</em> or <em>variables</em> <em>selection</em> <em>procedures</em>, have been developed to identify a small group of regression models that are “good” according to a specified <em>criterion</em>.</p>
+<p>Model selection procedures, also known as <em>subset</em> <em>selection</em> or <em>variable</em> <em>selection</em> <em>procedures</em>, have been developed to identify a small group of regression models that are “good” according to a specified <em>criterion</em>.</p>
 <p>This limited number might consist of three to six “good” subsets according to the criteria specified, so the investigator can then carefully study these regression models for choosing the final model.</p>
 <p>While many criteria for comparing the regression models have been developed, we will focus on six: <span class="math display">\[
 \begin{align*}
@@ -400,9 +430,345 @@ window.Quarto = {
 &amp; R_{a,p}^{2}\\
 &amp; AIC_{p}\\
 &amp; SBC_{p}\\
-&amp; PRESS_{p}
+&amp; PRESS_{p}\\
+&amp; \text{pred }R_{p}^{2}
 \end{align*}
 \]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Which direction is better?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Which direction is better?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The criteria do not all move in the same direction.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 30%">
+<col style="width: 40%">
+<col style="width: 30%">
+</colgroup>
+<thead><tr class="header">
+<th>Criterion</th>
+<th style="text-align: right;">Preferred direction</th>
+<th>Main idea</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(R_p^2\)</span></td>
+<td style="text-align: right;">Larger</td>
+<td>Measures in-sample fit, but never decreases when predictors are added.</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(R_{a,p}^2\)</span></td>
+<td style="text-align: right;">Larger</td>
+<td>Adjusts <span class="math inline">\(R^2\)</span> for the number of parameters in the model.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(AIC_p\)</span></td>
+<td style="text-align: right;">Smaller</td>
+<td>Rewards fit but penalizes model complexity.</td>
+</tr>
+<tr class="even">
+<td>
+<span class="math inline">\(BIC_p\)</span> or <span class="math inline">\(SBC_p\)</span>
+</td>
+<td style="text-align: right;">Smaller</td>
+<td>Similar to AIC, but usually penalizes complexity more strongly.</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(PRESS_p\)</span></td>
+<td style="text-align: right;">Smaller</td>
+<td>Measures leave-one-out prediction error.</td>
+</tr>
+<tr class="even">
+<td>pred <span class="math inline">\(R_p^2\)</span>
+</td>
+<td style="text-align: right;">Larger</td>
+<td>Converts PRESS into an <span class="math inline">\(R^2\)</span>-style prediction measure.</td>
+</tr>
+</tbody>
+</table>
+<p>No single criterion should replace judgment. The best model is usually one that fits the scientific question, predicts well, and is not more complicated than it needs to be.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Exhaustive subset selection with four predictors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When the number of possible predictors is small, we can fit every possible subset model and compare the criteria. This is called <em>exhaustive subset selection</em>.</p>
+<p>The following example uses four possible predictors from <code>mtcars</code>: <code>disp</code>, <code>hp</code>, <code>wt</code>, and <code>qsec</code>. Since there are 4 possible predictors, there are <span class="math inline">\(2^4=16\)</span> subset models.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">press_stat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">candidate_predictors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"disp"</span>, <span class="st">"hp"</span>, <span class="st">"wt"</span>, <span class="st">"qsec"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">all_subsets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span></span>
+<span>  <span class="fl">0</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">candidate_predictors</span><span class="op">)</span>,</span>
+<span>  \<span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="kw">if</span> <span class="op">(</span><span class="va">k</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/character.html">character</a></span><span class="op">(</span><span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/utils/combn.html">combn</a></span><span class="op">(</span><span class="va">candidate_predictors</span>, <span class="va">k</span>, simplify <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span><span class="op">(</span>recursive <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sst_mpg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">exhaustive_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>predictors <span class="op">=</span> <span class="va">all_subsets</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    model <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_chr</a></span><span class="op">(</span></span>
+<span>      <span class="va">predictors</span>,</span>
+<span>      \<span class="op">(</span><span class="va">vars</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>          <span class="st">"Intercept only"</span></span>
+<span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">vars</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    formula <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span></span>
+<span>      <span class="va">predictors</span>,</span>
+<span>      \<span class="op">(</span><span class="va">vars</span><span class="op">)</span> <span class="op">{</span></span>
+<span>        <span class="va">right_side</span> <span class="op">&lt;-</span> <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">vars</span><span class="op">)</span> <span class="op">==</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
+<span>          <span class="st">"1"</span></span>
+<span>        <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>          <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">vars</span>, collapse <span class="op">=</span> <span class="st">" + "</span><span class="op">)</span></span>
+<span>        <span class="op">}</span></span>
+<span></span>
+<span>        <span class="fu"><a href="https://rdrr.io/r/stats/formula.html">as.formula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="st">"mpg ~"</span>, <span class="va">right_side</span><span class="op">)</span><span class="op">)</span></span>
+<span>      <span class="op">}</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    fit <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">formula</span>, \<span class="op">(</span><span class="va">form</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">form</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    p <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_int</a></span><span class="op">(</span><span class="va">predictors</span>, <span class="va">length</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span>,</span>
+<span>    PRESS <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">press_stat</span><span class="op">)</span>,</span>
+<span>    pred_r_squared <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">PRESS</span> <span class="op">/</span> <span class="va">sst_mpg</span>,</span>
+<span>    glance <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">fit</span>, <span class="va">glance</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span><span class="va">glance</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">model</span>,</span>
+<span>    <span class="va">p</span>,</span>
+<span>    <span class="va">r.squared</span>,</span>
+<span>    <span class="va">adj.r.squared</span>,</span>
+<span>    <span class="va">AIC</span>,</span>
+<span>    <span class="va">BIC</span>,</span>
+<span>    <span class="va">PRESS</span>,</span>
+<span>    <span class="va">pred_r_squared</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">exhaustive_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">BIC</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 3%">
+<col style="width: 10%">
+<col style="width: 15%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 10%">
+<col style="width: 16%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">p</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">PRESS</th>
+<th style="text-align: right;">pred_r_squared</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">hp + wt</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.8268</td>
+<td style="text-align: right;">0.8148</td>
+<td style="text-align: right;">156.6523</td>
+<td style="text-align: right;">162.5153</td>
+<td style="text-align: right;">246.5063</td>
+<td style="text-align: right;">0.7811</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">wt + qsec</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.8264</td>
+<td style="text-align: right;">0.8144</td>
+<td style="text-align: right;">156.7205</td>
+<td style="text-align: right;">162.5834</td>
+<td style="text-align: right;">249.3488</td>
+<td style="text-align: right;">0.7786</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hp + wt + qsec</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.8348</td>
+<td style="text-align: right;">0.8171</td>
+<td style="text-align: right;">157.1426</td>
+<td style="text-align: right;">164.4713</td>
+<td style="text-align: right;">245.4834</td>
+<td style="text-align: right;">0.7820</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">disp + hp + wt</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.8268</td>
+<td style="text-align: right;">0.8083</td>
+<td style="text-align: right;">158.6430</td>
+<td style="text-align: right;">165.9717</td>
+<td style="text-align: right;">261.3609</td>
+<td style="text-align: right;">0.7679</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">disp + wt + qsec</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.8264</td>
+<td style="text-align: right;">0.8078</td>
+<td style="text-align: right;">158.7203</td>
+<td style="text-align: right;">166.0490</td>
+<td style="text-align: right;">259.1200</td>
+<td style="text-align: right;">0.7699</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">disp + hp + wt + qsec</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.8351</td>
+<td style="text-align: right;">0.8107</td>
+<td style="text-align: right;">159.0696</td>
+<td style="text-align: right;">167.8640</td>
+<td style="text-align: right;">257.8314</td>
+<td style="text-align: right;">0.7710</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">disp + wt</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.7809</td>
+<td style="text-align: right;">0.7658</td>
+<td style="text-align: right;">164.1678</td>
+<td style="text-align: right;">170.0307</td>
+<td style="text-align: right;">309.3015</td>
+<td style="text-align: right;">0.7253</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">wt</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.7528</td>
+<td style="text-align: right;">0.7446</td>
+<td style="text-align: right;">166.0294</td>
+<td style="text-align: right;">170.4266</td>
+<td style="text-align: right;">328.0228</td>
+<td style="text-align: right;">0.7087</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">disp + hp</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.7482</td>
+<td style="text-align: right;">0.7309</td>
+<td style="text-align: right;">168.6186</td>
+<td style="text-align: right;">174.4815</td>
+<td style="text-align: right;">343.9581</td>
+<td style="text-align: right;">0.6945</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">disp</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.7183</td>
+<td style="text-align: right;">0.7090</td>
+<td style="text-align: right;">170.2094</td>
+<td style="text-align: right;">174.6066</td>
+<td style="text-align: right;">365.8296</td>
+<td style="text-align: right;">0.6751</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">disp + hp + qsec</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.7542</td>
+<td style="text-align: right;">0.7279</td>
+<td style="text-align: right;">169.8525</td>
+<td style="text-align: right;">177.1812</td>
+<td style="text-align: right;">356.9407</td>
+<td style="text-align: right;">0.6830</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">disp + qsec</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.7216</td>
+<td style="text-align: right;">0.7024</td>
+<td style="text-align: right;">171.8418</td>
+<td style="text-align: right;">177.7048</td>
+<td style="text-align: right;">378.4050</td>
+<td style="text-align: right;">0.6640</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hp</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.6024</td>
+<td style="text-align: right;">0.5892</td>
+<td style="text-align: right;">181.2386</td>
+<td style="text-align: right;">185.6358</td>
+<td style="text-align: right;">552.1057</td>
+<td style="text-align: right;">0.5097</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">hp + qsec</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.6369</td>
+<td style="text-align: right;">0.6118</td>
+<td style="text-align: right;">180.3391</td>
+<td style="text-align: right;">186.2020</td>
+<td style="text-align: right;">540.3406</td>
+<td style="text-align: right;">0.5201</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.1753</td>
+<td style="text-align: right;">0.1478</td>
+<td style="text-align: right;">204.5881</td>
+<td style="text-align: right;">208.9853</td>
+<td style="text-align: right;">1041.1210</td>
+<td style="text-align: right;">0.0754</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Intercept only</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">208.7555</td>
+<td style="text-align: right;">211.6870</td>
+<td style="text-align: right;">1199.8671</td>
+<td style="text-align: right;">-0.0656</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Sorting by BIC places the simpler models with strong fit near the top. If we sorted by a different criterion, the order might change.</p>
+</div>
+</div>
 </section><section id="notation" class="level2" data-number="17.2"><h2 data-number="17.2" class="anchored" data-anchor-id="notation">
 <span class="header-section-number">17.2</span> Notation</h2>
 <p>Before discussing the criteria, we will need to develop some notation. We will denote the number of potential <span class="math inline">\(X\)</span> variables in the pool by <span class="math inline">\(P-1\)</span>.</p>
@@ -413,18 +779,174 @@ window.Quarto = {
 \]</span></p>
 </section><section id="coefficient-of-determination-and-sse" class="level2" data-number="17.3"><h2 data-number="17.3" class="anchored" data-anchor-id="coefficient-of-determination-and-sse">
 <span class="header-section-number">17.3</span> Coefficient of Determination and SSE</h2>
-<p>Clearly, we would like models that fit the data well. Thus we would like a coefficient of <em>multiple determiantion</em>, <span class="math inline">\(R^2\)</span>, to be high.</p>
+<p>Clearly, we would like models that fit the data well. Thus we would like a coefficient of <em>multiple determination</em>, <span class="math inline">\(R^2\)</span>, to be high.</p>
 <p>We will denote the number of parameters in the potential model as a subscript and write the coefficient of determination as <span class="math inline">\(R^2_p\)</span>.</p>
 <p>The <span class="math inline">\(R^2_p\)</span> criterion is equivalent to using the error sum of squares <span class="math inline">\(SSE_p\)</span> as the criterion. The <span class="math inline">\(R^2_p\)</span> criterion is not intended to identify the subsets that maximize this criterion.</p>
 <p>We know that <span class="math inline">\(R^2_p\)</span> can never decrease as additional <span class="math inline">\(X\)</span> variables are included in the model. Hence, <span class="math inline">\(R^2_p\)</span> will be a maximum when all <span class="math inline">\(P - 1\)</span> potential X variables are included in the regression model.</p>
 <p>The intent in using the <span class="math inline">\(R^2_p\)</span> criterion is to find the point where adding more <span class="math inline">\(X\)</span> variables is not worthwhile because it leads to a very small increase in <span class="math inline">\(R^2_p\)</span>.</p>
 <p>Often, this point is reached when only a limited number of <span class="math inline">\(X\)</span> variables are included in the regression model.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not choose a model using R-squared alone">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not choose a model using R-squared alone
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Because <span class="math inline">\(R_p^2\)</span> cannot decrease when a predictor is added, the model with the most predictors will always look at least as good by this criterion. This makes <span class="math inline">\(R_p^2\)</span> useful for describing fit, but risky as the only model-selection tool.</p>
+<p>When comparing candidate models, look for whether the added variables produce a meaningful improvement, not merely any improvement.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Overfitting by adding noise predictors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following example adds randomly generated noise predictors to a useful model. These noise variables are not meaningful predictors of <code>mpg</code>, but ordinary least squares can still use them to reduce in-sample error slightly.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">3386</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">press_stat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">noise_dat</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    noise_1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    noise_2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    noise_3 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    noise_4 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">sst_noise</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">noise_dat</span><span class="op">$</span><span class="va">mpg</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">noise_dat</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">noise_models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Base model"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">noise_dat</span><span class="op">)</span>,</span>
+<span>  <span class="st">"Add 1 noise predictor"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span> <span class="op">+</span> <span class="va">noise_1</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">noise_dat</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Add 2 noise predictors"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span> <span class="op">+</span> <span class="va">noise_1</span> <span class="op">+</span> <span class="va">noise_2</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">noise_dat</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Add 4 noise predictors"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span> <span class="op">+</span> <span class="va">noise_1</span> <span class="op">+</span> <span class="va">noise_2</span> <span class="op">+</span> <span class="va">noise_3</span> <span class="op">+</span> <span class="va">noise_4</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">noise_dat</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">noise_comparison</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">imap_dfr</a></span><span class="op">(</span></span>
+<span>  <span class="va">noise_models</span>,</span>
+<span>  \<span class="op">(</span><span class="va">fit_object</span>, <span class="va">model_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>        model <span class="op">=</span> <span class="va">model_name</span>,</span>
+<span>        predictors <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1</span>,</span>
+<span>        PRESS <span class="op">=</span> <span class="fu">press_stat</span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span>,</span>
+<span>        pred_r_squared <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">PRESS</span> <span class="op">/</span> <span class="va">sst_noise</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">model</span>,</span>
+<span>    <span class="va">predictors</span>,</span>
+<span>    <span class="va">r.squared</span>,</span>
+<span>    <span class="va">adj.r.squared</span>,</span>
+<span>    <span class="va">AIC</span>,</span>
+<span>    <span class="va">BIC</span>,</span>
+<span>    <span class="va">PRESS</span>,</span>
+<span>    <span class="va">pred_r_squared</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">noise_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 10%">
+<col style="width: 14%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 9%">
+<col style="width: 15%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">predictors</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">PRESS</th>
+<th style="text-align: right;">pred_r_squared</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Base model</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.8264</td>
+<td style="text-align: right;">0.8144</td>
+<td style="text-align: right;">156.7205</td>
+<td style="text-align: right;">162.5834</td>
+<td style="text-align: right;">249.3488</td>
+<td style="text-align: right;">0.7786</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Add 1 noise predictor</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.8298</td>
+<td style="text-align: right;">0.8116</td>
+<td style="text-align: right;">158.0855</td>
+<td style="text-align: right;">165.4142</td>
+<td style="text-align: right;">257.2757</td>
+<td style="text-align: right;">0.7715</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Add 2 noise predictors</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.8298</td>
+<td style="text-align: right;">0.8046</td>
+<td style="text-align: right;">160.0854</td>
+<td style="text-align: right;">168.8798</td>
+<td style="text-align: right;">269.1829</td>
+<td style="text-align: right;">0.7609</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Add 4 noise predictors</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.8344</td>
+<td style="text-align: right;">0.7946</td>
+<td style="text-align: right;">163.2150</td>
+<td style="text-align: right;">174.9408</td>
+<td style="text-align: right;">327.8328</td>
+<td style="text-align: right;">0.7089</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Notice that <span class="math inline">\(R^2\)</span> increases as the noise predictors are added. That does not mean the model is better. The other criteria warn us that the extra predictors are adding complexity without useful predictive value.</p>
+</div>
+</div>
 </section><section id="adjusted-coefficient-of-determination-and-mse" class="level2" data-number="17.4"><h2 data-number="17.4" class="anchored" data-anchor-id="adjusted-coefficient-of-determination-and-mse">
 <span class="header-section-number">17.4</span> Adjusted Coefficient of Determination and MSE</h2>
 <p>Since <span class="math inline">\(R^2_{p}\)</span> does not take account of the number of parameters in the regression model and since max(<span class="math inline">\(R^2_{p}\)</span>) can never decrease as <span class="math inline">\(p\)</span> increases, the <em>adjusted</em> coefficient of multiple determination <span class="math inline">\(R^2_{a,p}\)</span> has been suggested as an alternative criterion.</p>
 <p>This coefficient takes the number of parameters in the regression model into account through the degrees of freedom.</p>
 <p>Users of the <span class="math inline">\(R^2_{a,p}\)</span> criterion seek to find a few subsets for which <span class="math inline">\(R^2_{a,p}\)</span> is at the maximum or so close to the maximum that adding more variables is not worthwhile.</p>
-<p>The <span class="math inline">\(R^2_{a,p}\)</span> criterion is equivalent to using the mean square error <span class="math inline">\(SSE_p\)</span> as the criterion. This come from the relationship in <a href="13_Inferences.html#eq-w4_44" class="quarto-xref">Equation&nbsp;<span>13.7</span></a> <span class="math display">\[
+<p>The <span class="math inline">\(R^2_{a,p}\)</span> criterion is equivalent to using the mean square error <span class="math inline">\(MSE_p\)</span> as the criterion. This comes from the relationship <span class="math display">\[
 \begin{align*}
 R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
 &amp; =1-\left(\frac{n-1}{n-p}\right)\frac{SSE}{SSTO}\\
@@ -434,7 +956,7 @@ R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
 </section><section id="aic-and-bic" class="level2" data-number="17.5"><h2 data-number="17.5" class="anchored" data-anchor-id="aic-and-bic">
 <span class="header-section-number">17.5</span> AIC and BIC</h2>
 <p>We have seen that <span class="math inline">\(R_{a,p}^2\)</span> is a criterion that penalizes models having large numbers of predictors.</p>
-<p>Two popular alternatives that also provide penalties for adding predictors are <em>Akaike’s information criterion</em> (<span class="math inline">\(AIC_p\)</span>) and <em>Schwarz’ Bayesian criterion</em> (<span class="math inline">\(SBC_p\)</span>).</p>
+<p>Two popular alternatives that also provide penalties for adding predictors are <em>Akaike’s information criterion</em> (<span class="math inline">\(AIC_p\)</span>) and <em>Schwarz’s Bayesian criterion</em> (<span class="math inline">\(SBC_p\)</span>).</p>
 <p>A more popular name for <span class="math inline">\(SBC_p\)</span> is <em>Bayesian information criterion</em> (<span class="math inline">\(BIC_p\)</span>).</p>
 <p>We search for models that have small values of <span class="math inline">\(AIC_p\)</span>, or <span class="math inline">\(BIC_p\)</span>, where these criteria are given by: <span id="eq-w7_2"><span class="math display">\[
 \begin{align}
@@ -454,7 +976,24 @@ n\ln SSE_{p}
 \]</span> are not too large.</p>
 <p>If <span class="math inline">\(n \ge 8\)</span> the penalty for <span class="math inline">\(BIC_p\)</span> is larger than that for <span class="math inline">\(AIC_p\)</span>; hence the <span class="math inline">\(BIC_p\)</span> criterion tends to favor more <em>parsimonious</em> models.</p>
 <p>A parsimonious model is a model that accomplishes a desired level of explanation or prediction with as few predictor variables as possible.</p>
-<p>We consider the “best” models the ones with the lowest <span class="math inline">\(AIC_p\)</span> or <span class="math inline">\(BIC_p\)</span>.</p>
+<p>We consider the “best” models to be the ones with the lowest <span class="math inline">\(AIC_p\)</span> or <span class="math inline">\(BIC_p\)</span>.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Compare AIC and BIC only for models fit to the same response">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Compare AIC and BIC only for models fit to the same response
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>AIC and BIC are useful for comparing candidate models, but the models should be fit to the same response variable using the same set of observations. They are not meant to compare, for example, a model for <code>mpg</code> against a model for <code>log(mpg)</code>.</p>
+<p>Software may report versions of AIC and BIC that differ by constants from textbook formulas. This is usually not a problem because model selection depends on differences among models fit to the same data.</p>
+</div>
+</div>
+</div>
 </section><section id="criteria-for-prediction" class="level2" data-number="17.6"><h2 data-number="17.6" class="anchored" data-anchor-id="criteria-for-prediction">
 <span class="header-section-number">17.6</span> Criteria for Prediction</h2>
 <p>The <span class="math inline">\(PRESS_p\)</span> (<em>prediction sum of squares</em>) criterion is a measure of how well the use of the fitted values for a subset model can predict the observed responses <span class="math inline">\(y_i\)</span>.</p>
@@ -474,48 +1013,307 @@ PRESS_p = \sum_{i=1}^n\left(y_i - \hat{y}_{i(i)} \right)^2
 \tag{17.2}\]</span></span></p>
 <p>Models with small <span class="math inline">\(PRESS_p\)</span> values are considered good candidate models. The reason is that when the prediction errors <span class="math inline">\(y_i - \hat{y}_{i(i)}\)</span> are small, so are the squared prediction errors and the sum of the squared prediction errors.</p>
 <p>Thus, models with small <span class="math inline">\(PRESS_p\)</span> values fit well in the sense of having small prediction errors.</p>
-<p>Another measure of prediction is the <em>predicted</em> <span class="math inline">\(R^{2}\)</span>. Is is related to PRESS by <span id="eq-w7_8"><span class="math display">\[
+<p>Another measure of prediction is the <em>predicted</em> <span class="math inline">\(R^{2}\)</span>. It is related to PRESS by <span id="eq-w7_8"><span class="math display">\[
 \begin{align}
 \text{pred }R_{p}^{2} &amp; =1-\frac{PRESS_{p}}{SSTO}
 \end{align}
-\tag{17.3}\]</span></span> Large values of pred <span class="math inline">\(R_{p}^{2}\)</span> indicates a model that is “good” at prediction.</p>
-<div id="exm-17_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 17.1</strong></span> We can obtain <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2_a\)</span>, <span class="math inline">\(AIC\)</span>, and <span class="math inline">\(BIC\)</span> using the <code>glance</code> function after fitting a model. Let’s examine the fit to <code>mtcars</code> in <a href="16_Linearity.html#exm-16_2" class="quarto-xref">Example&nbsp;<span>16.2</span></a>.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
-<span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
-<span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
-<span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.892         0.871  2.16      43.0 9.14e-12     5  -66.7  147.  158.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+\tag{17.3}\]</span></span> Large values of pred <span class="math inline">\(R_{p}^{2}\)</span> indicate a model that is “good” at prediction.</p>
+<section id="press-and-leave-one-out-cross-validation" class="level3" data-number="17.6.1"><h3 data-number="17.6.1" class="anchored" data-anchor-id="press-and-leave-one-out-cross-validation">
+<span class="header-section-number">17.6.1</span> PRESS and Leave-One-Out Cross-Validation</h3>
+<p>PRESS is closely connected to <em>leave-one-out cross-validation</em> (LOOCV). In LOOCV, we repeatedly fit the model after leaving out one observation, then predict the observation that was left out. PRESS is the sum of the squared prediction errors from that process.</p>
+<p>For ordinary least squares models, PRESS can be computed without refitting the model <span class="math inline">\(n\)</span> separate times. If <span class="math inline">\(e_i\)</span> is the ordinary residual from the full model and <span class="math inline">\(h_{ii}\)</span> is the leverage value for observation <span class="math inline">\(i\)</span>, then</p>
+<p><span class="math display">\[
+\begin{align*}
+y_i-\hat{y}_{i(i)} = \frac{e_i}{1-h_{ii}}.
+\end{align*}
+\]</span></p>
+<p>So for ordinary least squares,</p>
+<p><span class="math display">\[
+\begin{align*}
+PRESS = \sum_{i=1}^n \left(\frac{e_i}{1-h_{ii}}\right)^2.
+\end{align*}
+\]</span></p>
+<p>This explains why PRESS is a prediction-focused criterion. Each observation is judged by how well the model predicts it when that observation was not used to fit the model.</p>
+<div id="exm-17_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 17.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Comparing candidate models with several criteria
 </div>
 </div>
-<p>To obtain the PRESS statistic, we can use the <code>PRESS</code> function from the <code>MPV</code> library.</p>
+<div class="callout-body-container callout-body">
+<p>We can obtain <span class="math inline">\(R^2\)</span>, <span class="math inline">\(R^2_a\)</span>, AIC, and BIC using the <code><a href="https://generics.r-lib.org/reference/glance.html">glance()</a></code> function after fitting a model. We can also calculate PRESS from the residuals and leverage values of an ordinary least squares model.</p>
+<p>Let’s compare several candidate models for <code>mtcars</code>. These models are not meant to be the final answer; they are a small set of candidate models used to illustrate how the criteria work.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">MPV</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/pkg/MPV/man/PRESS.html">PRESS</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>[1] 171.8721</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">press_stat</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">hatvalues</a></span><span class="op">(</span><span class="va">model</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">sst_mpg</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span><span class="op">)</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">candidate_models</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Full untransformed"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Full transformed"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Smaller transformed"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="st">"Weight and time"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>    <span class="va">mpg</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>    data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_comparison</span> <span class="op">&lt;-</span> <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">imap_dfr</a></span><span class="op">(</span></span>
+<span>  <span class="va">candidate_models</span>,</span>
+<span>  \<span class="op">(</span><span class="va">fit_object</span>, <span class="va">model_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>        model <span class="op">=</span> <span class="va">model_name</span>,</span>
+<span>        PRESS <span class="op">=</span> <span class="fu">press_stat</span><span class="op">(</span><span class="va">fit_object</span><span class="op">)</span>,</span>
+<span>        pred_r_squared <span class="op">=</span> <span class="fl">1</span> <span class="op">-</span> <span class="va">PRESS</span> <span class="op">/</span> <span class="va">sst_mpg</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">model</span>,</span>
+<span>    <span class="va">r.squared</span>,</span>
+<span>    <span class="va">adj.r.squared</span>,</span>
+<span>    <span class="va">AIC</span>,</span>
+<span>    <span class="va">BIC</span>,</span>
+<span>    <span class="va">PRESS</span>,</span>
+<span>    <span class="va">pred_r_squared</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">model_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">AIC</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 23%">
+<col style="width: 11%">
+<col style="width: 16%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 10%">
+<col style="width: 17%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">PRESS</th>
+<th style="text-align: right;">pred_r_squared</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Smaller transformed</td>
+<td style="text-align: right;">0.8910</td>
+<td style="text-align: right;">0.8793</td>
+<td style="text-align: right;">143.8376</td>
+<td style="text-align: right;">151.1663</td>
+<td style="text-align: right;">156.4152</td>
+<td style="text-align: right;">0.8611</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Weight and time</td>
+<td style="text-align: right;">0.8780</td>
+<td style="text-align: right;">0.8696</td>
+<td style="text-align: right;">145.4393</td>
+<td style="text-align: right;">151.3023</td>
+<td style="text-align: right;">167.0926</td>
+<td style="text-align: right;">0.8516</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Full transformed</td>
+<td style="text-align: right;">0.8922</td>
+<td style="text-align: right;">0.8715</td>
+<td style="text-align: right;">147.4688</td>
+<td style="text-align: right;">157.7289</td>
+<td style="text-align: right;">171.8721</td>
+<td style="text-align: right;">0.8474</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Full untransformed</td>
+<td style="text-align: right;">0.8489</td>
+<td style="text-align: right;">0.8199</td>
+<td style="text-align: right;">158.2784</td>
+<td style="text-align: right;">168.5385</td>
+<td style="text-align: right;">262.7954</td>
+<td style="text-align: right;">0.7666</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The table shows that different criteria may prefer different models. A model with more predictors may have a larger <span class="math inline">\(R^2\)</span>, while AIC, BIC, PRESS, or predicted <span class="math inline">\(R^2\)</span> may favor a simpler model if the extra predictors do not improve the model enough.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="What if the criteria disagree?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What if the criteria disagree?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Model-selection criteria often disagree because they value different things. When that happens, use the disagreement as a prompt for deeper comparison.</p>
+<ol type="1">
+<li><p><strong>Start with the goal.</strong> If prediction is the main goal, give more weight to PRESS, predicted <span class="math inline">\(R^2\)</span>, validation error, or cross-validation. If explanation is the main goal, give more weight to interpretability and subject-matter justification.</p></li>
+<li><p><strong>Prefer simpler models when performance is similar.</strong> If two models have nearly identical performance, the more parsimonious model is usually easier to explain, teach, and defend.</p></li>
+<li><p><strong>Look for unstable variables.</strong> If a predictor only appears in the model favored by one criterion, ask whether it has a meaningful interpretation or whether it is mostly taking advantage of this sample.</p></li>
+<li><p><strong>Check diagnostics.</strong> A model with attractive criteria can still violate assumptions. Residual plots, influential observations, and multicollinearity still matter.</p></li>
+<li><p><strong>Avoid automatic selection.</strong> Criteria help narrow the search. They should not replace thinking about the research question, data quality, and consequences of model complexity.</p></li>
+</ol>
+</div>
+</div>
+</div>
+</section></section><section id="recap" class="level2" data-number="17.7"><h2 data-number="17.7" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">17.7</span> Recap</h2>
+<p>In this chapter, we introduced several criteria for comparing candidate regression models.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Subset model</strong></td>
+<td>A model formed by including only some of the available predictors.</td>
+</tr>
+<tr class="even">
+<td><strong>Number of possible models</strong></td>
+<td>With <span class="math inline">\(p-1\)</span> possible predictors, there are <span class="math inline">\(2^{p-1}\)</span> possible subset models.</td>
+</tr>
+<tr class="odd">
+<td><strong>Exhaustive subset selection</strong></td>
+<td>Fitting every possible subset model from a chosen predictor pool. This is feasible only when the number of candidate predictors is small.</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(R_p^2\)</span></strong></td>
+<td>Measures in-sample fit for a model with <span class="math inline">\(p\)</span> parameters; larger is better, but it never decreases when predictors are added.</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="math inline">\(R_{a,p}^2\)</span></strong></td>
+<td>Adjusted <span class="math inline">\(R^2\)</span>; penalizes unnecessary predictors through the degrees of freedom.</td>
+</tr>
+<tr class="even">
+<td><strong>AIC</strong></td>
+<td>A model-selection criterion that balances fit and complexity; smaller is better.</td>
+</tr>
+<tr class="odd">
+<td><strong>BIC/SBC</strong></td>
+<td>Similar to AIC but usually applies a stronger penalty for complexity; smaller is better.</td>
+</tr>
+<tr class="even">
+<td><strong>Parsimonious model</strong></td>
+<td>A model that achieves the goal with relatively few predictors.</td>
+</tr>
+<tr class="odd">
+<td><strong>PRESS</strong></td>
+<td>A leave-one-out prediction error criterion; smaller values indicate better predictive performance.</td>
+</tr>
+<tr class="even">
+<td><strong>LOOCV</strong></td>
+<td>Leave-one-out cross-validation; fit the model leaving out one observation, then predict the omitted observation.</td>
+</tr>
+<tr class="odd">
+<td><strong>Predicted <span class="math inline">\(R^2\)</span></strong></td>
+<td>An <span class="math inline">\(R^2\)</span>-style measure based on PRESS; larger values indicate better prediction.</td>
+</tr>
+<tr class="even">
+<td><strong>Overfitting</strong></td>
+<td>A model fitting random or sample-specific noise rather than useful signal.</td>
+</tr>
+<tr class="odd">
+<td><strong>Criterion disagreement</strong></td>
+<td>Different criteria may select different models because they reward fit and penalize complexity differently.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="17.8"><h2 data-number="17.8" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">17.8</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why are there <span class="math inline">\(2^{p-1}\)</span> possible subset models when there are <span class="math inline">\(p-1\)</span> candidate predictors?</p></li>
+<li><p>Why is <span class="math inline">\(R^2\)</span> risky to use as the only model-selection criterion?</p></li>
+<li><p>What problem is adjusted <span class="math inline">\(R^2\)</span> trying to address?</p></li>
+<li><p>For AIC and BIC, do we prefer larger or smaller values? Why?</p></li>
+<li><p>Why does BIC often favor simpler models than AIC?</p></li>
+<li><p>What does it mean for a model to be parsimonious?</p></li>
+<li><p>How is PRESS different from SSE?</p></li>
+<li><p>Why is predicted <span class="math inline">\(R^2\)</span> useful when the goal is prediction?</p></li>
+<li><p>If one model has the best AIC and another has the best BIC, does that automatically mean one of them is wrong? Explain.</p></li>
+<li><p>Why should AIC and BIC usually be compared only among models fit to the same response using the same observations?</p></li>
+<li><p>Why does exhaustive subset selection become difficult as the number of candidate predictors grows?</p></li>
+<li><p>How is PRESS connected to leave-one-out cross-validation?</p></li>
+<li><p>Why can adding random noise predictors increase <span class="math inline">\(R^2\)</span> without improving the model?</p></li>
+<li><p>If several criteria disagree, why is it usually better to compare a small set of candidate models than to automatically choose the winner from one criterion?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Each predictor has two choices.</strong> Every candidate predictor can either be included or excluded. With <span class="math inline">\(p-1\)</span> predictors, this gives <span class="math inline">\(2^{p-1}\)</span> possible combinations.</p></li>
+<li><p><strong>It always rewards adding predictors.</strong> <span class="math inline">\(R^2\)</span> cannot decrease when predictors are added, even if the new predictors add little useful information. This can push us toward models that are unnecessarily complex.</p></li>
+<li><p><strong>It accounts for model size.</strong> Adjusted <span class="math inline">\(R^2\)</span> penalizes models for using more parameters. It tries to distinguish meaningful improvement from improvement that happens merely because more predictors were added.</p></li>
+<li><p><strong>Smaller values are preferred.</strong> AIC and BIC both combine a measure of lack of fit with a penalty for complexity. A smaller value indicates a better tradeoff between fit and model size.</p></li>
+<li><p><strong>BIC has a stronger penalty when <span class="math inline">\(n \ge 8\)</span>.</strong> AIC uses a penalty of <span class="math inline">\(2p\)</span>, while BIC uses <span class="math inline">\((\ln n)p\)</span>. Since <span class="math inline">\(\ln n\)</span> is larger than 2 for sample sizes of at least 8, BIC more strongly discourages extra predictors.</p></li>
+<li><p><strong>It is simple but effective.</strong> A parsimonious model accomplishes the modeling goal with as few predictors as reasonably possible.</p></li>
+<li><p><strong>PRESS measures leave-one-out prediction error.</strong> SSE uses residuals from a model fit to all observations. PRESS predicts each observation from a model fit without that observation, so it more directly reflects prediction performance.</p></li>
+<li><p><strong>It puts prediction performance on an <span class="math inline">\(R^2\)</span>-like scale.</strong> Predicted <span class="math inline">\(R^2\)</span> uses PRESS to summarize how well the model predicts omitted observations. Larger values suggest better predictive performance.</p></li>
+<li><p><strong>No.</strong> Different criteria emphasize different tradeoffs. AIC may prefer a somewhat larger model, while BIC may prefer a simpler one. This disagreement is a reason to examine the models carefully, not a sign that one criterion is invalid.</p></li>
+<li><p><strong>The criteria are relative comparisons.</strong> AIC and BIC are designed to compare candidate models fit to the same data and response. If the response or observations change, the numerical values are no longer directly comparable.</p></li>
+<li><p><strong>The number of models grows exponentially.</strong> Each predictor can be included or excluded, so adding one more candidate predictor doubles the number of possible subset models.</p></li>
+<li><p><strong>PRESS sums leave-one-out squared prediction errors.</strong> Each observation is predicted by a model that was fit without that observation. The squared errors from those omitted-observation predictions are added to form PRESS.</p></li>
+<li><p><strong>Ordinary least squares can chase sample noise.</strong> Adding predictors gives the model more flexibility, so in-sample SSE can decrease and <span class="math inline">\(R^2\)</span> can increase even when the new predictors have no real meaning. Prediction-focused criteria may reveal that the added complexity does not generalize.</p></li>
+<li><p><strong>Criteria are tools, not commandments.</strong> AIC, BIC, adjusted <span class="math inline">\(R^2\)</span>, and PRESS emphasize different tradeoffs. Comparing a small set of candidate models lets us consider prediction, interpretation, diagnostics, and subject-matter relevance together.</p></li>
+</ol>
 </div>
 </div>
 </div>

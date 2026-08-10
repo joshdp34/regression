@@ -1,4 +1,4 @@
-# The Regression Model in Matrix Terms 
+# The Regression Model in Matrix Terms
 
 > "The essence of mathematics is not to make simple things complicated, but to make complicated things simple." - S. Gudder
 
@@ -66,7 +66,7 @@ We define the vector of random errors as
 
 ### Vector of Coefficients
 
-We define the vector of Coefficients as 
+We define the vector of coefficients as
 \begin{align*}
 \underset{{p\times1}}{\boldsymbol{\beta}}=\left[\begin{array}{c}
 \beta_{0}\\
@@ -92,6 +92,47 @@ We define the matrix of the predictor variables as
 \end{align*}
 
 Note that the first column of $\bf{X}$ is a vector of ones. This column will represent the coefficient of the $y$-intercept in the model. 
+
+::: {.example title="Example 11.1: Building the response vector and design matrix in R"}
+
+In chapter 10, we fit the multiple regression model
+
+$$
+Volume_i=\beta_0+\beta_1Girth_i+\beta_2Height_i+\varepsilon_i
+$$
+
+using the `trees` dataset. In matrix notation, this model uses a response vector ${\bf Y}$ and a design matrix ${\bf X}$.
+
+```{r}
+trees_matrix_fit <- lm(Volume ~ Girth + Height, data = trees)
+
+Y_trees <- as.matrix(trees["Volume"])
+X_trees <- model.matrix(trees_matrix_fit)
+b_trees <- as.matrix(coef(trees_matrix_fit))
+
+matrix_dimensions <- tibble::tibble(
+  object = c("Y_trees", "X_trees", "b_trees"),
+  role = c("response vector", "design matrix", "estimated coefficient vector"),
+  dimension = c(
+    paste(dim(Y_trees), collapse = " x "),
+    paste(dim(X_trees), collapse = " x "),
+    paste(dim(b_trees), collapse = " x ")
+  )
+)
+
+knitr::kable(matrix_dimensions)
+```
+
+The design matrix begins with an intercept column of ones.
+
+```{r}
+head(X_trees) |>
+  knitr::kable(digits = 3)
+```
+
+The column of ones is what allows the matrix multiplication ${\bf X}{\boldsymbol\beta}$ to include the intercept term $\beta_0$.
+
+:::
 
 
 
@@ -148,6 +189,29 @@ y_{n}
 \beta_{0}+\beta_{1}x_{n1}+\beta_2x_{n2}+\cdots+\beta_{p-1}x_{n,p-1}+\varepsilon_{n}
 \end{array}\right]
 \end{align*}
+
+::: {.callout-note collapse="false" title="The dimension check tells the story"}
+
+The matrix model
+
+$$
+{\bf Y}={\bf X}{\boldsymbol\beta}+{\boldsymbol\varepsilon}
+$$
+
+has compatible dimensions:
+
+$$
+\underset{n\times1}{\bf Y}
+=
+\underset{n\times p}{\bf X}
+\underset{p\times1}{\boldsymbol\beta}
++
+\underset{n\times1}{\boldsymbol\varepsilon}.
+$$
+
+The product ${\bf X}{\boldsymbol\beta}$ is an $n\times1$ vector, so it has one model mean for each observation.
+
+:::
 
 
 
@@ -206,6 +270,27 @@ is a vector of zeros (${\bf 0}$) and the covariance matrix is
 & =\sigma^{2}{\bf I}.
 \end{align*}
 
+::: {.callout-note collapse="false" title="Scalar and matrix assumptions side-by-side"}
+
+The matrix notation is not adding new regression assumptions. It is rewriting the familiar scalar assumptions in a compact form.
+
+| Scalar statement | Matrix statement | Meaning |
+|---|---|---|
+| $E(\varepsilon_i)=0$ | $E({\boldsymbol\varepsilon})={\bf 0}$ | The errors average to 0. |
+| $Var(\varepsilon_i)=\sigma^2$ | Diagonal entries of $Cov({\boldsymbol\varepsilon})$ are $\sigma^2$ | Each error has the same variance. |
+| $Cov(\varepsilon_i,\varepsilon_j)=0$ for $i\ne j$ | Off-diagonal entries of $Cov({\boldsymbol\varepsilon})$ are 0 | Different errors are uncorrelated. |
+| $\varepsilon_i$ are normally distributed | ${\boldsymbol\varepsilon}\sim N_n({\bf 0},\sigma^2{\bf I})$ | The whole error vector follows a multivariate normal distribution. |
+
+Because ${\bf Y}={\bf X}{\boldsymbol\beta}+{\boldsymbol\varepsilon}$ and ${\bf X}$ is treated as fixed, these assumptions imply
+
+$$
+E({\bf Y})={\bf X}{\boldsymbol\beta}
+\qquad\text{and}\qquad
+Cov({\bf Y})=\sigma^2{\bf I}.
+$$
+
+:::
+
 
 
 
@@ -224,6 +309,27 @@ Note that
 \begin{align*}
 \textbf{E}\left(\textbf{Y}\right) & =\textbf{X}\boldsymbol{\beta}
 \end{align*}
+
+::: {.example title="Example 11.2: The fitted mean vector"}
+
+In practice, we estimate ${\boldsymbol\beta}$ with ${\bf b}$. Then ${\bf X}{\bf b}$ gives the fitted values.
+
+```{r}
+fitted_by_matrix <- X_trees %*% b_trees
+
+fitted_mean_compare <- tibble::tibble(
+  observation = 1:6,
+  matrix_fitted = as.numeric(fitted_by_matrix[1:6, 1]),
+  lm_fitted = as.numeric(fitted(trees_matrix_fit)[1:6]),
+  observed_volume = trees$Volume[1:6]
+)
+
+knitr::kable(fitted_mean_compare, digits = 4)
+```
+
+The matrix product ${\bf X}{\bf b}$ gives the same fitted values as `lm()`. The observed responses do not usually fall exactly on these fitted values because the residuals are not usually zero.
+
+:::
 
 
 
@@ -309,11 +415,88 @@ $$
 \end{align}
 $${#eq-w4_21}
 
+::: {.example title="Example 11.3: Computing the coefficient vector with matrices"}
+
+For the `trees` model, the coefficient vector can be calculated directly from
+
+$$
+{\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}.
+$$
+
+```{r}
+b_by_matrix <- solve(t(X_trees) %*% X_trees) %*% t(X_trees) %*% Y_trees
+
+coefficient_comparison <- tibble::tibble(
+  term = rownames(b_by_matrix),
+  matrix_formula = as.numeric(b_by_matrix),
+  lm_estimate = as.numeric(coef(trees_matrix_fit)),
+  difference = as.numeric(b_by_matrix) - as.numeric(coef(trees_matrix_fit))
+)
+
+knitr::kable(coefficient_comparison, digits = 10)
+```
+
+The matrix formula and `lm()` give the same coefficient estimates. The matrix form is not a different method; it is a compact way to write ordinary least squares for any number of predictors.
+
+:::
 
 
 
 
 
+
+
+::: {.example title="Example 11.4: A singular design matrix from a redundant predictor"}
+
+The formula
+
+$$
+{\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}
+$$
+
+requires ${\bf X}'{\bf X}$ to have an inverse. If one predictor is a perfect copy or exact multiple of another predictor, the columns of ${\bf X}$ are redundant and ${\bf X}'{\bf X}$ is singular.
+
+For example, create a new predictor that is exactly twice `Girth`.
+
+```{r}
+trees_redundant <- transform(trees, Girth_copy = 2 * Girth)
+
+X_singular <- model.matrix(Volume ~ Girth + Girth_copy + Height, data = trees_redundant)
+XtX_singular <- t(X_singular) %*% X_singular
+
+inverse_message <- tryCatch(
+  {
+    solve(XtX_singular)
+    "Inverse exists"
+  },
+  error = function(e) "No inverse: X'X is singular"
+)
+
+singular_summary <- tibble::tibble(
+  quantity = c("columns in X", "rank of X", "full column rank?", "inverse check"),
+  result = c(
+    as.character(ncol(X_singular)),
+    as.character(qr(X_singular)$rank),
+    as.character(qr(X_singular)$rank == ncol(X_singular)),
+    inverse_message
+  )
+)
+
+knitr::kable(singular_summary)
+```
+
+The design matrix has more columns than its rank because `Girth_copy` contains no new information beyond `Girth`. This is why the inverse in the least-squares formula does not exist.
+
+```{r}
+singular_fit <- lm(Volume ~ Girth + Girth_copy + Height, data = trees_redundant)
+
+broom::tidy(singular_fit) |>
+  knitr::kable(digits = 4)
+```
+
+R can still detect the redundancy and fit the estimable part of the model, but the matrix inverse formula fails because the coefficient vector is not uniquely determined.
+
+:::
 
 ### Fitted Values
 
@@ -347,8 +530,85 @@ $$
 \end{align}
 $${#eq-w4_25}
 
+::: {.example title="Example 11.5: The hat matrix maps observed responses to fitted values"}
+
+The hat matrix is called the "hat" matrix because it puts the hat on ${\bf Y}$:
+
+$$
+\hat{\bf Y}={\bf H}{\bf Y}.
+$$
+
+```{r}
+H_trees <- X_trees %*% solve(t(X_trees) %*% X_trees) %*% t(X_trees)
+fitted_by_hat <- H_trees %*% Y_trees
+
+hat_comparison <- tibble::tibble(
+  observation = 1:6,
+  hat_matrix_fitted = as.numeric(fitted_by_hat[1:6, 1]),
+  lm_fitted = as.numeric(fitted(trees_matrix_fit)[1:6]),
+  difference = as.numeric(fitted_by_hat[1:6, 1]) - as.numeric(fitted(trees_matrix_fit)[1:6])
+)
+
+knitr::kable(hat_comparison, digits = 10)
+```
+
+The hat matrix is an $n\times n$ matrix. For the `trees` data, it is `r nrow(H_trees)` by `r ncol(H_trees)`, because it transforms the whole response vector into the whole fitted-value vector.
+
+:::
+
+::: {.callout-note collapse="false" title="The diagonal of the hat matrix"}
+
+The diagonal entries of ${\bf H}$ are called *leverages*. Leverage measures how unusual an observation's predictor values are compared with the rest of the data.
+
+This chapter focuses on the matrix form of fitted values. Later, leverage will become important when we study influential observations.
+
+:::
 
 
+
+
+::: {.example title="Example 11.6: Fitted values as a projection"}
+
+Geometrically, least squares projects the observed response vector ${\bf Y}$ onto the column space of ${\bf X}$. The fitted vector $\hat{\bf Y}$ is the point in that column space closest to ${\bf Y}$, and the residual vector ${\bf e}={\bf Y}-\hat{\bf Y}$ is perpendicular to that space.
+
+The picture below is a two-dimensional cartoon of the idea. In a real regression problem, the vectors may live in a much higher-dimensional observation space.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 4
+
+plot(
+  NA,
+  xlim = c(-0.3, 4),
+  ylim = c(-0.4, 2.8),
+  xlab = "",
+  ylab = "",
+  axes = FALSE,
+  asp = 1,
+  main = "Least squares as projection"
+)
+
+abline(h = 0, col = "lightblue", lwd = 8)
+text(3.45, -0.25, "Column space of X", col = "steelblue")
+
+arrows(0, 0, 3, 0, length = 0.1, lwd = 2, col = "steelblue")
+arrows(0, 0, 3, 2, length = 0.1, lwd = 2, col = "darkgreen")
+arrows(3, 0, 3, 2, length = 0.1, lwd = 2, col = "firebrick")
+
+points(c(3, 3), c(0, 2), pch = 19, col = c("steelblue", "darkgreen"))
+
+text(3.2, 0.12, expression(hat(bold(Y))), col = "steelblue")
+text(2.35, 2.15, expression(bold(Y)), col = "darkgreen")
+text(3.25, 1, expression(bold(e) == bold(Y) - hat(bold(Y))), col = "firebrick")
+text(1.3, 0.25, expression(hat(bold(Y)) == bold(H) * bold(Y)), col = "steelblue")
+
+segments(2.85, 0, 2.85, 0.15, col = "gray40")
+segments(2.85, 0.15, 3, 0.15, col = "gray40")
+```
+
+This visual explains why the normal equations give ${\bf X}'{\bf e}={\bf 0}$: after projection, the leftover residual vector is orthogonal to every direction contained in the column space of ${\bf X}$.
+
+:::
 
 ### Residuals
 
@@ -368,6 +628,32 @@ $$
 & =\left({\bf I}-{\bf H}\right){\bf Y}
 \end{align}
 $${#eq-w4_27}
+
+::: {.example title="Example 11.7: Least-squares residuals are orthogonal to the design matrix"}
+
+The normal equations imply
+
+$$
+{\bf X}'{\bf e}={\bf 0}.
+$$
+
+This means the least-squares residual vector is orthogonal to every column of the design matrix, including the intercept column.
+
+```{r}
+e_trees <- Y_trees - fitted_by_hat
+orthogonality_check <- t(X_trees) %*% e_trees
+
+orthogonality_table <- tibble::tibble(
+  column_of_X = rownames(orthogonality_check),
+  X_prime_e = as.numeric(orthogonality_check)
+)
+
+knitr::kable(orthogonality_table, digits = 10)
+```
+
+The values are essentially zero, up to tiny numerical rounding error. This is one of the most important geometric facts about least squares: the residual vector is perpendicular to the space spanned by the predictor columns.
+
+:::
 
 
 
@@ -408,6 +694,137 @@ Here the degrees of freedom are now $n-p$ since there are $p$ parameters
 $\left(\beta_{0},\beta_{1},\ldots,\beta_{p-1}\right)$ that need to
 be estimated first in order to get $SSE$. As before, MSE is an estimator
 for $\sigma^{2}$.
+
+::: {.example title="Example 11.8: Computing SSE and MSE with matrices"}
+
+Because ${\bf e}$ is the residual vector, the error sum of squares can be written as
+
+$$
+SSE={\bf e}'{\bf e}.
+$$
+
+```{r}
+sse_matrix <- as.numeric(t(e_trees) %*% e_trees)
+n_trees <- nrow(X_trees)
+p_trees <- ncol(X_trees)
+mse_matrix <- sse_matrix / (n_trees - p_trees)
+
+mse_comparison <- tibble::tibble(
+  quantity = c("SSE from e'e", "MSE from SSE / (n - p)", "MSE from lm summary"),
+  value = c(
+    sse_matrix,
+    mse_matrix,
+    summary(trees_matrix_fit)$sigma^2
+  )
+)
+
+knitr::kable(mse_comparison, digits = 6)
+```
+
+For this model, $n=`r n_trees`$ and $p=`r p_trees`$, so the error degrees of freedom are $n-p=`r n_trees - p_trees`$.
+
+:::
+
+## Recap
+
+This chapter rewrote the multiple regression model using matrix notation.
+
+| Idea | Meaning |
+|---|---|
+| **Response vector** | ${\bf Y}$ is the $n\times1$ vector of observed responses. |
+| **Error vector** | ${\boldsymbol\varepsilon}$ is the $n\times1$ vector of random errors. |
+| **Coefficient vector** | ${\boldsymbol\beta}$ is the $p\times1$ vector of regression parameters. |
+| **Design matrix** | ${\bf X}$ is the $n\times p$ matrix containing the intercept column and predictor columns. |
+| **Matrix regression model** | ${\bf Y}={\bf X}{\boldsymbol\beta}+{\boldsymbol\varepsilon}$. |
+| **Normal error model** | ${\boldsymbol\varepsilon}\sim N_n({\bf 0},\sigma^2{\bf I})$. |
+| **Matrix assumptions** | The scalar error assumptions can be summarized by $E({\boldsymbol\varepsilon})={\bf 0}$ and $Cov({\boldsymbol\varepsilon})=\sigma^2{\bf I}$. |
+| **Least-squares criterion** | $Q=({\bf Y}-{\bf X}{\bf b})'({\bf Y}-{\bf X}{\bf b})$. |
+| **Normal equations** | ${\bf X}'{\bf X}{\bf b}={\bf X}'{\bf Y}$. |
+| **Least-squares estimator** | ${\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}$, when the inverse exists. |
+| **Singular design** | If a predictor is an exact linear combination of other predictors, ${\bf X}'{\bf X}$ is singular and the inverse does not exist. |
+| **Fitted values** | $\hat{\bf Y}={\bf X}{\bf b}$. |
+| **Hat matrix** | ${\bf H}={\bf X}({\bf X}'{\bf X})^{-1}{\bf X}'$, so $\hat{\bf Y}={\bf H}{\bf Y}$. |
+| **Projection view** | Least squares projects ${\bf Y}$ onto the column space of ${\bf X}$ to produce $\hat{\bf Y}$. |
+| **Residual vector** | ${\bf e}={\bf Y}-\hat{\bf Y}=({\bf I}-{\bf H}){\bf Y}$. |
+| **MSE** | $MSE=SSE/(n-p)$ estimates $\sigma^2$. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. What are the dimensions of ${\bf Y}$ in the matrix regression model?
+
+2. Why does the design matrix ${\bf X}$ usually include a first column of ones?
+
+3. If a model has an intercept and two predictors, how many columns does ${\bf X}$ have?
+
+4. In the matrix model ${\bf Y}={\bf X}{\boldsymbol\beta}+{\boldsymbol\varepsilon}$, what does ${\bf X}{\boldsymbol\beta}$ represent?
+
+5. What does the assumption ${\boldsymbol\varepsilon}\sim N_n({\bf 0},\sigma^2{\bf I})$ say about the errors?
+
+6. How do the scalar assumptions $E(\varepsilon_i)=0$, $Var(\varepsilon_i)=\sigma^2$, and $Cov(\varepsilon_i,\varepsilon_j)=0$ appear in matrix notation?
+
+7. Why is $Q=({\bf Y}-{\bf X}{\bf b})'({\bf Y}-{\bf X}{\bf b})$ the matrix version of the sum of squared residuals?
+
+8. What are the normal equations in matrix form?
+
+9. Why must ${\bf X}'{\bf X}$ be invertible for the formula ${\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}$ to work?
+
+10. Give an example of how a redundant predictor can make ${\bf X}'{\bf X}$ singular.
+
+11. What is the hat matrix, and why is it called the hat matrix?
+
+12. What does it mean to say that least squares projects ${\bf Y}$ onto the column space of ${\bf X}$?
+
+13. What does the residual vector ${\bf e}$ measure?
+
+14. What does ${\bf X}'{\bf e}={\bf 0}$ mean conceptually?
+
+15. Why is the denominator of MSE equal to $n-p$ in multiple regression?
+
+16. What information is contained on the diagonal of the hat matrix?
+
+17. How does matrix notation help when moving from simple regression to multiple regression?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **$n\times1$.** The response vector has one row for each observation and one column.
+
+2. **To include the intercept.** The first column of ones is multiplied by $\beta_0$, which adds the same intercept term to every observation's model mean.
+
+3. **Three columns.** There is one intercept column plus one column for each of the two predictors, so $p=3$.
+
+4. **The model mean vector.** The product ${\bf X}{\boldsymbol\beta}$ contains the expected response values implied by the regression model.
+
+5. **Zero mean, common variance, no covariance.** The errors have mean 0, common variance $\sigma^2$, and covariance matrix $\sigma^2{\bf I}$, which represents no covariance between different errors.
+
+6. **They become vector and matrix statements.** The assumptions become $E({\boldsymbol\varepsilon})={\bf 0}$ and $Cov({\boldsymbol\varepsilon})=\sigma^2{\bf I}$. The zero vector gives the mean-zero assumption; the diagonal $\sigma^2$ entries give common variance; the off-diagonal zeros give zero covariance between different errors.
+
+7. **It multiplies residuals by themselves and sums.** The vector ${\bf Y}-{\bf X}{\bf b}$ contains residuals. Multiplying its transpose by itself gives the sum of squared residuals.
+
+8. **${\bf X}'{\bf X}{\bf b}={\bf X}'{\bf Y}$.** These equations come from setting the derivative of the least-squares criterion equal to zero.
+
+9. **The inverse is needed.** The formula solves the normal equations by multiplying by $({\bf X}'{\bf X})^{-1}$. If that inverse does not exist, the formula cannot produce a unique coefficient vector.
+
+10. **Exact redundancy causes singularity.** If one predictor is exactly twice another predictor, or if a copied predictor is included twice, then one column of ${\bf X}$ is an exact linear combination of another. The model cannot uniquely separate those effects.
+
+11. **It maps observed values to fitted values.** The hat matrix is ${\bf H}={\bf X}({\bf X}'{\bf X})^{-1}{\bf X}'$. It is called the hat matrix because $\hat{\bf Y}={\bf H}{\bf Y}$.
+
+12. **Closest fitted vector.** The column space of ${\bf X}$ contains all possible fitted vectors ${\bf X}{\bf b}$. Least squares chooses the fitted vector in that space closest to the observed response vector ${\bf Y}$.
+
+13. **Observed minus fitted.** The residual vector contains the differences between observed responses and fitted values.
+
+14. **Residuals are orthogonal to the predictor columns.** The residual vector has no remaining linear association with any column of the design matrix under the least-squares fit.
+
+15. **Because $p$ parameters were estimated.** The model uses $p$ degrees of freedom to estimate the coefficients, leaving $n-p$ error degrees of freedom.
+
+16. **Leverage.** The diagonal entries of the hat matrix measure leverage, or how unusual each observation's predictor values are.
+
+17. **It scales the notation.** Matrix notation lets us write one formula for any number of predictors instead of writing separate equations for every coefficient.
+
+:::
 
 
 

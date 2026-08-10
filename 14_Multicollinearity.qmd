@@ -37,6 +37,22 @@ the independent variables are correlated, we say that
 
 The ability to obtain a good fit or to make inferences on the *mean response* or to *predict* the response are not affected by multicollinearity. However, inferences for the *coefficients*  (the $\beta$s) and for the model *variance* ($\sigma^2$) are affected by large correlation among the predictor variables.
 
+::: {.callout-note collapse="false" title="What multicollinearity does and does not do"}
+
+Multicollinearity is mainly a problem for interpreting individual regression coefficients.
+
+| Goal | Is multicollinearity a major problem? | Why? |
+|---|---|---|
+| Predicting new responses | Usually no | Correlated predictors can still combine to produce good predictions. |
+| Estimating the mean response | Usually no | The fitted mean may still be estimated well in regions supported by the data. |
+| Testing individual coefficients | Yes | Standard errors can become inflated, making individual predictors look nonsignificant. |
+| Interpreting partial slopes | Yes | Holding one predictor fixed while changing another may be unrealistic when predictors move together. |
+| Deciding which variable is "important" | Yes | Correlated predictors share information, so their unique contributions are hard to separate. |
+
+The awkward part is that a model can predict well while still being difficult to interpret.
+
+:::
+
 
 
 
@@ -76,7 +92,7 @@ use of the *variance  inflation factors* (VIF).
 
 Each predictor variable
 will have a VIF. Suppose we are interested in the VIF for $x_{1}$.
-We start by regression $x_{1}$ on all the other predictor variables.
+We start by regressing $x_{1}$ on all the other predictor variables.
 Thus, we fit the model
 $$
 \begin{align*}
@@ -114,10 +130,33 @@ A rule of thumb is that a VIF greater than 10 is evidence that multicollinearity
 is high when that variable is added to the model. Some use a cutoff
 of 5 instead of 10.
 
+::: {.example title="Worked example: Interpreting VIF values"}
 
-::: {#exm-14_1}
+The VIF for predictor $x_i$ is
 
-## `UN98` data
+$$
+VIF_i=\frac{1}{1-R_i^2},
+$$
+
+where $R_i^2$ comes from regressing $x_i$ on the other predictors. As $R_i^2$ gets close to 1, the VIF grows quickly.
+
+```{r warning=FALSE, message=FALSE}
+vif_interpretation <- tibble::tibble(
+  r_squared_from_other_predictors = c(0, 0.50, 0.80, 0.90, 0.95, 0.99),
+  vif = 1 / (1 - r_squared_from_other_predictors)
+)
+
+knitr::kable(vif_interpretation, digits = 2)
+```
+
+A VIF of 10 means the estimated variance of a coefficient is 10 times as large as it would be if that predictor were uncorrelated with the other predictors, all else equal. Since standard errors are square roots of variances, this corresponds to a standard error about $\sqrt{10}\approx 3.16$ times as large.
+
+:::
+
+
+::: {#exm-14_1 .example title="UN98 data and VIF diagnostics"}
+
+The `UN98` data will be used to illustrate VIF diagnostics.
 
 
 One approach to seeing which variables are correlated with each other is to remove a variable with a large VIF and see which variables had the largest change in their VIF.
@@ -125,88 +164,124 @@ One approach to seeing which variables are correlated with each other is to remo
 
 We will illustrate this process with the \texttt{UN98} dataset from the \texttt{car} library. We will not use the \texttt{region} and \texttt{GDPperCapita} variables for this example.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
 library(car)
 library(GGally)
 
-#explore correlation and scatterplots between pairs of variables
+vif_table <- function(vif_values) {
+  tibble(variable = names(vif_values), VIF = as.numeric(vif_values))
+}
+
+# Explore correlation and scatterplots between pairs of variables
 UN98 |> 
   select(-region, -GDPperCapita) |> 
   ggpairs()
 
-#prepare data
-dat_recipe = recipe(infantMortality ~ ., 
-                    data = UN98) |> 
+# Prepare data
+dat_recipe <- recipe(
+  infantMortality ~ .,
+  data = UN98
+) |>
   step_rm(region, GDPperCapita)
 
-#setup model
-lm_model = linear_reg() |>
+# Set up model
+lm_model <- linear_reg() |>
   set_engine("lm")
 
-#setup the workflow
-lm_workflow = workflow() |>
+# Set up the workflow
+lm_workflow <- workflow() |>
   add_recipe(dat_recipe) |> 
   add_model(lm_model)
 
-#fit the model
-lm_fit = lm_workflow |>
+# Fit the model
+lm_fit <- lm_workflow |>
   fit(data = UN98)
 
-lm_fit |> tidy()
+lm_fit |>
+  tidy() |>
+  knitr::kable(digits = 4)
 
-lm_fit |> glance()
+lm_fit |>
+  glance() |>
+  knitr::kable(digits = 4)
 
-
-#get the VIFs
-lm_fit |> extract_fit_engine() |> vif()
+# Get the VIFs
+lm_fit |>
+  extract_fit_engine() |>
+  vif() |>
+  vif_table() |>
+  knitr::kable(digits = 3)
 
 ```
 
 We see that there are a number of variables with high VIF. The highest is `lifeFemale`. If we remove this variable, what happens to the VIFs of the other variables?
 
-```{r message=FALSE, warning=F}
-#take out the lifeFemale variable
-lm_workflow2= lm_workflow |> 
+```{r message=FALSE, warning=FALSE}
+# Take out the lifeFemale variable
+lm_workflow2 <- lm_workflow |>
   update_recipe(
     dat_recipe |> step_rm(lifeFemale)
   )
 
-#fit the model
-lm_fit2 = lm_workflow2 |>
+# Fit the model
+lm_fit2 <- lm_workflow2 |>
   fit(data = UN98)
 
-#get the VIFs
-lm_fit2 |> extract_fit_engine() |> vif()
+# Get the VIFs
+lm_fit2 |>
+  extract_fit_engine() |>
+  vif() |>
+  vif_table() |>
+  knitr::kable(digits = 3)
 
 ```
 
-We see that removing `lifeFemale` leads to a couple of the variable to have a substantial decrease in their VIfs. The variables `tfr` and `lifeMale` both decrease by more than five points when `lifeFemale` is removed. From the scatterplot matrix above, we see that `tfr` and `lifeMale` have the highest correlation with `lifeFemale`. If we are deciding whether to keep `lifeFemale` in the model, then we can do so with a practical reason. Are any of the variables that are highly correlated with `lifeFemale` easier to obtain? If so, we should keep that variable and remove the other. 
+We see that removing `lifeFemale` leads to a couple of the variables having a substantial decrease in their VIFs. The variables `tfr` and `lifeMale` both decrease by more than five points when `lifeFemale` is removed. From the scatterplot matrix above, we see that `tfr` and `lifeMale` have the highest correlation with `lifeFemale`. If we are deciding whether to keep `lifeFemale` in the model, then we can do so with a practical reason. Are any of the variables that are highly correlated with `lifeFemale` easier to obtain? If so, we should keep that variable and remove the other.
 
 Let's now look at the next highest VIF: `educationFemale`. 
 
-```{r message=FALSE, warning=F}
-#take out the educationFemale variable
-lm_workflow3= lm_workflow |> 
+```{r message=FALSE, warning=FALSE}
+# Take out the educationFemale variable
+lm_workflow3 <- lm_workflow |>
   update_recipe(
     dat_recipe |> step_rm(educationFemale)
   )
 
-#fit the model
-lm_fit3 = lm_workflow3 |>
+# Fit the model
+lm_fit3 <- lm_workflow3 |>
   fit(data = UN98)
 
-#get the VIFs
-lm_fit3 |> extract_fit_engine() |> vif()
+# Get the VIFs
+lm_fit3 |>
+  extract_fit_engine() |>
+  vif() |>
+  vif_table() |>
+  knitr::kable(digits = 3)
 
 ```
 
 We see that `educationMale` has dropped substantially when `educationFemale` was removed. Again, deciding which variable to remove from the model is a practical one.
 
-We can continue this process of identifying which variables are highly correlate with other variables. 
+We can continue this process of identifying which variables are highly correlated with other variables.
 
 
+
+:::
+
+::: {.callout-tip collapse="false" title="What should we do when VIFs are high?"}
+
+A high VIF is a diagnostic, not an automatic instruction to delete a variable. The next step depends on the purpose of the model.
+
+| Goal | Reasonable response | Caution |
+|---|---|---|
+| **Predict the response** | You may keep the correlated predictors if prediction accuracy is good. | The model may still be hard to interpret. |
+| **Interpret individual coefficients** | Consider removing one of the redundant predictors, combining predictors, or using subject-matter judgment to keep the more meaningful variable. | Do not remove variables only because their p-values are large; multicollinearity may be inflating those p-values. |
+| **Reduce dimension** | Use a method such as principal component regression to replace the original predictors with fewer components. | The new predictors are combinations of the original variables, so coefficients become less directly interpretable. |
+| **Handle many correlated predictors** | Consider a regularization method such as ridge regression or lasso. | These methods introduce bias intentionally to improve stability and prediction. |
+
+The key question is not just "Are the VIFs high?" but "What do we need this model to do?"
 
 :::
 
@@ -271,19 +346,19 @@ We will illustrate this with the `bodyfat` data below.
 
 
 
-::: {#exm-14_2}
+::: {#exm-14_2 .example title="Bodyfat data and coefficient instability"}
 
-## `bodyfat` data
+The `bodyfat` data from @exm-13_1 provide a useful example because the predictors are strongly correlated.
 
 
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
 library(car)
 library(GGally)
 
-dat = read_table("BodyFat.txt")
+dat <- read_table("BodyFat.txt")
 
 
 #examine the scatterplot matrix
@@ -295,28 +370,35 @@ We see from this scatterplot matrix, that the predictor variables have some high
 
 
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
-#prepare data
-dat_recipe = recipe(bfat ~ tri + thigh + midarm, 
-                    data = dat) 
+# Prepare data
+dat_recipe <- recipe(
+  bfat ~ tri + thigh + midarm,
+  data = dat
+)
 
-#setup model
-lm_model = linear_reg() |>
+# Set up model
+lm_model <- linear_reg() |>
   set_engine("lm")
 
-#setup the workflow
-lm_workflow = workflow() |>
+# Set up the workflow
+lm_workflow <- workflow() |>
   add_recipe(dat_recipe) |> 
   add_model(lm_model)
 
-#fit the model
-lm_fit = lm_workflow |>
+# Fit the model
+lm_fit <- lm_workflow |>
   fit(data = dat)
 
-fit_full = lm_fit |>  extract_fit_engine()
+fit_full <- lm_fit |>  extract_fit_engine()
 
-fit_full |> vif()
+vif_full <- fit_full |> vif()
+
+knitr::kable(
+  tibble(variable = names(vif_full), VIF = as.numeric(vif_full)),
+  digits = 3
+)
 
 
 ```
@@ -325,21 +407,26 @@ From VIFs, we see that there is clear multicollinearity between all three variab
 
 The highest VIF is `tri`. From the scatterplot matrix above, we see `tri` is most correlated with `thigh`. Let's remove `tri` and see what happens.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
-lm_workflow_no_tri= lm_workflow |> 
+lm_workflow_no_tri <- lm_workflow |>
   update_recipe(
     dat_recipe |> step_rm(tri)
   )
 
 
-#fit the model
-lm_fit_no_tri = lm_workflow_no_tri |>
+# Fit the model
+lm_fit_no_tri <- lm_workflow_no_tri |>
   fit(data = dat)
 
-fit_no_tri= lm_fit_no_tri |>  extract_fit_engine()
+fit_no_tri <- lm_fit_no_tri |>  extract_fit_engine()
 
-fit_no_tri |> vif()
+vif_no_tri <- fit_no_tri |> vif()
+
+knitr::kable(
+  tibble(variable = names(vif_no_tri), VIF = as.numeric(vif_no_tri)),
+  digits = 3
+)
 
 ```
 
@@ -349,11 +436,19 @@ We are not suggesting that `tri` should definitely be removed. It may still be t
 
 To see the effect on the estimated coefficients, let's look at the standard errors for the model with all three variables and the model without `tri`.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
-fit_full |> tidy()
+full_coefficients <- fit_full |>
+  tidy() |>
+  mutate(model = "Full model")
 
-fit_no_tri |> tidy()
+no_tri_coefficients <- fit_no_tri |>
+  tidy() |>
+  mutate(model = "Without tri")
+
+bind_rows(full_coefficients, no_tri_coefficients) |>
+  select(model, term, estimate, std.error, statistic, p.value) |>
+  knitr::kable(digits = 4)
 
 ```
 
@@ -363,11 +458,19 @@ Larger standard errors will lead to smaller $t$ statistics and thus larger p-val
 
 Let's now look at the RMSE (`sigma` in the `glance()` function output) which is used in the confidence interval of the mean response and prediction interval formulas.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
-fit_full |> glance()
+full_glance <- fit_full |>
+  glance() |>
+  mutate(model = "Full model")
 
-fit_no_tri |> glance()
+no_tri_glance <- fit_no_tri |>
+  glance() |>
+  mutate(model = "Without tri")
+
+bind_rows(full_glance, no_tri_glance) |>
+  select(model, r.squared, adj.r.squared, sigma, statistic, p.value) |>
+  knitr::kable(digits = 4)
 
 ```
 
@@ -392,7 +495,7 @@ $$
 z_i = \frac{x_i - \bar{x}}{s_x}
 $$
 
-where $z_i$ is the standardized value, $x_i$ is the original value, $\bar{x}$ is the mean of the variable, and $s_x$ is its standard deviation. This process ensures that the transformed variable has a standard normal distribution with mean 0 and standard deviation 1.
+where $z_i$ is the standardized value, $x_i$ is the original value, $\bar{x}$ is the mean of the variable, and $s_x$ is its standard deviation. This process ensures that the transformed variable has mean 0 and standard deviation 1. It does **not** guarantee that the transformed variable follows a normal distribution.
 
 Normalization, on the other hand, typically refers to scaling the data to a specific range, such as [0, 1]. This is done using the formula:
 
@@ -412,6 +515,38 @@ In the `tidymodels` framework in R, the term "normalize" is used to describe wha
 
 By scaling all predictors to a common variance, the impact of large magnitude differences between variables is reduced, leading to more stable coefficient estimates. Standardization alone does not reduce correlations between variables. However, it provides numerical stability when using methods other than least squares, making it easier to detect and address multicollinearity issues. When multicollinearity is severe, other techniques, such as principal component regression, may be necessary.
 
+::: {.example title="Worked example: Standardizing does not remove correlation"}
+
+Standardization changes the scale of the predictors, but it does not change the correlation between them.
+
+```{r warning=FALSE, message=FALSE}
+bodyfat_predictors <- dat |>
+  select(tri, thigh, midarm)
+
+bodyfat_standardized <- bodyfat_predictors |>
+  mutate(across(everything(), ~ as.numeric(scale(.x))))
+
+correlation_compare <- tibble(
+  pair = c("tri and thigh", "tri and midarm", "thigh and midarm"),
+  original_correlation = c(
+    cor(bodyfat_predictors$tri, bodyfat_predictors$thigh),
+    cor(bodyfat_predictors$tri, bodyfat_predictors$midarm),
+    cor(bodyfat_predictors$thigh, bodyfat_predictors$midarm)
+  ),
+  standardized_correlation = c(
+    cor(bodyfat_standardized$tri, bodyfat_standardized$thigh),
+    cor(bodyfat_standardized$tri, bodyfat_standardized$midarm),
+    cor(bodyfat_standardized$thigh, bodyfat_standardized$midarm)
+  )
+)
+
+knitr::kable(correlation_compare, digits = 4)
+```
+
+The correlations are unchanged after standardization. This is why standardization is helpful for scale and numerical stability, but it is not a cure for multicollinearity.
+
+:::
+
 
 
 
@@ -424,6 +559,14 @@ One effective method for addressing multicollinearity is *Principal Component Re
 PCA is a *dimensionality reduction* technique that identifies the directions (called *principal components*) along which the variation in the data is maximized. These directions are orthogonal to each other and ranked by the amount of variance they capture. The first principal component explains the largest amount of variance in the data, followed by the second principal component, and so on. Each principal component is a linear combination of the original predictor variables.
 
 In practical terms, PCA helps to reduce the dimensionality of the data, making it more manageable without losing too much information. This is particularly useful in cases where the number of predictors is large, and some of them are highly correlated.
+
+::: {.callout-important collapse="false" title="PCA does not know about the response variable"}
+
+PCA is performed using only the predictor variables. It finds directions that explain variation in the predictors, not directions that necessarily predict the response well.
+
+This means the first few principal components may explain most of the variation in the predictors but may not be the most useful components for predicting $y$. In practice, the number of components should be chosen using model performance, subject-matter judgment, or a validation procedure, not only by looking at predictor variance.
+
+:::
 
 ::: {.callout-tip collapse="true"}
 ## For those who want to see the math:
@@ -502,46 +645,49 @@ In the context of regression, instead of regressing the response variable on the
 
 
 
-::: {#exm-14_3}
+::: {#exm-14_3 .example title="Principal component regression with the bodyfat data"}
 
-## `bodyfat` data again
+This example uses the `bodyfat` data again.
 
 The following steps will illustrate how to apply PCA to the predictors and then use the principal components in a regression model.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
-recipe = recipe(bfat ~ ., data = dat) |>
+pca_recipe <- recipe(bfat ~ ., data = dat) |>
   step_normalize(all_predictors()) |>
   step_pca(all_predictors(), num_comp = 3)
 
-#determine the parameters for any of the steps in the recipe
-#in this case, we need the mean and std dev of each variable
-#along with the values for principal components
-prepped = recipe |> prep()
+# Determine the parameters for the recipe steps.
+# In this case, we need the mean and standard deviation of each variable
+# along with the principal component loadings.
+prepped <- pca_recipe |> prep()
 
-#apply the steps (with the prepared parameters found in prep)
-#to the data
-pca_data = prepped |> bake(dat)
+# Apply the steps to the data.
+pca_data <- prepped |> bake(dat)
 
-# Print the principal components
-pca_data
+# Print the first few principal component rows.
+pca_data |>
+  head() |>
+  knitr::kable(digits = 4)
 ```
 
 The following code provides the principal components derived from the predictors in the `BodyFat` dataset. Each principal component is a linear combination of the original predictors (`tri`, `thigh`, `midarm`), and they explain the maximum variance in the data.
 
-To visualize how PCA works and to understand the contribution of each principal component, let’s examine the explained variance.
+To visualize how PCA works and to understand the contribution of each principal component, let's examine the explained variance.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 
 # Extract the PCA results
-pca_results = prepped |> tidy(number = 2, type="variance")
-pca_results
+pca_results <- prepped |> tidy(number = 2, type = "variance")
+
+pca_results |>
+  knitr::kable(digits = 4)
 
 # Visualize the explained variance
 pca_results |>
   filter(terms == "percent variance") |>
   ggplot(aes(x = component, y = value)) +
-  geom_bar(stat = "identity") +
+  geom_col() +
   labs(title = "Explained Variance by Principal Component", 
        x = "Principal Components", 
        y = "Proportion of Variance Explained")
@@ -551,7 +697,7 @@ In this plot, we observe the proportion of variance explained by each principal 
 
 Let's now look at the scatterplot matrix of the PCA data. Note how the correlations between the PCs are zero. 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 
 ggpairs(pca_data)
 
@@ -560,36 +706,38 @@ ggpairs(pca_data)
 Principal Component Regression is just using these PCs as the predictor variables. We see from above that the third PC does not explain much variability. Thus, we can just use the first two PCs and save a degree of freedom since we will be using one less coefficient in the model. 
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 
-dat_recipe = recipe(bfat ~ ., data = dat) |>
+pcr_recipe <- recipe(bfat ~ ., data = dat) |>
   step_normalize(all_predictors()) |>
   step_pca(all_predictors(), num_comp = 2)
 
-lm_model = linear_reg() |>
+lm_model <- linear_reg() |>
   set_engine("lm")
 
-lm_workflow = workflow() |>
-  add_recipe(dat_recipe) |> 
+pcr_workflow <- workflow() |>
+  add_recipe(pcr_recipe) |>
   add_model(lm_model)
 
-lm_fit = lm_workflow |>
+pcr_fit <- pcr_workflow |>
   fit(data = dat)
 
-lm_fit |> tidy()
-
-
+pcr_fit |>
+  tidy() |>
+  knitr::kable(digits = 4)
 
 ```
 
 Note how small the standard errors are for the coefficients now that we no longer have multicollinearity. Let's verify that there is no multicollinearity by examining the VIFs.
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 
-fit = lm_fit |>  extract_fit_engine()
+pcr_engine <- pcr_fit |> extract_fit_engine()
 
-fit |> vif()
+vif(pcr_engine) |>
+  vif_table() |>
+  knitr::kable(digits = 4)
 
 ```
 
@@ -597,7 +745,96 @@ Both VIFs are exactly one indicating no multicollinearity.
 
 :::
 
-PCR gives us the ability to still fit the regression model even in the presence of extreme multicollinearity. Another benefit of PCR is that you can also reduce dimensionality by only using the PCs that explain most of the variability. Note that you still need all the original predictor variables since the PCs are linear combinations of these variables. Thus, this is not a method for removing predictor variables. So if our goal is to determine if a variable (that may be difficult or expensive to obtain) can be dropped, then PCR is not the tool we want to use. In addition, in PCR we lose interpretability of the coefficients. 
+PCR gives us the ability to still fit the regression model even in the presence of extreme multicollinearity. Another benefit of PCR is that you can also reduce dimensionality by only using the PCs that explain most of the variability. Note that you still need all the original predictor variables since the PCs are linear combinations of these variables. Thus, this is not a method for removing predictor variables. So if our goal is to determine if a variable (that may be difficult or expensive to obtain) can be dropped, then PCR is not the tool we want to use. In addition, in PCR we lose interpretability of the coefficients.
+
+::: {.callout-warning collapse="false" title="PCR trades interpretation for stability"}
+
+PCR can reduce multicollinearity because the principal components are uncorrelated. The tradeoff is that the coefficients are no longer slopes for the original predictors. A coefficient for `PC1`, for example, describes the change in the expected response for a one-unit increase in the first principal component, not a one-unit increase in `tri`, `thigh`, or `midarm`.
+
+This is why PCR is most appealing when prediction or numerical stability matters more than explaining the effect of each original predictor.
+
+:::
+
+::: {.callout-note collapse="false" title="Bridge to ridge regression"}
+
+PCR is one way to respond to multicollinearity: it changes the predictors by replacing them with principal components. Ridge regression, discussed in @sec-ridge, takes a different approach. It keeps the original predictors in the model but adds a penalty that shrinks coefficient estimates toward 0.
+
+The two approaches answer slightly different needs:
+
+| Method | Basic idea | Main advantage | Main tradeoff |
+|---|---|---|---|
+| **PCR** | Replace correlated predictors with uncorrelated components. | Reduces dimension and removes multicollinearity among the components. | Coefficients are for components, not original variables. |
+| **Ridge regression** | Keep the original predictors but shrink their coefficients. | Often improves stability and prediction when predictors are correlated. | Coefficients are biased because shrinkage is intentional. |
+
+Both methods are useful when ordinary least squares becomes unstable, but neither magically answers which original variable is "the one true cause." That question still requires study design, context, and careful interpretation.
+
+:::
+
+## Recap
+
+In this chapter, we examined what happens when predictors overlap with each other and how principal component regression can address that overlap.
+
+| Idea | Meaning |
+|---|---|
+| **Multicollinearity** | Two or more predictors contain redundant information because they are correlated with each other. |
+| **Partial slope interpretation** | A regression coefficient describes the effect of changing one predictor while holding the others fixed. This interpretation becomes awkward when predictors naturally move together. |
+| **VIF** | The variance inflation factor measures how strongly one predictor can be explained by the other predictors. |
+| **Large VIF** | A large VIF indicates that the standard error for that coefficient is inflated because of multicollinearity. |
+| **Prediction vs. coefficient inference** | Multicollinearity may leave prediction performance largely unchanged while making individual coefficient tests unstable. |
+| **Standardization** | Rescaling a predictor to have mean 0 and standard deviation 1. Standardization changes scale, but it does not remove correlation among predictors. |
+| **PCA** | A method that replaces correlated predictors with uncorrelated principal components. PCA focuses on variation in the predictors, not directly on prediction of $y$. |
+| **PCR** | Principal component regression uses principal components as predictors in a regression model. It can improve stability but reduces direct interpretability. |
+| **Ridge regression** | A regularization method that keeps the original predictors but shrinks coefficients to improve stability. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why can a model with severe multicollinearity still make useful predictions?
+
+2. What does a high VIF tell us about a predictor's relationship with the other predictors?
+
+3. Explain why multicollinearity tends to increase p-values for individual coefficient tests.
+
+4. Why is the phrase "holding all other predictors constant" especially important when discussing multicollinearity?
+
+5. Does standardizing predictors remove multicollinearity? Explain.
+
+6. In `tidymodels`, why might `step_normalize()` be a confusing name in a regression course?
+
+7. Why does using principal components remove multicollinearity among the transformed predictors?
+
+8. Why might PCR be a poor choice if the main research goal is to explain the unique effect of each original predictor?
+
+9. Why might the first principal component not be the best single predictor of the response?
+
+10. How does ridge regression respond to multicollinearity differently than PCR?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Prediction uses the combined information in the predictors.** If two predictors overlap, the model may still use their shared information to predict the response well. The difficulty is not necessarily prediction; it is separating the unique contribution of each predictor.
+
+2. **The predictor is predictable from the other predictors.** A high VIF means that when the predictor is used as a response and regressed on the remaining predictors, the resulting $R_i^2$ is large. In plain language, the predictor is carrying information that is already present elsewhere in the model.
+
+3. **Inflated standard errors shrink the test statistic.** The test statistic for a coefficient divides the estimate by its standard error. Multicollinearity inflates the standard error, which can make the test statistic smaller and the p-value larger, even when the predictor is genuinely related to the response.
+
+4. **Holding correlated predictors constant may be unrealistic.** If two predictors usually move together, it may be hard to imagine increasing one while the other stays fixed. That makes the partial slope harder to interpret as a practical effect.
+
+5. **No.** Standardizing predictors changes their units so they have mean 0 and standard deviation 1, but it does not change their correlations. Since multicollinearity is about relationships among predictors, standardization alone does not remove it.
+
+6. **It performs standardization.** In this chapter's terminology, standardization means subtracting the mean and dividing by the standard deviation. `step_normalize()` does exactly that, even though some courses reserve the word normalization for scaling values to a range such as 0 to 1.
+
+7. **Principal components are constructed to be uncorrelated.** PCA rotates the original predictor space into new axes that are orthogonal to one another. Since the resulting components do not overlap linearly, their VIFs are 1 when used together in a linear model.
+
+8. **PCR changes the predictors.** The model coefficients describe principal components, not the original variables. Because each component is a combination of the original predictors, PCR can improve stability but makes direct statements like "holding `thigh` and `midarm` fixed, a one-unit increase in `tri`..." much harder to make.
+
+9. **PCA focuses on the predictors, not the response.** The first principal component explains the most variation among the predictors. But the direction with the most predictor variation is not guaranteed to be the direction most related to $y$.
+
+10. **Ridge keeps the predictors; PCR replaces them.** PCR creates uncorrelated principal components and uses those components in the regression model. Ridge regression keeps the original predictors but shrinks the coefficient estimates to make the model more stable when predictors are correlated.
+
+:::
 
 
 

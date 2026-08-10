@@ -341,7 +341,10 @@ window.Quarto = {
 </li>
   <li><a href="#identifying-transformations" id="toc-identifying-transformations" class="nav-link" data-scroll-target="#identifying-transformations"><span class="header-section-number">16.2</span> Identifying Transformations</a></li>
   <li><a href="#fitting-the-model-with-transformed-variables" id="toc-fitting-the-model-with-transformed-variables" class="nav-link" data-scroll-target="#fitting-the-model-with-transformed-variables"><span class="header-section-number">16.3</span> Fitting the Model with Transformed Variables</a></li>
-  <li><a href="#checking-linearity-after-fitting-the-model" id="toc-checking-linearity-after-fitting-the-model" class="nav-link" data-scroll-target="#checking-linearity-after-fitting-the-model"><span class="header-section-number">16.4</span> Checking Linearity After Fitting the Model</a></li>
+  <li><a href="#transforming-the-response-variable" id="toc-transforming-the-response-variable" class="nav-link" data-scroll-target="#transforming-the-response-variable"><span class="header-section-number">16.4</span> Transforming the Response Variable</a></li>
+  <li><a href="#checking-linearity-after-fitting-the-model" id="toc-checking-linearity-after-fitting-the-model" class="nav-link" data-scroll-target="#checking-linearity-after-fitting-the-model"><span class="header-section-number">16.5</span> Checking Linearity After Fitting the Model</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">16.6</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">16.7</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -367,10 +370,49 @@ window.Quarto = {
 <span class="header-section-number">16.1</span> Scatterplot Matrix</h2>
 <p>The first step in assessing the linearity assumption in a multiple regression model is to examine the relationships between the predictor variables and the response variable using a scatterplot matrix. This matrix provides a grid of pairwise scatterplots, allowing you to visualize potential relationships between all pairs of variables, especially the relationship between each predictor and the response variable.</p>
 <p>In the context of multiple regression, we expect that the relationship between each predictor and the response is approximately linear. If the scatterplot for a given predictor and the response shows a straight-line trend, this suggests a linear relationship, which aligns with the assumption. However, if the plot exhibits a <em>clear</em> curved or nonlinear pattern, it may indicate that the linearity assumption is violated for that predictor, and you may need to transform the variable to better capture the relationship.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="What does linearity mean here?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>What does linearity mean here?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>In regression, “linear” means linear in the coefficients. The predictors themselves can be transformed.</p>
+<p>For example,</p>
+<p><span class="math display">\[
+E(y)=\beta_0+\beta_1x
+\]</span></p>
+<p>is linear in the coefficients, but so is</p>
+<p><span class="math display">\[
+E(y)=\beta_0+\beta_1\log(x)
+\]</span></p>
+<p>and</p>
+<p><span class="math display">\[
+E(y)=\beta_0+\beta_1x+\beta_2x^2.
+\]</span></p>
+<p>The second and third models can represent curved relationships while still being linear regression models because the <span class="math inline">\(\beta\)</span> coefficients enter the model linearly.</p>
+</div>
+</div>
+</div>
 <p>A scatterplot matrix is a convenient way to quickly scan for any nonlinearity before fitting the model. You can create this matrix using the <code>GGally</code> package in R, which extends <code>ggplot2</code> to allow for a grid of scatterplots. Each scatterplot shows how one variable changes in response to another, and from this, you can judge whether a linear transformation is needed for any predictor variables before fitting the regression model.</p>
-<p><strong>Example</strong>:</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Scatterplot matrix for checking linearity
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
@@ -382,6 +424,8 @@ window.Quarto = {
 </div>
 <p>In this example, the <code>ggpairs</code> function creates a scatterplot matrix for the <code>mtcars</code> dataset. Each plot in the matrix shows the relationship between two variables. By focusing on the plots that involve the response variable (<code>mpg</code> in this case), you can assess whether the relationships between the response and each predictor (like <code>wt</code> or <code>hp</code>) appear linear. If any plot shows a nonlinear trend, it suggests that a transformation might be necessary to achieve a linear relationship.</p>
 <p>This initial diagnostic step is crucial because it allows you to anticipate issues with linearity before fitting the regression model, ensuring a better fit and more reliable interpretation of the results.</p>
+</div>
+</div>
 <section id="discrete-predictors" class="level3" data-number="16.1.1"><h3 data-number="16.1.1" class="anchored" data-anchor-id="discrete-predictors">
 <span class="header-section-number">16.1.1</span> Discrete Predictors</h3>
 <p>When a predictor variable has only a few discrete values, such as in the case of <code>gear</code> or <code>cyl</code> in the <code>mtcars</code> dataset, the scatterplot matrix will show points aligned vertically or horizontally at specific values. These discrete predictors can make it harder to judge linearity directly because the relationships are less continuous. Instead of a smooth trend, look for general patterns in how the response variable changes across the levels of the predictor. If the response values vary systematically across the predictor levels (e.g., a noticeable upward or downward shift), it may still indicate a linear trend. However, if the response varies non-linearly (e.g., higher values in the middle category and lower values on the ends), it may suggest that a transformation, such as using polynomial terms, or treating the predictor as a categorical variable, could improve the model.</p>
@@ -390,15 +434,74 @@ window.Quarto = {
 <span class="header-section-number">16.2</span> Identifying Transformations</h2>
 <p>When the scatterplot matrix suggests nonlinearity between a predictor and the response, it may be necessary to transform the predictor variable to improve the linear relationship. Common transformations include logarithmic, square root, and polynomial transformations. These transformations help capture nonlinear patterns and make relationships more linear, ensuring the regression model provides accurate estimates.</p>
 <p>In the <strong>tidyverse</strong>, transformations can be easily applied using <code><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate()</a></code> from the <strong>dplyr</strong> package. You can then incorporate these transformed variables into your regression model within the Tidymodels framework.</p>
-<div id="exm-16_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 16.1 (Log transformation in <code>mtcars</code>)</strong></span> The scatterplot matrix showed a non-linear trend for <code>disp</code> versus <code>mpg</code>. Let’s transformed this variable using a <code>log</code> transformation.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Choosing a transformation">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Choosing a transformation
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Transformations should be chosen to match the pattern in the data, not merely to improve <span class="math inline">\(R^2\)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Pattern in scatterplot</th>
+<th>Possible next step</th>
+<th>Interpretation caution</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Curves that flatten out</td>
+<td>Try a log transformation such as <span class="math inline">\(\log(x)\)</span>.</td>
+<td>A one-unit change in <span class="math inline">\(\log(x)\)</span> is not the same as a one-unit change in <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="even">
+<td>Counts or right-skewed positive predictors</td>
+<td>Try a square-root or log transformation.</td>
+<td>Log transformations require positive values.</td>
+</tr>
+<tr class="odd">
+<td>U-shaped or inverted U-shaped pattern</td>
+<td>Try a polynomial term such as <span class="math inline">\(x^2\)</span>.</td>
+<td>Polynomial terms can behave strangely outside the observed range of the data.</td>
+</tr>
+<tr class="even">
+<td>Few distinct predictor values</td>
+<td>Consider treating the predictor as categorical.</td>
+<td>A numeric code may not represent equal spacing between levels.</td>
+</tr>
+</tbody>
+</table>
+<p>After transforming, always refit the model and check residual plots again.</p>
+</div>
+</div>
+</div>
+<div id="exm-16_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 16.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Log transformation in mtcars
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The scatterplot matrix showed a nonlinear trend for <code>disp</code> versus <code>mpg</code>. Let’s transform this variable using a <code>log</code> transformation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Add a log-transformed variable for weight (wt)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Add a log-transformed variable for displacement (disp)</span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">log_disp</span>, <span class="va">disp</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">log_disp</span>, <span class="va">disp</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -409,80 +512,454 @@ window.Quarto = {
 </div>
 <p>We see the scatterplot between <code>mpg</code> and <code>log_disp</code> appears more linear than with the untransformed <code>disp</code>.</p>
 </div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Polynomial terms are still linear regression
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A model with a squared predictor can represent a curved relationship while still being a linear regression model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">quadratic_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">wt</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/AsIs.html">I</a></span><span class="op">(</span><span class="va">wt</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">quadratic_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">49.9308</td>
+<td style="text-align: right;">4.2113</td>
+<td style="text-align: right;">11.8564</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">wt</td>
+<td style="text-align: right;">-13.3803</td>
+<td style="text-align: right;">2.5140</td>
+<td style="text-align: right;">-5.3223</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">I(wt^2)</td>
+<td style="text-align: right;">1.1711</td>
+<td style="text-align: right;">0.3594</td>
+<td style="text-align: right;">3.2580</td>
+<td style="text-align: right;">0.0029</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The term <code>I(wt^2)</code> creates a new predictor by squaring <code>wt</code>. The model is curved as a function of <code>wt</code>, but it is still linear in the coefficients.</p>
+</div>
+</div>
 </section><section id="fitting-the-model-with-transformed-variables" class="level2" data-number="16.3"><h2 data-number="16.3" class="anchored" data-anchor-id="fitting-the-model-with-transformed-variables">
 <span class="header-section-number">16.3</span> Fitting the Model with Transformed Variables</h2>
 <p>After identifying and applying transformations, the next step is to fit a multiple regression model using the transformed predictors. This ensures that the model aligns with the linearity assumption, yielding more reliable predictions and inferences. Below is an example of how to fit such a model.</p>
-<div id="exm-16_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 16.2</strong></span> We will setup two models: one with transformed variables and one without transformed variables. We will then compare the results using <span class="math inline">\(R^2\)</span>. We will transform <code>disp</code>, <code>hp</code>, and <code>wt</code> since these three variables appear to be nonlinear in the scatterplot matrix. We will not include the discrete variables in this example.</p>
+<div id="exm-16_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 16.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Comparing models with and without transformed predictors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We will set up two models: one with transformed variables and one without transformed variables. We will then compare the results using <span class="math inline">\(R^2\)</span>. We will transform <code>disp</code>, <code>hp</code>, and <code>wt</code> since these three variables appear to be nonlinear in the scatterplot matrix. We will not include the discrete variables in this example.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#untransformed variables</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> </span>
+<span><span class="co"># Untransformed variables</span></span>
+<span><span class="va">untransformed_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">untransformed_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">untransformed_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_untransformed</span> <span class="op">&lt;-</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">fit_untransformed</span> <span class="op">&lt;-</span> <span class="va">untransformed_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_untransformed</span> <span class="op">|&gt;</span> <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.849         0.820  2.56      29.2 6.89e-10     5  -72.1  158.  169.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<span><span class="va">untransformed_metrics</span> <span class="op">&lt;-</span> <span class="va">fit_untransformed</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">glance</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"Untransformed predictors"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">untransformed_metrics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">sigma</span>, <span class="va">statistic</span>, <span class="va">p.value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 34%">
+<col style="width: 13%">
+<col style="width: 19%">
+<col style="width: 8%">
+<col style="width: 13%">
+<col style="width: 10%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: left;">Untransformed predictors</td>
+<td style="text-align: right;">0.8489</td>
+<td style="text-align: right;">0.8199</td>
+<td style="text-align: right;">2.558</td>
+<td style="text-align: right;">29.2177</td>
+<td style="text-align: right;">0</td>
+</tr></tbody>
+</table>
 </div>
 </div>
 <p>Now we will fit the model with the transformed variables.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># transformed variables</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Transformed variables</span></span>
+<span><span class="va">transformed_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">transformed_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">transformed_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_transformed</span> <span class="op">&lt;-</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">fit_transformed</span> <span class="op">&lt;-</span> <span class="va">transformed_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit_transformed</span> <span class="op">|&gt;</span> <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.892         0.871  2.16      43.0 9.14e-12     5  -66.7  147.  158.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<span><span class="va">transformed_metrics</span> <span class="op">&lt;-</span> <span class="va">fit_transformed</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">glance</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"Transformed predictors"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">untransformed_metrics</span>, <span class="va">transformed_metrics</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">sigma</span>, <span class="va">statistic</span>, <span class="va">p.value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 13%">
+<col style="width: 18%">
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 10%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Untransformed predictors</td>
+<td style="text-align: right;">0.8489</td>
+<td style="text-align: right;">0.8199</td>
+<td style="text-align: right;">2.5580</td>
+<td style="text-align: right;">29.2177</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Transformed predictors</td>
+<td style="text-align: right;">0.8922</td>
+<td style="text-align: right;">0.8715</td>
+<td style="text-align: right;">2.1605</td>
+<td style="text-align: right;">43.0487</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Note the improvement in the coefficient of determination. It has increased with the transformed variables.</p>
+<p>Note the improvement in the coefficient of determination. It has increased with the transformed variables. The residual standard error, <code>sigma</code>, also decreases, which suggests that the transformed model has smaller typical residuals.</p>
 </div>
-</section><section id="checking-linearity-after-fitting-the-model" class="level2" data-number="16.4"><h2 data-number="16.4" class="anchored" data-anchor-id="checking-linearity-after-fitting-the-model">
-<span class="header-section-number">16.4</span> Checking Linearity After Fitting the Model</h2>
-<p>After fitting the model, it’s essential to validate that the transformations improved the linear relationship between the predictors and the response. This can be achieved by examining the residuals.</p>
-<p>If the linearity assumption holds, the residuals should appear randomly scattered around zero in the residual plot, with no obvious patterns. Systematic patterns, such as curves, indicate remaining nonlinearity, suggesting that further transformations or a different model might be necessary.</p>
-<div id="exm-16_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 16.3</strong></span> Let’s first examine the fit with the untransformed variables.</p>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Interpreting coefficients after log transformations">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Interpreting coefficients after log transformations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Once a predictor is log-transformed, its coefficient is no longer the change in <span class="math inline">\(y\)</span> for a one-unit increase in the original predictor.</p>
+<p>For example, in a model with</p>
+<p><span class="math display">\[
+E(y)=\beta_0+\beta_1\log(x),
+\]</span></p>
+<p><span class="math inline">\(\beta_1\)</span> is the expected change in <span class="math inline">\(y\)</span> for a one-unit increase in <span class="math inline">\(\log(x)\)</span>, not a one-unit increase in <span class="math inline">\(x\)</span>. A more useful interpretation is often based on percentage changes:</p>
+<ul>
+<li>A 1% increase in <span class="math inline">\(x\)</span> is associated with an approximate change of <span class="math inline">\(0.01\beta_1\)</span> units in the mean response.</li>
+<li>Doubling <span class="math inline">\(x\)</span> is associated with a change of <span class="math inline">\(\beta_1\log(2)\)</span> units in the mean response.</li>
+</ul>
+<p>So transformed predictors may improve model fit, but they also change the way coefficients must be explained.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not rely on R-squared alone">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not rely on R-squared alone
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A larger <span class="math inline">\(R^2\)</span> can suggest that a transformed model fits better, but it does not prove that the linearity assumption has been fixed. A model can have a larger <span class="math inline">\(R^2\)</span> and still show a curved residual pattern.</p>
+<p>Use numerical summaries to compare fit, but use residual plots to check whether the linearity assumption looks reasonable.</p>
+</div>
+</div>
+</div>
+</section><section id="transforming-the-response-variable" class="level2" data-number="16.4"><h2 data-number="16.4" class="anchored" data-anchor-id="transforming-the-response-variable">
+<span class="header-section-number">16.4</span> Transforming the Response Variable</h2>
+<p>So far, we have transformed predictor variables. Sometimes it may also be useful to transform the response variable. This is most common when the response is positive and the relationship appears multiplicative rather than additive, or when the spread of the residuals increases as the fitted values increase.</p>
+<p>For example, instead of modeling <code>mpg</code> directly, we could model <code>log(mpg)</code>. This changes the response scale, so the residuals, fitted values, and coefficient interpretations are all on the log scale.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Transforming the response variable
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following model uses the same predictors as before, but transforms the response variable.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#obtain the residuals and fitted values from the fit</span></span>
-<span><span class="va">predictions_untransformed</span> <span class="op">=</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="va">fit_untransformed</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_response_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">mpg</span><span class="op">)</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">log_response_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">3.1089</td>
+<td style="text-align: right;">0.4823</td>
+<td style="text-align: right;">6.4458</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">disp</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">0.0005</td>
+<td style="text-align: right;">0.1215</td>
+<td style="text-align: right;">0.9042</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">hp</td>
+<td style="text-align: right;">-0.0009</td>
+<td style="text-align: right;">0.0007</td>
+<td style="text-align: right;">-1.3732</td>
+<td style="text-align: right;">0.1814</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.0542</td>
+<td style="text-align: right;">0.0576</td>
+<td style="text-align: right;">0.9402</td>
+<td style="text-align: right;">0.3557</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">wt</td>
+<td style="text-align: right;">-0.2069</td>
+<td style="text-align: right;">0.0547</td>
+<td style="text-align: right;">-3.7830</td>
+<td style="text-align: right;">0.0008</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.0247</td>
+<td style="text-align: right;">0.0202</td>
+<td style="text-align: right;">1.2232</td>
+<td style="text-align: right;">0.2322</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">log_response_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">sigma</span>, <span class="va">statistic</span>, <span class="va">p.value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.8802</td>
+<td style="text-align: right;">0.8572</td>
+<td style="text-align: right;">0.1125</td>
+<td style="text-align: right;">38.2165</td>
+<td style="text-align: right;">0</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>The fitted values from this model estimate <span class="math inline">\(\log(mpg)\)</span>, not <code>mpg</code>. If we want predictions on the original <code>mpg</code> scale, we need to back-transform.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">log_response_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  observed_mpg <span class="op">=</span> <span class="va">mtcars</span><span class="op">$</span><span class="va">mpg</span>,</span>
+<span>  fitted_log_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="va">log_response_fit</span><span class="op">)</span>,</span>
+<span>  fitted_mpg <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="va">log_response_fit</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  residual_log_scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">residuals</a></span><span class="op">(</span><span class="va">log_response_fit</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">log_response_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">observed_mpg</th>
+<th style="text-align: right;">fitted_log_mpg</th>
+<th style="text-align: right;">fitted_mpg</th>
+<th style="text-align: right;">residual_log_scale</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">3.0928</td>
+<td style="text-align: right;">22.0398</td>
+<td style="text-align: right;">-0.0483</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21.0</td>
+<td style="text-align: right;">3.0539</td>
+<td style="text-align: right;">21.1984</td>
+<td style="text-align: right;">-0.0094</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">22.8</td>
+<td style="text-align: right;">3.2179</td>
+<td style="text-align: right;">24.9767</td>
+<td style="text-align: right;">-0.0912</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">21.4</td>
+<td style="text-align: right;">3.0048</td>
+<td style="text-align: right;">20.1828</td>
+<td style="text-align: right;">0.0586</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">2.8483</td>
+<td style="text-align: right;">17.2592</td>
+<td style="text-align: right;">0.0802</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">18.1</td>
+<td style="text-align: right;">2.9587</td>
+<td style="text-align: right;">19.2734</td>
+<td style="text-align: right;">-0.0628</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Back-transforming with <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code> gives predictions in the original units, but inference is still being performed on the log scale. This is one reason response transformations should be used thoughtfully and explained carefully.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Interpreting coefficients after transforming the response">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Interpreting coefficients after transforming the response
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>When the response is log-transformed, coefficient interpretations change again. In a model such as</p>
+<p><span class="math display">\[
+\log(y)=\beta_0+\beta_1x,
+\]</span></p>
+<p>a one-unit increase in <span class="math inline">\(x\)</span> is associated with multiplying the typical value of <span class="math inline">\(y\)</span> by <span class="math inline">\(e^{\beta_1}\)</span>. For small values of <span class="math inline">\(\beta_1\)</span>, this is approximately a <span class="math inline">\(100\beta_1\%\)</span> change in <span class="math inline">\(y\)</span>.</p>
+<p>The phrase “typical value” is doing some work here. Because the model is fit on the log scale, simply exponentiating fitted values does not automatically give the arithmetic mean of <span class="math inline">\(y\)</span> on the original scale.</p>
+</div>
+</div>
+</div>
+</section><section id="checking-linearity-after-fitting-the-model" class="level2" data-number="16.5"><h2 data-number="16.5" class="anchored" data-anchor-id="checking-linearity-after-fitting-the-model">
+<span class="header-section-number">16.5</span> Checking Linearity After Fitting the Model</h2>
+<p>After fitting the model, it is essential to validate that the transformations improved the linear relationship between the predictors and the response. This can be achieved by examining the residuals.</p>
+<p>If the linearity assumption holds, the residuals should appear randomly scattered around zero in the residual plot, with no obvious patterns. Systematic patterns, such as curves, indicate remaining nonlinearity, suggesting that further transformations or a different model might be necessary.</p>
+<div id="exm-16_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 16.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Checking residual plots after transforming predictors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Next, let’s examine the residuals against each predictor in the untransformed model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Obtain the residuals and fitted values from the fit</span></span>
+<span><span class="va">predictions_untransformed</span> <span class="op">&lt;-</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="va">fit_untransformed</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">augment</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.fitted</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Fitted Values"</span>, </span>
 <span>       y <span class="op">=</span> <span class="st">"Residuals"</span>, </span>
@@ -490,7 +967,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -498,51 +975,62 @@ window.Quarto = {
 <p>We see from this residual plot that there is a nonlinear pattern. That is, the residuals tend to be above 0 at the low end, then they tend to be below 0 in the middle, then they tend to be back above 0 at the high end. If there are not that many predictors, you can plot the residuals against each predictor and determine which one needs to be transformed.</p>
 <p>Let’s first examine the fit with the untransformed variables.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">gridExtra</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p1</span> <span class="op">=</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">disp</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"disp"</span>, y <span class="op">=</span> <span class="st">"Residuals"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p2</span> <span class="op">=</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">hp</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"hp"</span>, y <span class="op">=</span> <span class="st">"Residuals"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p3</span> <span class="op">=</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">drat</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"drat"</span>, y <span class="op">=</span> <span class="st">"Residuals"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p4</span> <span class="op">=</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p4</span> <span class="op">&lt;-</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">wt</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"wt"</span>, y <span class="op">=</span> <span class="st">"Residuals"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">p5</span> <span class="op">=</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">p5</span> <span class="op">&lt;-</span> <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">qsec</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"qsec"</span>, y <span class="op">=</span> <span class="st">"Residuals"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/gridExtra/man/arrangeGrob.html">grid.arrange</a></span><span class="op">(</span><span class="va">p1</span>, <span class="va">p2</span>, <span class="va">p3</span>, <span class="va">p4</span>, <span class="va">p5</span>, nrow <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Combinig these residuals plots with the scatterplot matrix, it appears that <code>disp</code>, <code>hp</code>, and <code>wt</code> are clearly nonlinear.</p>
+<p>Combining these residual plots with the scatterplot matrix, it appears that <code>disp</code>, <code>hp</code>, and <code>wt</code> are clearly nonlinear.</p>
 <p>Let’s now see the residual plot for the transformed variables.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#obtain the residuals and fitted values from the fit</span></span>
-<span><span class="va">predictions_transformed</span> <span class="op">=</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="va">fit_transformed</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Obtain the residuals and fitted values from the fit</span></span>
+<span><span class="va">predictions_transformed</span> <span class="op">&lt;-</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="va">fit_transformed</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">augment</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">predictions_transformed</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">predictions_transformed</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.fitted</span>, y <span class="op">=</span> <span class="va">.resid</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Fitted Values"</span>, </span>
 <span>       y <span class="op">=</span> <span class="st">"Residuals"</span>, </span>
@@ -550,12 +1038,170 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>This residual plot shows no obvious nonlinear pattern. Thus, the transformations helped.</p>
+<p>The two residual plots can also be shown side by side. This makes it easier to see whether the transformation reduced the curved pattern.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">residual_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">predictions_untransformed</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>      model <span class="op">=</span> <span class="st">"Untransformed predictors"</span>,</span>
+<span>      fitted <span class="op">=</span> <span class="va">.fitted</span>,</span>
+<span>      residual <span class="op">=</span> <span class="va">.resid</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>  <span class="va">predictions_transformed</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>      model <span class="op">=</span> <span class="st">"Transformed predictors"</span>,</span>
+<span>      fitted <span class="op">=</span> <span class="va">.fitted</span>,</span>
+<span>      residual <span class="op">=</span> <span class="va">.resid</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">residual_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">fitted</span>, y <span class="op">=</span> <span class="va">residual</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"blue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Fitted Values"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Residuals"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Residual plots before and after transformation"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="16_Linearity_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The side-by-side display emphasizes the purpose of transforming variables: we want residuals that look more like random scatter around 0 and less like a systematic curve.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="16.6"><h2 data-number="16.6" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">16.6</span> Recap</h2>
+<p>In this chapter, we focused on how to assess and improve the linearity assumption in multiple regression.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Linearity assumption</strong></td>
+<td>The expected response should be approximately linear in the predictors included in the model.</td>
+</tr>
+<tr class="even">
+<td><strong>Linear in the coefficients</strong></td>
+<td>A regression model can include transformed predictors such as <span class="math inline">\(\log(x)\)</span> or <span class="math inline">\(x^2\)</span> and still be a linear regression model.</td>
+</tr>
+<tr class="odd">
+<td><strong>Scatterplot matrix</strong></td>
+<td>A grid of pairwise plots used to look for curved relationships before fitting the model.</td>
+</tr>
+<tr class="even">
+<td><strong>Discrete predictor</strong></td>
+<td>A predictor with only a few possible values; it may need to be treated as categorical rather than quantitative.</td>
+</tr>
+<tr class="odd">
+<td><strong>Transformation</strong></td>
+<td>A change to a predictor, such as using <span class="math inline">\(\log(x)\)</span>, <span class="math inline">\(\sqrt{x}\)</span>, or <span class="math inline">\(x^2\)</span>, to better capture a nonlinear relationship.</td>
+</tr>
+<tr class="even">
+<td><strong>Log-transformed predictor</strong></td>
+<td>A predictor entered as <span class="math inline">\(\log(x)\)</span>; the coefficient is interpreted in terms of changes in <span class="math inline">\(\log(x)\)</span> or approximate percentage changes in <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Transformed response</strong></td>
+<td>A model that uses a response such as <span class="math inline">\(\log(y)\)</span>; fitted values and residuals are on the transformed scale.</td>
+</tr>
+<tr class="even">
+<td><strong>Residual plot</strong></td>
+<td>A plot used after fitting the model to check whether nonlinear patterns remain.</td>
+</tr>
+<tr class="odd">
+<td><strong>Residuals vs.&nbsp;fitted values</strong></td>
+<td>A general diagnostic plot for checking whether residuals are randomly scattered around 0.</td>
+</tr>
+<tr class="even">
+<td><strong>Residuals vs.&nbsp;predictors</strong></td>
+<td>Diagnostic plots that can help identify which predictor may need a transformation.</td>
+</tr>
+<tr class="odd">
+<td><strong>Side-by-side residual plots</strong></td>
+<td>A useful way to compare model diagnostics before and after transforming variables.</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(R^2\)</span> caution</strong></td>
+<td>A larger <span class="math inline">\(R^2\)</span> may indicate better fit, but residual plots are needed to assess whether the linearity assumption is reasonable.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="16.7"><h2 data-number="16.7" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">16.7</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What does the linearity assumption mean in a multiple regression model?</p></li>
+<li><p>Why can a model with <span class="math inline">\(\log(x)\)</span> or <span class="math inline">\(x^2\)</span> still be called a linear regression model?</p></li>
+<li><p>Why is a scatterplot matrix useful before fitting a multiple regression model?</p></li>
+<li><p>Why can predictors with only a few distinct values be hard to assess using scatterplots?</p></li>
+<li><p>Give one situation where a log transformation might be useful.</p></li>
+<li><p>Why should we check residual plots after transforming predictors?</p></li>
+<li><p>What pattern in a residual plot suggests that the linearity assumption may still be violated?</p></li>
+<li><p>Why should we avoid choosing transformations based only on <span class="math inline">\(R^2\)</span>?</p></li>
+<li><p>In a model with <span class="math inline">\(E(y)=\beta_0+\beta_1\log(x)\)</span>, why should we avoid saying that <span class="math inline">\(\beta_1\)</span> is the effect of a one-unit increase in <span class="math inline">\(x\)</span>?</p></li>
+<li><p>What changes when we model <span class="math inline">\(\log(y)\)</span> instead of <span class="math inline">\(y\)</span>?</p></li>
+<li><p>Why is a side-by-side residual plot useful after transforming predictors?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>The mean response should follow the form specified by the model.</strong> In a model using untransformed predictors, this means the relationship between each predictor and the expected response should be approximately straight-line, after accounting for the other predictors.</p></li>
+<li><p><strong>Linearity refers to the coefficients.</strong> A model such as <span class="math inline">\(E(y)=\beta_0+\beta_1\log(x)\)</span> or <span class="math inline">\(E(y)=\beta_0+\beta_1x+\beta_2x^2\)</span> is still linear in the <span class="math inline">\(\beta\)</span> coefficients, even though it may be curved as a function of <span class="math inline">\(x\)</span>.</p></li>
+<li><p><strong>It helps identify potential nonlinear relationships early.</strong> Before fitting the model, a scatterplot matrix lets us scan the relationship between the response and each predictor and decide whether transformations may be needed.</p></li>
+<li><p><strong>There are too few x-values to see a smooth pattern.</strong> With only a few distinct predictor values, points stack vertically. It may be better to think about group differences or treat the predictor as categorical.</p></li>
+<li><p><strong>When the relationship bends and flattens out.</strong> A log transformation is often useful when increases in a positive predictor have a large effect at first but a smaller effect at larger values.</p></li>
+<li><p><strong>Transformations do not guarantee success.</strong> After refitting the model, residual plots show whether the curved pattern has actually been reduced.</p></li>
+<li><p><strong>A systematic curve.</strong> If residuals tend to be positive in one region, negative in another, and positive again elsewhere, the model is missing curvature.</p></li>
+<li><p><strong><span class="math inline">\(R^2\)</span> measures fit, not assumptions.</strong> A transformed model may have a larger <span class="math inline">\(R^2\)</span> but still show a nonlinear residual pattern. Residual diagnostics are needed to assess the model form.</p></li>
+<li><p><strong>The predictor scale has changed.</strong> The coefficient <span class="math inline">\(\beta_1\)</span> describes a one-unit increase in <span class="math inline">\(\log(x)\)</span>, not a one-unit increase in <span class="math inline">\(x\)</span>. It is often more useful to describe the effect using percentage changes in <span class="math inline">\(x\)</span>.</p></li>
+<li><p><strong>The model is now on the log-response scale.</strong> The fitted values, residuals, and coefficient interpretations refer to <span class="math inline">\(\log(y)\)</span>. To discuss predictions in the original units of <span class="math inline">\(y\)</span>, we need to back-transform carefully.</p></li>
+<li><p><strong>It makes improvement easier to see.</strong> A side-by-side plot lets us compare whether the transformed model has less systematic curvature in its residuals than the untransformed model.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 

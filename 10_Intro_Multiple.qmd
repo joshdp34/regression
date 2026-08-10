@@ -12,7 +12,7 @@ $$
     y = \beta_0 + \beta_1 x +\varepsilon
 \end{align*}
 $$
-stated previously that it is "simple" because there is only one predictor variable. 
+we stated previously that it is "simple" because there is only one predictor variable.
 
 
 The model is "*linear in the parameters*" because every parameter is only to the first power and is not multiplied or divided by another parameter.
@@ -21,10 +21,26 @@ The model is also "*linear in the predictor variable*" because $x$ appears only 
 
 A "linear model" means it is linear in the parameters (not necessarily linear in the predictor variables). A model that is linear in both the parameters and the predictor variables is called a *first-order model*.
 
+::: {.example title="Example 10.1: Linear in parameters versus linear in predictors"}
+
+The word "linear" can be sneaky because it can refer to two different ideas.
+
+| Model | Linear in the parameters? | Linear in the predictor variables? | First-order model? |
+|---|---|---|---|
+| $y=\beta_0+\beta_1x+\varepsilon$ | Yes | Yes | Yes |
+| $y=\beta_0+\beta_1x+\beta_2x^2+\varepsilon$ | Yes | No | No |
+| $y=\beta_0+\beta_1\log(x)+\varepsilon$ | Yes | No | No |
+| $y=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2+\varepsilon$ | Yes | No, because of the product term | No |
+| $y=\beta_0+\beta_1^2x+\varepsilon$ | No | Yes | No |
+
+Regression courses usually use the phrase "linear regression" to mean linear in the parameters. That means transformations of predictors, polynomial terms, and interaction terms can still be part of a linear regression model.
+
+:::
+
 
 ## Multiple Predictor Variables
 
-Often when modeling some response variable $y$, one predictor variable may not be adequate. Thus, more multiple predictor variable can be used to model $y$. 
+Often when modeling some response variable $y$, one predictor variable may not be adequate. Thus, multiple predictor variables can be used to model $y$.
 
 
 
@@ -56,6 +72,20 @@ $$
 \end{align*}
 $$
 
+::: {.example title="Example 10.2: Interpreting a partial slope"}
+
+Suppose we model a student's exam score using hours studied and number of missed classes:
+
+$$
+score_i=\beta_0+\beta_1hours_i+\beta_2missed_i+\varepsilon_i.
+$$
+
+The coefficient $\beta_1$ is the expected change in exam score for a one-unit increase in hours studied, *holding the number of missed classes constant*.
+
+The phrase "holding the other predictor constant" is the key new interpretation in multiple regression. A multiple-regression slope is a *partial* effect, not just the raw relationship between one predictor and the response.
+
+:::
+
 
 The predictor variable $x_{k}$ can be raised to some power or transformed
 in some other way. Also, the predictor variable can be the product
@@ -69,19 +99,29 @@ term. We will discuss these more later.
 
 In multiple regression, we are interested in how the predictor variables relate to the response variable. In particular, we want to know:
 
-1. How *important* are the difference predictor variables in modeling $y$?
+1. How *important* are the different predictor variables in modeling $y$?
 2. What is the *effect* of a given predictor variable on predicting $y$? 
 3. Are any of the predictor variables *unnecessary* in modeling $y$ and therefore be dropped from the model?
 4. Are there any predictor variables not *included* in the model that should be included? 
 
 
 
-Theses questions are relatively simple to answer if the predictor variables are *uncorrelated* among themselves.
+These questions are relatively simple to answer if the predictor variables are *uncorrelated* among themselves.
 
 
 
 
-Unfortunately, in real world application, especially for observational studies, the predictor variables tend to be correlated among themselves. When this is the case, we say that *multicollinearity* exists. 
+Unfortunately, in real-world applications, especially for observational studies, the predictor variables tend to be correlated among themselves. When this is the case, we say that *multicollinearity* exists.
+
+::: {.example title="Example 10.3: Why correlated predictors complicate interpretation"}
+
+Suppose we model house price using square footage and number of bedrooms.
+
+Larger houses often have more bedrooms, so these two predictors are usually correlated. If both predictors are in the model, the slope for square footage describes the relationship between square footage and price *among houses with the same number of bedrooms*. The slope for bedrooms describes the relationship between bedrooms and price *among houses with the same square footage*.
+
+Those are useful questions, but they are more subtle than the simple-regression question "How does price change as square footage changes?" Multicollinearity makes it harder to separate the unique contribution of each predictor.
+
+:::
 
 
 
@@ -108,7 +148,7 @@ $${#eq-w4_2}
 The estimates $b_0,b_1,\ldots,b_{p-1}$ are found by minimizing the *squared* *distances* between the observed values $y_i$ and the fitted values $\hat{y}_i$. The sum of the squared distances is now
 $$
 \begin{align}
-Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\right)\right)^2\
+Q=\sum \left(y_i-\left(b_0 + b_1 x_{i1} + b_2 x_{i2}+\cdots +b_{p-1}x_{i,p-1}\right)\right)^2
 \end{align}
 $${#eq-w4_3}
 in the multiple regression case. 
@@ -127,9 +167,9 @@ Note that model @eq-w4_1 is no longer a line. It is a *plane* when $p=3$ and a *
 When there are two predictor variables ($p=3$), we will take three partial derivatives of @eq-w4_3 with respect to $b_0$, $b_1$, and $b_2$. This leads us to 
 $$
 \begin{align}
-\frac{\partial Q}{\partial b_{0}} & =-2\sum\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\
-\frac{\partial Q}{\partial b_{1}} & =-2\sum x_{i1}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)\\
-\frac{\partial Q}{\partial b_{2}} & =-2\sum x_{i2}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{2i}\right)
+\frac{\partial Q}{\partial b_{0}} & =-2\sum\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{i2}\right)\\
+\frac{\partial Q}{\partial b_{1}} & =-2\sum x_{i1}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{i2}\right)\\
+\frac{\partial Q}{\partial b_{2}} & =-2\sum x_{i2}\left(y_{i}-b_{0}-b_{1}x_{i1}-b_{2}x_{i2}\right)
 \end{align}
 $${#eq-w4_4}
 
@@ -141,7 +181,7 @@ $${#eq-w4_4}
 Setting the partial derivative equal to zero and rearranging the terms lead us to the *normal* equations
 $$
 \begin{align}
-\sum y_{i} & =nb_{0}\sum x_{i1}+b_{2}\sum x_{i2}\\
+\sum y_{i} & =nb_{0}+b_{1}\sum x_{i1}+b_{2}\sum x_{i2}\\
 \sum x_{i1}y_{i} & =b_{0}\sum x_{i1}+b_{1}\sum x_{i1}^{2}+b_{2}\sum x_{i1}x_{i2}\\
 \sum x_{i2}y_{i} & =b_{0}\sum x_{i2}+b_{1}\sum x_{i1}x_{i2}+b_{2}\sum x_{i2}^{2}
 \end{align}
@@ -151,7 +191,7 @@ $${#eq-w4_5}
 
 ### The Least Squares Estimators
 
-Solving the normal equations for $b_0$, $b_1$, and $b_2$ gives use the *least* *squares* estimators
+Solving the normal equations for $b_0$, $b_1$, and $b_2$ gives us the *least* *squares* estimators
 $$
 \begin{align}
 b_{1} & =\frac{\left(\sum x_{i2}^{2}\right)\left(\sum x_{i1}y_{i}\right)-\left(\sum x_{i1}x_{i2}\right)\left(\sum x_{i2}y_{i}\right)}{\left(\sum x_{i1}^{2}\right)\left(\sum x_{i2}^{2}\right)-\left(\sum x_{i1}x_{i2}\right)^{2}}\\
@@ -161,6 +201,117 @@ b_{0} & =\bar{Y}-b_{1}\bar{X}_{1}-b_{2}\bar{X}_{2}
 $${#eq-w4_6}
 
 We see that the expression for the least squares estimators become cumbersome even for $p=3$. As more variables are added to the model, the equations become even more cumbersome.
+
+::: {.example title="Example 10.4: Fitting a multiple regression model in R"}
+
+The `trees` dataset contains measurements on the girth, height, and volume of 31 black cherry trees. A natural multiple regression model is
+
+$$
+Volume_i=\beta_0+\beta_1Girth_i+\beta_2Height_i+\varepsilon_i.
+$$
+
+```{r}
+trees_fit <- lm(Volume ~ Girth + Height, data = trees)
+
+trees_coefs <- broom::tidy(trees_fit)
+
+knitr::kable(trees_coefs, digits = 4)
+```
+
+The estimated slope for `Girth` is `r round(trees_coefs$estimate[trees_coefs$term == "Girth"], 4)`. Interpreted in the multiple-regression model, this means that for trees with the same height, a one-unit increase in girth is associated with an average increase of about `r round(trees_coefs$estimate[trees_coefs$term == "Girth"], 4)` cubic feet in predicted volume.
+
+The estimated slope for `Height` is `r round(trees_coefs$estimate[trees_coefs$term == "Height"], 4)`. This means that for trees with the same girth, a one-unit increase in height is associated with an average increase of about `r round(trees_coefs$estimate[trees_coefs$term == "Height"], 4)` cubic feet in predicted volume.
+
+The important phrase in both interpretations is "with the other predictor held constant."
+
+:::
+
+::: {.callout-warning collapse="false" title="Common interpretation mistake: partial slopes are conditional"}
+
+In simple linear regression, it is natural to describe the slope as the relationship between $x$ and $y$.
+
+In multiple regression, that wording is incomplete. A slope describes the relationship between one predictor and the response *after accounting for the other predictors in the model*.
+
+For the `trees` model, the `Girth` slope should not be interpreted as the overall relationship between girth and volume. It is the expected change in volume for a one-unit increase in girth *among trees with the same height*.
+
+That "holding the other predictors constant" phrase is not decorative. It is doing the heavy interpretive lifting.
+
+:::
+
+::: {.example title="Example 10.5: Visualizing a regression plane"}
+
+With one predictor, the fitted values form a line. With two predictors, the fitted values form a plane.
+
+The model
+
+$$
+\widehat{Volume}=b_0+b_1Girth+b_2Height
+$$
+
+produces one predicted volume for each combination of girth and height.
+
+```{r}
+#| fig-width: 6
+#| fig-height: 5
+
+girth_grid <- seq(min(trees$Girth), max(trees$Girth), length.out = 25)
+height_grid <- seq(min(trees$Height), max(trees$Height), length.out = 25)
+
+plane_grid <- expand.grid(
+  Girth = girth_grid,
+  Height = height_grid
+)
+
+plane_grid$predicted_volume <- predict(trees_fit, newdata = plane_grid)
+
+volume_surface <- matrix(
+  plane_grid$predicted_volume,
+  nrow = length(girth_grid),
+  ncol = length(height_grid)
+)
+
+regression_plane <- persp(
+  x = girth_grid,
+  y = height_grid,
+  z = volume_surface,
+  theta = 35,
+  phi = 25,
+  expand = 0.6,
+  col = "lightblue",
+  border = "gray80",
+  ticktype = "detailed",
+  xlab = "Girth",
+  ylab = "Height",
+  zlab = "Predicted volume"
+)
+
+points(
+  trans3d(
+    x = trees$Girth,
+    y = trees$Height,
+    z = trees$Volume,
+    pmat = regression_plane
+  ),
+  pch = 19,
+  col = "darkgreen"
+)
+```
+
+The blue surface represents the fitted regression plane. The green points represent the observed trees. Each residual is the vertical distance between an observed point and the fitted plane.
+
+:::
+
+::: {.callout-note collapse="false" title="From line to plane to hyperplane"}
+
+The geometry changes as predictors are added:
+
+- one predictor gives a fitted line,
+- two predictors give a fitted plane,
+- three or more predictors give a fitted hyperplane.
+
+The word "hyperplane" sounds fancy, but the idea is the same: the model is still producing fitted values by combining predictors linearly in the parameters.
+
+:::
 
 
 
@@ -189,7 +340,7 @@ a matrix is:
 \end{array}\right]
 \end{align*}
 
-This matrix represents some of the data from the \texttt{trees} dataset. The values in the first column represents Girth, the second column represents Height, and the third column represents Volume. 
+This matrix represents some of the data from the \texttt{trees} dataset. The values in the first column represent Girth, the second column represents Height, and the third column represents Volume.
 
 
 Each row corresponds to a tree. The first row represents the values for the first tree. It has 8.3 for Girth, 70 for Height, and 10.3 for Volume.
@@ -197,6 +348,25 @@ Each row corresponds to a tree. The first row represents the values for the firs
 
 
 So this matrix gives the values of three variables for four trees.
+
+::: {.example title="Example 10.6: The data matrix behind the `trees` example"}
+
+The first four rows of the `trees` data can be viewed as a matrix.
+
+```{r}
+trees_matrix <- as.matrix(head(trees, 4))
+
+trees_matrix
+```
+
+This matrix has `r nrow(trees_matrix)` rows and `r ncol(trees_matrix)` columns. The rows represent observational units, the individual trees. The columns represent variables measured on each tree.
+
+In regression, it is useful to keep this distinction straight:
+
+- rows usually correspond to observations,
+- columns usually correspond to variables or model terms.
+
+:::
 
 
 
@@ -208,7 +378,7 @@ Each value of the matrix is called an *element* of that matrix. We denote the el
 
 
 
-So for the matrix above, the elements can be denotes as
+So for the matrix above, the elements can be denoted as
 $$
 \begin{align*}
 \left[\begin{array}{ccc}
@@ -265,6 +435,18 @@ Recall that the `trees` dataset has 31 observations. So a matrix representing th
 
 Note that in giving the
 dimension of a matrix, we always specify the number of *rows* first and then the number of *columns*.
+
+::: {.callout-note collapse="false" title="Rows first, columns second"}
+
+Matrix dimensions are always written as
+
+$$
+\text{number of rows} \times \text{number of columns}.
+$$
+
+For regression data, rows usually represent observations and columns usually represent variables or model terms. If a data matrix has 31 trees and 3 measured variables, its dimension is $31\times3$, not $3\times31$.
+
+:::
 
 
 
@@ -430,7 +612,7 @@ A symmetric matrix $\bf{A}$ has elements $a_{ij}=a_{ji}$. Clearly, a symmetric m
 
 
 
-### Diagonal Matrices}
+### Diagonal Matrices
 
 A square matrix is said to be *diagonal* if all of the off-diagonal elements are zero. 
 
@@ -453,9 +635,9 @@ is a diagonal matrix.
 
 
 
-### Indentity Matrix
+### Identity Matrix
 
-The *identity* matrix is a diagonal matrix with ones for all the diagonal elements. The identity matrix is denoted with with $\bf{I}$.
+The *identity* matrix is a diagonal matrix with ones for all the diagonal elements. The identity matrix is denoted with $\bf{I}$.
 
 
 
@@ -480,7 +662,7 @@ is a 4 x 4 identity matrix.
 ### Matrices and Vectors of Ones and Zeros
 
 
-A matrix of with ones for all the elements is denoted as
+A matrix with ones for all the elements is denoted as
 $$
 \begin{align*}
 {\bf J} & =\left[\begin{array}{cccc}
@@ -587,12 +769,12 @@ $$
 
 ### Matrix Multiplication
 
-The addition and subtraction rules discussed above are fairly straight forward and similar to addition and subtraction of (non-matrix) numbers. 
+The addition and subtraction rules discussed above are fairly straightforward and similar to addition and subtraction of (non-matrix) numbers.
 
 
 
 
-Multiplication of matrices are not as straight forward as multiplication of (non-matrix) numbers. 
+Multiplication of matrices is not as straightforward as multiplication of (non-matrix) numbers.
 
 
 
@@ -756,6 +938,29 @@ Note that the order in matrix multiplication is important. In general, $\textbf{
 In general, the product $\textbf{AB}$  is defined only when the number of columns in $\textbf{A}$  equals the
 number of rows in $\textbf{B}$. 
 
+::: {.example title="Example 10.7: Checking whether matrix multiplication is defined"}
+
+In regression matrix notation, the fitted values can be written as
+
+$$
+\hat{\bf Y}={\bf X}{\bf b}.
+$$
+
+If there are $n$ observations and $p$ regression parameters, then
+
+$$
+\underset{n\times p}{\bf X}\quad
+\underset{p\times 1}{\bf b}
+=
+\underset{n\times 1}{\hat{\bf Y}}.
+$$
+
+The multiplication is defined because the number of columns in $\bf X$ equals the number of rows in $\bf b$. The result is an $n\times1$ vector, one fitted value for each observation.
+
+This is a useful way to check whether a matrix formula makes sense: the inner dimensions must match, and the outer dimensions tell you the size of the result.
+
+:::
+
 
 
 
@@ -838,8 +1043,51 @@ the inverse is unique.
 
 
 
-If a the inverse of a matrix does not exist, then we say the matrix is *singular*. If the inverse does exist, then we say the matrix is *nonsingular*.
+If the inverse of a matrix does not exist, then we say the matrix is *singular*. If the inverse does exist, then we say the matrix is *nonsingular*.
 
+::: {.callout-warning collapse="false" title="Why singular matrices matter in regression"}
+
+In multiple regression, the least-squares estimates can be written using a matrix inverse. In the next chapter, this will appear as
+
+$$
+{\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}.
+$$
+
+This formula only works if ${\bf X}'{\bf X}$ has an inverse. If predictors are perfectly redundant, such as including the same variable twice or including one predictor that is an exact linear combination of others, then ${\bf X}'{\bf X}$ becomes singular and the usual least-squares estimates are not uniquely defined.
+
+This is the matrix-algebra version of a regression idea: the model cannot separately estimate effects that the data cannot separate.
+
+:::
+
+::: {.example title="Example 10.8: Verifying the matrix formula for least squares"}
+
+The usual matrix formula for the least-squares coefficient estimates is
+
+$$
+{\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}.
+$$
+
+For the `trees` model, R's `model.matrix()` creates the design matrix ${\bf X}$. The first column is the intercept column of ones, and the remaining columns are the predictors.
+
+```{r}
+X <- model.matrix(trees_fit)
+Y <- trees$Volume
+
+matrix_estimates <- solve(t(X) %*% X) %*% t(X) %*% Y
+
+comparison <- tibble::tibble(
+  term = names(coef(trees_fit)),
+  matrix_formula = as.numeric(matrix_estimates),
+  lm_estimate = as.numeric(coef(trees_fit)),
+  difference = as.numeric(matrix_estimates) - as.numeric(coef(trees_fit))
+)
+
+knitr::kable(comparison, digits = 10)
+```
+
+The matrix formula and `lm()` give the same coefficient estimates. In practice, we usually rely on software such as `lm()` because it uses numerically stable methods, but this calculation shows where the familiar regression estimates come from.
+
+:::
 
 
 
@@ -962,7 +1210,7 @@ $$
 
 #### Common Derivatives Involving Matrices
 
-$$4
+$$
 \begin{align*}
 & \frac{\partial{\bf A}^{\prime}{\bf A}}{\partial{\bf A}}=2{\bf A}^{\prime}\\
 & \frac{\partial{\bf A}^{\prime}{\bf B}}{\partial{\bf B}}=\frac{\partial{\bf B}^{\prime}{\bf A}}{\partial{\bf B}}={\bf A}^{\prime} &  & \text{(provided }m=n)\\
@@ -1052,6 +1300,144 @@ $$
 Note that ${\bf Cov}\left[{\bf Y}\right]$ is a symmetric matrix since
 $Cov\left[Y_{i},Y_{j}\right]=Cov\left[Y_{j},Y_{i}\right]$.
 
+::: {.example title="Example 10.9: Independent errors and the covariance matrix"}
+
+In the usual regression model, the error terms are assumed to be independent with common variance $\sigma^2$. In matrix notation, that assumption can be written as
+
+$$
+{\bf Cov}({\boldsymbol \varepsilon})=\sigma^2{\bf I}.
+$$
+
+For three observations, this means
+
+$$
+{\bf Cov}({\boldsymbol \varepsilon})=
+\sigma^2
+\left[
+\begin{array}{ccc}
+1 & 0 & 0\\
+0 & 1 & 0\\
+0 & 0 & 1
+\end{array}
+\right]
+=
+\left[
+\begin{array}{ccc}
+\sigma^2 & 0 & 0\\
+0 & \sigma^2 & 0\\
+0 & 0 & \sigma^2
+\end{array}
+\right].
+$$
+
+The diagonal entries are variances. The off-diagonal entries are covariances. The zeros off the diagonal represent independence between different errors.
+
+:::
+
+## Recap
+
+This chapter introduced multiple regression and the matrix notation that will make later regression results easier to state.
+
+| Idea | Meaning |
+|---|---|
+| **Multiple regression** | A regression model with two or more predictor variables. |
+| **Linear in the parameters** | Each parameter appears to the first power and is not multiplied or divided by another parameter. |
+| **First-order model** | A model that is linear in both the parameters and the predictor variables. |
+| **Partial slope** | The expected change in the response for a one-unit change in one predictor, holding the other predictors constant. |
+| **Common partial-slope mistake** | Interpreting a multiple-regression slope as a simple bivariate relationship instead of a conditional relationship. |
+| **Multicollinearity** | Correlation among predictor variables; it can make individual predictor effects harder to estimate and interpret. |
+| **Least squares** | Chooses coefficient estimates by minimizing the sum of squared residuals. |
+| **Regression plane** | The fitted surface produced by a model with two predictors. |
+| **Design matrix** | The matrix ${\bf X}$ containing the intercept column and predictor columns used in the regression model. |
+| **Matrix least-squares formula** | The coefficient estimates can be written as ${\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}$ when the inverse exists. |
+| **Matrix dimension** | Written as rows $\times$ columns. |
+| **Transpose** | Interchanges rows and columns of a matrix. |
+| **Identity matrix** | A diagonal matrix with ones on the diagonal; it acts like the number 1 in matrix multiplication. |
+| **Inverse matrix** | A matrix ${\bf A}^{-1}$ such that ${\bf A}^{-1}{\bf A}={\bf A}{\bf A}^{-1}={\bf I}$. |
+| **Singular matrix** | A square matrix with no inverse. |
+| **Covariance matrix** | A matrix that stores variances on the diagonal and covariances off the diagonal. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why is simple linear regression called "simple"?
+
+2. What does it mean for a model to be linear in the parameters?
+
+3. Can a model include $x^2$ and still be a linear regression model? Explain.
+
+4. In multiple regression, what does it mean to interpret a slope while "holding the other predictors constant"?
+
+5. What is a common mistake when interpreting a multiple-regression slope?
+
+6. Why can correlated predictors make interpretation harder?
+
+7. In a model with two predictors, what does the regression plane represent?
+
+8. What quantity does least squares minimize?
+
+9. Why do the least-squares formulas become cumbersome as more predictors are added?
+
+10. What is the design matrix ${\bf X}$?
+
+11. Why should the matrix formula ${\bf b}=({\bf X}'{\bf X})^{-1}{\bf X}'{\bf Y}$ agree with `lm()` for the same model?
+
+12. If a matrix has 10 rows and 4 columns, what is its dimension?
+
+13. What happens to the dimensions of a matrix when it is transposed?
+
+14. When is the product ${\bf A}{\bf B}$ defined?
+
+15. What role does the identity matrix play in matrix algebra?
+
+16. Why is a singular matrix a problem for the usual matrix formula for least-squares estimates?
+
+17. In a covariance matrix, where are the variances located?
+
+18. What does it mean if the off-diagonal entries of an error covariance matrix are 0?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **One predictor.** Simple linear regression is called "simple" because the model has one predictor variable.
+
+2. **Parameters appear linearly.** A model is linear in the parameters when each parameter appears to the first power and is not multiplied or divided by another parameter.
+
+3. **Yes.** A model such as $y=\beta_0+\beta_1x+\beta_2x^2+\varepsilon$ is linear in the parameters even though it is not linear in the predictor variable. It is a linear regression model, but not a first-order model.
+
+4. **Partial interpretation.** It means we interpret the effect of changing one predictor while comparing observations that have the same values of the other predictors in the model.
+
+5. **Forgetting the conditioning.** A common mistake is to interpret a multiple-regression slope as the overall relationship between one predictor and the response. In multiple regression, the slope is conditional on the other predictors in the model.
+
+6. **Effects are harder to separate.** When predictors are correlated, changes in one predictor tend to come with changes in another predictor. This makes it harder to isolate the unique contribution of each predictor.
+
+7. **The fitted surface.** The regression plane represents the fitted values from a model with two predictors. Observed points can fall above or below the plane, and those vertical differences are residuals.
+
+8. **The sum of squared residuals.** Least squares chooses estimates that minimize the sum of squared differences between observed values and fitted values.
+
+9. **More parameters create more equations.** Each additional predictor adds another coefficient and another normal equation. The algebra grows quickly, which motivates matrix notation.
+
+10. **The model-input matrix.** The design matrix ${\bf X}$ contains the intercept column and the predictor columns used to fit the regression model.
+
+11. **They estimate the same least-squares coefficients.** The matrix formula is the algebraic expression for ordinary least squares. For the same response, predictors, and intercept convention, it gives the same estimates as `lm()`.
+
+12. **$10\times4$.** Matrix dimensions are written as rows $\times$ columns.
+
+13. **Rows and columns switch.** The transpose of a $10\times4$ matrix is a $4\times10$ matrix.
+
+14. **Inner dimensions must match.** The product ${\bf A}{\bf B}$ is defined when the number of columns in ${\bf A}$ equals the number of rows in ${\bf B}$.
+
+15. **It acts like 1.** The identity matrix plays the role of 1 in matrix multiplication: multiplying by the identity leaves a compatible matrix unchanged.
+
+16. **No inverse.** The usual matrix formula for least-squares estimates uses $({\bf X}'{\bf X})^{-1}$. If ${\bf X}'{\bf X}$ is singular, that inverse does not exist, so the usual formula cannot be used.
+
+17. **On the diagonal.** The variances are the diagonal entries of the covariance matrix.
+
+18. **Zero covariance.** Off-diagonal zeros mean the corresponding errors have covariance 0. Under the usual regression assumptions, this represents no linear association between different error terms and is tied to the independence assumption.
+
+:::
 
 
 

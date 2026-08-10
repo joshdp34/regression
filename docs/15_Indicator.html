@@ -343,9 +343,12 @@ window.Quarto = {
 <a href="#indicator-variables-for-two-classes" id="toc-indicator-variables-for-two-classes" class="nav-link" data-scroll-target="#indicator-variables-for-two-classes"><span class="header-section-number">15.2</span> Indicator Variables for Two Classes</a>
   <ul class="collapse">
 <li><a href="#interpretation" id="toc-interpretation" class="nav-link" data-scroll-target="#interpretation"><span class="header-section-number">15.2.1</span> Interpretation</a></li>
+  <li><a href="#different-slopes-with-an-interaction" id="toc-different-slopes-with-an-interaction" class="nav-link" data-scroll-target="#different-slopes-with-an-interaction"><span class="header-section-number">15.2.2</span> Different Slopes with an Interaction</a></li>
   </ul>
 </li>
   <li><a href="#qualitative-predictors-with-more-than-two-classes" id="toc-qualitative-predictors-with-more-than-two-classes" class="nav-link" data-scroll-target="#qualitative-predictors-with-more-than-two-classes"><span class="header-section-number">15.3</span> Qualitative Predictors with More Than Two Classes</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">15.4</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">15.5</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -371,25 +374,40 @@ window.Quarto = {
 </blockquote>
 <section id="two-types-of-independent-variables" class="level2" data-number="15.1"><h2 data-number="15.1" class="anchored" data-anchor-id="two-types-of-independent-variables">
 <span class="header-section-number">15.1</span> Two Types of Independent Variables</h2>
-<p>The independent variables that appear in a linear model can be one of two types: <em>quantitative</em> and <em>qualitative</em> (or <em>categorical</em>)</p>
-<p>The different values of an independent variable used in regression are called it’s <em>levels</em>.</p>
+<p>The independent variables that appear in a linear model can be one of two types: <em>quantitative</em> and <em>qualitative</em> (or <em>categorical</em>).</p>
+<p>The different values of an independent variable used in regression are called its <em>levels</em>.</p>
 <p>For a quantitative variable, the levels correspond to the numerical values it assumes. For example, if the number of defects in a product ranges from 0 to 3, the independent variable assumes four levels: 0, 1, 2, and 3.</p>
-<p>The levels of a qualitative variable are not numerical. They can be defined only by describing them. Thus, they are the categories the variable can be.</p>
+<p>The levels of a qualitative variable are not numerical. They can be defined only by describing them. Thus, they are the categories to which an observation can belong.</p>
 <section id="qualitative-predictors" class="level3" data-number="15.1.1"><h3 data-number="15.1.1" class="anchored" data-anchor-id="qualitative-predictors">
 <span class="header-section-number">15.1.1</span> Qualitative Predictors</h3>
 <p>Thus far, we have only considered predictor variables that are quantitative.</p>
 <p>Qualitative predictor variables can also be used in regression models.</p>
 <p>Let’s look at an example involving handspans and heights of students.</p>
-<div id="exm-15_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 15.1 (Handspan data)</strong></span> The dataset examined here consists of left and right hand spans of 1102 students along with the height, sex, handedness, and dominate eye. The response variable is right hand span with height as a predictor variable. Below is a scatterplot of the data.</p>
+<div id="exm-15_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 15.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Handspan data: height and sex
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The dataset examined here consists of left and right hand spans of 1102 students along with height, sex, handedness, and dominant eye. The response variable is right hand span with height as a predictor variable. Below is a scatterplot of the data.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"SurveyMeasurements.csv"</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"SurveyMeasurements.csv"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`height (inches)`</span>, y <span class="op">=</span> <span class="va">`right handspan (cm)`</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`height (inches)`</span>, y <span class="op">=</span> <span class="va">`right handspan (cm)`</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Height (inches)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Right handspan (cm)"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="15_Indicator_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="576"></p>
@@ -402,9 +420,14 @@ window.Quarto = {
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">`height (inches)`</span>, y <span class="op">=</span> <span class="va">`right handspan (cm)`</span>,</span>
-<span>             color <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>             color <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Height (inches)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Right handspan (cm)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Sex"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="15_Indicator_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="576"></p>
@@ -413,6 +436,7 @@ window.Quarto = {
 </div>
 </div>
 <p>We can see that sex plays a role in the regression line. For the male subjects, the fitted line tends to be higher than for the female subjects.</p>
+</div>
 </div>
 </section></section><section id="indicator-variables-for-two-classes" class="level2" data-number="15.2"><h2 data-number="15.2" class="anchored" data-anchor-id="indicator-variables-for-two-classes">
 <span class="header-section-number">15.2</span> Indicator Variables for Two Classes</h2>
@@ -446,77 +470,395 @@ E\left[y_{i}\right] &amp; =\beta_{0}+\beta_{1}x_{i1}+\beta_{2}\left(0\right)\\
 \]</span></p>
 <p>Thus, the two groups will have the same slope (<span class="math inline">\(\beta_{1}\)</span>), but will have different intercepts. That means the means of the two groups are different by <span class="math inline">\(\beta_{2}\)</span> for all values of <span class="math inline">\(x_{1}\)</span>.</p>
 <p>We could also have different slopes for the two groups by incorporating an <em>interaction</em> term between the predictors.</p>
-<div id="exm-15_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 15.2 (Handspan data again)</strong></span> Indicator variables can be specified with the <code>step_dummy</code> function. You can tell it which variable to make into indicator variables. If we want all character variables to be turned into indicator variables, we can specify <code>all_nominal_predictors()</code>.</p>
+</section><section id="different-slopes-with-an-interaction" class="level3" data-number="15.2.2"><h3 data-number="15.2.2" class="anchored" data-anchor-id="different-slopes-with-an-interaction">
+<span class="header-section-number">15.2.2</span> Different Slopes with an Interaction</h3>
+<p>The model above allows the groups to have different intercepts, but it assumes they have the same slope. That means the difference between the groups is the same for every value of the quantitative predictor.</p>
+<p>To allow both the intercept and the slope to differ, we can include an interaction between the quantitative predictor and the indicator variable:</p>
+<p><span class="math display">\[
+\begin{align*}
+y_i = \beta_0+\beta_1x_i+\beta_2z_i+\beta_3x_iz_i+\varepsilon_i,
+\end{align*}
+\]</span></p>
+<p>where <span class="math inline">\(z_i=1\)</span> for one group and <span class="math inline">\(z_i=0\)</span> for the reference group.</p>
+<p>For the reference group, <span class="math inline">\(z_i=0\)</span>, so</p>
+<p><span class="math display">\[
+\begin{align*}
+E(y_i)=\beta_0+\beta_1x_i.
+\end{align*}
+\]</span></p>
+<p>For the other group, <span class="math inline">\(z_i=1\)</span>, so</p>
+<p><span class="math display">\[
+\begin{align*}
+E(y_i)=(\beta_0+\beta_2)+(\beta_1+\beta_3)x_i.
+\end{align*}
+\]</span></p>
+<p>The coefficient <span class="math inline">\(\beta_2\)</span> changes the intercept, while <span class="math inline">\(\beta_3\)</span> changes the slope. In this model, the group difference depends on the value of <span class="math inline">\(x\)</span>.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Interpreting an indicator coefficient
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose <code>female</code> is the reference group and the fitted model is</p>
+<p><span class="math display">\[
+\widehat{y}=b_0+b_1(\text{height})+b_2(\text{male}).
+\]</span></p>
+<p>Then the fitted equations are</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Group</th>
+<th style="text-align: right;">Indicator value</th>
+<th>Fitted equation</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Female</td>
+<td style="text-align: right;">0</td>
+<td><span class="math inline">\(\widehat{y}=b_0+b_1(\text{height})\)</span></td>
+</tr>
+<tr class="even">
+<td>Male</td>
+<td style="text-align: right;">1</td>
+<td><span class="math inline">\(\widehat{y}=(b_0+b_2)+b_1(\text{height})\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The coefficient <span class="math inline">\(b_2\)</span> is the estimated difference between males and females at the same height. Because there is no interaction term, the model assumes this difference is constant across all heights.</p>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Handspan data: allowing different slopes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The plot in <a href="#exm-15_1" class="quarto-xref">Example&nbsp;<span>15.1</span></a> included separate fitted lines for each sex. To fit that idea directly, we can include an interaction between height and sex.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#prepare data</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">`right handspan (cm)`</span> <span class="op">~</span> <span class="va">`height (inches)`</span> <span class="op">+</span> <span class="va">sex</span>, </span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">interaction_data</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span></span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">sex</span><span class="op">)</span>,</span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">`height (inches)`</span><span class="op">)</span>,</span>
+<span>    <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">`right handspan (cm)`</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">handspan_interaction_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>  <span class="va">`right handspan (cm)`</span> <span class="op">~</span> <span class="va">`height (inches)`</span> <span class="op">*</span> <span class="va">sex</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">interaction_data</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">handspan_interaction_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">6.2735</td>
+<td style="text-align: right;">1.5573</td>
+<td style="text-align: right;">4.0285</td>
+<td style="text-align: right;">0.0001</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>height (inches)</code></td>
+<td style="text-align: right;">0.1938</td>
+<td style="text-align: right;">0.0240</td>
+<td style="text-align: right;">8.0767</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sexm</td>
+<td style="text-align: right;">1.6051</td>
+<td style="text-align: right;">2.5156</td>
+<td style="text-align: right;">0.6381</td>
+<td style="text-align: right;">0.5236</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>height (inches)</code>:sexm</td>
+<td style="text-align: right;">0.0020</td>
+<td style="text-align: right;">0.0369</td>
+<td style="text-align: right;">0.0546</td>
+<td style="text-align: right;">0.9564</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>In this model, the interaction term estimates how much the height slope differs between the non-reference group and the reference group. If the interaction coefficient is near 0, then the separate fitted lines are close to parallel. If it is far from 0, then the relationship between height and handspan differs by group.</p>
+</div>
+</div>
+<div id="exm-15_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 15.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Handspan data: fitting an indicator-variable model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Indicator variables can be specified with the <code>step_dummy()</code> function. You can tell it which variable to make into indicator variables. If we want all character variables to be turned into indicator variables, we can specify <code>all_nominal_predictors()</code>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Prepare data</span></span>
+<span><span class="va">handspan_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">`right handspan (cm)`</span> <span class="op">~</span> <span class="va">`height (inches)`</span> <span class="op">+</span> <span class="va">sex</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">dat</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_naomit</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup model</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up model</span></span>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow</span></span>
-<span><span class="va">lm_workflow</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Set up the workflow</span></span>
+<span><span class="va">handspan_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">handspan_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the model</span></span>
-<span><span class="va">lm_fit</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Fit the model</span></span>
+<span><span class="va">handspan_fit</span> <span class="op">&lt;-</span> <span class="va">handspan_workflow</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 5
-  term              estimate std.error statistic  p.value
-  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)          6.22     1.18        5.26 1.75e- 7
-2 `height (inches)`    0.195    0.0182     10.7  1.93e-25
-3 sex_m                1.74     0.155      11.3  5.82e-28</code></pre>
+<span><span class="va">handspan_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">6.2182</td>
+<td style="text-align: right;">1.1827</td>
+<td style="text-align: right;">5.2576</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>height (inches)</code></td>
+<td style="text-align: right;">0.1947</td>
+<td style="text-align: right;">0.0182</td>
+<td style="text-align: right;">10.6900</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sex_m</td>
+<td style="text-align: right;">1.7422</td>
+<td style="text-align: right;">0.1546</td>
+<td style="text-align: right;">11.2721</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Note that the variable <code>sex</code> has an <code>m</code> next to it. This is letting you know which category (level) is encoded with 1. The way this is determined in <code>step_dummy</code> is based on which level first in alphabetical order. For the sex variable, <code>f</code> is first. So it is the <em>reference</em> level. The reference level will be the 0 in the encoding.</p>
-<p>If we want to change the reference level so another category, we can use the <code>step_relevel</code> function first.</p>
+<p>Note that the variable <code>sex</code> has an <code>m</code> next to it. This is letting you know which category (level) is encoded with 1. The way this is determined in <code>step_dummy()</code> is based on which level comes first in alphabetical order. For the sex variable, <code>f</code> is first, so it is the <em>reference</em> level. The reference level is the 0 in the encoding.</p>
+<p>The fitted model can be used to compare two students at the same height. The following table compares the predicted right handspan for a female student and a male student who are both 70 inches tall.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#prepare data</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">`right handspan (cm)`</span> <span class="op">~</span> <span class="va">`height (inches)`</span> <span class="op">+</span> <span class="va">sex</span>, </span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">same_height_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  `height (inches)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">70</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"m"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">same_height_results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>  <span class="va">handspan_fit</span>,</span>
+<span>  new_data <span class="op">=</span> <span class="va">same_height_predictions</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">same_height_predictions</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">sex</span>, <span class="va">`height (inches)`</span>, predicted_handspan_cm <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">same_height_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">sex</th>
+<th style="text-align: right;">height (inches)</th>
+<th style="text-align: right;">predicted_handspan_cm</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">f</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">19.844</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">m</td>
+<td style="text-align: right;">70</td>
+<td style="text-align: right;">21.587</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The difference between these two predictions is the fitted male indicator coefficient because the two students have the same value of height.</p>
+<p>If we want to change the reference level to another category, we can use the <code>step_relevel()</code> function first.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Prepare data</span></span>
+<span><span class="va">handspan_recipe_m_reference</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">`right handspan (cm)`</span> <span class="op">~</span> <span class="va">`height (inches)`</span> <span class="op">+</span> <span class="va">sex</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">dat</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_naomit</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">step_relevel</span><span class="op">(</span><span class="va">sex</span>, ref_level <span class="op">=</span> <span class="st">"m"</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup model</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up model</span></span>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow</span></span>
-<span><span class="va">lm_workflow</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Set up the workflow</span></span>
+<span><span class="va">handspan_workflow_m_reference</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">handspan_recipe_m_reference</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the model</span></span>
-<span><span class="va">lm_fit</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Fit the model</span></span>
+<span><span class="va">handspan_fit_m_reference</span> <span class="op">&lt;-</span> <span class="va">handspan_workflow_m_reference</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 5
-  term              estimate std.error statistic  p.value
-  &lt;chr&gt;                &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)          7.96     1.29        6.19 8.73e-10
-2 `height (inches)`    0.195    0.0182     10.7  1.93e-25
-3 sex_f               -1.74     0.155     -11.3  5.82e-28</code></pre>
+<span><span class="va">handspan_fit_m_reference</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">7.9605</td>
+<td style="text-align: right;">1.2870</td>
+<td style="text-align: right;">6.1854</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>height (inches)</code></td>
+<td style="text-align: right;">0.1947</td>
+<td style="text-align: right;">0.0182</td>
+<td style="text-align: right;">10.6900</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">sex_f</td>
+<td style="text-align: right;">-1.7422</td>
+<td style="text-align: right;">0.1546</td>
+<td style="text-align: right;">-11.2721</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Note that the coefficient for <code>height</code> did not change and the coefficient for <code>sex</code> just signs but had the same magnitude.</p>
+<p>Note that the coefficient for <code>height</code> did not change and the coefficient for <code>sex</code> changed signs but had the same magnitude. Changing the reference level changes the way the difference is described, but it does not change the fitted values from the model.</p>
+<p>We can verify that the fitted values are unchanged by comparing predictions from the two models. The first model uses <code>f</code> as the reference level, while the second model uses <code>m</code> as the reference level.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">reference_check_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  `height (inches)` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">65</span>, <span class="fl">65</span>, <span class="fl">70</span>, <span class="fl">70</span><span class="op">)</span>,</span>
+<span>  sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"f"</span>, <span class="st">"m"</span>, <span class="st">"f"</span>, <span class="st">"m"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">female_reference_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>  <span class="va">handspan_fit</span>,</span>
+<span>  new_data <span class="op">=</span> <span class="va">reference_check_data</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>predicted_with_f_reference <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">male_reference_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>  <span class="va">handspan_fit_m_reference</span>,</span>
+<span>  new_data <span class="op">=</span> <span class="va">reference_check_data</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>predicted_with_m_reference <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span></span>
+<span>  <span class="va">reference_check_data</span>,</span>
+<span>  <span class="va">female_reference_predictions</span>,</span>
+<span>  <span class="va">male_reference_predictions</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>difference <span class="op">=</span> <span class="va">predicted_with_f_reference</span> <span class="op">-</span> <span class="va">predicted_with_m_reference</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">6</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 18%">
+<col style="width: 4%">
+<col style="width: 31%">
+<col style="width: 31%">
+<col style="width: 12%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">height (inches)</th>
+<th style="text-align: left;">sex</th>
+<th style="text-align: right;">predicted_with_f_reference</th>
+<th style="text-align: right;">predicted_with_m_reference</th>
+<th style="text-align: right;">difference</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">65</td>
+<td style="text-align: left;">f</td>
+<td style="text-align: right;">18.87112</td>
+<td style="text-align: right;">18.87112</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">65</td>
+<td style="text-align: left;">m</td>
+<td style="text-align: right;">20.61335</td>
+<td style="text-align: right;">20.61335</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">f</td>
+<td style="text-align: right;">19.84442</td>
+<td style="text-align: right;">19.84442</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">70</td>
+<td style="text-align: left;">m</td>
+<td style="text-align: right;">21.58665</td>
+<td style="text-align: right;">21.58665</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The predictions are the same. Only the baseline used to describe the coefficients changed.</p>
+</div>
 </div>
 </section></section><section id="qualitative-predictors-with-more-than-two-classes" class="level2" data-number="15.3"><h2 data-number="15.3" class="anchored" data-anchor-id="qualitative-predictors-with-more-than-two-classes">
 <span class="header-section-number">15.3</span> Qualitative Predictors with More Than Two Classes</h2>
 <p>We can use indicator variables for qualitative predictors that have more than two classes (categories).</p>
-<p>For example, suppose we wanted to model the sales price of a home bases on the quantitative predictors lot size (<span class="math inline">\(x_1\)</span>), local taxes (<span class="math inline">\(x_2\)</span>), and age (<span class="math inline">\(x_3\)</span>).</p>
+<p>For example, suppose we wanted to model the sales price of a home based on the quantitative predictors lot size (<span class="math inline">\(x_1\)</span>), local taxes (<span class="math inline">\(x_2\)</span>), and age (<span class="math inline">\(x_3\)</span>).</p>
 <p>We may also want to include the qualitative predictor for air conditioning type. The possible classes are “no air conditioning”, “window units”, “heat pumps”, and “central air conditioning”.</p>
 <p>We will now set up the indicator variables in the following way: <span class="math display">\[
 \begin{align*}
@@ -535,6 +877,23 @@ x_{6} &amp; =\begin{cases}
 \end{align*}
 \]</span> We do not include an indicator variable for the last class “central air conditioning” because subjects with <span class="math inline">\(x_{4}=0\)</span>, <span class="math inline">\(x_{5}=0\)</span>, and <span class="math inline">\(x_{6}=0\)</span> will be considered in the class “central air conditioning”.</p>
 <p>As a general rule, if there are <span class="math inline">\(c\)</span> classes for a qualitative variable, then <em><span class="math inline">\(c-1\)</span></em> indicator variables will be needed.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Why use c - 1 indicators?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Why use c - 1 indicators?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>If a qualitative predictor has <span class="math inline">\(c\)</span> classes and the model includes an intercept, we include only <span class="math inline">\(c-1\)</span> indicator variables. The omitted class becomes the reference group.</p>
+<p>Including all <span class="math inline">\(c\)</span> indicators along with an intercept creates perfect multicollinearity because the indicators add up to 1 for every observation. This is sometimes called the <em>dummy variable trap</em>.</p>
+</div>
+</div>
+</div>
 <p>The expectations become <span class="math display">\[
 \begin{align*}
 \text{no air conditioning: }E\left[y_{i}\right]= &amp; \beta_{0}+\beta_{1}x_{i1}+\beta_{2}x_{i2}+\beta_{3}x_{i3}+\beta_{4}\left(1\right)+\beta_{5}\left(0\right)+\beta_{6}\left(0\right)\\
@@ -557,56 +916,371 @@ x_{6} &amp; =\begin{cases}
 \end{align*}
 \]</span></p>
 <p>So once again the slopes will be the same for each class but the intercept will change for different classes.</p>
-<div id="exm-15_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 15.3 (CDI data)</strong></span> Let’s examine the CDI data from Kutner[<sup>1</sup>]. The data consist of the number of active physicians (<span class="math inline">\(Y\)</span>), the population size, total personal income, and region of 440 counties in the United States.</p>
-<p>[<sup>1</sup>]: Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Practice: Creating indicators">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Practice: Creating indicators
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Suppose a model predicts exam score from hours studied and course format. The course format has four categories:</p>
+<ul>
+<li>in person</li>
+<li>hybrid</li>
+<li>online synchronous</li>
+<li>online asynchronous</li>
+</ul>
+<p>Use “in person” as the reference level.</p>
+<ol type="1">
+<li>How many indicator variables are needed?</li>
+<li>Define the indicator variables.</li>
+<li>What does the coefficient for the <code>online asynchronous</code> indicator mean?</li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="One possible answer">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>One possible answer
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Since there are 4 categories, we need <span class="math inline">\(4-1=3\)</span> indicator variables.</p></li>
+<li>
+<p>One possible coding is</p>
+<p><span class="math display">\[
+x_2 =
+\begin{cases}
+1 &amp; \text{if hybrid}\\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p><span class="math display">\[
+x_3 =
+\begin{cases}
+1 &amp; \text{if online synchronous}\\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p><span class="math display">\[
+x_4 =
+\begin{cases}
+1 &amp; \text{if online asynchronous}\\
+0 &amp; \text{otherwise}
+\end{cases}
+\]</span></p>
+<p>In-person classes have <span class="math inline">\(x_2=0\)</span>, <span class="math inline">\(x_3=0\)</span>, and <span class="math inline">\(x_4=0\)</span>.</p>
+</li>
+<li><p>The coefficient for <code>online asynchronous</code> is the estimated difference in mean exam score between online asynchronous and in-person classes, holding hours studied constant.</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div id="exm-15_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 15.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>CDI data: converting coded regions to factors
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s examine the CDI data from Kutner<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. The data consist of the number of active physicians (<span class="math inline">\(Y\)</span>), the population size, total personal income, and region of 440 counties in the United States.</p>
 <p>The <code>region</code> variable is originally coded in the dataset as</p>
-<p>1 - New England 2 - North Central 3 - Southern 4 - Western</p>
-<p>Note that when you read this into R, they are thought of as numeric and not factors or characters. Then they are then passed to the <code>lm</code> engine, they are treated as any other quantitative variable.</p>
-<p>We can use the <code>step_num2factor</code> function to convert these to factors. We can even change the names from the numbers to the name of the region by passing this function a vector of names (in the order of the numbers).</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th style="text-align: right;">Code</th>
+<th>Region</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td>New England</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td>North Central</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td>Southern</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td>Western</td>
+</tr>
+</tbody>
+</table>
+<p>Note that when you read this into R, the region codes are treated as numeric values rather than factors or characters. If they are passed to the <code>lm</code> engine this way, they are treated like any other quantitative variable.</p>
+<p>We can use the <code>step_num2factor()</code> function to convert these to factors. We can even change the names from the numbers to the name of the region by passing this function a vector of names (in the order of the numbers).</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"CDI.txt"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">cdi_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"CDI.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">region_names</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"New England"</span>, <span class="st">"North Central"</span>,</span>
-<span>                 <span class="st">"Southern"</span>, <span class="st">"Western"</span><span class="op">)</span></span>
+<span><span class="va">region_names</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"New England"</span>,</span>
+<span>  <span class="st">"North Central"</span>,</span>
+<span>  <span class="st">"Southern"</span>,</span>
+<span>  <span class="st">"Western"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#prepare data</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">num_physicians</span><span class="op">~</span><span class="va">pop</span><span class="op">+</span><span class="va">personal_income</span><span class="op">+</span><span class="va">region</span>, </span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">cdi_dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">region</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>region_name <span class="op">=</span> <span class="va">region_names</span><span class="op">[</span><span class="va">region</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">region</span>, <span class="va">region_name</span>, <span class="va">n</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">region</th>
+<th style="text-align: left;">region_name</th>
+<th style="text-align: right;">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">New England</td>
+<td style="text-align: right;">103</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">North Central</td>
+<td style="text-align: right;">108</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Southern</td>
+<td style="text-align: right;">152</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Western</td>
+<td style="text-align: right;">77</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Prepare data</span></span>
+<span><span class="va">cdi_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">num_physicians</span> <span class="op">~</span> <span class="va">pop</span> <span class="op">+</span> <span class="va">personal_income</span> <span class="op">+</span> <span class="va">region</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">cdi_dat</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_num2factor</span><span class="op">(</span><span class="va">region</span>, levels <span class="op">=</span> <span class="va">region_names</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">step_dummy</span><span class="op">(</span><span class="fu">all_nominal_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup model</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up model</span></span>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow</span></span>
-<span><span class="va">lm_workflow</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Set up the workflow</span></span>
+<span><span class="va">cdi_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">cdi_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the model</span></span>
-<span><span class="va">lm_fit</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="co"># Fit the model</span></span>
+<span><span class="va">cdi_fit</span> <span class="op">&lt;-</span> <span class="va">cdi_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">cdi_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  term                    estimate std.error statistic  p.value
-  &lt;chr&gt;                      &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)           -58.5      58.8        -0.994  3.21e- 1
-2 pop                     0.000551  0.000284    1.94   5.24e- 2
-3 personal_income         0.107     0.0133      8.07   6.80e-15
-4 region_North.Central   -3.49     78.8        -0.0443 9.65e- 1
-5 region_Southern        42.2      74.0         0.570  5.69e- 1
-6 region_Western       -149.       86.8        -1.72   8.68e- 2</code></pre>
+<span><span class="va">cdi_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-58.4762</td>
+<td style="text-align: right;">58.8161</td>
+<td style="text-align: right;">-0.9942</td>
+<td style="text-align: right;">0.3207</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">pop</td>
+<td style="text-align: right;">0.0006</td>
+<td style="text-align: right;">0.0003</td>
+<td style="text-align: right;">1.9449</td>
+<td style="text-align: right;">0.0524</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">personal_income</td>
+<td style="text-align: right;">0.1070</td>
+<td style="text-align: right;">0.0133</td>
+<td style="text-align: right;">8.0733</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">region_North.Central</td>
+<td style="text-align: right;">-3.4931</td>
+<td style="text-align: right;">78.8104</td>
+<td style="text-align: right;">-0.0443</td>
+<td style="text-align: right;">0.9647</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">region_Southern</td>
+<td style="text-align: right;">42.1967</td>
+<td style="text-align: right;">74.0226</td>
+<td style="text-align: right;">0.5701</td>
+<td style="text-align: right;">0.5689</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">region_Western</td>
+<td style="text-align: right;">-149.0196</td>
+<td style="text-align: right;">86.8332</td>
+<td style="text-align: right;">-1.7162</td>
+<td style="text-align: right;">0.0868</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Note that we did not have to use <code>step_dummy</code> here due to the numbers being turned into factors by <code>step_num2factor</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character into dummy variables. So we did not need to use <code>step_dummy</code> in either <a href="#exm-15_1" class="quarto-xref">Example&nbsp;<span>15.1</span></a> or <a href="#exm-15_2" class="quarto-xref">Example&nbsp;<span>15.2</span></a> either. However, it is good practice to include <code>step_dummy</code> in your recipe when dealing with qualitative variables since it will allow for more control when dealing with complex data.</p>
+<p>The <code>step_num2factor()</code> step is important because the region numbers are labels, not measurements. Region 4 is not “twice as much region” as region 2.</p>
+<p>Note that we did not have to use <code>step_dummy()</code> here after the numbers were turned into factors by <code>step_num2factor()</code>. The <code>lm</code> engine automatically turns factors into dummy variables for you. In fact, the engine will turn any character predictor into dummy variables. However, it is good practice to include <code>step_dummy()</code> in your recipe when dealing with qualitative variables since it allows for more control when dealing with complex data.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="15.4"><h2 data-number="15.4" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">15.4</span> Recap</h2>
+<p>In this chapter, we extended regression models to include qualitative predictors by using indicator variables.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Quantitative predictor</strong></td>
+<td>A predictor whose values are numerical measurements or counts.</td>
+</tr>
+<tr class="even">
+<td><strong>Qualitative predictor</strong></td>
+<td>A predictor whose values are categories or groups.</td>
+</tr>
+<tr class="odd">
+<td><strong>Level</strong></td>
+<td>A possible value or category of a predictor.</td>
+</tr>
+<tr class="even">
+<td><strong>Indicator variable</strong></td>
+<td>A variable coded as 0 or 1 to represent whether an observation belongs to a particular category.</td>
+</tr>
+<tr class="odd">
+<td><strong>Reference level</strong></td>
+<td>The category represented by all 0s for the indicator variables. Coefficients for other categories are interpreted relative to this group. Changing the reference level changes coefficient interpretation but not fitted values.</td>
+</tr>
+<tr class="even">
+<td><strong>Two-class predictor</strong></td>
+<td>A qualitative predictor with two categories needs one indicator variable.</td>
+</tr>
+<tr class="odd">
+<td><strong>More than two classes</strong></td>
+<td>A qualitative predictor with <span class="math inline">\(c\)</span> categories needs <span class="math inline">\(c-1\)</span> indicator variables when the model includes an intercept.</td>
+</tr>
+<tr class="even">
+<td><strong>Dummy variable trap</strong></td>
+<td>Perfect multicollinearity created by including all <span class="math inline">\(c\)</span> indicators along with an intercept.</td>
+</tr>
+<tr class="odd">
+<td><strong>Same-slope indicator model</strong></td>
+<td>A model with indicator variables but no interactions; the groups have different intercepts but the same slope for the quantitative predictor.</td>
+</tr>
+<tr class="even">
+<td><strong>Interaction term</strong></td>
+<td>A product term that allows the relationship between a quantitative predictor and the response to differ by group.</td>
+</tr>
+<tr class="odd">
+<td><strong>Different-slope indicator model</strong></td>
+<td>A model with an indicator variable, a quantitative predictor, and their interaction; groups may have different intercepts and different slopes.</td>
+</tr>
+<tr class="even">
+<td><strong>Coded categories</strong></td>
+<td>Numeric labels such as 1, 2, 3, and 4 should be converted to factors when the numbers represent categories rather than quantities.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="15.5"><h2 data-number="15.5" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">15.5</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What is the difference between a quantitative predictor and a qualitative predictor?</p></li>
+<li><p>Why do we need indicator variables to include qualitative predictors in a regression model?</p></li>
+<li><p>Suppose <code>female</code> is the reference level and <code>male</code> is coded as 1. What does the coefficient for the male indicator represent?</p></li>
+<li><p>Why does a qualitative predictor with four categories require only three indicator variables when the model includes an intercept?</p></li>
+<li><p>What is the dummy variable trap?</p></li>
+<li><p>If changing the reference level changes the sign of an indicator coefficient, does it change the fitted values from the model? Explain.</p></li>
+<li><p>Why should a region variable coded as 1, 2, 3, and 4 usually be converted to a factor before fitting a regression model?</p></li>
+<li><p>In a model with height and sex but no interaction, what assumption is being made about the slope for height across sex groups?</p></li>
+<li><p>In the model <span class="math inline">\(E(y)=\beta_0+\beta_1x+\beta_2z+\beta_3xz\)</span>, where <span class="math inline">\(z\)</span> is an indicator variable, what does <span class="math inline">\(\beta_3\)</span> represent?</p></li>
+<li><p>Why is it useful to compare predictions from two models that use different reference levels?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Quantitative predictors are numerical measurements; qualitative predictors are categories.</strong> Height, income, and population size are quantitative. Sex, region, and air-conditioning type are qualitative.</p></li>
+<li><p><strong>Regression models need numerical inputs.</strong> Indicator variables translate categories into 0/1 variables so the model can estimate separate mean shifts for different groups.</p></li>
+<li><p><strong>It is the estimated difference from the reference group.</strong> If <code>female</code> is the reference level, the male coefficient estimates how much higher or lower the mean response is for males than for females at the same value of the other predictors.</p></li>
+<li><p><strong>The omitted group is represented by the intercept.</strong> With four categories, three indicators identify three of the groups. The fourth group is the reference level, where all three indicators equal 0.</p></li>
+<li><p><strong>It is perfect multicollinearity from overcoding categories.</strong> If all category indicators are included along with an intercept, the indicators add to 1 for every observation. One column is therefore perfectly determined by the others.</p></li>
+<li><p><strong>No.</strong> Changing the reference level changes which group is used as the baseline and changes how coefficients are described, but the model’s fitted values remain the same.</p></li>
+<li><p><strong>The numbers are labels, not amounts.</strong> Treating region as numeric would imply that region 4 is larger than region 3 and that the spacing between regions is meaningful. Converting it to a factor tells the model to treat the values as categories.</p></li>
+<li><p><strong>The height slope is assumed to be the same for each group.</strong> The indicator changes the intercept, but without an interaction term, the model assumes the relationship between height and handspan has the same slope for both sex groups.</p></li>
+<li><p><strong>It is the difference in slopes.</strong> The reference group has slope <span class="math inline">\(\beta_1\)</span>. The group with <span class="math inline">\(z=1\)</span> has slope <span class="math inline">\(\beta_1+\beta_3\)</span>. So <span class="math inline">\(\beta_3\)</span> describes how much the slope changes for the non-reference group.</p></li>
+<li><p><strong>It separates coefficient interpretation from fitted values.</strong> Changing the reference level changes the baseline group and therefore the coefficient signs/names, but it should not change the predictions. Comparing fitted values makes that invariance visible.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section><section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes"><hr>
+<ol>
+<li id="fn1"><p>Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). <em>Applied Linear Statistical Models</em>. McGraw-Hill/Irwin series operations and decision sciences.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

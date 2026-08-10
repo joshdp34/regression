@@ -4,7 +4,7 @@
 
 > "When a measure becomes a target, it ceases to be a good measure." - Marilyn Strathern
 
-So far, we have discussed using the coefficient of determination, $R^2$ and adjusted coefficient of determination, $R^2_a$, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be use to help in the model building process.
+So far, we have discussed using the coefficient of determination, $R^2$ and adjusted coefficient of determination, $R^2_a$, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be used to help in the model building process.
 
 ## Possible Models
 
@@ -16,12 +16,35 @@ alternative models can be constructed.
 This calculation is based on the fact that each predictor can be either included or excluded from the
 model. 
 
-For example, the 
+::: {.example title="Counting possible subset models"}
+
+If there are 4 possible predictors, each predictor has two choices:
+
+- included in the model
+- excluded from the model
+
+This gives
+
+$$
+2^4 = 16
+$$
+
+possible subset models. If there are 10 possible predictors, there are
+
+$$
+2^{10}=1024
+$$
+
+possible subset models. The number of possible models grows quickly, which is why model-selection criteria are useful.
+
+:::
+
+For example, the
 $$
 2^4 = 16
 $$
 different possible subset models that can be formed from
-the pool of four $X$ variables are 
+the pool of four $X$ variables are
 $$
 \begin{align*}
 & \text{None}\\
@@ -43,18 +66,7 @@ $$
 \end{align*}
 $$
 
-
-
-If there are 10 potential predictor variables, there there would be 
-$$
-2^{10} = 1024
-$$
-possible subset models. 
-
-
-
-
-Model selection procedures, also known as *subset* *selection* or *variables* *selection* *procedures*,
+Model selection procedures, also known as *subset* *selection* or *variable* *selection* *procedures*,
 have been developed to identify a small group of regression models that are "good"
 according to a specified *criterion*. 
 
@@ -73,9 +85,108 @@ $$
 & R_{a,p}^{2}\\
 & AIC_{p}\\
 & SBC_{p}\\
-& PRESS_{p}
+& PRESS_{p}\\
+& \text{pred }R_{p}^{2}
 \end{align*}
 $$
+
+::: {.callout-note collapse="false" title="Which direction is better?"}
+
+The criteria do not all move in the same direction.
+
+| Criterion | Preferred direction | Main idea |
+|---|---:|---|
+| $R_p^2$ | Larger | Measures in-sample fit, but never decreases when predictors are added. |
+| $R_{a,p}^2$ | Larger | Adjusts $R^2$ for the number of parameters in the model. |
+| $AIC_p$ | Smaller | Rewards fit but penalizes model complexity. |
+| $BIC_p$ or $SBC_p$ | Smaller | Similar to AIC, but usually penalizes complexity more strongly. |
+| $PRESS_p$ | Smaller | Measures leave-one-out prediction error. |
+| pred $R_p^2$ | Larger | Converts PRESS into an $R^2$-style prediction measure. |
+
+No single criterion should replace judgment. The best model is usually one that fits the scientific question, predicts well, and is not more complicated than it needs to be.
+
+:::
+
+::: {.example title="Exhaustive subset selection with four predictors"}
+
+When the number of possible predictors is small, we can fit every possible subset model and compare the criteria. This is called *exhaustive subset selection*.
+
+The following example uses four possible predictors from `mtcars`: `disp`, `hp`, `wt`, and `qsec`. Since there are 4 possible predictors, there are $2^4=16$ subset models.
+
+```{r warning=FALSE, message=FALSE}
+library(tidyverse)
+library(broom)
+
+press_stat <- function(model) {
+  sum((residuals(model) / (1 - hatvalues(model)))^2)
+}
+
+candidate_predictors <- c("disp", "hp", "wt", "qsec")
+
+all_subsets <- map(
+  0:length(candidate_predictors),
+  \(k) {
+    if (k == 0) {
+      list(character(0))
+    } else {
+      combn(candidate_predictors, k, simplify = FALSE)
+    }
+  }
+) |>
+  unlist(recursive = FALSE)
+
+sst_mpg <- sum((mtcars$mpg - mean(mtcars$mpg))^2)
+
+exhaustive_results <- tibble(predictors = all_subsets) |>
+  mutate(
+    model = map_chr(
+      predictors,
+      \(vars) {
+        if (length(vars) == 0) {
+          "Intercept only"
+        } else {
+          paste(vars, collapse = " + ")
+        }
+      }
+    ),
+    formula = map(
+      predictors,
+      \(vars) {
+        right_side <- if (length(vars) == 0) {
+          "1"
+        } else {
+          paste(vars, collapse = " + ")
+        }
+
+        as.formula(paste("mpg ~", right_side))
+      }
+    ),
+    fit = map(formula, \(form) lm(form, data = mtcars)),
+    p = map_int(predictors, length) + 1,
+    PRESS = map_dbl(fit, press_stat),
+    pred_r_squared = 1 - PRESS / sst_mpg,
+    glance = map(fit, glance)
+  ) |>
+  unnest(glance) |>
+  select(
+    model,
+    p,
+    r.squared,
+    adj.r.squared,
+    AIC,
+    BIC,
+    PRESS,
+    pred_r_squared
+  )
+
+exhaustive_results |>
+  arrange(BIC) |>
+  knitr::kable(digits = 4)
+```
+
+Sorting by BIC places the simpler models with strong fit near the top. If we sorted by a different criterion, the order might change.
+
+:::
 
 ## Notation
 
@@ -103,7 +214,7 @@ $$
 ## Coefficient of Determination and SSE
 
 
-Clearly, we would like models that fit the data well. Thus we would like a coefficient of *multiple determiantion*, $R^2$, to be high. 
+Clearly, we would like models that fit the data well. Thus we would like a coefficient of *multiple determination*, $R^2$, to be high.
 
 
 We will denote the number of parameters in the potential model as a subscript and write the coefficient of determination as $R^2_p$. 
@@ -129,6 +240,82 @@ Often, this
 point is reached when only a limited number of $X$ variables are included in the regression
 model.
 
+::: {.callout-warning collapse="false" title="Do not choose a model using R-squared alone"}
+
+Because $R_p^2$ cannot decrease when a predictor is added, the model with the most predictors will always look at least as good by this criterion. This makes $R_p^2$ useful for describing fit, but risky as the only model-selection tool.
+
+When comparing candidate models, look for whether the added variables produce a meaningful improvement, not merely any improvement.
+
+:::
+
+::: {.example title="Overfitting by adding noise predictors"}
+
+The following example adds randomly generated noise predictors to a useful model. These noise variables are not meaningful predictors of `mpg`, but ordinary least squares can still use them to reduce in-sample error slightly.
+
+```{r warning=FALSE, message=FALSE}
+set.seed(3386)
+
+press_stat <- function(model) {
+  sum((residuals(model) / (1 - hatvalues(model)))^2)
+}
+
+noise_dat <- mtcars |>
+  mutate(
+    noise_1 = rnorm(n()),
+    noise_2 = rnorm(n()),
+    noise_3 = rnorm(n()),
+    noise_4 = rnorm(n())
+  )
+
+sst_noise <- sum((noise_dat$mpg - mean(noise_dat$mpg))^2)
+
+noise_models <- list(
+  "Base model" = lm(mpg ~ wt + qsec, data = noise_dat),
+  "Add 1 noise predictor" = lm(
+    mpg ~ wt + qsec + noise_1,
+    data = noise_dat
+  ),
+  "Add 2 noise predictors" = lm(
+    mpg ~ wt + qsec + noise_1 + noise_2,
+    data = noise_dat
+  ),
+  "Add 4 noise predictors" = lm(
+    mpg ~ wt + qsec + noise_1 + noise_2 + noise_3 + noise_4,
+    data = noise_dat
+  )
+)
+
+noise_comparison <- purrr::imap_dfr(
+  noise_models,
+  \(fit_object, model_name) {
+    glance(fit_object) |>
+      mutate(
+        model = model_name,
+        predictors = length(coef(fit_object)) - 1,
+        PRESS = press_stat(fit_object),
+        pred_r_squared = 1 - PRESS / sst_noise
+      )
+  }
+) |>
+  select(
+    model,
+    predictors,
+    r.squared,
+    adj.r.squared,
+    AIC,
+    BIC,
+    PRESS,
+    pred_r_squared
+  )
+
+noise_comparison |>
+  knitr::kable(digits = 4)
+```
+
+Notice that $R^2$ increases as the noise predictors are added. That does not mean the model is better. The other criteria warn us that the extra predictors are adding complexity without useful predictive value.
+
+:::
+
 ## Adjusted Coefficient of Determination and MSE
 
 
@@ -146,7 +333,7 @@ seek to find a few subsets for which $R^2_{a,p}$  is at the maximum or so close 
 that adding more variables is not worthwhile.
 
 
-The $R^2_{a,p}$ criterion is equivalent to using the mean square error $SSE_p$ as the criterion. This come from the relationship in @eq-w4_44
+The $R^2_{a,p}$ criterion is equivalent to using the mean square error $MSE_p$ as the criterion. This comes from the relationship in @eq-w4_44
 $$
 \begin{align*}
 R_{a}^{2} & =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
@@ -163,7 +350,7 @@ having large numbers of predictors.
 
 
 Two popular alternatives that also provide penalties
-for adding predictors are *Akaike's information criterion* ($AIC_p$) and *Schwarz' Bayesian criterion* ($SBC_p$). 
+for adding predictors are *Akaike's information criterion* ($AIC_p$) and *Schwarz's Bayesian criterion* ($SBC_p$).
 
 
 
@@ -224,7 +411,15 @@ A parsimonious model is a model that accomplishes a desired level of explanation
 
 
 
-We consider the "best" models the ones with the lowest $AIC_p$ or $BIC_p$.
+We consider the "best" models to be the ones with the lowest $AIC_p$ or $BIC_p$.
+
+::: {.callout-important collapse="false" title="Compare AIC and BIC only for models fit to the same response"}
+
+AIC and BIC are useful for comparing candidate models, but the models should be fit to the same response variable using the same set of observations. They are not meant to compare, for example, a model for `mpg` against a model for `log(mpg)`.
+
+Software may report versions of AIC and BIC that differ by constants from textbook formulas. This is usually not a problem because model selection depends on differences among models fit to the same data.
+
+:::
 
 
 ## Criteria for Prediction
@@ -277,53 +472,166 @@ Thus, models with small $PRESS_p$ values fit well
 in the sense of having small prediction errors.
 
 
-Another measure of prediction is the *predicted* $R^{2}$. Is is related
+Another measure of prediction is the *predicted* $R^{2}$. It is related
 to PRESS by
 $$
 \begin{align}
 \text{pred }R_{p}^{2} & =1-\frac{PRESS_{p}}{SSTO}
 \end{align}
 $${#eq-w7_8}
-Large values of pred $R_{p}^{2}$ indicates a model that is "good"
+Large values of pred $R_{p}^{2}$ indicate a model that is "good"
 at prediction.
 
-::: {#exm-17_1}
+### PRESS and Leave-One-Out Cross-Validation
 
-We can obtain $R^2$, $R^2_a$, $AIC$, and $BIC$ using the `glance` function after fitting a model. Let's examine the fit to `mtcars` in @exm-16_2. 
+PRESS is closely connected to *leave-one-out cross-validation* (LOOCV). In LOOCV, we repeatedly fit the model after leaving out one observation, then predict the observation that was left out. PRESS is the sum of the squared prediction errors from that process.
 
+For ordinary least squares models, PRESS can be computed without refitting the model $n$ separate times. If $e_i$ is the ordinary residual from the full model and $h_{ii}$ is the leverage value for observation $i$, then
 
-```{r warning=FALSE, message=FALSE}
-library(tidymodels)
+$$
+\begin{align*}
+y_i-\hat{y}_{i(i)} = \frac{e_i}{1-h_{ii}}.
+\end{align*}
+$$
 
-dat_recipe = recipe(mpg ~ disp + hp + drat + wt + qsec, data = mtcars) |> 
-  step_mutate(
-    log_disp = log(disp),
-    log_hp = log(hp),
-    log_wt = log(wt)
-  ) |> 
-  step_rm(disp, hp, wt)
+So for ordinary least squares,
 
-lm_model <- linear_reg() |>
-  set_engine("lm")
+$$
+\begin{align*}
+PRESS = \sum_{i=1}^n \left(\frac{e_i}{1-h_{ii}}\right)^2.
+\end{align*}
+$$
 
-wf = workflow() |> 
-  add_recipe(dat_recipe) |> 
-  add_model(lm_model)
+This explains why PRESS is a prediction-focused criterion. Each observation is judged by how well the model predicts it when that observation was not used to fit the model.
 
-fit <- wf |> fit(mtcars)
+::: {#exm-17_1 .example title="Comparing candidate models with several criteria"}
 
-fit |> glance()
+We can obtain $R^2$, $R^2_a$, AIC, and BIC using the `glance()` function after fitting a model. We can also calculate PRESS from the residuals and leverage values of an ordinary least squares model.
 
-```
-
-To obtain the PRESS statistic, we can use the `PRESS` function from the `MPV` library.
-
+Let's compare several candidate models for `mtcars`. These models are not meant to be the final answer; they are a small set of candidate models used to illustrate how the criteria work.
 
 ```{r warning=FALSE, message=FALSE}
-library(MPV)
-fit |> extract_fit_engine() |> PRESS()
+library(tidyverse)
+library(broom)
 
+press_stat <- function(model) {
+  sum((residuals(model) / (1 - hatvalues(model)))^2)
+}
+
+sst_mpg <- sum((mtcars$mpg - mean(mtcars$mpg))^2)
+
+candidate_models <- list(
+  "Full untransformed" = lm(
+    mpg ~ disp + hp + drat + wt + qsec,
+    data = mtcars
+  ),
+  "Full transformed" = lm(
+    mpg ~ log(disp) + log(hp) + drat + log(wt) + qsec,
+    data = mtcars
+  ),
+  "Smaller transformed" = lm(
+    mpg ~ log(hp) + log(wt) + qsec,
+    data = mtcars
+  ),
+  "Weight and time" = lm(
+    mpg ~ log(wt) + qsec,
+    data = mtcars
+  )
+)
+
+model_comparison <- purrr::imap_dfr(
+  candidate_models,
+  \(fit_object, model_name) {
+    glance(fit_object) |>
+      mutate(
+        model = model_name,
+        PRESS = press_stat(fit_object),
+        pred_r_squared = 1 - PRESS / sst_mpg
+      )
+  }
+) |>
+  select(
+    model,
+    r.squared,
+    adj.r.squared,
+    AIC,
+    BIC,
+    PRESS,
+    pred_r_squared
+  )
+
+model_comparison |>
+  arrange(AIC) |>
+  knitr::kable(digits = 4)
 ```
 
+The table shows that different criteria may prefer different models. A model with more predictors may have a larger $R^2$, while AIC, BIC, PRESS, or predicted $R^2$ may favor a simpler model if the extra predictors do not improve the model enough.
+
+:::
+
+## Recap
+
+In this chapter, we introduced several criteria for comparing candidate regression models.
+
+| Idea | Meaning |
+|---|---|
+| **Subset model** | A model formed by including only some of the available predictors. |
+| **Number of possible models** | With $p-1$ possible predictors, there are $2^{p-1}$ possible subset models. |
+| **$R_p^2$** | Measures in-sample fit for a model with $p$ parameters; larger is better, but it never decreases when predictors are added. |
+| **$R_{a,p}^2$** | Adjusted $R^2$; penalizes unnecessary predictors through the degrees of freedom. |
+| **AIC** | A model-selection criterion that balances fit and complexity; smaller is better. |
+| **BIC/SBC** | Similar to AIC but usually applies a stronger penalty for complexity; smaller is better. |
+| **Parsimonious model** | A model that achieves the goal with relatively few predictors. |
+| **PRESS** | A leave-one-out prediction error criterion; smaller values indicate better predictive performance. |
+| **Predicted $R^2$** | An $R^2$-style measure based on PRESS; larger values indicate better prediction. |
+| **Criterion disagreement** | Different criteria may select different models because they reward fit and penalize complexity differently. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why are there $2^{p-1}$ possible subset models when there are $p-1$ candidate predictors?
+
+2. Why is $R^2$ risky to use as the only model-selection criterion?
+
+3. What problem is adjusted $R^2$ trying to address?
+
+4. For AIC and BIC, do we prefer larger or smaller values? Why?
+
+5. Why does BIC often favor simpler models than AIC?
+
+6. What does it mean for a model to be parsimonious?
+
+7. How is PRESS different from SSE?
+
+8. Why is predicted $R^2$ useful when the goal is prediction?
+
+9. If one model has the best AIC and another has the best BIC, does that automatically mean one of them is wrong? Explain.
+
+10. Why should AIC and BIC usually be compared only among models fit to the same response using the same observations?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Each predictor has two choices.** Every candidate predictor can either be included or excluded. With $p-1$ predictors, this gives $2^{p-1}$ possible combinations.
+
+2. **It always rewards adding predictors.** $R^2$ cannot decrease when predictors are added, even if the new predictors add little useful information. This can push us toward models that are unnecessarily complex.
+
+3. **It accounts for model size.** Adjusted $R^2$ penalizes models for using more parameters. It tries to distinguish meaningful improvement from improvement that happens merely because more predictors were added.
+
+4. **Smaller values are preferred.** AIC and BIC both combine a measure of lack of fit with a penalty for complexity. A smaller value indicates a better tradeoff between fit and model size.
+
+5. **BIC has a stronger penalty when $n \ge 8$.** AIC uses a penalty of $2p$, while BIC uses $(\ln n)p$. Since $\ln n$ is larger than 2 for sample sizes of at least 8, BIC more strongly discourages extra predictors.
+
+6. **It is simple but effective.** A parsimonious model accomplishes the modeling goal with as few predictors as reasonably possible.
+
+7. **PRESS measures leave-one-out prediction error.** SSE uses residuals from a model fit to all observations. PRESS predicts each observation from a model fit without that observation, so it more directly reflects prediction performance.
+
+8. **It puts prediction performance on an $R^2$-like scale.** Predicted $R^2$ uses PRESS to summarize how well the model predicts omitted observations. Larger values suggest better predictive performance.
+
+9. **No.** Different criteria emphasize different tradeoffs. AIC may prefer a somewhat larger model, while BIC may prefer a simpler one. This disagreement is a reason to examine the models carefully, not a sign that one criterion is invalid.
+
+10. **The criteria are relative comparisons.** AIC and BIC are designed to compare candidate models fit to the same data and response. If the response or observations change, the numerical values are no longer directly comparable.
 
 :::

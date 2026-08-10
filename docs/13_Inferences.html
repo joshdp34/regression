@@ -363,6 +363,8 @@ window.Quarto = {
   </ul>
 </li>
   <li><a href="#a-test-for-comparing-nested-models" id="toc-a-test-for-comparing-nested-models" class="nav-link" data-scroll-target="#a-test-for-comparing-nested-models"><span class="header-section-number">13.5</span> A Test for Comparing Nested Models</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">13.6</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">13.7</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -423,56 +425,163 @@ H_{a}: &amp; \beta_{k}\ne0
 t^{*} &amp; =\frac{b_{k}}{s\left[b_{k}\right]}
 \end{align}
 \tag{13.5}\]</span></span> where <span class="math inline">\(t^{*}\sim t\left(n-p\right)\)</span>.</p>
-<div id="exm-13_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 13.1 (<code>bodyfat</code> data from Kutner[<sup>1</sup>])</strong></span> [<sup>1</sup>]: Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.</p>
+<div id="exm-13_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 13.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Bodyfat data from Kutner
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>bodyfat</code> data are from Kutner[<sup>1</sup>].</p>
+<p>[<sup>1</sup>]: Kutner, M. H., Nachtsheim, C. J., Neter, J., &amp; Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.</p>
 <p>In this dataset the bodyfat, tricep skinfold thickness, thigh circumference, and midarm circumference are found for 20 healthy females 25-34 years old. We want to model bodyfat based on the other three variables.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#prepare data</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>, </span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> </span>
+<span><span class="co"># Prepare data</span></span>
+<span><span class="va">dat_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">dat</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup model</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up model</span></span>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow</span></span>
-<span><span class="va">lm_workflow</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up the workflow</span></span>
+<span><span class="va">lm_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the model</span></span>
-<span><span class="va">lm_fit</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Fit the model</span></span>
+<span><span class="va">lm_fit</span> <span class="op">&lt;-</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#to get the coefficients and CIs</span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span>conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 7
-  term        estimate std.error statistic p.value conf.low conf.high
-  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;   &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
-1 (Intercept)   117.       99.8       1.17   0.258   -94.4     329.  
-2 tri             4.33      3.02      1.44   0.170    -2.06     10.7 
-3 thigh          -2.86      2.58     -1.11   0.285    -8.33      2.62
-4 midarm         -2.19      1.60     -1.37   0.190    -5.57      1.20</code></pre>
+<span><span class="co"># Get the coefficients and confidence intervals</span></span>
+<span><span class="va">bodyfat_coefficients</span> <span class="op">&lt;-</span> <span class="va">lm_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>conf.int <span class="op">=</span> <span class="cn">TRUE</span>, conf.level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">bodyfat_coefficients</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 13%">
+<col style="width: 14%">
+<col style="width: 14%">
+<col style="width: 11%">
+<col style="width: 13%">
+<col style="width: 14%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">117.0847</td>
+<td style="text-align: right;">99.7824</td>
+<td style="text-align: right;">1.1734</td>
+<td style="text-align: right;">0.2578</td>
+<td style="text-align: right;">-94.4446</td>
+<td style="text-align: right;">328.6139</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tri</td>
+<td style="text-align: right;">4.3341</td>
+<td style="text-align: right;">3.0155</td>
+<td style="text-align: right;">1.4373</td>
+<td style="text-align: right;">0.1699</td>
+<td style="text-align: right;">-2.0585</td>
+<td style="text-align: right;">10.7267</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">thigh</td>
+<td style="text-align: right;">-2.8568</td>
+<td style="text-align: right;">2.5820</td>
+<td style="text-align: right;">-1.1064</td>
+<td style="text-align: right;">0.2849</td>
+<td style="text-align: right;">-8.3305</td>
+<td style="text-align: right;">2.6168</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">midarm</td>
+<td style="text-align: right;">-2.1861</td>
+<td style="text-align: right;">1.5955</td>
+<td style="text-align: right;">-1.3701</td>
+<td style="text-align: right;">0.1896</td>
+<td style="text-align: right;">-5.5684</td>
+<td style="text-align: right;">1.1962</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Note that each coefficient is insignificant when tested individually. Let’s use the global F-test to see if the model is useful.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic    p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.801         0.764  2.48      21.5 0.00000734     3  -44.3  98.6  104.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_global_test</span> <span class="op">&lt;-</span> <span class="va">lm_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bodyfat_global_test</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">statistic</span>, <span class="va">p.value</span>, <span class="va">df</span>, <span class="va">df.residual</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">df.residual</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.8014</td>
+<td style="text-align: right;">0.7641</td>
+<td style="text-align: right;">21.5157</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16</td>
+</tr></tbody>
+</table>
 </div>
 </div>
 <p>The global F-test is significant. The reason for the contradiction between the t-tests and the F-test will be discussed when we examine the correlation between predictor variables.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="A significant F-test can coexist with nonsignificant individual t-tests">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>A significant F-test can coexist with nonsignificant individual t-tests
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The global <span class="math inline">\(F\)</span>-test and the individual coefficient <span class="math inline">\(t\)</span>-tests ask different questions.</p>
+<ul>
+<li>The global <span class="math inline">\(F\)</span>-test asks whether the predictors are collectively useful.</li>
+<li>An individual <span class="math inline">\(t\)</span>-test asks whether one coefficient is different from 0 after accounting for the other predictors.</li>
+</ul>
+<p>When predictors are strongly correlated with one another, the model may explain substantial variation overall, while individual slopes are hard to estimate precisely. This is a preview of multicollinearity.</p>
+</div>
+</div>
 </div>
 <section id="recommendation-for-checking-the-utility-of-a-multiple-regression-model" class="level4"><h4 class="anchored" data-anchor-id="recommendation-for-checking-the-utility-of-a-multiple-regression-model">Recommendation for Checking the Utility of a Multiple Regression Model</h4>
 <ol type="1">
@@ -509,6 +618,71 @@ R_{a}^{2} &amp; =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
 \end{align}
 \tag{13.7}\]</span></span></p>
 <p>The value of <span class="math inline">\(R_{a}^{2}\)</span> can decrease when another <span class="math inline">\(x\)</span> is included in the model because any decrease in SSE may be more than offset by the loss of a <em>degree of freedom</em> of SSE (<span class="math inline">\(n-p\)</span>).</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Worked example: Comparing `R^2` and adjusted `R^2`
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Ordinary <span class="math inline">\(R^2\)</span> cannot decrease when predictors are added to a model. Adjusted <span class="math inline">\(R^2\)</span> can decrease if the added predictor does not improve the model enough to justify the lost degree of freedom.</p>
+<p>Using the <code>bodyfat</code> data, compare three nested models:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_rsq_compare</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  <span class="st">"tri only"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,</span>
+<span>  <span class="st">"tri + thigh"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span>,</span>
+<span>  <span class="st">"tri + thigh + midarm"</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">purrr</span><span class="fu">::</span><span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">imap_dfr</a></span><span class="op">(</span></span>
+<span>    <span class="kw">function</span><span class="op">(</span><span class="va">fit</span>, <span class="va">model_name</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/glance.html">glance</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">model_name</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">sigma</span>, <span class="va">df.residual</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">bodyfat_rsq_compare</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">df.residual</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">tri only</td>
+<td style="text-align: right;">0.7111</td>
+<td style="text-align: right;">0.6950</td>
+<td style="text-align: right;">2.8198</td>
+<td style="text-align: right;">18</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tri + thigh</td>
+<td style="text-align: right;">0.7781</td>
+<td style="text-align: right;">0.7519</td>
+<td style="text-align: right;">2.5432</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">tri + thigh + midarm</td>
+<td style="text-align: right;">0.8014</td>
+<td style="text-align: right;">0.7641</td>
+<td style="text-align: right;">2.4800</td>
+<td style="text-align: right;">16</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The important lesson is not simply to choose the model with the largest <span class="math inline">\(R^2\)</span>. Since <span class="math inline">\(R^2\)</span> rewards every added predictor, adjusted <span class="math inline">\(R^2\)</span> is often more useful when comparing models with different numbers of predictors.</p>
+</div>
+</div>
 </section></section><section id="estimation-and-prediction-of-the-response" class="level2" data-number="13.3"><h2 data-number="13.3" class="anchored" data-anchor-id="estimation-and-prediction-of-the-response">
 <span class="header-section-number">13.3</span> Estimation and Prediction of the Response</h2>
 <section id="estimating-the-mean-response" class="level3" data-number="13.3.1"><h3 data-number="13.3.1" class="anchored" data-anchor-id="estimating-the-mean-response">
@@ -526,7 +700,7 @@ x_{h,p-1}
 \]</span></p>
 <p>So the estimated mean response will be the regression function evaluated at <span class="math inline">\({\bf X}_{h}\)</span>: <span id="eq-w4_45"><span class="math display">\[
 \begin{align}
-\hat{Y}_{h} &amp; ={\bf X}_{h}{\bf b}
+\hat{Y}_{h} &amp; ={\bf X}_{h}^{\prime}{\bf b}
 \end{align}
 \tag{13.8}\]</span></span> The variance of the estimated mean response is <span id="eq-w4_46"><span class="math display">\[
 \begin{align}
@@ -554,31 +728,221 @@ s^{2}\left[\hat{Y}_{h}\right] &amp; =MSE{\bf X}_{h}^{\prime}\left({\bf X}^{\prim
 s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\left({\bf X}^{\prime}{\bf X}\right)^{-1}{\bf X}_{h}\right)
 \end{align}
 \tag{13.13}\]</span></span></p>
-<div id="exm-13_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 13.2 (<a href="#exm-13_1" class="quarto-xref">Example&nbsp;<span>13.1</span></a> revisited)</strong></span> For the bodyfat data, suppose we want to predict and estimate at <code>tri=25</code>, <code>thigh=51.2</code>, and <code>midarm=24.9</code>. We will use the <code>predict</code> function.</p>
+<div id="exm-13_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 13.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Mean response interval versus prediction interval
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This example revisits <a href="#exm-13_1" class="quarto-xref">Example&nbsp;<span>13.1</span></a>.</p>
+<p>For the bodyfat data, suppose we want to predict and estimate at <code>tri=25</code>, <code>thigh=51.2</code>, and <code>midarm=24.9</code>. We will use the <code>predict</code> function.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">new_dat</span> <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>tri<span class="op">=</span><span class="fl">25</span>, thigh<span class="op">=</span><span class="fl">51.2</span>, midarm <span class="op">=</span> <span class="fl">24.9</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">new_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>tri <span class="op">=</span> <span class="fl">25</span>, thigh <span class="op">=</span> <span class="fl">51.2</span>, midarm <span class="op">=</span> <span class="fl">24.9</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#confidence interval for mean response</span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">new_dat</span>, type <span class="op">=</span> <span class="st">"conf_int"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  .pred_lower .pred_upper
-        &lt;dbl&gt;       &lt;dbl&gt;
-1        17.5        31.9</code></pre>
+<span><span class="co"># Confidence interval for mean response</span></span>
+<span><span class="va">mean_interval</span> <span class="op">&lt;-</span> <span class="va">lm_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">new_dat</span>, type <span class="op">=</span> <span class="st">"conf_int"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span></span>
+<span>    mean_lower <span class="op">=</span> <span class="va">.pred_lower</span>,</span>
+<span>    mean_upper <span class="op">=</span> <span class="va">.pred_upper</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Prediction interval for one new response</span></span>
+<span><span class="va">prediction_interval</span> <span class="op">&lt;-</span> <span class="va">lm_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">new_dat</span>, type <span class="op">=</span> <span class="st">"pred_int"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span></span>
+<span>    prediction_lower <span class="op">=</span> <span class="va">.pred_lower</span>,</span>
+<span>    prediction_upper <span class="op">=</span> <span class="va">.pred_upper</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">interval_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span></span>
+<span>  <span class="va">new_dat</span>,</span>
+<span>  <span class="va">mean_interval</span>,</span>
+<span>  <span class="va">prediction_interval</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">interval_comparison</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 5%">
+<col style="width: 8%">
+<col style="width: 9%">
+<col style="width: 15%">
+<col style="width: 15%">
+<col style="width: 23%">
+<col style="width: 23%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">tri</th>
+<th style="text-align: right;">thigh</th>
+<th style="text-align: right;">midarm</th>
+<th style="text-align: right;">mean_lower</th>
+<th style="text-align: right;">mean_upper</th>
+<th style="text-align: right;">prediction_lower</th>
+<th style="text-align: right;">prediction_upper</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">51.2</td>
+<td style="text-align: right;">24.9</td>
+<td style="text-align: right;">17.5374</td>
+<td style="text-align: right;">31.9295</td>
+<td style="text-align: right;">15.8215</td>
+<td style="text-align: right;">33.6454</td>
+</tr></tbody>
+</table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#prediction interval</span></span>
-<span><span class="va">lm_fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">new_dat</span>, type <span class="op">=</span> <span class="st">"pred_int"</span>, level <span class="op">=</span> <span class="fl">0.95</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  .pred_lower .pred_upper
-        &lt;dbl&gt;       &lt;dbl&gt;
-1        15.8        33.6</code></pre>
 </div>
+<p>The confidence interval estimates the mean body fat for all healthy females with these predictor values. The prediction interval estimates a plausible range for one new person’s body fat with these predictor values.</p>
+<p>The prediction interval is wider because it includes both uncertainty in the estimated mean and individual-to-individual variability around that mean.</p>
 </div>
 </div>
 </section></section><section id="second-order-models" class="level2" data-number="13.4"><h2 data-number="13.4" class="anchored" data-anchor-id="second-order-models">
 <span class="header-section-number">13.4</span> Second-Order Models</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="R formula syntax for second-order terms">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>R formula syntax for second-order terms
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>R has compact formula syntax for interactions and polynomial terms.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead><tr class="header">
+<th>Modeling idea</th>
+<th>Mathematical term</th>
+<th>Base R formula syntax</th>
+<th>Recipe syntax</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Main effects only</td>
+<td><span class="math inline">\(x_1+x_2\)</span></td>
+<td><code>y ~ x1 + x2</code></td>
+<td><code>recipe(y ~ x1 + x2, data = dat)</code></td>
+</tr>
+<tr class="even">
+<td>Interaction only</td>
+<td><span class="math inline">\(x_1x_2\)</span></td>
+<td><code>y ~ x1:x2</code></td>
+<td><code>recipe(y ~ x1:x2, data = dat)</code></td>
+</tr>
+<tr class="odd">
+<td>Main effects plus interaction</td>
+<td><span class="math inline">\(x_1+x_2+x_1x_2\)</span></td>
+<td><code>y ~ x1 * x2</code></td>
+<td><code>recipe(y ~ x1 * x2, data = dat)</code></td>
+</tr>
+<tr class="even">
+<td>Raw quadratic term</td>
+<td><span class="math inline">\(x+x^2\)</span></td>
+<td><code>y ~ x + I(x^2)</code></td>
+<td><code>recipe(y ~ x, data = dat) |&gt; step_mutate(x2 = x^2)</code></td>
+</tr>
+<tr class="odd">
+<td>Orthogonal polynomial terms</td>
+<td>polynomial basis terms</td>
+<td><code>y ~ poly(x, degree = 2)</code></td>
+<td><code>recipe(y ~ x, data = dat) |&gt; step_poly(x, degree = 2)</code></td>
+</tr>
+</tbody>
+</table>
+<p>The expression <code>x1 * x2</code> is shorthand for <code>x1 + x2 + x1:x2</code>. The colon <code>:</code> creates only the interaction term.</p>
+<p>Use <code>I(x^2)</code> when you want R to interpret <code>x^2</code> as ordinary arithmetic inside a formula. Without <code><a href="https://rdrr.io/r/base/AsIs.html">I()</a></code>, formula operators have special meanings.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Worked example: Formula syntax for interactions and quadratic terms
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following formulas represent different models:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">formula_examples</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"First-order model"</span>,</span>
+<span>    <span class="st">"Interaction model"</span>,</span>
+<span>    <span class="st">"Raw quadratic model"</span>,</span>
+<span>    <span class="st">"Orthogonal polynomial model"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  formula <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"y ~ x1 + x2"</span>,</span>
+<span>    <span class="st">"y ~ x1 * x2"</span>,</span>
+<span>    <span class="st">"y ~ x + I(x^2)"</span>,</span>
+<span>    <span class="st">"y ~ poly(x, degree = 2)"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  terms_in_model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"intercept, x1, x2"</span>,</span>
+<span>    <span class="st">"intercept, x1, x2, x1:x2"</span>,</span>
+<span>    <span class="st">"intercept, x, x^2"</span>,</span>
+<span>    <span class="st">"intercept, two polynomial basis terms"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">formula_examples</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 31%">
+<col style="width: 26%">
+<col style="width: 42%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">formula</th>
+<th style="text-align: left;">terms_in_model</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">First-order model</td>
+<td style="text-align: left;">y ~ x1 + x2</td>
+<td style="text-align: left;">intercept, x1, x2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Interaction model</td>
+<td style="text-align: left;">y ~ x1 * x2</td>
+<td style="text-align: left;">intercept, x1, x2, x1:x2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Raw quadratic model</td>
+<td style="text-align: left;">y ~ x + I(x^2)</td>
+<td style="text-align: left;">intercept, x, x^2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Orthogonal polynomial model</td>
+<td style="text-align: left;">y ~ poly(x, degree = 2)</td>
+<td style="text-align: left;">intercept, two polynomial basis terms</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The raw quadratic form <code>I(x^2)</code> is usually easier to connect to the algebraic model <span class="math inline">\(\beta_0+\beta_1x+\beta_2x^2\)</span>. The <code>step_poly()</code> approach is often more numerically stable, but the resulting polynomial columns are transformed basis terms rather than a literal <code>x^2</code> column.</p>
+</div>
+</div>
 <section id="simulating-data-in-r" class="level3" data-number="13.4.1"><h3 data-number="13.4.1" class="anchored" data-anchor-id="simulating-data-in-r">
 <span class="header-section-number">13.4.1</span> Simulating data in R</h3>
 <p>In R, there are a number of functions involving probability distributions. Each available distribution will have some functions that can be utilized. For the normal distribution, we can access the functions</p>
@@ -595,7 +959,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 <p>Different distributions will have the same four functions with the starting letter above. For example, if we want to use the binomial distribution, we can use the functions <code>dbinom</code>, <code>pbinom</code>, <code>qbinom</code>, and <code>rbinom</code>.</p>
 <p>If we use the following code:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">x</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span></span>
 <span></span>
@@ -604,7 +968,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -620,14 +984,24 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 \end{align*}
 \]</span></p>
 <p>We can use the <code>rnorm</code> function to obtain a sample of the error terms.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Worked example: Simulating a first-order model with parallel lines
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">100</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">100</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We now will obtain some values of the <span class="math inline">\(x\)</span>s. Let’s make the values of <span class="math inline">\(x_1\)</span> be values from 0 to 3. The values of <span class="math inline">\(x_2\)</span> will be only the values 0, 1, 2. Thus, both predictors are <em>quantitative</em> but <span class="math inline">\(x_2\)</span> is discrete.</p>
 <p>We can simulate from the model by:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">300</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">300</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">x1values</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, length <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
@@ -646,9 +1020,12 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
+</div>
+</div>
+<p>In this first-order model, the effect of <span class="math inline">\(x_1\)</span> does not depend on the value of <span class="math inline">\(x_2\)</span>. If we draw separate lines for each fixed value of <span class="math inline">\(x_2\)</span>, the lines are parallel.</p>
 </div>
 </div>
 </section><section id="an-interaction-model-with-quantitative-predictors" class="level3" data-number="13.4.3"><h3 data-number="13.4.3" class="anchored" data-anchor-id="an-interaction-model-with-quantitative-predictors">
@@ -661,9 +1038,19 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
     E(y) = 1+2x_1-x_2+x_1x_2
 \end{align*}
 \]</span></p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Worked example: Simulating an interaction model with nonparallel lines
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <p>Let’s simulate from this model and construct a scatterplot of <span class="math inline">\(y\)</span> versus <span class="math inline">\(x_1\)</span> again:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">300</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">=</span> <span class="fl">300</span></span>
 <span><span class="va">eps</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, mean <span class="op">=</span> <span class="fl">0</span>, sd <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">x1values</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, length <span class="op">=</span> <span class="va">n</span><span class="op">/</span><span class="fl">3</span><span class="op">)</span></span>
@@ -682,7 +1069,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="13_Inferences_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -708,13 +1095,32 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 \]</span></p>
 <p>Note that the slope of each line is represented by <span class="math display">\[
 \begin{align*}
-    \beta_1 + \beta_2 x_2 =  2+x_2
+    \beta_1 + \beta_3 x_2 =  2+x_2
 \end{align*}
 \]</span> Thus, the effect on <span class="math inline">\(E(y)\)</span> of a change in <span class="math inline">\(x_1\)</span> (i.e., the slope) now depends on the value of <span class="math inline">\(x_2\)</span>. When this situation occurs, we say that <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> <em>interact</em>.</p>
+</div>
+</div>
 <p>The cross-product term, <span class="math inline">\(x_1x_2\)</span>, is called an <em>interaction term</em>, and the model called an interaction <em>model</em> with two quantitative variables.</p>
 <p>Note an important point about conducting <span class="math inline">\(t\)</span>-tests on the <span class="math inline">\(\beta\)</span> parameters in the interaction model.</p>
 <p>The “most important” <span class="math inline">\(\beta\)</span> parameter in this model is the interaction term, <span class="math inline">\(\beta_3\)</span>.</p>
 <p>Consequently, we will want to test <span class="math inline">\(H_0: \beta_3 = 0\)</span> after we have determined that the overall model is useful for predicting <span class="math inline">\(y\)</span>. Once interaction is detected tests on the first-order terms <span class="math inline">\(x_1\)</span> and <span class="math inline">\(x_2\)</span> should not be conducted since they are <em>meaningless</em> tests; the presence of interaction implies that both <span class="math inline">\(x\)</span>’s are important.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not interpret main effects in isolation when an interaction is present">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not interpret main effects in isolation when an interaction is present
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>When a model contains an interaction term such as <span class="math inline">\(x_1x_2\)</span>, the effect of <span class="math inline">\(x_1\)</span> depends on the value of <span class="math inline">\(x_2\)</span>, and the effect of <span class="math inline">\(x_2\)</span> depends on the value of <span class="math inline">\(x_1\)</span>.</p>
+<p>That means a test of a first-order term by itself can be misleading. A common modeling practice is the <em>hierarchy principle</em>: if an interaction is included, keep the corresponding lower-order terms in the model unless there is a strong reason not to.</p>
+</div>
+</div>
+</div>
 </section><section id="a-quadratic-second-order-model-with-a-quantitative-predictor" class="level3" data-number="13.4.4"><h3 data-number="13.4.4" class="anchored" data-anchor-id="a-quadratic-second-order-model-with-a-quantitative-predictor">
 <span class="header-section-number">13.4.4</span> A Quadratic (Second-Order) Model with a Quantitative Predictor</h3>
 <p>All of the models discussed thus far proposed straight-line relationships between <span class="math inline">\(E(y)\)</span> and each of the independent variables in the model.</p>
@@ -735,7 +1141,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 <p>To answer this question, examine the two models, and note that the curvilinear model contains all the terms in the straight-line interaction model plus two additional terms—those involving <span class="math inline">\(\beta_4\)</span> and <span class="math inline">\(\beta_5\)</span>: <span class="math display">\[
 \begin{align*}
     E(y) &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2 &amp;\quad \text{Straight-line with interaction}\\
-    E(y) &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2+ \beta_4 x^2_1 +\beta_5 x_2^2&amp;\quad \text{Curvillinear model}
+    E(y) &amp;= \beta_0 + \beta_1 x_1 + \beta_2 x_2 + \beta_3 x_1 x_2+ \beta_4 x^2_1 +\beta_5 x_2^2&amp;\quad \text{Curvilinear model}
 \end{align*}
 \]</span></p>
 <p>Consequently, these are nested models. Since the straight-line model is the simpler of the two, we say that the straight-line model is nested within the more complex curvilinear model.</p>
@@ -746,7 +1152,7 @@ s^{2}\left[Y_{h\left(pred\right)}\right] &amp; =MSE\left(1+{\bf X}_{h}^{\prime}\
 \end{align*}
 \]</span> (i.e., the quadratic terms do not contribute information for the prediction of <span class="math inline">\(y\)</span>) against the alternative hypothesis <span class="math display">\[
 \begin{align*}
-    H_a: \text{At least one of the parameters, }\beta_4 \text{ or } \beta_5, \text{differ from 0}
+    H_a: \text{At least one of the parameters, }\beta_4 \text{ or } \beta_5, \text{ differs from 0}
 \end{align*}
 \]</span> (i.e., at least one of the quadratic terms contributes information for the prediction of <span class="math inline">\(y\)</span>).</p>
 <p>The procedure for conducting this test is intuitive. First, we use the method of least squares to fit the reduced model and calculate the corresponding sum of squares for error, <span class="math display">\[
@@ -758,62 +1164,276 @@ SSE_C
 SSE_R - SSE_C
 \]</span> If the quadratic terms contribute to the model, then <span class="math inline">\(SSE_C\)</span> should be much smaller than <span class="math inline">\(SSE_R\)</span>, and the difference will be large. The larger the difference, the greater the weight of evidence that the complete model provides better predictions of <span class="math inline">\(y\)</span> than does the reduced model.</p>
 <p>The sum of squares for error will always decrease when new terms are added to the model. The question is whether this decrease is large enough to conclude that it is due to more than just an increase in the number of model terms and to chance.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="How to read the nested F-test">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>How to read the nested F-test
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The nested F-test compares a reduced model to a complete model.</p>
+<ul>
+<li>The reduced model is simpler.</li>
+<li>The complete model contains every term in the reduced model plus one or more additional terms.</li>
+<li>The test asks whether the extra terms reduce SSE enough to justify the added complexity.</li>
+</ul>
+<p>This test only applies when the models are truly nested.</p>
+</div>
+</div>
+</div>
 <p>To test the null hypothesis that the curvature coefficients simultaneously equal 0, we use an F statistic. For our example, this F statistic is: <span class="math display">\[
 \begin{align*}
-    F = \frac{\frac{(SSE_R - SSE_C)}{\text{Number of parameters beging tested}}}{\frac{SSE_C}{n-p}}
+    F = \frac{\frac{(SSE_R - SSE_C)}{\text{Number of parameters being tested}}}{\frac{SSE_C}{n-p}}
 \end{align*}
 \]</span></p>
-<p>When the candidate models in model building are nested models, the <span class="math inline">\(F\)</span>-Test is the appropriate procedure to apply to compare the models. However, if the models are not nested, this <span class="math inline">\(F\)</span>-Test is not applicable. In this situation, the analyst must base the choice of the best model on statistics such as <span class="math inline">\(R^2_a\)</span>. It is important to remember that decisions based on these and other numerical descriptive measures of model adequacy cannot be supported with a measure of reliability and are often very subjective in nature.</p>
-<div id="exm-13_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 13.3 (<a href="#exm-13_1" class="quarto-xref">Example&nbsp;<span>13.1</span></a> revisited - Nested F-test)</strong></span> Suppose, for some reason, we were to hypothesize that model needed the term <code>midarm^2</code>. Let’s conduct a nested F-test to see if this extra term is significant.</p>
+<p>When the candidate models in model building are nested models, the <span class="math inline">\(F\)</span>-test is the appropriate procedure to apply to compare the models. However, if the models are not nested, this <span class="math inline">\(F\)</span>-test is not applicable. In this situation, the analyst must base the choice of the best model on statistics such as <span class="math inline">\(R^2_a\)</span>. It is important to remember that decisions based on these and other numerical descriptive measures of model adequacy cannot be supported with a measure of reliability and are often very subjective in nature.</p>
+<div id="exm-13_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 13.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Nested F-test for an added quadratic term
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>This example revisits <a href="#exm-13_1" class="quarto-xref">Example&nbsp;<span>13.1</span></a>.</p>
+<p>Suppose, for some reason, we were to hypothesize that the model needs the term <code>midarm^2</code>. We can conduct a nested F-test to see if this extra term is significant.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#prepare data for the complete model</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span> , </span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Prepare data for the complete model</span></span>
+<span><span class="va">dat_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">dat</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_poly</span><span class="op">(</span><span class="va">midarm</span>, degree <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup model</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up model</span></span>
+<span><span class="va">lm_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow for complete model</span></span>
-<span><span class="va">lm_workflow</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up the workflow for complete model</span></span>
+<span><span class="va">lm_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
 <span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the complete model</span></span>
-<span><span class="va">lm_fit_C</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Fit the complete model</span></span>
+<span><span class="va">lm_fit_C</span> <span class="op">&lt;-</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the workflow for reduced model</span></span>
-<span><span class="va">lm_workflow_R</span> <span class="op">=</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Set up the workflow for reduced model</span></span>
+<span><span class="va">lm_workflow_R</span> <span class="op">&lt;-</span> <span class="va">lm_workflow</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">update_recipe</span><span class="op">(</span></span>
 <span>    <span class="va">dat_recipe</span> <span class="op">|&gt;</span> <span class="fu">step_rm</span><span class="op">(</span><span class="va">midarm_poly_2</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="co">#fit the reduced model</span></span>
-<span><span class="va">lm_fit_R</span> <span class="op">=</span> <span class="va">lm_workflow_R</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Fit the reduced model</span></span>
+<span><span class="va">lm_fit_R</span> <span class="op">&lt;-</span> <span class="va">lm_workflow_R</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#extract the models and conduct nested F-test</span></span>
-<span><span class="va">model_C</span> <span class="op">=</span> <span class="va">lm_fit_C</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">model_R</span> <span class="op">=</span> <span class="va">lm_fit_R</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co"># Extract the models and conduct nested F-test</span></span>
+<span><span class="va">model_C</span> <span class="op">&lt;-</span> <span class="va">lm_fit_C</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">model_R</span> <span class="op">&lt;-</span> <span class="va">lm_fit_R</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">model_R</span>, <span class="va">model_C</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Analysis of Variance Table
-
-Model 1: ..y ~ tri + thigh + midarm_poly_1
-Model 2: ..y ~ tri + thigh + midarm_poly_1 + midarm_poly_2
-  Res.Df    RSS Df Sum of Sq      F Pr(&gt;F)
-1     16 98.405                           
-2     15 90.397  1     8.008 1.3288 0.2671</code></pre>
+<span><span class="va">nested_test</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/anova.html">anova</a></span><span class="op">(</span><span class="va">model_R</span>, <span class="va">model_C</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="va">nested_test</span>, digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">Res.Df</th>
+<th style="text-align: right;">RSS</th>
+<th style="text-align: right;">Df</th>
+<th style="text-align: right;">Sum of Sq</th>
+<th style="text-align: right;">F</th>
+<th style="text-align: right;">Pr(&gt;F)</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">98.4049</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+<td style="text-align: right;">NA</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">90.3969</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8.008</td>
+<td style="text-align: right;">1.3288</td>
+<td style="text-align: right;">0.2671</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Since the p-value is greater than 0.05, there is not enough evidence to conclude that the quadratic term coefficient is different than 0.</p>
+<p>Since the p-value is greater than 0.05, there is not enough evidence to conclude that the quadratic term coefficient is different from 0.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="13.6"><h2 data-number="13.6" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">13.6</span> Recap</h2>
+<p>This chapter extended inference from the overall ANOVA F-test to coefficient-level inference, response intervals, second-order models, and nested model comparisons.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Unbiased coefficient estimates</strong></td>
+<td>The least-squares coefficient vector satisfies <span class="math inline">\(E({\bf b})={\boldsymbol\beta}\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Estimated covariance matrix of coefficients</strong></td>
+<td>
+<span class="math inline">\(MSE({\bf X}'{\bf X})^{-1}\)</span> estimates the covariance matrix of <span class="math inline">\({\bf b}\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Coefficient confidence interval</strong></td>
+<td>
+<span class="math inline">\(b_k \pm t_{\alpha/2,n-p}s[b_k]\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Individual coefficient t-test</strong></td>
+<td>Tests whether one coefficient is 0 after accounting for the other predictors.</td>
+</tr>
+<tr class="odd">
+<td><strong>Global F-test</strong></td>
+<td>Tests whether the predictors are collectively useful.</td>
+</tr>
+<tr class="even">
+<td><strong><span class="math inline">\(R^2\)</span></strong></td>
+<td>The proportion of variation in the response explained by the model.</td>
+</tr>
+<tr class="odd">
+<td><strong>Adjusted <span class="math inline">\(R^2\)</span></strong></td>
+<td>A version of <span class="math inline">\(R^2\)</span> that penalizes the model for using more predictors.</td>
+</tr>
+<tr class="even">
+<td><strong>Confidence interval for mean response</strong></td>
+<td>Estimates the mean response at a specified set of predictor values.</td>
+</tr>
+<tr class="odd">
+<td><strong>Prediction interval</strong></td>
+<td>Gives a plausible range for one new response at a specified set of predictor values.</td>
+</tr>
+<tr class="even">
+<td><strong>Prediction intervals are wider</strong></td>
+<td>They include uncertainty in the estimated mean and individual response variability.</td>
+</tr>
+<tr class="odd">
+<td><strong>Interaction term</strong></td>
+<td>A product term such as <span class="math inline">\(x_1x_2\)</span> that allows the effect of one predictor to depend on another predictor.</td>
+</tr>
+<tr class="even">
+<td><strong>Quadratic term</strong></td>
+<td>A term such as <span class="math inline">\(x^2\)</span> that allows curvature.</td>
+</tr>
+<tr class="odd">
+<td><strong>R formula syntax</strong></td>
+<td>
+<code>x1 * x2</code> expands to <code>x1 + x2 + x1:x2</code>; <code>I(x^2)</code> creates a raw quadratic term; <code>step_poly()</code> creates polynomial basis terms in a recipe.</td>
+</tr>
+<tr class="even">
+<td><strong>Second-order model</strong></td>
+<td>A model that includes interaction terms, squared terms, or both, while remaining linear in the parameters.</td>
+</tr>
+<tr class="odd">
+<td><strong>Nested models</strong></td>
+<td>A reduced model is nested inside a complete model when the complete model contains all reduced-model terms plus additional terms.</td>
+</tr>
+<tr class="even">
+<td><strong>Nested F-test</strong></td>
+<td>Tests whether the additional terms in a complete model reduce SSE enough to justify the added complexity.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="13.7"><h2 data-number="13.7" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">13.7</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What does it mean for the least-squares coefficient estimates to be unbiased?</p></li>
+<li><p>What information is contained in the estimated covariance matrix <span class="math inline">\(MSE({\bf X}'{\bf X})^{-1}\)</span>?</p></li>
+<li><p>What does an individual coefficient <span class="math inline">\(t\)</span>-test ask in a multiple regression model?</p></li>
+<li><p>Why can the global F-test be significant even when individual coefficient t-tests are not significant?</p></li>
+<li><p>Why should individual coefficient tests be used carefully when many predictors are being considered?</p></li>
+<li><p>Why can ordinary <span class="math inline">\(R^2\)</span> be misleading when comparing models with different numbers of predictors?</p></li>
+<li><p>What does adjusted <span class="math inline">\(R^2\)</span> try to correct?</p></li>
+<li><p>What is the difference between estimating a mean response and predicting a new response?</p></li>
+<li><p>Why is a prediction interval wider than a confidence interval for the mean response?</p></li>
+<li><p>What does an interaction term allow the model to do?</p></li>
+<li><p>In the model <span class="math inline">\(E(y)=\beta_0+\beta_1x_1+\beta_2x_2+\beta_3x_1x_2\)</span>, what is the slope with respect to <span class="math inline">\(x_1\)</span> for a fixed value of <span class="math inline">\(x_2\)</span>?</p></li>
+<li><p>Why are the lines parallel in a first-order model with no interaction?</p></li>
+<li><p>What does a quadratic term allow the model to represent?</p></li>
+<li><p>What is the difference between <code>x1:x2</code> and <code>x1 * x2</code> in an R model formula?</p></li>
+<li><p>Why do we use <code>I(x^2)</code> when writing a raw quadratic term in a base R formula?</p></li>
+<li><p>What is one difference between <code>I(x^2)</code> and <code>step_poly(x, degree = 2)</code>?</p></li>
+<li><p>What does it mean for two models to be nested?</p></li>
+<li><p>What question is answered by a nested F-test?</p></li>
+<li><p>Why is a nested F-test not appropriate for comparing models that are not nested?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Correct on average.</strong> Unbiased means that across repeated samples, the average value of the estimator equals the true parameter value.</p></li>
+<li><p><strong>Variances and covariances of estimates.</strong> The diagonal entries give estimated variances of coefficient estimates, and their square roots give standard errors. The off-diagonal entries describe estimated covariances between coefficient estimates.</p></li>
+<li><p><strong>One coefficient, conditional on the rest.</strong> It asks whether one coefficient differs from 0 after accounting for the other predictors in the model.</p></li>
+<li><p><strong>The questions are different.</strong> The global F-test asks whether the predictors are collectively useful. Individual t-tests ask whether each predictor has a clear unique contribution after accounting for the others. Correlated predictors can make individual effects hard to estimate.</p></li>
+<li><p><strong>Many tests inflate error risk.</strong> Testing many coefficients creates many chances for false positives, especially if tests are used mechanically for model selection.</p></li>
+<li><p><strong>It cannot decrease.</strong> Ordinary <span class="math inline">\(R^2\)</span> can only increase or stay the same when predictors are added, even if the added predictors are not genuinely useful.</p></li>
+<li><p><strong>It penalizes complexity.</strong> Adjusted <span class="math inline">\(R^2\)</span> accounts for the number of predictors by using degrees of freedom. It can decrease when an added predictor does not improve the model enough.</p></li>
+<li><p><strong>Mean versus individual.</strong> A mean-response interval estimates the average response for all units with specified predictor values. A prediction interval estimates a plausible range for one new unit with those predictor values.</p></li>
+<li><p><strong>More uncertainty is included.</strong> A prediction interval includes uncertainty in the estimated mean plus the natural variability of individual observations around that mean.</p></li>
+<li><p><strong>Changing slopes.</strong> An interaction term allows the effect of one predictor to depend on the value of another predictor.</p></li>
+<li><p><strong><span class="math inline">\(\beta_1+\beta_3x_2\)</span>.</strong> The slope with respect to <span class="math inline">\(x_1\)</span> depends on the fixed value of <span class="math inline">\(x_2\)</span>.</p></li>
+<li><p><strong>The slope is constant.</strong> Without an interaction, the effect of <span class="math inline">\(x_1\)</span> does not depend on <span class="math inline">\(x_2\)</span>, so separate lines for fixed values of <span class="math inline">\(x_2\)</span> have the same slope.</p></li>
+<li><p><strong>Curvature.</strong> A quadratic term allows the relationship between the predictor and the mean response to bend instead of being strictly straight.</p></li>
+<li><p><strong>Interaction only versus main effects plus interaction.</strong> <code>x1:x2</code> includes only the interaction term. <code>x1 * x2</code> expands to <code>x1 + x2 + x1:x2</code>.</p></li>
+<li><p><strong>To force arithmetic.</strong> In R formulas, some symbols have special formula meanings. <code>I(x^2)</code> tells R to treat <code>x^2</code> as ordinary arithmetic and include a raw squared predictor.</p></li>
+<li><p><strong>Raw term versus transformed basis.</strong> <code>I(x^2)</code> creates a literal squared predictor. <code>step_poly(x, degree = 2)</code> creates polynomial basis columns, often for better numerical behavior, but the columns are not simply named <code>x</code> and <code>x^2</code>.</p></li>
+<li><p><strong>One model contains the other.</strong> The reduced model is nested in the complete model if every term in the reduced model also appears in the complete model.</p></li>
+<li><p><strong>Whether extra terms help.</strong> A nested F-test asks whether the additional terms in the complete model reduce SSE enough to justify the added complexity.</p></li>
+<li><p><strong>There is no valid reduced-versus-complete decomposition.</strong> If models are not nested, one model is not simply the other plus additional terms, so the nested F-test formula does not apply.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 

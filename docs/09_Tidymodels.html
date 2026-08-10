@@ -101,8 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<style>
+}</script><style>
 div.callout-example.callout {
   border-left-color: #008000;
 }
@@ -511,39 +510,6 @@ Computational engine: lm </code></pre>
 <li>preprocessing steps, and</li>
 <li>eventually the fitted model.</li>
 </ul>
-<div class="callout callout-style-default callout-note callout-titled" title="Tidymodels workflow map">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Tidymodels workflow map
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>The basic simple regression workflow looks like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"></figure><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-  A["Model specification&lt;br/&gt;linear_reg() + engine"] --&gt; C["Workflow"]
-  B["Formula&lt;br/&gt;mpg ~ hp"] --&gt; C
-  C --&gt; D["Fit with data&lt;br/&gt;fit(data = mtcars)"]
-  D --&gt; E["Results&lt;br/&gt;coefficients, predictions,&lt;br/&gt;metrics, diagnostics"]
-</pre>
-</div>
-<p></p>
-</div>
-</div>
-</div>
-<p>The workflow keeps the modeling pieces together so the process is easier to reuse, modify, and debug.</p>
-</div>
-</div>
-</div>
 <section id="creating-a-workflow-for-simple-linear-regression" class="level3" data-number="9.2.1"><h3 data-number="9.2.1" class="anchored" data-anchor-id="creating-a-workflow-for-simple-linear-regression">
 <span class="header-section-number">9.2.1</span> Creating a Workflow for Simple Linear Regression</h3>
 <p>For simple linear regression, our workflow consists of two main components:</p>
@@ -1165,7 +1131,7 @@ Coefficients:
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Training metrics are optimistic">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1174,7 +1140,7 @@ Coefficients:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>The metrics above are calculated on the same data used to fit the model. These are training-set metrics.</p>
 <p>Training-set performance can make a model look better than it will perform on new data. Later, we will use tools such as data splitting, cross-validation, and resampling to estimate performance more honestly.</p>
@@ -1325,7 +1291,7 @@ Coefficients:
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -1358,7 +1324,7 @@ Coefficients:
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-14-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -1383,7 +1349,7 @@ Coefficients:
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html">acf</a></span><span class="op">(</span><span class="va">diagnostic_data</span><span class="op">$</span><span class="va">.resid</span>, main <span class="op">=</span> <span class="st">"ACF of residuals"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -1418,7 +1384,7 @@ Coefficients:
 <span>  <span class="fu">theme_minimal</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="09_Tidymodels_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
@@ -1427,7 +1393,7 @@ Coefficients:
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Common Tidymodels troubleshooting">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-19-contents" aria-controls="callout-19" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1436,7 +1402,7 @@ Coefficients:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
+<div id="callout-19" class="callout-19-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>When Tidymodels code fails, the issue is often about the object being used rather than the regression idea itself.</p>
 <table class="caption-top table">
@@ -1555,7 +1521,7 @@ Coefficients:
 </table></section><section id="check-your-understanding" class="level2" data-number="9.8"><h2 data-number="9.8" class="anchored" data-anchor-id="check-your-understanding">
 <span class="header-section-number">9.8</span> Check your understanding</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Problems">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-20-contents" aria-controls="callout-20" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1564,7 +1530,7 @@ Coefficients:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-21" class="callout-21-contents callout-collapse collapse show">
+<div id="callout-20" class="callout-20-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>What is the difference between specifying a model with <code>linear_reg()</code> and fitting a model with <code>fit()</code>?</p></li>
@@ -1584,7 +1550,7 @@ Coefficients:
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-22-contents" aria-controls="callout-22" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-21-contents" aria-controls="callout-21" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1593,7 +1559,7 @@ Coefficients:
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-22" class="callout-22-contents callout-collapse collapse">
+<div id="callout-21" class="callout-21-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p><strong>Specification versus fitting.</strong> <code>linear_reg()</code> describes the type of model to use. <code>fit()</code> estimates the model parameters from data.</p></li>

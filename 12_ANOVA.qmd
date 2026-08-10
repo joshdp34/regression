@@ -50,6 +50,19 @@ simple linear model. That is,
 The inferences on the multiple regression model will depend on these
 assumptions holding. We will discuss how to check these later.
 
+::: {.callout-note collapse="false" title="Assumptions and the F-test"}
+
+The ANOVA $F$-test is a model-utility test, but it still relies on the regression assumptions.
+
+- Linearity affects whether the fitted model is describing the right mean structure.
+- Constant variance affects the reliability of the standard error estimate.
+- Normality is especially important for small-sample inference.
+- Independence affects whether the information in the data is being counted correctly.
+
+A small p-value from the global $F$-test does not prove that the model assumptions are satisfied. It only says that, under the model assumptions, the predictors collectively explain more variation than we would expect by chance if all slope coefficients were 0.
+
+:::
+
 ## A First-Order Model with Quantitative Predictors
 
 Recall that a *first-order* model means that none of the predictor
@@ -61,6 +74,14 @@ regression model. The difference is that when we interpret the $\beta$
 that multiplies one of the variables (e.g., $x_1$), we must be certain
 to hold the values of the remaining independent variables (e.g., $x_2$,
 $x_3$) *fixed*.
+
+::: {.callout-warning collapse="false" title="Partial slopes are still conditional"}
+
+The ANOVA $F$-test asks whether the predictors are collectively useful. It does not change how individual slopes are interpreted.
+
+In a first-order model with quantitative predictors, each slope is interpreted as the expected change in the response for a one-unit increase in that predictor, *holding the other predictors fixed*.
+
+:::
 
 ## Testing the Utility of a Model: The Analysis of Variance $F$-Test
 
@@ -108,10 +129,10 @@ the null hypothesis at least once and conclude that some $\beta$
 parameter is nonzero. In other words, the overall Type I error is about
 .40, not .05.
 
-To illustrate this inflated type I error, let's look at the following
+To illustrate this inflated Type I error, let's look at the following
 example.
 
-::: {#exm-12_1}
+::: {#exm-12_1 .example title="Inflated Type I error from many individual tests"}
 We will simulate a sample of size 200 with a response variable $y$ and
 ten predictor variables $x_1, x_2, \ldots, x_{10}$. The random error
 term $\varepsilon$ will be a standard normal random variable.
@@ -162,12 +183,98 @@ p-value smaller than 0.05. This corresponds to the probability of at
 least one Type I error of around 0.401.
 :::
 
+::: {.example title="Worked example: Comparing many t-tests to the global F-test"}
+
+The previous simulation counted how often at least one individual $t$-test was significant when all slope coefficients were truly 0. Now compare that behavior with the global $F$-test.
+
+```{r warning=FALSE, message=FALSE}
+set.seed(3386)
+
+nsim <- 1000
+n <- 200
+alpha <- 0.05
+
+simulation_results <- tibble(
+  many_t_tests = logical(nsim),
+  global_f_test = logical(nsim)
+)
+
+for (i in 1:nsim) {
+  x <- matrix(runif(n * 10), ncol = 10)
+  eps <- rnorm(n)
+  y <- 20 + eps
+
+  dat <- tibble(
+    y,
+    x1 = x[, 1],
+    x2 = x[, 2],
+    x3 = x[, 3],
+    x4 = x[, 4],
+    x5 = x[, 5],
+    x6 = x[, 6],
+    x7 = x[, 7],
+    x8 = x[, 8],
+    x9 = x[, 9],
+    x10 = x[, 10]
+  )
+
+  fit <- lm(y ~ ., data = dat)
+
+  coefficient_p_values <- summary(fit)$coefficients[-1, 4]
+  f_statistic <- summary(fit)$fstatistic
+  global_p_value <- pf(
+    f_statistic["value"],
+    f_statistic["numdf"],
+    f_statistic["dendf"],
+    lower.tail = FALSE
+  )
+
+  simulation_results$many_t_tests[i] <- any(coefficient_p_values < alpha)
+  simulation_results$global_f_test[i] <- global_p_value < alpha
+}
+
+type1_comparison <- simulation_results |>
+  summarize(
+    `At least one individual t-test is significant` = mean(many_t_tests),
+    `Global F-test is significant` = mean(global_f_test)
+  ) |>
+  pivot_longer(
+    cols = everything(),
+    names_to = "method",
+    values_to = "type_i_error_rate"
+  )
+
+knitr::kable(type1_comparison, digits = 3)
+```
+
+When all slope coefficients are truly 0, the global $F$-test keeps the Type I error rate close to $\alpha = 0.05$. The "many separate $t$-tests" approach has a much larger chance of producing at least one false positive.
+
+:::
+
 In multiple regression models for which a large number of independent
 variables are being considered, conducting a series of $t$-tests may
 cause the experimenter to include a large number of insignificant
 variables and exclude some useful ones. If we want to test the utility
 of a multiple regression model, we will need a *global* *test* (one that
 encompasses all the $\beta$ parameters).
+
+::: {.callout-note collapse="false" title="What the global F-test asks"}
+
+For a model with predictors $x_1,\ldots,x_{p-1}$, the global $F$-test asks:
+
+$$
+H_0:\beta_1=\beta_2=\cdots=\beta_{p-1}=0
+$$
+
+against
+
+$$
+H_a:\text{at least one slope coefficient is not 0.}
+$$
+
+The test is global because it evaluates the model's predictors as a group. If the test is significant, it does not tell us which predictor is responsible. It only tells us that the model with predictors improves on the intercept-only model.
+
+:::
 
 ### Partitioning the Sum of Squares
 
@@ -185,14 +292,14 @@ SSTO & ={\bf Y}^{\prime}{\bf Y}-\left(\frac{1}{n}\right){\bf Y}^{\prime}{\bf J}{
 \end{align}
 $$ {#eq-w4-34}
 
-#### Sum of Square Error (SSE)
+#### Sum of Squares Error (SSE)
 
 Also recall the variability of $y$ about the regression line (in simple
 linear regression) was expressed by SSE. We can think of this as the
-variability of $y$ remaining after exampling some of the variability
+variability of $y$ remaining after explaining some of the variability
 with the regression model.
 
-In multiple regression, SSE is still the sum of the square distances
+In multiple regression, SSE is still the sum of the squared distances
 between the response $y$ and the fitted model $\hat{y}$. Now, the fitted
 model is the fitted *hyperplane* instead of a line.
 
@@ -203,9 +310,9 @@ SSE & =\left({\bf Y}-{\bf X}{\bf b}\right)^{\prime}\left({\bf Y}-{\bf X}{\bf b}\
 \end{align}
 $$ {#eq-w3_35}
 
-#### Sum of Square Regression (SSR)
+#### Sum of Squares Regression (SSR)
 
-If SSTO is the total variability of $y$ (without of regard to the
+If SSTO is the total variability of $y$ (without regard to the
 predictor variables), and SSE is the variability of $y$ left over after
 explaining the variability of $y$ with the model (including the
 predictor variables), we might want to know the variability of $y$
@@ -267,6 +374,74 @@ SSTO & =SSR+SSE
 $$ {#eq-4_38}
 
 We call this the *decomposition* of SSTO.
+
+::: {.example title="Worked example: Decomposing SSTO for the `trees` model"}
+
+For the `trees` model with `Volume` predicted by `Girth` and `Height`, the total variation in `Volume` can be split into variation explained by the model and variation left in the residuals.
+
+```{r warning=FALSE, message=FALSE}
+trees_anova_fit <- lm(Volume ~ Girth + Height, data = trees)
+
+trees_y <- trees$Volume
+trees_yhat <- fitted(trees_anova_fit)
+trees_resid <- resid(trees_anova_fit)
+
+ssto_trees <- sum((trees_y - mean(trees_y))^2)
+ssr_trees <- sum((trees_yhat - mean(trees_y))^2)
+sse_trees <- sum(trees_resid^2)
+
+ss_decomposition <- tibble(
+  source = c("Total variation", "Explained by regression", "Unexplained error"),
+  symbol = c("SSTO", "SSR", "SSE"),
+  value = c(ssto_trees, ssr_trees, sse_trees)
+)
+
+knitr::kable(ss_decomposition, digits = 4)
+```
+
+The decomposition says
+
+$$
+SSTO = SSR + SSE.
+$$
+
+For this model, `r round(ssto_trees, 4)` is approximately equal to `r round(ssr_trees, 4)` + `r round(sse_trees, 4)`.
+
+:::
+
+::: {.example title="Worked example: Visualizing `SSTO = SSR + SSE`"}
+
+The decomposition can also be shown visually. The total bar shows SSTO. The second bar breaks that same total into SSR and SSE.
+
+```{r warning=FALSE, message=FALSE}
+ss_visual <- tibble(
+  bar = c("SSTO", "SSR + SSE", "SSR + SSE"),
+  component = c("SSTO", "SSR", "SSE"),
+  value = c(ssto_trees, ssr_trees, sse_trees)
+)
+
+ggplot(ss_visual, aes(x = bar, y = value, fill = component)) +
+  geom_col(width = 0.6, color = "white") +
+  scale_fill_manual(
+    values = c(
+      "SSTO" = "gray70",
+      "SSR" = "steelblue",
+      "SSE" = "orange"
+    )
+  ) +
+  labs(
+    x = NULL,
+    y = "Sum of squares",
+    fill = "Component",
+    title = "Total variation decomposes into explained and unexplained variation",
+    subtitle = "For least squares regression with an intercept: SSTO = SSR + SSE"
+  ) +
+  theme_minimal()
+```
+
+The visual point is simple: the total variation in the response can be split into the part explained by the fitted model and the part left in the residuals.
+
+:::
 
 #### Degrees of Freedom
 
@@ -380,10 +555,10 @@ $$
 $$
 
 The ratio of two independent chi-square random variables divided by
-their degrees of freedom give a statistic that follows a F-distribution.
+their degrees of freedom gives a statistic that follows an F-distribution.
 
 Since $SSE/\sigma^{2}$ and $SSR/\sigma^{2}$ are independent (proof not
-give here), then under $H_{0}$, we can construct a test statistic as
+given here), then under $H_{0}$, we can construct a test statistic as
 $$
 \begin{align}
 F^{*} & =\left(\frac{\frac{SSR}{\sigma^{2}}}{p-1}\right)\div\left(\frac{\frac{SSE}{\sigma^{2}}}{n-p}\right)\\
@@ -403,16 +578,68 @@ table:
 
 |   Source   |     df      |   SS   | MS  |  F  | p-value |
 |:----------:|:-----------:|:------:|:---:|:---:|:-------:|
-| Regression | $df_{SSR}$  | $SSR$  |  $MSR$   | $F^{*}$    |  $P\left(Z\ge Z^{*}\right)$       |
+| Regression | $df_{SSR}$  | $SSR$  |  $MSR$   | $F^{*}$    |  $P\left(F\ge F^{*}\right)$       |
 |   Error    | $df_{SSE}$  | $SSE$  | $MSE$    |     |         |
 |   Total    | $df_{SSTO}$ | $SSTO$ |     |     |         |
 
+::: {.example title="Worked example: Building the ANOVA table by hand"}
+
+Using the sums of squares from the `trees` model, we can construct the ANOVA table directly.
+
+```{r warning=FALSE, message=FALSE}
+n_trees_anova <- nobs(trees_anova_fit)
+p_trees_anova <- length(coef(trees_anova_fit))
+
+df_regression <- p_trees_anova - 1
+df_error <- n_trees_anova - p_trees_anova
+df_total <- n_trees_anova - 1
+
+msr_trees <- ssr_trees / df_regression
+mse_trees <- sse_trees / df_error
+f_trees <- msr_trees / mse_trees
+p_value_trees <- pf(f_trees, df_regression, df_error, lower.tail = FALSE)
+
+manual_anova_table <- tibble(
+  source = c("Regression", "Error", "Total"),
+  df = c(df_regression, df_error, df_total),
+  SS = c(ssr_trees, sse_trees, ssto_trees),
+  MS = c(msr_trees, mse_trees, NA_real_),
+  F = c(f_trees, NA_real_, NA_real_),
+  p_value = c(p_value_trees, NA_real_, NA_real_)
+)
+
+knitr::kable(manual_anova_table, digits = 4)
+```
+
+The global $F$ statistic compares explained variation per regression degree of freedom to unexplained variation per error degree of freedom.
+
+$$
+F^*=\frac{MSR}{MSE}.
+$$
+
+Large values of $F^*$ occur when the regression model explains a lot of variation relative to the residual noise.
+
+:::
+
+::: {.callout-warning collapse="false" title="What a significant F-test does not tell you"}
+
+A significant global $F$-test tells us that at least one slope coefficient is not 0. It does not tell us:
+
+- which predictor or predictors are useful,
+- whether the model assumptions are satisfied,
+- whether the relationship is causal,
+- whether the model predicts well on new data.
+
+Those questions require follow-up coefficient tests, diagnostic plots, subject-area reasoning, and validation.
+
+:::
 
 
 
 
-::: {#exm-12_2}
-We will fit a multiple regression model to the `trees` dataset. The tidymodels framework will be used. 
+
+::: {#exm-12_2 .example title="The global F-test for the `trees` model"}
+We will fit a multiple regression model to the `trees` dataset. The Tidymodels framework will be used.
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -420,46 +647,237 @@ library(tidymodels)
 
 data(trees)
 
-#prepare data
-dat_recipe = recipe(Volume ~ Girth + Height, data = trees) 
+# Prepare data
+dat_recipe <- recipe(Volume ~ Girth + Height, data = trees)
 
-#setup model
-lm_model = linear_reg() |>
+# Set up model
+lm_model <- linear_reg() |>
   set_engine("lm")
 
-#setup the workflow
-lm_workflow = workflow() |>
+# Set up the workflow
+lm_workflow <- workflow() |>
   add_recipe(dat_recipe) |> 
   add_model(lm_model)
 
-#fit the model
-lm_fit = lm_workflow |>
+# Fit the model
+lm_fit <- lm_workflow |>
   fit(data = trees)
 
-#to get the coefficients
-lm_fit |> tidy()
+# Get the coefficients
+trees_tidymodels_coefficients <- lm_fit |>
+  tidy()
+
+knitr::kable(trees_tidymodels_coefficients, digits = 4)
 ```
 
 The fitted model is
 $$
 \hat{y} = -57.988 + 4.708x_1 + 0.339x_2
 $$
-For every one inch increase in Girth, the average Volume increases by 4.708 cubit ft, keeping Height fixed. 
 
-For every one ft increase in Height, the average Volume increases by 0.339 cubit ft, keeping Girth fixed. 
+where $x_1$ is `Girth` and $x_2$ is `Height`.
+
+For every one-inch increase in Girth, the average Volume increases by 4.708 cubic feet, keeping Height fixed.
+
+For every one-foot increase in Height, the average Volume increases by 0.339 cubic feet, keeping Girth fixed.
 
 
 ```{r warning=FALSE, message=FALSE}
-#to get the global F-test p-value
-lm_fit |> glance()
+# Get the global F-test p-value
+trees_global_test <- lm_fit |>
+  glance()
 
-#To get the ANOVA table
-#Note that SSR is split into individual predictors
-lm_fit |> extract_fit_engine() |> anova()
+trees_global_test |>
+  select(r.squared, statistic, p.value, df, df.residual) |>
+  knitr::kable(digits = 4)
+
+# Get the ANOVA table
+# Note that SSR is split into individual predictors
+trees_sequential_anova <- lm_fit |>
+  extract_fit_engine() |>
+  anova()
+
+knitr::kable(trees_sequential_anova, digits = 4)
 ```
 
 
-Since the p-value of $1.071\times 10^{-18}$ is less than 0.05, there is sufficient evidence to conclude that at least one of the coefficients is not zero.
+Since the global F-test p-value is very small, there is sufficient evidence to conclude that at least one slope coefficient is not 0.
+
+The `anova()` table shown by R splits the regression sum of squares across predictors in the order they enter the model. The global F-test reported by `glance()` tests the predictors collectively.
+
+:::
+
+::: {.callout-note collapse="false" title="Global F-test versus sequential ANOVA table"}
+
+The global $F$-test and the `anova()` table from `anova(lm_object)` answer related but different questions.
+
+| Output | Main question | Important detail |
+|---|---|---|
+| `glance()` global F-test | Does the full model improve on the intercept-only model? | Tests all slopes together. |
+| `anova(lm_object)` sequential ANOVA table | How much sum of squares is added by each predictor as it enters the model? | The order of predictors matters. |
+
+For example, compare these two model formulas:
+
+```{r warning=FALSE, message=FALSE}
+anova_girth_first <- anova(lm(Volume ~ Girth + Height, data = trees))
+anova_height_first <- anova(lm(Volume ~ Height + Girth, data = trees))
+
+sequential_anova_compare <- bind_rows(
+  as_tibble(anova_girth_first, rownames = "term") |>
+    mutate(order = "Girth entered first"),
+  as_tibble(anova_height_first, rownames = "term") |>
+    mutate(order = "Height entered first")
+) |>
+  select(order, term, Df, `Sum Sq`, `Mean Sq`, `F value`, `Pr(>F)`)
+
+knitr::kable(sequential_anova_compare, digits = 4)
+```
+
+The total model fit is the same either way, but the sequential ANOVA table allocates explained variation according to the order in which predictors enter the formula. This is why the global F-test is the cleaner answer to the question, "Is the predictor set useful as a group?"
+
+:::
+
+### A Bridge to Adjusted $R^2$
+
+The ANOVA decomposition also connects directly to $R^2$.
+
+Recall that
+
+$$
+R^2=\frac{SSR}{SSTO}=1-\frac{SSE}{SSTO}.
+$$
+
+This measures the proportion of sample variation in the response explained by the fitted model. However, ordinary $R^2$ never decreases when predictors are added, even if the new predictors are not useful. Adjusted $R^2$ adds a degrees-of-freedom penalty:
+
+$$
+R^2_{adj}=1-\frac{SSE/(n-p)}{SSTO/(n-1)}.
+$$
+
+Notice that this formula uses the same ingredients as the ANOVA table: $SSE$, $SSTO$, $n-p$, and $n-1$.
+
+::: {.example title="Worked example: Connecting ANOVA to adjusted `R^2`"}
+
+For the `trees` model, we can calculate $R^2$ and adjusted $R^2$ directly from the sums of squares.
+
+```{r warning=FALSE, message=FALSE}
+r_squared_trees <- ssr_trees / ssto_trees
+adjusted_r_squared_trees <- 1 - (sse_trees / df_error) / (ssto_trees / df_total)
+
+rsq_compare <- tibble(
+  quantity = c("R-squared from sums of squares", "Adjusted R-squared from ANOVA pieces", "R-squared from lm summary", "Adjusted R-squared from lm summary"),
+  value = c(
+    r_squared_trees,
+    adjusted_r_squared_trees,
+    summary(trees_anova_fit)$r.squared,
+    summary(trees_anova_fit)$adj.r.squared
+  )
+)
+
+knitr::kable(rsq_compare, digits = 4)
+```
+
+Adjusted $R^2$ is useful because it rewards explained variation but penalizes the model for using more predictors. It is not a hypothesis test, but it is closely connected to the same variation-decomposition ideas behind ANOVA.
+
+:::
+
+## Recap
+
+This chapter introduced the ANOVA approach to testing the overall utility of a multiple regression model.
+
+| Idea | Meaning |
+|---|---|
+| **Global F-test** | Tests whether the predictors are collectively useful for explaining variation in the response. |
+| **Null hypothesis** | $H_0:\beta_1=\beta_2=\cdots=\beta_{p-1}=0$. |
+| **Alternative hypothesis** | At least one slope coefficient is not 0. |
+| **SSTO** | Total variation in the response: variation around $\bar y$. |
+| **SSR** | Regression variation: variation explained by the fitted model. |
+| **SSE** | Error variation: variation left in the residuals. |
+| **Sum-of-squares decomposition** | $SSTO=SSR+SSE$. |
+| **Degrees-of-freedom decomposition** | $n-1=(p-1)+(n-p)$. |
+| **MSR** | $MSR=SSR/(p-1)$, explained variation per regression degree of freedom. |
+| **MSE** | $MSE=SSE/(n-p)$, unexplained variation per error degree of freedom. |
+| **F statistic** | $F^*=MSR/MSE$. |
+| **Large F statistic** | Evidence against $H_0$ and in favor of at least one useful predictor. |
+| **Sequential ANOVA** | Splits SSR across predictors in formula order; useful, but order-dependent. |
+| **$R^2$** | $R^2=SSR/SSTO=1-SSE/SSTO$, the proportion of sample response variation explained by the model. |
+| **Adjusted $R^2$** | $R^2_{adj}=1-\dfrac{SSE/(n-p)}{SSTO/(n-1)}$, an $R^2$-like measure with a degrees-of-freedom penalty. |
+| **Important limitation** | A significant global F-test does not identify which predictor is useful or prove that assumptions hold. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. What is the purpose of the global ANOVA $F$-test in multiple regression?
+
+2. What null hypothesis is tested by the global $F$-test?
+
+3. Why is conducting many individual $t$-tests not the same as conducting one global model test?
+
+4. What does SSTO measure?
+
+5. What does SSR measure?
+
+6. What does SSE measure?
+
+7. How are SSTO, SSR, and SSE related?
+
+8. What are the degrees of freedom for regression, error, and total in a model with $p$ parameters and $n$ observations?
+
+9. Why do we divide sums of squares by degrees of freedom to form mean squares?
+
+10. What does the statistic $F^*=MSR/MSE$ compare?
+
+11. What does a large value of $F^*$ suggest?
+
+12. If the global $F$-test is significant, does that tell us which predictor is useful? Explain.
+
+13. Does a significant global $F$-test prove that the regression assumptions are satisfied?
+
+14. Why is the global $F$-test best viewed as a test of collective usefulness?
+
+15. Why can the sequential ANOVA table from `anova(lm_object)` change when the order of predictors changes?
+
+16. How is $R^2$ related to the ANOVA sums of squares?
+
+17. Why does adjusted $R^2$ include a degrees-of-freedom penalty?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **To test overall model utility.** The global $F$-test asks whether the predictors, as a group, explain a meaningful amount of variation in the response.
+
+2. **All slopes are 0.** The null hypothesis is $H_0:\beta_1=\beta_2=\cdots=\beta_{p-1}=0$.
+
+3. **Multiple tests inflate error risk.** Many individual $t$-tests create many chances for a Type I error. The global $F$-test evaluates the predictors together in one test.
+
+4. **Total response variation.** SSTO measures the total variation of the observed responses around their mean.
+
+5. **Explained variation.** SSR measures the part of the response variation explained by the fitted regression model.
+
+6. **Unexplained variation.** SSE measures the residual variation left after fitting the model.
+
+7. **They decompose total variation.** In least squares regression with an intercept, $SSTO=SSR+SSE$.
+
+8. **Regression, error, total.** The regression degrees of freedom are $p-1$, the error degrees of freedom are $n-p$, and the total degrees of freedom are $n-1$.
+
+9. **To put variation on a per-degree-of-freedom scale.** Mean squares compare sums of squares after accounting for their degrees of freedom.
+
+10. **Explained variation relative to residual variation.** The $F$ statistic compares MSR to MSE.
+
+11. **Evidence against the null.** A large $F^*$ suggests that the model explains more variation than expected if all slope coefficients were 0.
+
+12. **No.** A significant global $F$-test says at least one slope is not 0, but it does not identify which one.
+
+13. **No.** The test assumes the regression assumptions are reasonable; it does not verify them.
+
+14. **It evaluates the predictor set.** The test compares a model with all predictors to an intercept-only model, so it addresses whether the predictors are collectively useful.
+
+15. **Sequential means order-dependent.** The table gives each predictor credit for the extra sum of squares it explains after earlier predictors have already entered the model. If the order changes, that allocation can change.
+
+16. **It is explained variation divided by total variation.** $R^2=SSR/SSTO=1-SSE/SSTO$.
+
+17. **To discourage adding useless predictors.** Ordinary $R^2$ cannot decrease when predictors are added. Adjusted $R^2$ compares MSE to the total mean square, so it accounts for both unexplained variation and the number of parameters estimated.
 
 :::
 
