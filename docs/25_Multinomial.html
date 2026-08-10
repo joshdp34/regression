@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>25&nbsp; Multinomial Logistic Regression and Poisson Regression – STA 3386 Regression Analysis</title>
+<title>25&nbsp; Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression – STA 3386 Regression Analysis</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -74,7 +74,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-252a5852334bca2ff0cfda27f9d47fed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9d446ab727817792bab91d50dee4855b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -147,7 +147,7 @@ window.Quarto = {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./25_Multinomial.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression and Poisson Regression</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./25_Multinomial.html"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -321,7 +321,7 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./25_Multinomial.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression and Poisson Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression</span></span></a>
   </div>
 </li>
     </ul>
@@ -333,25 +333,29 @@ window.Quarto = {
    
   <ul>
 <li><a href="#nominal-response" id="toc-nominal-response" class="nav-link active" data-scroll-target="#nominal-response"><span class="header-section-number">25.1</span> Nominal Response</a></li>
+  <li><a href="#multinomial-logistic-regression" id="toc-multinomial-logistic-regression" class="nav-link" data-scroll-target="#multinomial-logistic-regression"><span class="header-section-number">25.2</span> Multinomial Logistic Regression</a></li>
   <li>
-<a href="#ordinal-regression" id="toc-ordinal-regression" class="nav-link" data-scroll-target="#ordinal-regression"><span class="header-section-number">25.2</span> Ordinal Regression</a>
+<a href="#ordinal-regression" id="toc-ordinal-regression" class="nav-link" data-scroll-target="#ordinal-regression"><span class="header-section-number">25.3</span> Ordinal Regression</a>
   <ul class="collapse">
-<li><a href="#ordinal-response" id="toc-ordinal-response" class="nav-link" data-scroll-target="#ordinal-response"><span class="header-section-number">25.2.1</span> Ordinal Response</a></li>
+<li><a href="#ordinal-response" id="toc-ordinal-response" class="nav-link" data-scroll-target="#ordinal-response"><span class="header-section-number">25.3.1</span> Ordinal Response</a></li>
+  <li><a href="#proportional-odds-assumption" id="toc-proportional-odds-assumption" class="nav-link" data-scroll-target="#proportional-odds-assumption"><span class="header-section-number">25.3.2</span> Proportional Odds Assumption</a></li>
   </ul>
 </li>
   <li>
-<a href="#poisson-regression" id="toc-poisson-regression" class="nav-link" data-scroll-target="#poisson-regression"><span class="header-section-number">25.3</span> Poisson Regression</a>
+<a href="#poisson-regression" id="toc-poisson-regression" class="nav-link" data-scroll-target="#poisson-regression"><span class="header-section-number">25.4</span> Poisson Regression</a>
   <ul class="collapse">
-<li><a href="#the-poisson-distribution" id="toc-the-poisson-distribution" class="nav-link" data-scroll-target="#the-poisson-distribution"><span class="header-section-number">25.3.1</span> The Poisson Distribution</a></li>
-  <li><a href="#poisson-regression-1" id="toc-poisson-regression-1" class="nav-link" data-scroll-target="#poisson-regression-1"><span class="header-section-number">25.3.2</span> Poisson Regression</a></li>
+<li><a href="#the-poisson-distribution" id="toc-the-poisson-distribution" class="nav-link" data-scroll-target="#the-poisson-distribution"><span class="header-section-number">25.4.1</span> The Poisson Distribution</a></li>
+  <li><a href="#poisson-regression-model" id="toc-poisson-regression-model" class="nav-link" data-scroll-target="#poisson-regression-model"><span class="header-section-number">25.4.2</span> Poisson Regression Model</a></li>
   </ul>
 </li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">25.5</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">25.6</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title">
-<span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression and Poisson Regression</span>
+<span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression</span>
 </h1>
 </div>
 
@@ -369,357 +373,1603 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“It’s easy to lie with statistics; it is easier to lie without them.” - Frederick Mosteller</p>
 </blockquote>
+<p>The previous chapters focused on binary logistic regression. In this chapter, we briefly introduce three related models for categorical and count responses:</p>
+<ul>
+<li>
+<strong>multinomial logistic regression</strong> for nominal response categories,</li>
+<li>
+<strong>ordinal logistic regression</strong> for ordered response categories, and</li>
+<li>
+<strong>Poisson regression</strong> for count responses.</li>
+</ul>
+<p>These models extend the regression idea beyond quantitative responses while still using predictors to explain or predict an outcome.</p>
 <section id="nominal-response" class="level2" data-number="25.1"><h2 data-number="25.1" class="anchored" data-anchor-id="nominal-response">
 <span class="header-section-number">25.1</span> Nominal Response</h2>
-<p>Logistic regression is most frequently used to model the relationship between a dichotomous response variable and a set of predictor variables.</p>
-<p>On occasion, however. the response variable may have <em>more</em> than two levels.</p>
-<p>Logistic regression can still be employed by means of a <em>polytomous</em>-or <em>multinomial</em>-logistic regression model.</p>
-<p>Multinomial logistic regression models are used in many fields. In business, for instance, a market researcher may wish to relate a consumer’s choice of product (product A, product B. product C) to the consumer’s age, gender, geographic location and several other potential explanatory variables.</p>
-<p>This is an example of nominal multinomial regression because the response categories are purely qualitative and not <em>ordered</em> in any way.</p>
-<p><em>Ordinal</em> response categories can also be modeled using multinomial regression.</p>
-<p>For example, the relation between severity of disease measured on an ordinal scale (mild, moderate, severe) and age of patient, gender of patient, and some other explanatory variables may be of interest.</p>
-<p>The response variable <span class="math inline">\(y\)</span> must be coded in the same way as indicator variables except we will need an indicator variable for each category of <span class="math inline">\(y\)</span>.</p>
-<p>Instead of going through the details, we will illustrate with tidymodels.</p>
-<section id="example" class="level4"><h4 class="anchored" data-anchor-id="example">Example</h4>
-<p>A study was undertaken to determine the strength of association between several risk factors and the duration of pregnancies.</p>
-<p>The risk factors considered were mother’s age, nutritional status, history of tobacco use, and history of alcohol use.</p>
-<p>The response of interest, pregnancy duration, is a three-category variable that was coded as follows: <span class="math display">\[
-\begin{align*}
-y_{i} &amp;\quad \textbf{Pregnancy Duration Category}\\
-1 &amp;\quad \text{Preterm (less than 36 weeks)}\\
-2 &amp;\quad \text{Intermediate term (36 to 37 weeks)}\\
-3 &amp;\quad \text{Full term (38 weeks or greater)}
-\end{align*}
+<p>Logistic regression is most frequently used when the response variable has two categories. Sometimes, however, the response variable has more than two categories.</p>
+<p>If those categories have no natural ordering, the response is <strong>nominal</strong>. For example, a consumer’s product choice among product A, product B, and product C is nominal because the categories are names rather than ordered levels.</p>
+<p>Multinomial logistic regression models the probability of each response category by comparing each non-baseline category to a chosen baseline category.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Nominal versus ordinal responses">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Nominal versus ordinal responses
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Response type</th>
+<th>Example</th>
+<th>Appropriate model</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Nominal</strong></td>
+<td>Product A, product B, product C</td>
+<td>Multinomial logistic regression</td>
+</tr>
+<tr class="even">
+<td><strong>Ordinal</strong></td>
+<td>Mild, moderate, severe</td>
+<td>Ordinal logistic regression</td>
+</tr>
+<tr class="odd">
+<td><strong>Count</strong></td>
+<td>Number of store visits</td>
+<td>Poisson regression</td>
+</tr>
+</tbody>
+</table>
+<p>The distinction matters because nominal models ignore ordering, ordinal models use ordering, and Poisson models are for nonnegative integer counts.</p>
+</div>
+</div>
+</div>
+</section><section id="multinomial-logistic-regression" class="level2" data-number="25.2"><h2 data-number="25.2" class="anchored" data-anchor-id="multinomial-logistic-regression">
+<span class="header-section-number">25.2</span> Multinomial Logistic Regression</h2>
+<p>For a response with <span class="math inline">\(J\)</span> categories, multinomial logistic regression chooses one category as the <strong>baseline</strong>. The model then compares each other category to that baseline.</p>
+<p>For example, if category 1 is the baseline, then the model fits log-odds equations such as</p>
+<p><span class="math display">\[
+\log\left(\frac{P(Y=2)}{P(Y=1)}\right)
+= \beta_{20}+\beta_{21}x_1+\cdots+\beta_{2,p-1}x_{p-1}
 \]</span></p>
-<p>Relevant data for 102 women who had recently given birth at a large metropolitan hospital were obtained.</p>
-<p>X variables include:</p>
-<ul>
-<li><p>Nutritional status (<span class="math inline">\(x_1\)</span>), is an index of nutritional status (higher score denotes better nutritional status).</p></li>
-<li><p>Age was categorized into three groups. It is represented by two indicator variables (<span class="math inline">\(x_2\)</span> and <span class="math inline">\(x_3\)</span>): <span class="math display">\[
-\begin{align*}
-x_{2} &amp;\quad x_{3} &amp; \textbf{Class}\\
-1 &amp;\quad 0 &amp; \text{Less than or equal to 20}\\
-0 &amp;\quad 0 &amp; \text{21 to 30}\\
-0 &amp;\quad 1 &amp; \text{Greater than 30}
-\end{align*}
-\]</span></p></li>
-<li><p>Alcohol (<span class="math inline">\(x_4\)</span>) and smoking history (<span class="math inline">\(x_5\)</span>) were also qualitative predictors; the categories were “Yes” (coded 1) and “No” (coded 0).</p></li>
-</ul>
-<p>Let’s read in the data and visualize the variables.</p>
+<p>and</p>
+<p><span class="math display">\[
+\log\left(\frac{P(Y=3)}{P(Y=1)}\right)
+= \beta_{30}+\beta_{31}x_1+\cdots+\beta_{3,p-1}x_{p-1}.
+\]</span></p>
+<p>Each non-baseline category gets its own set of coefficients.</p>
+<div id="exm-25_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Pregnancy duration data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A study was undertaken to examine the association between several risk factors and pregnancy duration.</p>
+<p>The response variable has three categories:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th style="text-align: right;">Code</th>
+<th>Pregnancy duration category</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td>Preterm: less than 36 weeks</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td>Intermediate: 36 to 37 weeks</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td>Full term: 38 weeks or greater</td>
+</tr>
+</tbody>
+</table>
+<p>The predictors are:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Variable</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(X_1\)</span></td>
+<td>Nutritional status; higher scores indicate better nutritional status</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(X_2\)</span></td>
+<td>Indicator for age less than or equal to 20</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_3\)</span></td>
+<td>Indicator for age greater than 30</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(X_4\)</span></td>
+<td>Indicator for alcohol history</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_5\)</span></td>
+<td>Indicator for smoking history</td>
+</tr>
+</tbody>
+</table>
+<p>The age categories are represented by two indicator variables:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Age category</th>
+<th style="text-align: right;"><span class="math inline">\(X_2\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(X_3\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Less than or equal to 20</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="even">
+<td>21 to 30</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr class="odd">
+<td>Greater than 30</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+<p>Thus, age 21 to 30 is the reference group.</p>
+</div>
+</div>
+<div id="exm-25_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Loading and preparing the pregnancy data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We first read the data, assign useful variable names, and convert the response to a factor.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/poissonreg">poissonreg</a></span><span class="op">)</span></span>
 <span></span>
+<span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"CH14TA13.txt"</span><span class="op">)</span></span>
+<span><span class="va">pregnancy_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"CH14TA13.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"Y"</span>, <span class="st">"Y1"</span>, <span class="st">"Y2"</span>, <span class="st">"Y3"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"X5"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">pregnancy_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"id"</span>, <span class="st">"Y"</span>, <span class="st">"Y1"</span>, <span class="st">"Y2"</span>, <span class="st">"Y3"</span>,</span>
+<span>  <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"X5"</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 10
-     id     Y    Y1    Y2    Y3    X1    X2    X3    X4    X5
-  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     2     1     1     0     0   124     1     0     0     0
-2     3     1     1     0     0   128     0     0     0     1
-3     4     1     1     0     0   128     1     0     0     1
-4     5     1     1     0     0   133     0     0     1     1
-5     6     1     1     0     0   130     0     0     1     1
-6     7     1     1     0     0   154     0     0     0     0</code></pre>
+<span><span class="va">pregnancy_data</span> <span class="op">&lt;-</span> <span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
+<span>      <span class="va">Y</span>,</span>
+<span>      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span>      labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Preterm"</span>, <span class="st">"Intermediate"</span>, <span class="st">"FullTerm"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">id</span>, <span class="op">-</span><span class="va">Y1</span>, <span class="op">-</span><span class="va">Y2</span>, <span class="op">-</span><span class="va">Y3</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Y</th>
+<th style="text-align: right;">n</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">26</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Intermediate</td>
+<td style="text-align: right;">35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">FullTerm</td>
+<td style="text-align: right;">41</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>In the dataset, <span class="math inline">\(y\)</span> is already encoded into Y1, Y2, and Y3. In tidymodels, we will just convert Y into a factor and let the engine encode it.</p>
+<p>A few targeted plots are often easier to interpret than a large scatterplot matrix. We begin with the distribution of the response categories.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">=</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">Y1</span>, <span class="op">-</span><span class="va">Y2</span>, <span class="op">-</span><span class="va">Y3</span>, <span class="op">-</span><span class="va">id</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">dat</span>,columns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">6</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Y</span>, y <span class="op">=</span> <span class="va">n</span>, fill <span class="op">=</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span>show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Pregnancy duration category"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Number of observations"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Pregnancy duration category counts"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="25_Multinomial_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="25_Multinomial_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="Bar chart showing the number of observations in each pregnancy duration category." width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Let’s setup the recipe, model, and workflow.</p>
+<p>Next, we examine nutritional status by pregnancy duration category.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span><span class="op">+</span><span class="va">X3</span><span class="op">+</span><span class="va">X4</span><span class="op">+</span><span class="va">X5</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu">multinom_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"nnet"</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">fitted_model</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fitted_model</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>══ Workflow [trained] ══════════════════════════════════════════════════════════
-Preprocessor: Recipe
-Model: multinom_reg()
-
-── Preprocessor ────────────────────────────────────────────────────────────────
-0 Recipe Steps
-
-── Model ───────────────────────────────────────────────────────────────────────
-Call:
-nnet::multinom(formula = ..y ~ ., data = data, trace = FALSE)
-
-Coefficients:
-  (Intercept)         X1         X2         X3        X4         X5
-2   -2.033254 0.02487209 -0.2456229 -0.3532932 -1.164997 -0.2062779
-3   -6.061462 0.07194469 -3.1842221 -2.2722329 -2.281508 -2.3955799
-
-Residual Deviance: 163.5748 
-AIC: 187.5748 </code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Y</span>, y <span class="op">=</span> <span class="va">X1</span>, color <span class="op">=</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>outlier.shape <span class="op">=</span> <span class="cn">NA</span>, alpha <span class="op">=</span> <span class="fl">0.15</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.12</span>, height <span class="op">=</span> <span class="fl">0</span>, alpha <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Pregnancy duration category"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Nutritional status"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Category"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Nutritional status by pregnancy duration"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="25_Multinomial_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="Boxplots and jittered points showing nutritional status by pregnancy duration category." width="576"></p>
+</figure>
 </div>
 </div>
-<p>Note in the summary, we have two regression fits. What we actually have done is model the odds of the probability of being in category 2 to the probability of being in category 1.</p>
-<p>We also modeled the odds of the probability of being in category 3 to the probability of being in category 1.</p>
-<p>So we call category 1 the baseline category.</p>
-<p>To get the effect on the odds ratio for each coefficient:</p>
+</div>
+<p>Finally, we look at the observed category proportions for the indicator predictors.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fitted_model</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  (Intercept)       X1         X2        X3        X4         X5
-2  0.13090879 1.025184 0.78221712 0.7023712 0.3119237 0.81360695
-3  0.00233099 1.074596 0.04141044 0.1030818 0.1021301 0.09111982</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_indicator_proportions</span> <span class="op">&lt;-</span> <span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Y</span>, <span class="va">X2</span>, <span class="va">X3</span>, <span class="va">X4</span>, <span class="va">X5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="va">X2</span><span class="op">:</span><span class="va">X5</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"predictor"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"indicator_value"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    predictor <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/recode.html">recode</a></span><span class="op">(</span></span>
+<span>      <span class="va">predictor</span>,</span>
+<span>      X2 <span class="op">=</span> <span class="st">"Age &lt;= 20"</span>,</span>
+<span>      X3 <span class="op">=</span> <span class="st">"Age &gt; 30"</span>,</span>
+<span>      X4 <span class="op">=</span> <span class="st">"Alcohol history"</span>,</span>
+<span>      X5 <span class="op">=</span> <span class="st">"Smoking history"</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    indicator_value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">indicator_value</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">predictor</span>, <span class="va">indicator_value</span>, <span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">predictor</span>, <span class="va">indicator_value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>proportion <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pregnancy_indicator_proportions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">indicator_value</span>, y <span class="op">=</span> <span class="va">proportion</span>, fill <span class="op">=</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">predictor</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="fu">scales</span><span class="fu">::</span><span class="fu"><a href="https://scales.r-lib.org/reference/label_percent.html">label_percent</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Indicator value"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Observed category proportion"</span>,</span>
+<span>    fill <span class="op">=</span> <span class="st">"Category"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Pregnancy duration proportions by indicator value"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="25_Multinomial_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" alt="Faceted bar charts showing observed pregnancy duration proportions by binary predictor values." width="576"></p>
+</figure>
 </div>
 </div>
-<p>We can predict the probabilities for each observation:</p>
+</div>
+</div>
+</div>
+<div id="exm-25_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting a multinomial logistic regression model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can fit a multinomial logistic regression model using a <code>tidymodels</code> workflow.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">preds_nom</span> <span class="op">=</span> <span class="va">fitted_model</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">preds_nom</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             1          2          3
-1  0.252516319 0.56495019 0.18253349
-2  0.175701610 0.45163857 0.37265982
-3  0.322735859 0.64891800 0.02834614
-4  0.450781712 0.40929735 0.13992094
-5  0.477822475 0.40265564 0.11952189
-6  0.006323362 0.03814132 0.95553532
-7  0.351688939 0.55546163 0.09284943
-8  0.675713013 0.29825134 0.02603565
-9  0.143882729 0.41882539 0.43729188
-10 0.100166274 0.14696010 0.75287363</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span> <span class="op">+</span> <span class="va">X3</span> <span class="op">+</span> <span class="va">X4</span> <span class="op">+</span> <span class="va">X5</span>, data <span class="op">=</span> <span class="va">pregnancy_data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pregnancy_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/multinom_reg.html">multinom_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"nnet"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pregnancy_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">pregnancy_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">pregnancy_model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pregnancy_fit</span> <span class="op">&lt;-</span> <span class="va">pregnancy_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">pregnancy_data</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<p>Commonly, the class with the highest probability is the predicted class.</p>
+<p>Because <code>Preterm</code> is the baseline category, the model fits one comparison for <code>Intermediate</code> versus <code>Preterm</code> and another for <code>FullTerm</code> versus <code>Preterm</code>.</p>
+<p>The coefficients are on the log-odds scale.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ind</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">preds_nom</span>, <span class="fl">1</span>, <span class="va">which.max</span><span class="op">)</span></span>
-<span><span class="va">preds_class</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">preds_nom</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span></span>
-<span><span class="va">preds_class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "2" "2" "2" "1" "1" "3" "2" "1" "3" "3" "1" "2" "1" "1" "3" "2" "2" "1"
- [19] "1" "1" "1" "1" "2" "1" "1" "3" "3" "2" "2" "2" "2" "2" "2" "3" "2" "2"
- [37] "2" "2" "3" "2" "2" "2" "2" "2" "2" "3" "2" "1" "2" "2" "1" "2" "2" "1"
- [55] "2" "2" "1" "3" "1" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3"
- [73] "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "2" "3" "3" "3" "1" "3" "3"
- [91] "3" "3" "3" "2" "2" "2" "2" "1" "1" "3" "1"</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">(Intercept)</th>
+<th style="text-align: right;">X1</th>
+<th style="text-align: right;">X2</th>
+<th style="text-align: right;">X3</th>
+<th style="text-align: right;">X4</th>
+<th style="text-align: right;">X5</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intermediate</td>
+<td style="text-align: right;">-1.5170</td>
+<td style="text-align: right;">0.0190</td>
+<td style="text-align: right;">-0.0436</td>
+<td style="text-align: right;">-0.1722</td>
+<td style="text-align: right;">-0.9759</td>
+<td style="text-align: right;">-0.2219</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FullTerm</td>
+<td style="text-align: right;">-5.4754</td>
+<td style="text-align: right;">0.0654</td>
+<td style="text-align: right;">-2.9569</td>
+<td style="text-align: right;">-2.0596</td>
+<td style="text-align: right;">-2.0429</td>
+<td style="text-align: right;">-2.4523</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>We can compare the predicted classes versus the observed classes.</p>
+<p>Exponentiating the coefficients gives odds ratios for each comparison.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">preds_class</span>, <span class="va">dat</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           
-preds_class  1  2  3
-          1 13  5  4
-          2  8 23  5
-          3  4  7 32</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://hardhat.tidymodels.org/reference/hardhat-extract.html">extract_fit_engine</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">(Intercept)</th>
+<th style="text-align: right;">X1</th>
+<th style="text-align: right;">X2</th>
+<th style="text-align: right;">X3</th>
+<th style="text-align: right;">X4</th>
+<th style="text-align: right;">X5</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Intermediate</td>
+<td style="text-align: right;">0.2194</td>
+<td style="text-align: right;">1.0192</td>
+<td style="text-align: right;">0.9574</td>
+<td style="text-align: right;">0.8418</td>
+<td style="text-align: right;">0.3769</td>
+<td style="text-align: right;">0.8010</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">FullTerm</td>
+<td style="text-align: right;">0.0042</td>
+<td style="text-align: right;">1.0676</td>
+<td style="text-align: right;">0.0520</td>
+<td style="text-align: right;">0.1275</td>
+<td style="text-align: right;">0.1297</td>
+<td style="text-align: right;">0.0861</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-</section></section><section id="ordinal-regression" class="level2" data-number="25.2"><h2 data-number="25.2" class="anchored" data-anchor-id="ordinal-regression">
-<span class="header-section-number">25.2</span> Ordinal Regression</h2>
-<section id="ordinal-response" class="level3" data-number="25.2.1"><h3 data-number="25.2.1" class="anchored" data-anchor-id="ordinal-response">
-<span class="header-section-number">25.2.1</span> Ordinal Response</h3>
-<p>When the response variable <span class="math inline">\(Y\)</span> takes on categorical responses that can be put into order, then the multinomial logistic regression can still be used.</p>
-<p>However, a more effective strategy, yielding a more parsimonious and more easily interpreted model, results if the <em>ordering</em> of the categories is taken into account explicitly.</p>
-<p>The model that is usually employed is called the <em>proportional</em> <em>odds</em> model</p>
-<p>The proportional odds model for ordinal logistic regression models the cumulative probabilities <span class="math display">\[
-P(y_i\le j)
-\]</span> rather than the specific category probabilities <span class="math display">\[
-P(y_i=j)
-\]</span> as was the case for nominal logistic regression.</p>
-<p>Again, we will skip the details and illustrate with R using the pregnancy data from the last section.</p>
+<p>For example, the coefficient for <code>X1</code> in the <code>FullTerm</code> row describes the change in the log-odds of being full term rather than preterm for a one-unit increase in nutritional status, holding the other predictors fixed.</p>
+</div>
+</div>
+<div id="exm-25_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Predicted probabilities and classes from a multinomial model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>A multinomial model gives one predicted probability for each response category. A common classification rule is to predict the category with the largest fitted probability.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="http://www.stats.ox.ac.uk/pub/MASS4/">MASS</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_predictions</span> <span class="op">&lt;-</span> <span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">pregnancy_fit</span>, new_data <span class="op">=</span> <span class="va">pregnancy_data</span>, type <span class="op">=</span> <span class="st">"prob"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">pregnancy_fit</span>, new_data <span class="op">=</span> <span class="va">pregnancy_data</span>, type <span class="op">=</span> <span class="st">"class"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"CH14TA13.txt"</span><span class="op">)</span></span>
+<span><span class="va">pregnancy_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 20%">
+<col style="width: 27%">
+<col style="width: 21%">
+<col style="width: 18%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">Y</th>
+<th style="text-align: right;">.pred_Preterm</th>
+<th style="text-align: right;">.pred_Intermediate</th>
+<th style="text-align: right;">.pred_FullTerm</th>
+<th style="text-align: left;">.pred_class</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.094</td>
+<td style="text-align: right;">0.285</td>
+<td style="text-align: right;">0.621</td>
+<td style="text-align: left;">FullTerm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.254</td>
+<td style="text-align: right;">0.561</td>
+<td style="text-align: right;">0.185</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.220</td>
+<td style="text-align: right;">0.437</td>
+<td style="text-align: right;">0.343</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.335</td>
+<td style="text-align: right;">0.638</td>
+<td style="text-align: right;">0.027</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.475</td>
+<td style="text-align: right;">0.392</td>
+<td style="text-align: right;">0.133</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.497</td>
+<td style="text-align: right;">0.388</td>
+<td style="text-align: right;">0.115</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.039</td>
+<td style="text-align: right;">0.951</td>
+<td style="text-align: left;">FullTerm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.335</td>
+<td style="text-align: right;">0.567</td>
+<td style="text-align: right;">0.097</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.659</td>
+<td style="text-align: right;">0.314</td>
+<td style="text-align: right;">0.028</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.187</td>
+<td style="text-align: right;">0.409</td>
+<td style="text-align: right;">0.404</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can compare predicted classes to observed classes with a confusion matrix.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pregnancy_confusion</span> <span class="op">&lt;-</span> <span class="fu">conf_mat</span><span class="op">(</span></span>
+<span>  <span class="va">pregnancy_predictions</span>,</span>
+<span>  truth <span class="op">=</span> <span class="va">Y</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="va">.pred_class</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"id"</span>, <span class="st">"Y"</span>, <span class="st">"Y1"</span>, <span class="st">"Y2"</span>, <span class="st">"Y3"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"X5"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">Y</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span><span class="op">)</span>, ordered<span class="op">=</span><span class="cn">T</span><span class="op">)</span><span class="op">)</span> </span>
-<span></span>
-<span><span class="va">fit_ord</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">X1</span><span class="op">+</span><span class="va">X2</span><span class="op">+</span><span class="va">X3</span><span class="op">+</span><span class="va">X4</span><span class="op">+</span><span class="va">X5</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span></span>
-<span><span class="va">fit_ord</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">T</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">pregnancy_confusion</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 7 × 5
-  term  estimate std.error statistic coef.type  
-  &lt;chr&gt;    &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt; &lt;chr&gt;      
-1 X1       1.05     0.0123      4.27 coefficient
-2 X2       0.120    0.590      -3.60 coefficient
-3 X3       0.225    0.558      -2.68 coefficient
-4 X4       0.163    0.488      -3.71 coefficient
-5 X5       0.205    0.459      -3.45 coefficient
-6 1|2     24.8      1.54        2.09 scale      
-7 2|3    220.       1.59        3.39 scale      </code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">preds_ord</span> <span class="op">=</span> <span class="va">fit_ord</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="va">preds_nom</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>,<span class="op">]</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>             1          2          3
-1  0.252516319 0.56495019 0.18253349
-2  0.175701610 0.45163857 0.37265982
-3  0.322735859 0.64891800 0.02834614
-4  0.450781712 0.40929735 0.13992094
-5  0.477822475 0.40265564 0.11952189
-6  0.006323362 0.03814132 0.95553532
-7  0.351688939 0.55546163 0.09284943
-8  0.675713013 0.29825134 0.02603565
-9  0.143882729 0.41882539 0.43729188
-10 0.100166274 0.14696010 0.75287363</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ind</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="va">preds_ord</span>, <span class="fl">1</span>, <span class="va">which.max</span><span class="op">)</span></span>
-<span><span class="va">preds_class</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">preds_nom</span><span class="op">)</span><span class="op">[</span><span class="va">ind</span><span class="op">]</span></span>
-<span><span class="va">preds_class</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  [1] "2" "3" "1" "2" "1" "3" "2" "1" "3" "3" "1" "2" "1" "1" "3" "2" "2" "1"
- [19] "1" "1" "1" "1" "2" "1" "1" "3" "3" "1" "2" "2" "2" "2" "2" "3" "2" "2"
- [37] "3" "2" "2" "2" "2" "1" "2" "2" "2" "3" "2" "2" "1" "2" "2" "1" "2" "1"
- [55] "2" "1" "1" "2" "2" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "2" "3" "3"
- [73] "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "3" "2" "3" "2"
- [91] "3" "3" "3" "3" "2" "2" "3" "2" "1" "3" "2"</code></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/table.html">table</a></span><span class="op">(</span><span class="va">preds_class</span>, <span class="va">dat</span><span class="op">$</span><span class="va">Y</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>           
-preds_class  1  2  3
-          1 13  7  1
-          2  7 22  7
-          3  5  6 33</code></pre>
+<pre><code>              Truth
+Prediction     Preterm Intermediate FullTerm
+  Preterm           12            4        4
+  Intermediate      10           23        5
+  FullTerm           4            8       32</code></pre>
 </div>
 </div>
-</section></section><section id="poisson-regression" class="level2" data-number="25.3"><h2 data-number="25.3" class="anchored" data-anchor-id="poisson-regression">
-<span class="header-section-number">25.3</span> Poisson Regression</h2>
-<p>We consider now another nonlinear regression model where the response outcomes are discrete.</p>
-<p>Poisson regression is useful when the outcome is a count, with large-count outcomes being rare events.</p>
-<p>For instance, the number of times a household shops at a particular supermarket in a week is a count, with a large number of shopping trips to the store during the week being a rare event. A researcher may wish to study the relation between a family’s number of shopping trips to the store during a particular week and the family’s income, number of children, distance from the store, and some other explanatory variables.</p>
-<p>As another example, the relation between the number of hospitalizations of a member of a health maintenance organization during the past year and the member’s age, income, and previous health status may be of interest.</p>
-<p>The Poisson distribution can be utilized for outcomes that are counts (<span class="math inline">\(y_i = 0, 1,2, ...\)</span> ), with a large count or frequency being a rare event.</p>
-<section id="the-poisson-distribution" class="level3" data-number="25.3.1"><h3 data-number="25.3.1" class="anchored" data-anchor-id="the-poisson-distribution">
-<span class="header-section-number">25.3.1</span> The Poisson Distribution</h3>
-<p>The Poisson probability distribution is <span class="math display">\[
-f(Y) = \frac{\mu^Y \exp(-\mu)}{Y!}
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu">accuracy</span><span class="op">(</span><span class="va">pregnancy_predictions</span>, truth <span class="op">=</span> <span class="va">Y</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span>,</span>
+<span>  <span class="fu">mn_log_loss</span><span class="op">(</span></span>
+<span>    <span class="va">pregnancy_predictions</span>,</span>
+<span>    truth <span class="op">=</span> <span class="va">Y</span>,</span>
+<span>    <span class="va">.pred_Preterm</span>,</span>
+<span>    <span class="va">.pred_Intermediate</span>,</span>
+<span>    <span class="va">.pred_FullTerm</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">accuracy</td>
+<td style="text-align: left;">multiclass</td>
+<td style="text-align: right;">0.657</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">mn_log_loss</td>
+<td style="text-align: left;">multiclass</td>
+<td style="text-align: right;">0.827</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Accuracy uses only the predicted class. Multinomial log loss uses the full set of predicted probabilities, so it rewards confident correct predictions and penalizes confident wrong predictions.</p>
+</div>
+</div>
+</section><section id="ordinal-regression" class="level2" data-number="25.3"><h2 data-number="25.3" class="anchored" data-anchor-id="ordinal-regression">
+<span class="header-section-number">25.3</span> Ordinal Regression</h2>
+<section id="ordinal-response" class="level3" data-number="25.3.1"><h3 data-number="25.3.1" class="anchored" data-anchor-id="ordinal-response">
+<span class="header-section-number">25.3.1</span> Ordinal Response</h3>
+<p>When the response categories can be put into a meaningful order, the response is <strong>ordinal</strong>. Pregnancy duration can be treated as ordinal because</p>
+<p><span class="math display">\[
+\text{Preterm} &lt; \text{Intermediate} &lt; \text{FullTerm}.
 \]</span></p>
-<p>The mean and variance of a Poisson distribution are <span class="math display">\[
+<p>Multinomial logistic regression can still be used, but it ignores the ordering. Ordinal logistic regression uses the ordering directly. A common ordinal logistic model is the <strong>proportional odds model</strong>, which models cumulative probabilities such as</p>
+<p><span class="math display">\[
+P(Y_i \le j)
+\]</span></p>
+<p>rather than modeling only the separate category probabilities <span class="math inline">\(P(Y_i=j)\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Why use an ordinal model?">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why use an ordinal model?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>An ordinal model can be more parsimonious because it uses the category ordering. Instead of fitting a completely separate coefficient vector for each non-baseline category, the proportional odds model uses one coefficient for each predictor and separate cutpoints between adjacent response categories.</p>
+</div>
+</div>
+</div>
+</section><section id="proportional-odds-assumption" class="level3" data-number="25.3.2"><h3 data-number="25.3.2" class="anchored" data-anchor-id="proportional-odds-assumption">
+<span class="header-section-number">25.3.2</span> Proportional Odds Assumption</h3>
+<p>The proportional odds model relies on an important assumption: each predictor has the same effect across the cumulative splits of the ordered response.</p>
+<p>For the pregnancy duration categories, the cumulative splits are:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Split</th>
+<th>Comparison</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Preterm versus Intermediate or FullTerm</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Preterm or Intermediate versus FullTerm</td>
+</tr>
+</tbody>
+</table>
+<p>The proportional odds assumption says that a predictor’s slope is the same for these cumulative comparisons, up to the sign convention used by the software. The cutpoints may differ, but the predictor effects are shared.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Parallel slopes idea">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Parallel slopes idea
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Another way to say this is that the model assumes <strong>parallel slopes</strong> on the cumulative logit scale.</p>
+<p>For example, if nutritional status is associated with longer pregnancy duration, the proportional odds model assumes that this association works similarly when separating <code>Preterm</code> from higher categories and when separating <code>FullTerm</code> from lower categories.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="When the assumption may be questionable">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>When the assumption may be questionable
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The proportional odds assumption may be questionable if a predictor has a very different relationship with different category cutpoints.</p>
+<p>For example, if smoking history strongly separates <code>Preterm</code> from the other categories but has little relationship to whether a pregnancy is <code>FullTerm</code>, then one shared slope may be too restrictive. In that case, a multinomial model or a more flexible ordinal model may be more appropriate.</p>
+</div>
+</div>
+</div>
+<div id="exm-25_5" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting a proportional odds model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can fit a proportional odds model using <code><a href="https://rdrr.io/pkg/MASS/man/polr.html">MASS::polr()</a></code>. The response must be stored as an ordered factor.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ordinal_data</span> <span class="op">&lt;-</span> <span class="va">pregnancy_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    Y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">ordered</a></span><span class="op">(</span></span>
+<span>      <span class="va">Y</span>,</span>
+<span>      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Preterm"</span>, <span class="st">"Intermediate"</span>, <span class="st">"FullTerm"</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">ordinal_fit</span> <span class="op">&lt;-</span> <span class="fu">MASS</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/MASS/man/polr.html">polr</a></span><span class="op">(</span></span>
+<span>  <span class="va">Y</span> <span class="op">~</span> <span class="va">X1</span> <span class="op">+</span> <span class="va">X2</span> <span class="op">+</span> <span class="va">X3</span> <span class="op">+</span> <span class="va">X4</span> <span class="op">+</span> <span class="va">X5</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">ordinal_data</span>,</span>
+<span>  Hess <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span></span>
+<span>  <span class="va">ordinal_fit</span>,</span>
+<span>  exponentiate <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  conf.int <span class="op">=</span> <span class="cn">TRUE</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">coef.type</span> <span class="op">==</span> <span class="st">"coefficient"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">term</span>, <span class="va">estimate</span>, <span class="va">conf.low</span>, <span class="va">conf.high</span>, <span class="va">statistic</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">conf.low</th>
+<th style="text-align: right;">conf.high</th>
+<th style="text-align: right;">statistic</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">X1</td>
+<td style="text-align: right;">1.0501</td>
+<td style="text-align: right;">1.0274</td>
+<td style="text-align: right;">1.0764</td>
+<td style="text-align: right;">4.1332</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X2</td>
+<td style="text-align: right;">0.1386</td>
+<td style="text-align: right;">0.0430</td>
+<td style="text-align: right;">0.4164</td>
+<td style="text-align: right;">-3.4296</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X3</td>
+<td style="text-align: right;">0.2558</td>
+<td style="text-align: right;">0.0850</td>
+<td style="text-align: right;">0.7348</td>
+<td style="text-align: right;">-2.4950</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X4</td>
+<td style="text-align: right;">0.1883</td>
+<td style="text-align: right;">0.0718</td>
+<td style="text-align: right;">0.4669</td>
+<td style="text-align: right;">-3.5128</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X5</td>
+<td style="text-align: right;">0.2036</td>
+<td style="text-align: right;">0.0813</td>
+<td style="text-align: right;">0.4815</td>
+<td style="text-align: right;">-3.5239</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The exponentiated coefficients are cumulative odds ratios under the proportional odds model. Their interpretation depends on the direction of the cumulative logits used by the software, so always check the model convention before writing a final applied interpretation.</p>
+<p>The model also estimates cutpoints between adjacent ordered categories.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">ordinal_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">coef.type</span> <span class="op">==</span> <span class="st">"scale"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: left;">coef.type</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Preterm|Intermediate</td>
+<td style="text-align: right;">2.9301</td>
+<td style="text-align: right;">1.4929</td>
+<td style="text-align: right;">1.9627</td>
+<td style="text-align: left;">scale</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Intermediate|FullTerm</td>
+<td style="text-align: right;">5.0249</td>
+<td style="text-align: right;">1.5445</td>
+<td style="text-align: right;">3.2535</td>
+<td style="text-align: left;">scale</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-25_6" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.6</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Predictions from an ordinal logistic regression model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Like the multinomial model, the ordinal model can return one predicted probability for each category.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ordinal_probabilities</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>  <span class="va">ordinal_fit</span>,</span>
+<span>  newdata <span class="op">=</span> <span class="va">ordinal_data</span>,</span>
+<span>  type <span class="op">=</span> <span class="st">"probs"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ordinal_predictions</span> <span class="op">&lt;-</span> <span class="va">ordinal_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span></span>
+<span>    <span class="va">ordinal_probabilities</span>,</span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>      .pred_class <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>        <span class="va">ordinal_fit</span>,</span>
+<span>        newdata <span class="op">=</span> <span class="va">ordinal_data</span>,</span>
+<span>        type <span class="op">=</span> <span class="st">"class"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">ordinal_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">Y</th>
+<th style="text-align: right;">Preterm</th>
+<th style="text-align: right;">Intermediate</th>
+<th style="text-align: right;">FullTerm</th>
+<th style="text-align: left;">.pred_class</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.057</td>
+<td style="text-align: right;">0.272</td>
+<td style="text-align: right;">0.671</td>
+<td style="text-align: left;">FullTerm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.240</td>
+<td style="text-align: right;">0.480</td>
+<td style="text-align: right;">0.281</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.150</td>
+<td style="text-align: right;">0.439</td>
+<td style="text-align: right;">0.411</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.560</td>
+<td style="text-align: right;">0.352</td>
+<td style="text-align: right;">0.088</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.423</td>
+<td style="text-align: right;">0.433</td>
+<td style="text-align: right;">0.144</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.460</td>
+<td style="text-align: right;">0.414</td>
+<td style="text-align: right;">0.126</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.010</td>
+<td style="text-align: right;">0.066</td>
+<td style="text-align: right;">0.924</td>
+<td style="text-align: left;">FullTerm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.385</td>
+<td style="text-align: right;">0.451</td>
+<td style="text-align: right;">0.165</td>
+<td style="text-align: left;">Intermediate</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.752</td>
+<td style="text-align: right;">0.209</td>
+<td style="text-align: right;">0.039</td>
+<td style="text-align: left;">Preterm</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Preterm</td>
+<td style="text-align: right;">0.121</td>
+<td style="text-align: right;">0.408</td>
+<td style="text-align: right;">0.471</td>
+<td style="text-align: left;">FullTerm</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ordinal_confusion</span> <span class="op">&lt;-</span> <span class="fu">conf_mat</span><span class="op">(</span></span>
+<span>  <span class="va">ordinal_predictions</span>,</span>
+<span>  truth <span class="op">=</span> <span class="va">Y</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="va">.pred_class</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ordinal_confusion</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>              Truth
+Prediction     Preterm Intermediate FullTerm
+  Preterm           13            7        1
+  Intermediate       8           21        7
+  FullTerm           5            7       33</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">accuracy</span><span class="op">(</span><span class="va">ordinal_predictions</span>, truth <span class="op">=</span> <span class="va">Y</span>, estimate <span class="op">=</span> <span class="va">.pred_class</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: left;">accuracy</td>
+<td style="text-align: left;">multiclass</td>
+<td style="text-align: right;">0.657</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>The ordinal model and multinomial model have the same in-sample accuracy here, but they use different assumptions. The ordinal model uses the response ordering; the multinomial model treats the categories as unordered.</p>
+</div>
+</div>
+</section></section><section id="poisson-regression" class="level2" data-number="25.4"><h2 data-number="25.4" class="anchored" data-anchor-id="poisson-regression">
+<span class="header-section-number">25.4</span> Poisson Regression</h2>
+<p>Poisson regression is used when the response variable is a count:</p>
+<p><span class="math display">\[
+Y_i = 0,1,2,\ldots
+\]</span></p>
+<p>Examples include the number of store visits, number of hospitalizations, number of defects, or number of events in a fixed time period.</p>
+<section id="the-poisson-distribution" class="level3" data-number="25.4.1"><h3 data-number="25.4.1" class="anchored" data-anchor-id="the-poisson-distribution">
+<span class="header-section-number">25.4.1</span> The Poisson Distribution</h3>
+<p>The Poisson probability distribution is</p>
+<p><span class="math display">\[
+f(Y) = \frac{\mu^Y \exp(-\mu)}{Y!}.
+\]</span></p>
+<p>For a Poisson random variable,</p>
+<p><span class="math display">\[
 \begin{align*}
-E\{Y\} &amp;= \mu\\
-\sigma^2\{Y\} &amp;=\mu
+E(Y) &amp;= \mu,\\
+Var(Y) &amp;= \mu.
 \end{align*}
 \]</span></p>
-<p>Note that the variance is the same as the mean.</p>
-<p>Hence, if the number of store trips follows the Poisson distribution and the mean number of store trips for a family with three children is larger than the mean number of trips for a family with no children, the variances of the distributions of outcomes for the two families will also differ.</p>
-</section><section id="poisson-regression-1" class="level3" data-number="25.3.2"><h3 data-number="25.3.2" class="anchored" data-anchor-id="poisson-regression-1">
-<span class="header-section-number">25.3.2</span> Poisson Regression</h3>
-<p>We start with the regression model <span class="math display">\[
-\begin{align*}
-y_{i} &amp; =E\left[ y_{i}\right] +\varepsilon_{i}\qquad i=1,2,\ldots,n
-\end{align*}
+<p>The mean and variance are the same. This is an important assumption to remember when using Poisson regression.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Counts are not just another continuous response">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Counts are not just another continuous response
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A count response is nonnegative and discrete. A linear model can predict negative fitted values, but a Poisson model with a log link keeps the fitted mean positive.</p>
+</div>
+</div>
+</div>
+</section><section id="poisson-regression-model" class="level3" data-number="25.4.2"><h3 data-number="25.4.2" class="anchored" data-anchor-id="poisson-regression-model">
+<span class="header-section-number">25.4.2</span> Poisson Regression Model</h3>
+<p>In Poisson regression, we usually assume</p>
+<p><span class="math display">\[
+Y_i \sim \text{Poisson}(\mu_i)
 \]</span></p>
-<p>The mean response for the <span class="math inline">\(i\)</span>th case, to be denoted now my <span class="math inline">\(\mu_{i}\)</span> for simplicity, is assumed as always to be a function of the set of predictor variables <span class="math inline">\(x_{1},\ldots,x_{p-1}\)</span>.</p>
-<p>We use the notation <span class="math inline">\(\mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)\)</span> to denote the function that relates the mean response <span class="math inline">\(\mu_{i}\)</span> to <span class="math inline">\(\textbf{X}_{i}\)</span>, the values of the predictor variables for case <span class="math inline">\(i\)</span>, and <span class="math inline">\(\boldsymbol{\beta}\)</span>, the values of the regression coefficients.</p>
-<p>Some commonly used functions for Poisson regression are <span class="math display">\[
-\begin{align*}
-\mu_{i}= &amp; \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\\
-\mu_{i}= &amp; \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\exp\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)\\
-\mu_{i}= &amp; \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\ln\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)
-\end{align*}
+<p>and use the log link</p>
+<p><span class="math display">\[
+\log(\mu_i)=\mathbf{x}_i^\prime\boldsymbol{\beta}.
 \]</span></p>
-<p>In all three cases, the mean response <span class="math inline">\(\mu_{i}\)</span> must be nonnegative.</p>
-<p>Since the distribution of the error terms <span class="math inline">\(\varepsilon_{i}\)</span> for Poisson regression is a function of the distribution of the response <span class="math inline">\(y_{i}\)</span>, which is Poisson, it is easiest to state the Poisson regression model in the following form:</p>
-<p><span class="math inline">\(y_{i}\)</span> are independent Poisson random variables with expected values <span class="math inline">\(\mu_{i}\)</span> where <span class="math display">\[
-\begin{align*}
-\mu_{i} &amp; =\mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)
-\end{align*}
+<p>Equivalently,</p>
+<p><span class="math display">\[
+\mu_i=\exp(\mathbf{x}_i^\prime\boldsymbol{\beta}).
 \]</span></p>
-<p>The most commonly used response function is <span class="math inline">\(\mu_{i}=\exp\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)\)</span>.</p>
-<section id="example-1" class="level4"><h4 class="anchored" data-anchor-id="example-1">Example</h4>
-<p>The Miller Lumber Company is a large retailer of lumber and paint, as well as of plumbing, electrical, and other household supplies.</p>
-<p>During a representative two-week period, in-store surveys were conducted and addresses of customers were obtained. The addresses were then used to identify the metropolitan area census tracts in which the customers reside.</p>
-<p>At the end of the survey period, the total number of customers who visited the store from each census tract within a 10-mile radius was determined and relevant demographic information for each tract (average income, number of housing units, etc.) was obtained.</p>
-<p>Several other variables expected to be related to customer counts were constructed from maps, including distance from census tract to nearest competitor and distance to store.</p>
-<p>Initial screening of the potential predictor variables was conducted which led to the retention of five predictor variables:</p>
+<p>This guarantees that the fitted mean count is positive.</p>
+<div id="exm-25_7" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.7</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Poisson regression for store customer counts
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The Miller Lumber Company is a large retailer of lumber, paint, plumbing, electrical supplies, and other household supplies.</p>
+<p>During a representative two-week period, in-store surveys were conducted and addresses of customers were obtained. The addresses were used to identify the metropolitan-area census tracts in which the customers lived. At the end of the survey period, the total number of customers who visited the store from each census tract was recorded.</p>
+<p>The response is:</p>
 <ul>
-<li><p><span class="math inline">\(x_1\)</span>: Number of housing units</p></li>
-<li><p><span class="math inline">\(x_2\)</span>: Average income, in dollars</p></li>
-<li><p><span class="math inline">\(x_3\)</span>: Average housing unit age, in years</p></li>
-<li><p><span class="math inline">\(x_4\)</span> : Distance to nearest competitor, in miles</p></li>
-<li><p><span class="math inline">\(x_5\)</span>: Distance to store, in miles</p></li>
-<li><p><span class="math inline">\(y_i\)</span> : Number of customers who visited store from census tract</p></li>
+<li>
+<span class="math inline">\(Y\)</span>: number of customers who visited the store from the census tract.</li>
 </ul>
+<p>The predictors are:</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Variable</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(X_1\)</span></td>
+<td>Number of housing units</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(X_2\)</span></td>
+<td>Average income, in dollars</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_3\)</span></td>
+<td>Average housing-unit age, in years</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(X_4\)</span></td>
+<td>Distance to nearest competitor, in miles</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(X_5\)</span></td>
+<td>Distance to store, in miles</td>
+</tr>
+</tbody>
+</table>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/poissonreg">poissonreg</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"CH14TA14.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"CH14TA14.txt"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">lumber_data</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"X5"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Y"</span>, <span class="st">"X1"</span>, <span class="st">"X2"</span>, <span class="st">"X3"</span>, <span class="st">"X4"</span>, <span class="st">"X5"</span><span class="op">)</span></span>
+<span><span class="va">lumber_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">Y</th>
+<th style="text-align: right;">X1</th>
+<th style="text-align: right;">X2</th>
+<th style="text-align: right;">X3</th>
+<th style="text-align: right;">X4</th>
+<th style="text-align: right;">X5</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">606</td>
+<td style="text-align: right;">41393</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">3.04</td>
+<td style="text-align: right;">6.32</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">641</td>
+<td style="text-align: right;">23635</td>
+<td style="text-align: right;">18</td>
+<td style="text-align: right;">1.95</td>
+<td style="text-align: right;">8.89</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">505</td>
+<td style="text-align: right;">55475</td>
+<td style="text-align: right;">27</td>
+<td style="text-align: right;">6.54</td>
+<td style="text-align: right;">2.05</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">866</td>
+<td style="text-align: right;">64646</td>
+<td style="text-align: right;">31</td>
+<td style="text-align: right;">1.67</td>
+<td style="text-align: right;">5.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">599</td>
+<td style="text-align: right;">31972</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.72</td>
+<td style="text-align: right;">8.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">520</td>
+<td style="text-align: right;">41755</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">2.24</td>
+<td style="text-align: right;">6.81</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">354</td>
+<td style="text-align: right;">46014</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">0.77</td>
+<td style="text-align: right;">9.27</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">483</td>
+<td style="text-align: right;">34626</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3.51</td>
+<td style="text-align: right;">7.92</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">1034</td>
+<td style="text-align: right;">85207</td>
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">4.23</td>
+<td style="text-align: right;">4.40</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">456</td>
+<td style="text-align: right;">33021</td>
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">3.07</td>
+<td style="text-align: right;">6.03</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div id="exm-25_8" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.8</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting and interpreting a Poisson regression model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Y</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">lumber_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">Y</span><span class="op">~</span><span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">lumber_model</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://parsnip.tidymodels.org/reference/poisson_reg.html">poisson_reg</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://parsnip.tidymodels.org/reference/set_engine.html">set_engine</a></span><span class="op">(</span><span class="st">"glm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="va">lumber_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">lumber_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lumber_model</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">lumber_fit</span> <span class="op">&lt;-</span> <span class="va">lumber_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lumber_data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://generics.r-lib.org/reference/fit.html">fit</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 5
-  term          estimate  std.error statistic  p.value
-  &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
-1 (Intercept)  2.94      0.207          14.2  9.47e-46
-2 X1           0.000606  0.000142        4.26 2.02e- 5
-3 X2          -0.0000117 0.00000211     -5.53 3.13e- 8
-4 X3          -0.00373   0.00178        -2.09 3.65e- 2
-5 X4           0.168     0.0258          6.53 6.39e-11
-6 X5          -0.129     0.0162         -7.95 1.89e-15</code></pre>
+<span><span class="va">lumber_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">2.9424</td>
+<td style="text-align: right;">0.2072</td>
+<td style="text-align: right;">14.1977</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X1</td>
+<td style="text-align: right;">0.0006</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">4.2623</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X2</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">-5.5340</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X3</td>
+<td style="text-align: right;">-0.0037</td>
+<td style="text-align: right;">0.0018</td>
+<td style="text-align: right;">-2.0913</td>
+<td style="text-align: right;">0.0365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X4</td>
+<td style="text-align: right;">0.1684</td>
+<td style="text-align: right;">0.0258</td>
+<td style="text-align: right;">6.5343</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X5</td>
+<td style="text-align: right;">-0.1288</td>
+<td style="text-align: right;">0.0162</td>
+<td style="text-align: right;">-7.9481</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 110 × 1
-   .pred
-   &lt;dbl&gt;
- 1 12.3 
- 2  8.77
- 3 28.1 
- 4  8.41
- 5  7.26
- 6  8.88
- 7  4.30
- 8 11.0 
- 9 14.4 
-10 11.6 
-# ℹ 100 more rows</code></pre>
+</div>
+<p>The coefficients are on the log-mean scale. Exponentiating them gives multiplicative effects on the expected count.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span>exponentiate <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">18.9620</td>
+<td style="text-align: right;">0.2072</td>
+<td style="text-align: right;">14.1977</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X1</td>
+<td style="text-align: right;">1.0006</td>
+<td style="text-align: right;">0.0001</td>
+<td style="text-align: right;">4.2623</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X2</td>
+<td style="text-align: right;">1.0000</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">-5.5340</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X3</td>
+<td style="text-align: right;">0.9963</td>
+<td style="text-align: right;">0.0018</td>
+<td style="text-align: right;">-2.0913</td>
+<td style="text-align: right;">0.0365</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">X4</td>
+<td style="text-align: right;">1.1834</td>
+<td style="text-align: right;">0.0258</td>
+<td style="text-align: right;">6.5343</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">X5</td>
+<td style="text-align: right;">0.8792</td>
+<td style="text-align: right;">0.0162</td>
+<td style="text-align: right;">-7.9481</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For example, if an exponentiated coefficient is 1.18, then a one-unit increase in that predictor is associated with multiplying the expected count by 1.18, holding the other predictors fixed.</p>
+</div>
+</div>
+<div id="exm-25_9" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 25.9</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Predicted counts from a Poisson regression model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_predictions</span> <span class="op">&lt;-</span> <span class="va">lumber_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">lumber_fit</span>, new_data <span class="op">=</span> <span class="va">lumber_data</span>, type <span class="op">=</span> <span class="st">"numeric"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">lumber_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">Y</th>
+<th style="text-align: right;">.pred</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">12.338</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">8.767</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">28.126</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">8.407</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7.261</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">8.882</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">4.298</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">10.999</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">16</td>
+<td style="text-align: right;">14.444</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">11.634</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">Y</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">3.236</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.762</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mae</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.482</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">lumber_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">.pred</span>, y <span class="op">=</span> <span class="va">Y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Predicted count"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Observed count"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Observed versus predicted customer counts"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="25_Multinomial_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" alt="Observed customer counts plotted against predicted customer counts from a Poisson regression model." width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If the model predicted every count perfectly, all points would fall on the dashed line. In practice, count data are noisy, so we look for whether the predictions are reasonably aligned with the observed counts.</p>
+</div>
+</div>
+</section></section><section id="recap" class="level2" data-number="25.5"><h2 data-number="25.5" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">25.5</span> Recap</h2>
+<p>In this chapter, we introduced three regression models for non-continuous response variables.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Nominal response</strong></td>
+<td>A categorical response whose categories have no natural order.</td>
+</tr>
+<tr class="even">
+<td><strong>Multinomial logistic regression</strong></td>
+<td>A model for nominal responses with more than two categories.</td>
+</tr>
+<tr class="odd">
+<td><strong>Baseline category</strong></td>
+<td>The category used as the comparison group in a multinomial logistic model.</td>
+</tr>
+<tr class="even">
+<td><strong>Category-specific coefficients</strong></td>
+<td>Separate coefficients for each non-baseline category comparison.</td>
+</tr>
+<tr class="odd">
+<td><strong>Multinomial predicted probabilities</strong></td>
+<td>One fitted probability for each response category.</td>
+</tr>
+<tr class="even">
+<td><strong>Multinomial log loss</strong></td>
+<td>A metric that evaluates the full set of predicted category probabilities.</td>
+</tr>
+<tr class="odd">
+<td><strong>Ordinal response</strong></td>
+<td>A categorical response whose categories have a meaningful order.</td>
+</tr>
+<tr class="even">
+<td><strong>Proportional odds model</strong></td>
+<td>An ordinal logistic model based on cumulative probabilities.</td>
+</tr>
+<tr class="odd">
+<td><strong>Proportional odds assumption</strong></td>
+<td>The assumption that predictor effects are shared across cumulative category splits.</td>
+</tr>
+<tr class="even">
+<td><strong>Parallel slopes</strong></td>
+<td>A way to describe the proportional odds assumption on the cumulative logit scale.</td>
+</tr>
+<tr class="odd">
+<td><strong>Cutpoints</strong></td>
+<td>Thresholds that separate adjacent ordered response categories.</td>
+</tr>
+<tr class="even">
+<td><strong>Targeted exploratory plot</strong></td>
+<td>A focused plot designed to show one important predictor-response relationship clearly.</td>
+</tr>
+<tr class="odd">
+<td><strong>Count response</strong></td>
+<td>A nonnegative integer response variable.</td>
+</tr>
+<tr class="even">
+<td><strong>Poisson distribution</strong></td>
+<td>A count distribution where the mean and variance are both <span class="math inline">\(\mu\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Poisson regression</strong></td>
+<td>A regression model for count responses.</td>
+</tr>
+<tr class="even">
+<td><strong>Log link</strong></td>
+<td>A link function that models <span class="math inline">\(\log(\mu_i)\)</span> as a linear predictor.</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean-count ratio</strong></td>
+<td>The exponentiated Poisson coefficient, interpreted as a multiplicative effect on the expected count.</td>
+</tr>
+<tr class="even">
+<td><strong>Observed versus predicted plot</strong></td>
+<td>A plot used to compare observed counts to fitted counts.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="25.6"><h2 data-number="25.6" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">25.6</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What is the difference between a nominal response and an ordinal response?</p></li>
+<li><p>Why is multinomial logistic regression appropriate for a response with more than two unordered categories?</p></li>
+<li><p>What is the baseline category in a multinomial logistic regression model?</p></li>
+<li><p>If a response has three categories, how many non-baseline log-odds equations are fit?</p></li>
+<li><p>In the pregnancy duration example, what does it mean that <code>Preterm</code> is the baseline category?</p></li>
+<li><p>Why does a multinomial model return several predicted probabilities for each observation?</p></li>
+<li><p>How is the predicted class usually chosen from multinomial predicted probabilities?</p></li>
+<li><p>Why can accuracy miss information that multinomial log loss uses?</p></li>
+<li><p>Why might an ordinal model be preferred over a multinomial model for ordered categories?</p></li>
+<li><p>What are cumulative probabilities in the proportional odds model?</p></li>
+<li><p>What are cutpoints in an ordinal logistic regression model?</p></li>
+<li><p>What does the proportional odds assumption say?</p></li>
+<li><p>What are the two cumulative splits in the pregnancy duration example?</p></li>
+<li><p>What does the phrase parallel slopes mean in the proportional odds model?</p></li>
+<li><p>Why should we be careful when interpreting exponentiated coefficients from <code>polr()</code>?</p></li>
+<li><p>Why can targeted plots be better than one large scatterplot matrix?</p></li>
+<li><p>What kinds of response variables are appropriate for Poisson regression?</p></li>
+<li><p>Why does Poisson regression often use a log link?</p></li>
+<li><p>What does it mean that the Poisson mean and variance are both <span class="math inline">\(\mu\)</span>?</p></li>
+<li><p>How do we interpret an exponentiated coefficient in Poisson regression?</p></li>
+<li><p>Why is a plot of observed versus predicted counts useful?</p></li>
+<li><p>Why should the multinomial, ordinal, and Poisson models not be treated as interchangeable?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Nominal categories have no natural order; ordinal categories do.</strong> Product choice is nominal, while severity levels such as mild, moderate, and severe are ordinal.</p></li>
+<li><p><strong>It models multiple category probabilities.</strong> Multinomial logistic regression compares each non-baseline category to a baseline category.</p></li>
+<li><p><strong>It is the reference category.</strong> The model expresses log-odds for each other category relative to the baseline.</p></li>
+<li><p><strong>Two equations are fit.</strong> With three categories and one baseline category, there are two non-baseline comparisons.</p></li>
+<li><p><strong>The other categories are compared to preterm.</strong> The <code>Intermediate</code> and <code>FullTerm</code> coefficient rows describe log-odds relative to <code>Preterm</code>.</p></li>
+<li><p><strong>There is one probability for each possible category.</strong> The probabilities should sum to 1 for each observation.</p></li>
+<li><p><strong>Choose the category with the largest predicted probability.</strong> This is the maximum-probability classification rule.</p></li>
+<li><p><strong>Accuracy uses only the final class label.</strong> Log loss also uses how confident the predicted probabilities were.</p></li>
+<li><p><strong>It uses the ordering.</strong> An ordinal model can be more parsimonious and more appropriate when the response categories have a meaningful order.</p></li>
+<li><p><strong>They are probabilities of being at or below a category.</strong> For example, <span class="math inline">\(P(Y \le \text{Intermediate})\)</span> is cumulative.</p></li>
+<li><p><strong>They separate adjacent ordered categories.</strong> Cutpoints locate the boundaries between response levels on the model scale.</p></li>
+<li><p><strong>It says predictor effects are shared across cumulative splits.</strong> The model uses the same slope for each predictor when comparing lower versus higher ordered response categories.</p></li>
+<li><p><strong>The splits are Preterm versus higher categories and lower categories versus FullTerm.</strong> More specifically: Preterm versus Intermediate or FullTerm, and Preterm or Intermediate versus FullTerm.</p></li>
+<li><p><strong>The predictor slopes are the same across cutpoints.</strong> The cutpoints can shift, but the model does not estimate separate predictor effects for each cumulative split.</p></li>
+<li><p><strong>Software conventions differ.</strong> The sign and direction of the cumulative logit determine how an exponentiated coefficient should be described.</p></li>
+<li><p><strong>They focus attention.</strong> A large matrix can be useful for scanning, but smaller targeted plots make important relationships easier to see and explain.</p></li>
+<li><p><strong>Nonnegative integer counts.</strong> Examples include number of visits, number of defects, or number of events.</p></li>
+<li><p><strong>It keeps fitted means positive.</strong> Modeling <span class="math inline">\(\log(\mu_i)\)</span> linearly implies <span class="math inline">\(\mu_i=\exp(\mathbf{x}_i^\prime\boldsymbol{\beta})&gt;0\)</span>.</p></li>
+<li><p><strong>The variance increases with the mean.</strong> Larger expected counts also imply larger variability under the Poisson model.</p></li>
+<li><p><strong>It is a multiplicative effect on the expected count.</strong> Values above 1 increase the expected count; values below 1 decrease it.</p></li>
+<li><p><strong>It shows how well the fitted counts align with the observed counts.</strong> Large departures from the diagonal can reveal poor fit or unusual observations.</p></li>
+<li><p><strong>They are designed for different response structures.</strong> Nominal categories, ordered categories, and counts require different model assumptions and interpretations.</p></li>
+</ol>
+</div>
 </div>
 </div>
 
 
-</section></section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -1127,18 +2377,7 @@ y_{i} &amp; =E\left[ y_{i}\right] +\varepsilon_{i}\qquad i=1,2,\ldots,n
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer"><div class="nav-footer">
-    <div class="nav-footer-left">
-<p>STA 3386</p>
-</div>   
-    <div class="nav-footer-center">
-      &nbsp;
-    </div>
-    <div class="nav-footer-right">
-<p>Fall 2024</p>
-</div>
-  </div>
-</footer>
+
 
 
 </body></html>

@@ -1,493 +1,713 @@
-
-
-# Multinomial Logistic Regression and Poisson Regression
+# Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression
 
 > "It's easy to lie with statistics; it is easier to lie without them." - Frederick Mosteller
 
+The previous chapters focused on binary logistic regression. In this chapter, we briefly introduce three related models for categorical and count responses:
 
+- **multinomial logistic regression** for nominal response categories,
+- **ordinal logistic regression** for ordered response categories, and
+- **Poisson regression** for count responses.
 
-
-
-
+These models extend the regression idea beyond quantitative responses while still using predictors to explain or predict an outcome.
 
 ## Nominal Response
 
-Logistic regression is most frequently used to model the relationship between a dichotomous
-response variable and a set of predictor variables.
+Logistic regression is most frequently used when the response variable has two categories. Sometimes, however, the response variable has more than two categories.
 
+If those categories have no natural ordering, the response is **nominal**. For example, a consumer's product choice among product A, product B, and product C is nominal because the categories are names rather than ordered levels.
 
+Multinomial logistic regression models the probability of each response category by comparing each non-baseline category to a chosen baseline category.
 
+::: {.callout-note collapse="false" title="Nominal versus ordinal responses"}
 
+| Response type | Example | Appropriate model |
+|---|---|---|
+| **Nominal** | Product A, product B, product C | Multinomial logistic regression |
+| **Ordinal** | Mild, moderate, severe | Ordinal logistic regression |
+| **Count** | Number of store visits | Poisson regression |
 
-On occasion, however. the response
-variable may have *more* than two levels.
+The distinction matters because nominal models ignore ordering, ordinal models use ordering, and Poisson models are for nonnegative integer counts.
 
+:::
 
+## Multinomial Logistic Regression
 
+For a response with $J$ categories, multinomial logistic regression chooses one category as the **baseline**. The model then compares each other category to that baseline.
 
+For example, if category 1 is the baseline, then the model fits log-odds equations such as
 
-Logistic regression can still be employed by
-means of a *polytomous*-or *multinomial*-logistic regression model.
-
-
-
-
-
-Multinomial logistic
-regression models are used in many fields. In business, for instance, a market researcher
-may wish to relate a consumer's choice of product (product A, product B. product C) to
-the consumer's age, gender, geographic location and several other potential explanatory
-variables.
-
-
-
-
-
-This is an example of nominal multinomial regression because the response
-categories are purely qualitative and not *ordered* in any way.
-
-
-
-*Ordinal* response categories can
-also be modeled using multinomial regression.
-
-
-
-
-
-For example, the relation between severity
-of disease measured on an ordinal scale (mild, moderate, severe) and age of patient, gender
-of patient, and some other explanatory variables may be of interest.
-
-
-
-
-
-The response variable $y$ must be coded in the same way as indicator variables except we will need an indicator variable for each category of $y$.
-
-
-
-
-
-Instead of going through the details, we will illustrate with tidymodels.
-
-
-
-
-#### Example
-
-
-
-A study was undertaken to determine the strength of association between several risk factors
-and the duration of pregnancies.
-
-
-
-
-The risk factors considered were mother's age, nutritional
-status, history of tobacco use, and history of alcohol use.
-
-
-
-
-
-The response of interest, pregnancy
-duration, is a three-category variable that was coded as follows:
 $$
-\begin{align*}
-y_{i} &\quad \textbf{Pregnancy Duration Category}\\
-1 &\quad \text{Preterm (less than 36 weeks)}\\
-2 &\quad \text{Intermediate term (36 to 37 weeks)}\\
-3 &\quad \text{Full term (38 weeks or greater)}
-\end{align*}
+\log\left(\frac{P(Y=2)}{P(Y=1)}\right)
+= \beta_{20}+\beta_{21}x_1+\cdots+\beta_{2,p-1}x_{p-1}
 $$
 
-Relevant data for 102 women who had recently given birth at a large metropolitan hospital
-were obtained.
+and
 
-
-X variables include:
-
-
-- Nutritional status ($x_1$), is an index of nutritional status (higher score denotes better nutritional status).
-- Age was categorized into three groups. It is represented by
-two indicator variables ($x_2$ and $x_3$):
 $$
-\begin{align*}
-x_{2} &\quad x_{3} & \textbf{Class}\\
-1 &\quad 0 & \text{Less than or equal to 20}\\
-0 &\quad 0 & \text{21 to 30}\\
-0 &\quad 1 & \text{Greater than 30}
-\end{align*}
+\log\left(\frac{P(Y=3)}{P(Y=1)}\right)
+= \beta_{30}+\beta_{31}x_1+\cdots+\beta_{3,p-1}x_{p-1}.
 $$
 
-- Alcohol ($x_4$) and smoking history ($x_5$) were also qualitative predictors; the categories were "Yes" (coded 1) and "No" (coded 0).
+Each non-baseline category gets its own set of coefficients.
 
+:::: {#exm-25_1 .example title="Pregnancy duration data"}
 
-Let's read in the data and visualize the variables.
+A study was undertaken to examine the association between several risk factors and pregnancy duration.
 
-```{r message=FALSE, warning=F}
+The response variable has three categories:
+
+| Code | Pregnancy duration category |
+|---:|---|
+| 1 | Preterm: less than 36 weeks |
+| 2 | Intermediate: 36 to 37 weeks |
+| 3 | Full term: 38 weeks or greater |
+
+The predictors are:
+
+| Variable | Meaning |
+|---|---|
+| $X_1$ | Nutritional status; higher scores indicate better nutritional status |
+| $X_2$ | Indicator for age less than or equal to 20 |
+| $X_3$ | Indicator for age greater than 30 |
+| $X_4$ | Indicator for alcohol history |
+| $X_5$ | Indicator for smoking history |
+
+The age categories are represented by two indicator variables:
+
+| Age category | $X_2$ | $X_3$ |
+|---|---:|---:|
+| Less than or equal to 20 | 1 | 0 |
+| 21 to 30 | 0 | 0 |
+| Greater than 30 | 0 | 1 |
+
+Thus, age 21 to 30 is the reference group.
+
+::::
+
+:::: {#exm-25_2 .example title="Loading and preparing the pregnancy data"}
+
+We first read the data, assign useful variable names, and convert the response to a factor.
+
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
-library(GGally)
+library(poissonreg)
 
+tidymodels_prefer()
 
-dat = read_table("CH14TA13.txt")
+pregnancy_data <- read.table("CH14TA13.txt")
 
-names(dat) = c("id", "Y", "Y1", "Y2", "Y3", "X1", "X2", "X3", "X4", "X5")
+names(pregnancy_data) <- c(
+  "id", "Y", "Y1", "Y2", "Y3",
+  "X1", "X2", "X3", "X4", "X5"
+)
 
-head(dat)
+pregnancy_data <- pregnancy_data |>
+  mutate(
+    Y = factor(
+      Y,
+      levels = c(1, 2, 3),
+      labels = c("Preterm", "Intermediate", "FullTerm")
+    )
+  ) |>
+  select(-id, -Y1, -Y2, -Y3)
+
+pregnancy_data |>
+  count(Y) |>
+  knitr::kable()
 ```
 
-In the dataset, $y$ is already encoded into Y1, Y2, and Y3. In tidymodels, we will just convert Y into a factor and let the engine encode it.
+A few targeted plots are often easier to interpret than a large scatterplot matrix. We begin with the distribution of the response categories.
 
-```{r message=FALSE, warning=F}
-dat = dat |> 
-  mutate(Y = factor(Y)) |> 
-  select(-Y1, -Y2, -Y3, -id)
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Bar chart showing the number of observations in each pregnancy duration category."
 
-ggpairs(dat,columns = c(2:6, 1))
-
+pregnancy_data |>
+  count(Y) |>
+  ggplot(aes(x = Y, y = n, fill = Y)) +
+  geom_col(show.legend = FALSE) +
+  labs(
+    x = "Pregnancy duration category",
+    y = "Number of observations",
+    title = "Pregnancy duration category counts"
+  ) +
+  theme_minimal()
 ```
 
+Next, we examine nutritional status by pregnancy duration category.
 
-Let's setup the recipe, model, and workflow.
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Boxplots and jittered points showing nutritional status by pregnancy duration category."
 
-```{r message=FALSE, warning=F}
-dat_recipe = recipe(Y~X1+X2+X3+X4+X5, data = dat)
+pregnancy_data |>
+  ggplot(aes(x = Y, y = X1, color = Y)) +
+  geom_boxplot(outlier.shape = NA, alpha = 0.15) +
+  geom_jitter(width = 0.12, height = 0, alpha = 0.7) +
+  labs(
+    x = "Pregnancy duration category",
+    y = "Nutritional status",
+    color = "Category",
+    title = "Nutritional status by pregnancy duration"
+  ) +
+  theme_minimal()
+```
 
-model = multinom_reg() |> 
+Finally, we look at the observed category proportions for the indicator predictors.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Faceted bar charts showing observed pregnancy duration proportions by binary predictor values."
+#| fig-height: 4
+
+pregnancy_indicator_proportions <- pregnancy_data |>
+  select(Y, X2, X3, X4, X5) |>
+  pivot_longer(
+    cols = X2:X5,
+    names_to = "predictor",
+    values_to = "indicator_value"
+  ) |>
+  mutate(
+    predictor = recode(
+      predictor,
+      X2 = "Age <= 20",
+      X3 = "Age > 30",
+      X4 = "Alcohol history",
+      X5 = "Smoking history"
+    ),
+    indicator_value = factor(indicator_value, levels = c(0, 1))
+  ) |>
+  count(predictor, indicator_value, Y) |>
+  group_by(predictor, indicator_value) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup()
+
+pregnancy_indicator_proportions |>
+  ggplot(aes(x = indicator_value, y = proportion, fill = Y)) +
+  geom_col() +
+  facet_wrap(~ predictor) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  labs(
+    x = "Indicator value",
+    y = "Observed category proportion",
+    fill = "Category",
+    title = "Pregnancy duration proportions by indicator value"
+  ) +
+  theme_minimal()
+```
+
+::::
+
+:::: {#exm-25_3 .example title="Fitting a multinomial logistic regression model"}
+
+We can fit a multinomial logistic regression model using a `tidymodels` workflow.
+
+```{r message=FALSE, warning=FALSE}
+pregnancy_recipe <- recipe(Y ~ X1 + X2 + X3 + X4 + X5, data = pregnancy_data)
+
+pregnancy_model <- multinom_reg() |>
   set_engine("nnet")
 
+pregnancy_workflow <- workflow() |>
+  add_recipe(pregnancy_recipe) |>
+  add_model(pregnancy_model)
 
-wf = workflow() |> 
-  add_recipe(dat_recipe) |> 
-  add_model(model)
-
-
-fitted_model = wf |> fit(data = dat)
-
-fitted_model
-
-
+pregnancy_fit <- pregnancy_workflow |>
+  fit(data = pregnancy_data)
 ```
 
+Because `Preterm` is the baseline category, the model fits one comparison for `Intermediate` versus `Preterm` and another for `FullTerm` versus `Preterm`.
 
+The coefficients are on the log-odds scale.
 
-
-
-Note in the summary, we have two regression fits. What we actually have done is model the odds of the probability of being in category 2 to the probability of being in category 1.
-
-
-We also modeled the odds of the probability of being in category 3 to the probability of being in category 1.
-
-
-So we call category 1 the baseline category.
-
-
-
-To get the effect on the odds ratio for each coefficient:
-
-```{r message=FALSE, warning=F}
-fitted_model |> extract_fit_engine() |> coef() |> exp()
+```{r message=FALSE, warning=FALSE}
+pregnancy_fit |>
+  extract_fit_engine() |>
+  coef() |>
+  knitr::kable(digits = 4)
 ```
 
+Exponentiating the coefficients gives odds ratios for each comparison.
 
-We can predict the probabilities for each observation:
-
-```{r message=FALSE, warning=F}
-preds_nom = fitted_model |> extract_fit_engine() |> fitted()
-preds_nom[1:10,]
+```{r message=FALSE, warning=FALSE}
+pregnancy_fit |>
+  extract_fit_engine() |>
+  coef() |>
+  exp() |>
+  knitr::kable(digits = 4)
 ```
 
-Commonly, the class with the highest probability is the predicted class.
+For example, the coefficient for `X1` in the `FullTerm` row describes the change in the log-odds of being full term rather than preterm for a one-unit increase in nutritional status, holding the other predictors fixed.
 
+::::
 
-```{r message=FALSE, warning=F}
+:::: {#exm-25_4 .example title="Predicted probabilities and classes from a multinomial model"}
 
-ind = apply(preds_nom, 1, which.max)
-preds_class = colnames(preds_nom)[ind]
-preds_class
+A multinomial model gives one predicted probability for each response category. A common classification rule is to predict the category with the largest fitted probability.
 
+```{r message=FALSE, warning=FALSE}
+pregnancy_predictions <- pregnancy_data |>
+  select(Y) |>
+  bind_cols(
+    predict(pregnancy_fit, new_data = pregnancy_data, type = "prob"),
+    predict(pregnancy_fit, new_data = pregnancy_data, type = "class")
+  )
+
+pregnancy_predictions |>
+  slice_head(n = 10) |>
+  knitr::kable(digits = 3)
 ```
 
-We can compare the predicted classes versus the observed classes.
+We can compare predicted classes to observed classes with a confusion matrix.
 
-```{r message=FALSE, warning=F}
-table(preds_class, dat$Y)
+```{r message=FALSE, warning=FALSE}
+pregnancy_confusion <- conf_mat(
+  pregnancy_predictions,
+  truth = Y,
+  estimate = .pred_class
+)
 
+pregnancy_confusion
 ```
 
+```{r message=FALSE, warning=FALSE}
+bind_rows(
+  accuracy(pregnancy_predictions, truth = Y, estimate = .pred_class),
+  mn_log_loss(
+    pregnancy_predictions,
+    truth = Y,
+    .pred_Preterm,
+    .pred_Intermediate,
+    .pred_FullTerm
+  )
+) |>
+  knitr::kable(digits = 3)
+```
+
+Accuracy uses only the predicted class. Multinomial log loss uses the full set of predicted probabilities, so it rewards confident correct predictions and penalizes confident wrong predictions.
+
+::::
 
 ## Ordinal Regression
 
-
 ### Ordinal Response
 
+When the response categories can be put into a meaningful order, the response is **ordinal**. Pregnancy duration can be treated as ordinal because
 
-When the response variable $Y$ takes on categorical responses that can be put into order, then  the multinomial logistic regression  can still be used.
-
-
-
-However, a more effective strategy, yielding a more parsimonious and more easily interpreted model, results if the *ordering* of the categories is taken into account explicitly.
-
-
-
-
-
-The model that is usually employed is called the *proportional* *odds*  model
-
-
-
-
-
-The proportional odds model for ordinal logistic regression models the cumulative probabilities
 $$
-P(y_i\le j)
+\text{Preterm} < \text{Intermediate} < \text{FullTerm}.
 $$
-rather than the specific category probabilities
+
+Multinomial logistic regression can still be used, but it ignores the ordering. Ordinal logistic regression uses the ordering directly. A common ordinal logistic model is the **proportional odds model**, which models cumulative probabilities such as
+
 $$
-P(y_i=j)
+P(Y_i \le j)
 $$
-as was the case
-for nominal logistic regression.
 
+rather than modeling only the separate category probabilities $P(Y_i=j)$.
 
+::: {.callout-note collapse="false" title="Why use an ordinal model?"}
 
+An ordinal model can be more parsimonious because it uses the category ordering. Instead of fitting a completely separate coefficient vector for each non-baseline category, the proportional odds model uses one coefficient for each predictor and separate cutpoints between adjacent response categories.
 
+:::
 
-Again, we will skip the details and illustrate with R using the pregnancy data from the last section.
+### Proportional Odds Assumption
 
+The proportional odds model relies on an important assumption: each predictor has the same effect across the cumulative splits of the ordered response.
 
-```{r message=FALSE, warning=F}
-library(MASS)
-library(tidyverse)
+For the pregnancy duration categories, the cumulative splits are:
 
-dat = read_table("CH14TA13.txt")
+| Split | Comparison |
+|---|---|
+| 1 | Preterm versus Intermediate or FullTerm |
+| 2 | Preterm or Intermediate versus FullTerm |
 
-names(dat) = c("id", "Y", "Y1", "Y2", "Y3", "X1", "X2", "X3", "X4", "X5")
+The proportional odds assumption says that a predictor's slope is the same for these cumulative comparisons, up to the sign convention used by the software. The cutpoints may differ, but the predictor effects are shared.
 
-dat = dat |> 
-  mutate(Y = factor(Y, levels = c("1", "2", "3"), ordered=T)) 
+::: {.callout-note collapse="false" title="Parallel slopes idea"}
 
-fit_ord = polr(Y~X1+X2+X3+X4+X5, data = dat)
+Another way to say this is that the model assumes **parallel slopes** on the cumulative logit scale.
 
+For example, if nutritional status is associated with longer pregnancy duration, the proportional odds model assumes that this association works similarly when separating `Preterm` from higher categories and when separating `FullTerm` from lower categories.
 
-fit_ord |> tidy(exponentiate = T)
+:::
 
+::: {.callout-warning collapse="false" title="When the assumption may be questionable"}
 
-preds_ord = fit_ord |> fitted()
-preds_nom[1:10,]
+The proportional odds assumption may be questionable if a predictor has a very different relationship with different category cutpoints.
 
+For example, if smoking history strongly separates `Preterm` from the other categories but has little relationship to whether a pregnancy is `FullTerm`, then one shared slope may be too restrictive. In that case, a multinomial model or a more flexible ordinal model may be more appropriate.
 
-ind = apply(preds_ord, 1, which.max)
-preds_class = colnames(preds_nom)[ind]
-preds_class
+:::
 
-table(preds_class, dat$Y)
+:::: {#exm-25_5 .example title="Fitting a proportional odds model"}
 
+We can fit a proportional odds model using `MASS::polr()`. The response must be stored as an ordered factor.
+
+```{r message=FALSE, warning=FALSE}
+ordinal_data <- pregnancy_data |>
+  mutate(
+    Y = ordered(
+      Y,
+      levels = c("Preterm", "Intermediate", "FullTerm")
+    )
+  )
+
+ordinal_fit <- MASS::polr(
+  Y ~ X1 + X2 + X3 + X4 + X5,
+  data = ordinal_data,
+  Hess = TRUE
+)
+
+broom::tidy(
+  ordinal_fit,
+  exponentiate = TRUE,
+  conf.int = TRUE
+) |>
+  filter(coef.type == "coefficient") |>
+  select(term, estimate, conf.low, conf.high, statistic) |>
+  knitr::kable(digits = 4)
 ```
 
+The exponentiated coefficients are cumulative odds ratios under the proportional odds model. Their interpretation depends on the direction of the cumulative logits used by the software, so always check the model convention before writing a final applied interpretation.
+
+The model also estimates cutpoints between adjacent ordered categories.
+
+```{r message=FALSE, warning=FALSE}
+broom::tidy(ordinal_fit) |>
+  filter(coef.type == "scale") |>
+  knitr::kable(digits = 4)
+```
+
+::::
+
+:::: {#exm-25_6 .example title="Predictions from an ordinal logistic regression model"}
+
+Like the multinomial model, the ordinal model can return one predicted probability for each category.
+
+```{r message=FALSE, warning=FALSE}
+ordinal_probabilities <- predict(
+  ordinal_fit,
+  newdata = ordinal_data,
+  type = "probs"
+) |>
+  as_tibble()
+
+ordinal_predictions <- ordinal_data |>
+  select(Y) |>
+  bind_cols(
+    ordinal_probabilities,
+    tibble(
+      .pred_class = predict(
+        ordinal_fit,
+        newdata = ordinal_data,
+        type = "class"
+      )
+    )
+  )
+
+ordinal_predictions |>
+  slice_head(n = 10) |>
+  knitr::kable(digits = 3)
+```
+
+```{r message=FALSE, warning=FALSE}
+ordinal_confusion <- conf_mat(
+  ordinal_predictions,
+  truth = Y,
+  estimate = .pred_class
+)
+
+ordinal_confusion
+```
+
+```{r message=FALSE, warning=FALSE}
+accuracy(ordinal_predictions, truth = Y, estimate = .pred_class) |>
+  knitr::kable(digits = 3)
+```
+
+The ordinal model and multinomial model have the same in-sample accuracy here, but they use different assumptions. The ordinal model uses the response ordering; the multinomial model treats the categories as unordered.
+
+::::
 
 ## Poisson Regression
 
+Poisson regression is used when the response variable is a count:
 
+$$
+Y_i = 0,1,2,\ldots
+$$
 
-We consider now another nonlinear regression model where the response outcomes are
-discrete.
-
-
-
-
-
-Poisson regression is useful when the outcome is a count, with large-count outcomes
-being rare events.
-
-
-
-
-
-For instance, the number of times a household shops at a particular
-supermarket in a week is a count, with a large number of shopping trips to the store during
-the week being a rare event. A researcher may wish to study the relation between a family's
-number of shopping trips to the store during a particular week and the family's income,
-number of children, distance from the store, and some other explanatory variables.
-
-
-
-
-
-As another
-example, the relation between the number of hospitalizations of a member of a health
-maintenance organization during the past year and the member's age, income, and previous
-health status may be of interest.
-
-
-
-
-
-
-The Poisson distribution can be utilized for outcomes that are counts ($y_i = 0, 1,2, ...$ ),
-with a large count or frequency being a rare event.
+Examples include the number of store visits, number of hospitalizations, number of defects, or number of events in a fixed time period.
 
 ### The Poisson Distribution
 
-
 The Poisson probability distribution is
+
 $$
-f(Y) = \frac{\mu^Y \exp(-\mu)}{Y!}
+f(Y) = \frac{\mu^Y \exp(-\mu)}{Y!}.
 $$
 
-The mean and variance of a Poisson distribution are
+For a Poisson random variable,
+
 $$
 \begin{align*}
-E\{Y\} &= \mu\\
-\sigma^2\{Y\} &=\mu
+E(Y) &= \mu,\\
+Var(Y) &= \mu.
 \end{align*}
 $$
 
+The mean and variance are the same. This is an important assumption to remember when using Poisson regression.
 
-Note that the variance is the same as the mean.
+::: {.callout-note collapse="false" title="Counts are not just another continuous response"}
 
+A count response is nonnegative and discrete. A linear model can predict negative fitted values, but a Poisson model with a log link keeps the fitted mean positive.
 
+:::
 
+### Poisson Regression Model
 
-Hence, if the number of store trips follows
-the Poisson distribution and the mean number of store trips for a family with three children
-is larger than the mean number of trips for a family with no children, the variances of the
-distributions of outcomes for the two families will also differ.
+In Poisson regression, we usually assume
 
-### Poisson Regression
-
-
-We start with the regression model
 $$
-\begin{align*}
-y_{i} & =E\left[ y_{i}\right] +\varepsilon_{i}\qquad i=1,2,\ldots,n
-\end{align*}
+Y_i \sim \text{Poisson}(\mu_i)
 $$
 
+and use the log link
 
-The mean response for the $i$th case, to be denoted now my $\mu_{i}$
-for simplicity, is assumed as always to be a function of the set of
-predictor variables $x_{1},\ldots,x_{p-1}$.
-
-
-
-
-
-We use the notation $\mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)$
-to denote the function that relates the mean response $\mu_{i}$ to
-$\textbf{X}_{i}$, the values of the predictor variables for case
-$i$, and $\boldsymbol{\beta}$, the values of the regression coefficients.
-
-
-
-
-
-Some commonly used functions for Poisson regression are
 $$
-\begin{align*}
-\mu_{i}= & \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\\
-\mu_{i}= & \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\exp\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)\\
-\mu_{i}= & \mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)=\ln\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)
-\end{align*}
+\log(\mu_i)=\mathbf{x}_i^\prime\boldsymbol{\beta}.
 $$
 
-In all three cases, the mean response $\mu_{i}$ must be nonnegative.
+Equivalently,
 
-
-
-
-
-Since the distribution of the error terms $\varepsilon_{i}$ for Poisson
-regression is a function of the distribution of the response $y_{i}$,
-which is Poisson, it is easiest to state the Poisson regression model
-in the following form:
-
-$y_{i}$ are independent Poisson random variables with expected values $\mu_{i}$ where
 $$
-\begin{align*}
-\mu_{i} & =\mu\left(\textbf{X}_{i},\boldsymbol{\beta}\right)
-\end{align*}
+\mu_i=\exp(\mathbf{x}_i^\prime\boldsymbol{\beta}).
 $$
 
+This guarantees that the fitted mean count is positive.
 
-The most commonly used response function is
-$\mu_{i}=\exp\left(\textbf{X}_{i}^{\prime}\boldsymbol{\beta}\right)$.
+:::: {#exm-25_7 .example title="Poisson regression for store customer counts"}
 
-#### Example
+The Miller Lumber Company is a large retailer of lumber, paint, plumbing, electrical supplies, and other household supplies.
 
-The Miller Lumber Company is a large retailer of lumber and paint, as well as of plumbing,
-electrical, and other household supplies.
+During a representative two-week period, in-store surveys were conducted and addresses of customers were obtained. The addresses were used to identify the metropolitan-area census tracts in which the customers lived. At the end of the survey period, the total number of customers who visited the store from each census tract was recorded.
 
+The response is:
 
-During a representative two-week period, in-store
-surveys were conducted and addresses of customers were obtained. The addresses were
-then used to identify the metropolitan area census tracts in which the customers reside.
+- $Y$: number of customers who visited the store from the census tract.
 
+The predictors are:
 
+| Variable | Meaning |
+|---|---|
+| $X_1$ | Number of housing units |
+| $X_2$ | Average income, in dollars |
+| $X_3$ | Average housing-unit age, in years |
+| $X_4$ | Distance to nearest competitor, in miles |
+| $X_5$ | Distance to store, in miles |
 
+```{r message=FALSE, warning=FALSE}
+lumber_data <- read.table("CH14TA14.txt")
 
+names(lumber_data) <- c("Y", "X1", "X2", "X3", "X4", "X5")
 
-At
-the end of the survey period, the total number of customers who visited the store from each
-census tract within a 10-mile radius was determined and relevant demographic information
-for each tract (average income, number of housing units, etc.) was obtained.
-
-
-
-
-
-Several other
-variables expected to be related to customer counts were constructed from maps, including
-distance from census tract to nearest competitor and distance to store.
-
-
-
-
-
-
-Initial screening of the potential predictor variables was conducted which led to the
-retention of five predictor variables:
-
-
-- $x_1$: Number of housing units
-
-- $x_2$: Average income, in dollars
-
-- $x_3$: Average housing unit age, in years
-
-- $x_4$ : Distance to nearest competitor, in miles
-
-- $x_5$: Distance to store, in miles
-
-- $y_i$ : Number of customers who visited store from census tract
-
-
-```{r message=FALSE, warning=F}
-
-library(poissonreg)
-
-dat = read.table("CH14TA14.txt")
-
-names(dat) = c("Y", "X1", "X2", "X3", "X4", "X5")
-
-dat_recipe = recipe(Y~., data = dat)
-
-model = poisson_reg() |> 
-  set_engine("glm")
-
-wf = workflow() |> 
-  add_recipe(dat_recipe) |> 
-  add_model(model)
-
-
-fit = wf |> fit(data = dat)
-
-fit |> tidy()
-
-fit |> predict(new_data = dat)
-
+lumber_data |>
+  slice_head(n = 10) |>
+  knitr::kable(digits = 3)
 ```
 
+::::
+
+:::: {#exm-25_8 .example title="Fitting and interpreting a Poisson regression model"}
+
+```{r message=FALSE, warning=FALSE}
+lumber_recipe <- recipe(Y ~ ., data = lumber_data)
+
+lumber_model <- poisson_reg() |>
+  set_engine("glm")
+
+lumber_workflow <- workflow() |>
+  add_recipe(lumber_recipe) |>
+  add_model(lumber_model)
+
+lumber_fit <- lumber_workflow |>
+  fit(data = lumber_data)
+
+lumber_fit |>
+  tidy() |>
+  knitr::kable(digits = 4)
+```
+
+The coefficients are on the log-mean scale. Exponentiating them gives multiplicative effects on the expected count.
+
+```{r message=FALSE, warning=FALSE}
+lumber_fit |>
+  tidy(exponentiate = TRUE) |>
+  knitr::kable(digits = 4)
+```
+
+For example, if an exponentiated coefficient is 1.18, then a one-unit increase in that predictor is associated with multiplying the expected count by 1.18, holding the other predictors fixed.
+
+::::
+
+:::: {#exm-25_9 .example title="Predicted counts from a Poisson regression model"}
+
+```{r message=FALSE, warning=FALSE}
+lumber_predictions <- lumber_data |>
+  select(Y) |>
+  bind_cols(
+    predict(lumber_fit, new_data = lumber_data, type = "numeric")
+  )
+
+lumber_predictions |>
+  slice_head(n = 10) |>
+  knitr::kable(digits = 3)
+```
+
+```{r message=FALSE, warning=FALSE}
+lumber_predictions |>
+  metrics(truth = Y, estimate = .pred) |>
+  knitr::kable(digits = 3)
+```
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Observed customer counts plotted against predicted customer counts from a Poisson regression model."
+
+lumber_predictions |>
+  ggplot(aes(x = .pred, y = Y)) +
+  geom_point(alpha = 0.75) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  labs(
+    x = "Predicted count",
+    y = "Observed count",
+    title = "Observed versus predicted customer counts"
+  ) +
+  theme_minimal()
+```
+
+If the model predicted every count perfectly, all points would fall on the dashed line. In practice, count data are noisy, so we look for whether the predictions are reasonably aligned with the observed counts.
+
+::::
+
+## Recap
+
+In this chapter, we introduced three regression models for non-continuous response variables.
+
+| Idea | Meaning |
+|---|---|
+| **Nominal response** | A categorical response whose categories have no natural order. |
+| **Multinomial logistic regression** | A model for nominal responses with more than two categories. |
+| **Baseline category** | The category used as the comparison group in a multinomial logistic model. |
+| **Category-specific coefficients** | Separate coefficients for each non-baseline category comparison. |
+| **Multinomial predicted probabilities** | One fitted probability for each response category. |
+| **Multinomial log loss** | A metric that evaluates the full set of predicted category probabilities. |
+| **Ordinal response** | A categorical response whose categories have a meaningful order. |
+| **Proportional odds model** | An ordinal logistic model based on cumulative probabilities. |
+| **Proportional odds assumption** | The assumption that predictor effects are shared across cumulative category splits. |
+| **Parallel slopes** | A way to describe the proportional odds assumption on the cumulative logit scale. |
+| **Cutpoints** | Thresholds that separate adjacent ordered response categories. |
+| **Targeted exploratory plot** | A focused plot designed to show one important predictor-response relationship clearly. |
+| **Count response** | A nonnegative integer response variable. |
+| **Poisson distribution** | A count distribution where the mean and variance are both $\mu$. |
+| **Poisson regression** | A regression model for count responses. |
+| **Log link** | A link function that models $\log(\mu_i)$ as a linear predictor. |
+| **Mean-count ratio** | The exponentiated Poisson coefficient, interpreted as a multiplicative effect on the expected count. |
+| **Observed versus predicted plot** | A plot used to compare observed counts to fitted counts. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. What is the difference between a nominal response and an ordinal response?
+
+2. Why is multinomial logistic regression appropriate for a response with more than two unordered categories?
+
+3. What is the baseline category in a multinomial logistic regression model?
+
+4. If a response has three categories, how many non-baseline log-odds equations are fit?
+
+5. In the pregnancy duration example, what does it mean that `Preterm` is the baseline category?
+
+6. Why does a multinomial model return several predicted probabilities for each observation?
+
+7. How is the predicted class usually chosen from multinomial predicted probabilities?
+
+8. Why can accuracy miss information that multinomial log loss uses?
+
+9. Why might an ordinal model be preferred over a multinomial model for ordered categories?
+
+10. What are cumulative probabilities in the proportional odds model?
+
+11. What are cutpoints in an ordinal logistic regression model?
+
+12. What does the proportional odds assumption say?
+
+13. What are the two cumulative splits in the pregnancy duration example?
+
+14. What does the phrase parallel slopes mean in the proportional odds model?
+
+15. Why should we be careful when interpreting exponentiated coefficients from `polr()`?
+
+16. Why can targeted plots be better than one large scatterplot matrix?
+
+17. What kinds of response variables are appropriate for Poisson regression?
+
+18. Why does Poisson regression often use a log link?
+
+19. What does it mean that the Poisson mean and variance are both $\mu$?
+
+20. How do we interpret an exponentiated coefficient in Poisson regression?
+
+21. Why is a plot of observed versus predicted counts useful?
+
+22. Why should the multinomial, ordinal, and Poisson models not be treated as interchangeable?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Nominal categories have no natural order; ordinal categories do.** Product choice is nominal, while severity levels such as mild, moderate, and severe are ordinal.
+
+2. **It models multiple category probabilities.** Multinomial logistic regression compares each non-baseline category to a baseline category.
+
+3. **It is the reference category.** The model expresses log-odds for each other category relative to the baseline.
+
+4. **Two equations are fit.** With three categories and one baseline category, there are two non-baseline comparisons.
+
+5. **The other categories are compared to preterm.** The `Intermediate` and `FullTerm` coefficient rows describe log-odds relative to `Preterm`.
+
+6. **There is one probability for each possible category.** The probabilities should sum to 1 for each observation.
+
+7. **Choose the category with the largest predicted probability.** This is the maximum-probability classification rule.
+
+8. **Accuracy uses only the final class label.** Log loss also uses how confident the predicted probabilities were.
+
+9. **It uses the ordering.** An ordinal model can be more parsimonious and more appropriate when the response categories have a meaningful order.
+
+10. **They are probabilities of being at or below a category.** For example, $P(Y \le \text{Intermediate})$ is cumulative.
+
+11. **They separate adjacent ordered categories.** Cutpoints locate the boundaries between response levels on the model scale.
+
+12. **It says predictor effects are shared across cumulative splits.** The model uses the same slope for each predictor when comparing lower versus higher ordered response categories.
+
+13. **The splits are Preterm versus higher categories and lower categories versus FullTerm.** More specifically: Preterm versus Intermediate or FullTerm, and Preterm or Intermediate versus FullTerm.
+
+14. **The predictor slopes are the same across cutpoints.** The cutpoints can shift, but the model does not estimate separate predictor effects for each cumulative split.
+
+15. **Software conventions differ.** The sign and direction of the cumulative logit determine how an exponentiated coefficient should be described.
+
+16. **They focus attention.** A large matrix can be useful for scanning, but smaller targeted plots make important relationships easier to see and explain.
+
+17. **Nonnegative integer counts.** Examples include number of visits, number of defects, or number of events.
+
+18. **It keeps fitted means positive.** Modeling $\log(\mu_i)$ linearly implies $\mu_i=\exp(\mathbf{x}_i^\prime\boldsymbol{\beta})>0$.
+
+19. **The variance increases with the mean.** Larger expected counts also imply larger variability under the Poisson model.
+
+20. **It is a multiplicative effect on the expected count.** Values above 1 increase the expected count; values below 1 decrease it.
+
+21. **It shows how well the fitted counts align with the observed counts.** Large departures from the diagonal can reveal poor fit or unusual observations.
+
+22. **They are designed for different response structures.** Nominal categories, ordered categories, and counts require different model assumptions and interpretations.
+
+:::

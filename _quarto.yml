@@ -13,11 +13,11 @@ book:
     title: " "
     background: "#326565"
     foreground: "#F5F5EF"
-  page-footer: 
-    left: |
-      STA 3386
-    right: |
-      Fall 2024
+  # page-footer: 
+  #   left: |
+  #     STA 3386
+  #   right: |
+  #     Fall 2024
   chapters:
     - index.qmd
     - 01_Intro.qmd

@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.38">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>23&nbsp; Introduction to Logistic Regression – STA 3386 Regression Analysis</title>
 <style>
 /* Default styles provided by pandoc.
@@ -23,8 +20,42 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -44,8 +75,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-252a5852334bca2ff0cfda27f9d47fed.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap-9d446ab727817792bab91d50dee4855b.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -71,8 +101,7 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-<style>
+}</script><style>
 div.callout-example.callout {
   border-left-color: #008000;
 }
@@ -85,11 +114,7 @@ div.callout-example.callout-style-default .callout-icon::before, div.callout-exa
   background-image: none;
 }
 </style>
-
-  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
-  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
+<script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
 const typesetMath = (el) => {
   if (window.MathJax) {
     // MathJax Typeset
@@ -114,17 +139,12 @@ const typesetMath = (el) => {
 window.Quarto = {
   typesetMath
 };
-</script>
-
-<link rel="stylesheet" href="styles.css">
+</script><link rel="stylesheet" href="styles.css">
 </head>
-
 <body class="nav-sidebar docked quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -135,13 +155,9 @@ window.Quarto = {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./"></a> 
     </div>
@@ -153,7 +169,7 @@ window.Quarto = {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Introduction</span></a>
@@ -306,39 +322,41 @@ window.Quarto = {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./25_Multinomial.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression and Poisson Regression</span></span></a>
+ <span class="menu-text"><span class="chapter-number">25</span>&nbsp; <span class="chapter-title">Multinomial Logistic Regression, Ordinal Regression, and Poisson Regression</span></span></a>
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#binary-response-variable" id="toc-binary-response-variable" class="nav-link active" data-scroll-target="#binary-response-variable"><span class="header-section-number">23.1</span> Binary Response Variable</a>
+<li>
+<a href="#binary-response-variable" id="toc-binary-response-variable" class="nav-link active" data-scroll-target="#binary-response-variable"><span class="header-section-number">23.1</span> Binary Response Variable</a>
   <ul class="collapse">
-  <li><a href="#response-function-meaning" id="toc-response-function-meaning" class="nav-link" data-scroll-target="#response-function-meaning"><span class="header-section-number">23.1.1</span> Response Function Meaning</a></li>
+<li><a href="#response-function-meaning" id="toc-response-function-meaning" class="nav-link" data-scroll-target="#response-function-meaning"><span class="header-section-number">23.1.1</span> Response Function Meaning</a></li>
   <li><a href="#problems-when-response-is-binary" id="toc-problems-when-response-is-binary" class="nav-link" data-scroll-target="#problems-when-response-is-binary"><span class="header-section-number">23.1.2</span> Problems when response is binary</a></li>
-  </ul></li>
-  <li><a href="#sigmoidal-response-functions" id="toc-sigmoidal-response-functions" class="nav-link" data-scroll-target="#sigmoidal-response-functions"><span class="header-section-number">23.2</span> Sigmoidal Response Functions</a>
+  </ul>
+</li>
+  <li>
+<a href="#sigmoidal-response-functions" id="toc-sigmoidal-response-functions" class="nav-link" data-scroll-target="#sigmoidal-response-functions"><span class="header-section-number">23.2</span> Sigmoidal Response Functions</a>
   <ul class="collapse">
-  <li><a href="#probit-mean-response-function" id="toc-probit-mean-response-function" class="nav-link" data-scroll-target="#probit-mean-response-function"><span class="header-section-number">23.2.1</span> Probit Mean Response Function</a></li>
-  </ul></li>
+<li><a href="#probit-mean-response-function" id="toc-probit-mean-response-function" class="nav-link" data-scroll-target="#probit-mean-response-function"><span class="header-section-number">23.2.1</span> Probit Mean Response Function</a></li>
+  </ul>
+</li>
   <li><a href="#logistic-mean-response-function" id="toc-logistic-mean-response-function" class="nav-link" data-scroll-target="#logistic-mean-response-function"><span class="header-section-number">23.3</span> Logistic Mean Response Function</a></li>
   <li><a href="#interpretation-of-the-coefficients" id="toc-interpretation-of-the-coefficients" class="nav-link" data-scroll-target="#interpretation-of-the-coefficients"><span class="header-section-number">23.4</span> Interpretation of the Coefficients</a></li>
-  </ul>
-</nav>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">23.5</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">23.6</span> Check your understanding</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title"><span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span></h1>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<h1 class="title">
+<span class="chapter-number">23</span>&nbsp; <span class="chapter-title">Introduction to Logistic Regression</span>
+</h1>
 </div>
 
 
@@ -352,19 +370,18 @@ window.Quarto = {
   
 
 
-</header>
-
-
-<blockquote class="blockquote">
+</header><blockquote class="blockquote">
 <p>“If all you have is a hammer, everything looks like a nail.” - Bernard Baruch</p>
 </blockquote>
-<section id="binary-response-variable" class="level2" data-number="23.1">
-<h2 data-number="23.1" class="anchored" data-anchor-id="binary-response-variable"><span class="header-section-number">23.1</span> Binary Response Variable</h2>
+<p>In previous chapters, the response variable was quantitative. Logistic regression is used when the response is categorical, especially when the response has two possible outcomes such as yes/no, success/failure, or present/absent.</p>
+<p>The main idea is simple but important: when <span class="math inline">\(Y\)</span> is binary, the mean response is a probability. Logistic regression models that probability while keeping fitted values between 0 and 1.</p>
+<section id="binary-response-variable" class="level2" data-number="23.1"><h2 data-number="23.1" class="anchored" data-anchor-id="binary-response-variable">
+<span class="header-section-number">23.1</span> Binary Response Variable</h2>
 <p>In a variety of regression applications, the response variable of interest has only two possible <em>qualitative</em> outcomes, and therefore can be represented by a binary indicator variable taking on values 0 and 1.</p>
 <p>A binary response variable is said to involve binary responses or dichotomous responses.</p>
 <p>We consider first the meaning of the response function when the outcome variable is binary, and then we take up some special problems that arise with this type of response variable.</p>
-<section id="response-function-meaning" class="level3" data-number="23.1.1">
-<h3 data-number="23.1.1" class="anchored" data-anchor-id="response-function-meaning"><span class="header-section-number">23.1.1</span> Response Function Meaning</h3>
+<section id="response-function-meaning" class="level3" data-number="23.1.1"><h3 data-number="23.1.1" class="anchored" data-anchor-id="response-function-meaning">
+<span class="header-section-number">23.1.1</span> Response Function Meaning</h3>
 <p>Consider the simple linear regression model <span class="math display">\[
 \begin{align*}
 y_{i} &amp; =\beta_{0}+\beta_{1}x_{i}+\varepsilon_{i}\qquad y_{i}=0,1
@@ -400,42 +417,87 @@ E\left[ y_{i}\right]  &amp; =\beta_{0}+\beta_{1}x_{i}\\
 <p>The mean response <span class="math inline">\(E\{y_i\}\)</span> as given by the response function is therefore simply the probability that <span class="math inline">\(y_i = 1\)</span> when the level of the predictor variable is <span class="math inline">\(x_i\)</span>.</p>
 <p>This interpretation of the mean response applies whether the response function is a simple linear one, as here, or a complex multiple regression one.</p>
 <p>The mean response, when the outcome variable is a 0, 1 indicator variable, always represents the probability that <span class="math inline">\(Y = 1\)</span> for the given levels of the predictor variables.</p>
-</section>
-<section id="problems-when-response-is-binary" class="level3" data-number="23.1.2">
-<h3 data-number="23.1.2" class="anchored" data-anchor-id="problems-when-response-is-binary"><span class="header-section-number">23.1.2</span> Problems when response is binary</h3>
+<div id="exm-23_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>The mean of a binary response is a probability
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose <span class="math inline">\(Y\)</span> indicates whether a student passes an exam:</p>
+<ul>
+<li>
+<span class="math inline">\(Y = 1\)</span> means the student passes,</li>
+<li>
+<span class="math inline">\(Y = 0\)</span> means the student does not pass.</li>
+</ul>
+<p>If the probability of passing is <span class="math inline">\(\pi = 0.80\)</span>, then</p>
+<p><span class="math display">\[
+E(Y) = 1(0.80) + 0(0.20) = 0.80.
+\]</span></p>
+<p>For a binary response, the expected value is not an average outcome such as “0.80 students.” It is the probability that the outcome equals 1.</p>
+</div>
+</div>
+</section><section id="problems-when-response-is-binary" class="level3" data-number="23.1.2"><h3 data-number="23.1.2" class="anchored" data-anchor-id="problems-when-response-is-binary">
+<span class="header-section-number">23.1.2</span> Problems when response is binary</h3>
 <p>Special problems arise, unfortunately, when the response variable is an indicator variable. We consider three of these now, using a simple linear regression model as an illustration.</p>
 <ol type="1">
-<li><p><em>Nonnormal error terms</em>: For a binary 0, 1 response variable, each error term can take on only two values: <span class="math display">\[
+<li>
+<p><em>Nonnormal error terms</em>: For a binary 0, 1 response variable, each error term can take on only two values: <span class="math display">\[
 \begin{align*}
 \text{When }y_{i}=1: &amp; \quad\varepsilon_{i}=1-\beta_{0}-\beta_{1}x_{i}\\
 \text{When }y_{i}=0: &amp; \quad\varepsilon_{i}=0-\beta_{0}-\beta_{1}x_{i}
 \end{align*}
 \]</span></p>
-<p>Clearly, normal error regression model, which assumes that the <span class="math inline">\(\varepsilon_i\)</span> are normally distributed, is not appropriate.</p></li>
-<li><p><em>Nonconstant Error Variance</em>: Another problem with the error terms is that they do not have equal variances when the response variable is an indicator variable.</p>
+<p>Clearly, the normal error regression model, which assumes that the <span class="math inline">\(\varepsilon_i\)</span> are normally distributed, is not appropriate.</p>
+</li>
+<li>
+<p><em>Nonconstant error variance</em>: Another problem with the error terms is that they do not have equal variances when the response variable is an indicator variable.</p>
 <p>To see this, note that <span class="math display">\[
 \begin{align*}
-Var[\varepsilon_i] = (\beta_{0}+\beta_{1}x_{i})(1-\beta_{0}-\beta_{1}x_{i})
+Var[\varepsilon_i] = \pi_i(1-\pi_i)
 \end{align*}
 \]</span></p>
-<p>Note that <span class="math inline">\(Var\{\varepsilon_i\}\)</span> depends on <span class="math inline">\(x_i\)</span>. Hence, the error variances will differ at different levels of X, and ordinary least squares will no longer be optimal.</p></li>
-<li><p><em>Constraints one Response Function</em>: Since the response function represents probabilities when the outcome variable is a 0, 1 indicator variable, the mean responses should be constrained as follows: <span class="math display">\[
+<p>Note that <span class="math inline">\(Var\{\varepsilon_i\}\)</span> depends on <span class="math inline">\(\pi_i\)</span>, which usually depends on <span class="math inline">\(x_i\)</span>. Hence, the error variances will differ at different levels of <span class="math inline">\(X\)</span>, and ordinary least squares will no longer be optimal.</p>
+</li>
+<li>
+<p><em>Constraints on the response function</em>: Since the response function represents probabilities when the outcome variable is a 0, 1 indicator variable, the mean responses should be constrained as follows: <span class="math display">\[
 0\le E\{Y\}=\pi \le 1
 \]</span></p>
 <p>The difficulties created by the need for the restriction on the response function are the most serious.</p>
 <p>One could use weighted least squares to handle the problem of unequal error variances.</p>
 <p>In addition, with large sample sizes the method of least squares provides estimators that are asymptotically normal under quite general conditions, even if the distribution of the error terms is far from normal.</p>
-<p>However, the constraint on the mean responses to fall between 0 and 1 frequently will rule out a linear response function.</p></li>
+<p>However, the constraint on the mean responses to fall between 0 and 1 frequently will rule out a linear response function.</p>
+</li>
 </ol>
-</section>
-</section>
-<section id="sigmoidal-response-functions" class="level2" data-number="23.2">
-<h2 data-number="23.2" class="anchored" data-anchor-id="sigmoidal-response-functions"><span class="header-section-number">23.2</span> Sigmoidal Response Functions</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="The biggest problem is the probability scale">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>The biggest problem is the probability scale
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>For binary responses, nonnormality and nonconstant variance matter. But the most visible problem is that a straight-line model can predict values below 0 or above 1.</p>
+<p>Logistic regression solves this by modeling a transformed probability with a linear predictor while keeping the fitted probability itself between 0 and 1.</p>
+</div>
+</div>
+</div>
+</section></section><section id="sigmoidal-response-functions" class="level2" data-number="23.2"><h2 data-number="23.2" class="anchored" data-anchor-id="sigmoidal-response-functions">
+<span class="header-section-number">23.2</span> Sigmoidal Response Functions</h2>
 <p>In this section, we will examine two response functions for modeling binary responses.</p>
 <p>These functions are bounded between 0 and 1, have a characteristic <em>sigmoidal</em>- or S-shape, and approach 0 and 1 asymptotically.</p>
 <p>These functions arise naturally when the binary response variable results from a zero-one recoding (or dichotomization) of an underlying continuous response variable, and they are often appropriate for discrete binary responses as well.</p>
-<section id="probit-mean-response-function" class="level3" data-number="23.2.1">
-<h3 data-number="23.2.1" class="anchored" data-anchor-id="probit-mean-response-function"><span class="header-section-number">23.2.1</span> Probit Mean Response Function</h3>
+<section id="probit-mean-response-function" class="level3" data-number="23.2.1"><h3 data-number="23.2.1" class="anchored" data-anchor-id="probit-mean-response-function">
+<span class="header-section-number">23.2.1</span> Probit Mean Response Function</h3>
 <p>Consider a health researcher studying the effect of a mother’s use of alcohol (<span class="math inline">\(x\)</span> -an index of degree of alcohol use during pregnancy) on the duration of her pregnancy (<span class="math inline">\(y^C\)</span>).</p>
 <p>Here we use the superscript <span class="math inline">\(c\)</span> to emphasize that the response variable, pregnancy duration, is a <em>continuous</em> response.</p>
 <p>This can be represented by a simple linear regression model: <span class="math display">\[
@@ -459,8 +521,8 @@ P\left(y_{i}=1\right)=\pi_{i} &amp; =P\left(y_{i}^{c}\le38\right)\\
 \end{align*}
 \]</span> where <span class="math display">\[
 \begin{align*}
-\beta_{0}^{c} &amp; =\frac{38-\beta_{0}^{c}}{\sigma_{c}}\\
-\beta_{1}^{c} &amp; =-\frac{\beta_{1}^{c}}{\sigma_{c}}\\
+\beta_{0}^{*} &amp; =\frac{38-\beta_{0}^{c}}{\sigma_{c}}\\
+\beta_{1}^{*} &amp; =-\frac{\beta_{1}^{c}}{\sigma_{c}}\\
 Z &amp; =\frac{\varepsilon_{i}^{c}}{\sigma_{c}}.
 \end{align*}
 \]</span></p>
@@ -482,26 +544,109 @@ E\left[ y_{i}\right]  &amp; =\pi_{i}=\Phi\left(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\
 \end{align*}
 \]</span></p>
 <p>The resulting expression <span class="math inline">\(\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}\)</span> is called the probit response function, or more generally, the linear predictor.</p>
-<section id="example-beta_00" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_00">Example: <span class="math inline">\(\beta_0^*=0\)</span>}</h4>
-<p>black line: <span class="math inline">\(\beta_1^*=5\)</span></p>
-<p>red line: <span class="math inline">\(\beta_1^*=1\)</span></p>
-<p><img src="ex1.png" class="img-fluid"></p>
-</section>
-<section id="example-beta_1-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_1-1">Example: <span class="math inline">\(\beta_1^*=-1\)</span>}</h4>
-<p>black line: <span class="math inline">\(\beta_0^*=0\)</span></p>
-<p>red line: <span class="math inline">\(\beta_0^*=5\)</span></p>
-<p><img src="ex2.png" class="img-fluid"></p>
-</section>
-</section>
-</section>
-<section id="logistic-mean-response-function" class="level2" data-number="23.3">
-<h2 data-number="23.3" class="anchored" data-anchor-id="logistic-mean-response-function"><span class="header-section-number">23.3</span> Logistic Mean Response Function</h2>
+<div id="exm-23_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>How probit coefficients affect the S-shaped curve
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The probit mean response function is</p>
+<p><span class="math display">\[
+\pi_i = \Phi(\beta_0^*+\beta_1^*x_i).
+\]</span></p>
+<p>The intercept shifts the curve left or right, while the slope controls how quickly the probability changes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">probit_scenario_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Same intercept, steeper slope"</span>,</span>
+<span>  <span class="st">"Different intercept, same slope"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">probit_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html">expand_grid</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, length.out <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>,</span>
+<span>  scenario <span class="op">=</span> <span class="va">probit_scenario_levels</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    scenario <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">scenario</span>, levels <span class="op">=</span> <span class="va">probit_scenario_levels</span><span class="op">)</span>,</span>
+<span>    beta_0 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"Same intercept, steeper slope"</span>, <span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    beta_1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">scenario</span> <span class="op">==</span> <span class="st">"Same intercept, steeper slope"</span>, <span class="fl">1.5</span>, <span class="fl">1</span><span class="op">)</span>,</span>
+<span>    probability <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">pnorm</a></span><span class="op">(</span><span class="va">beta_0</span> <span class="op">+</span> <span class="va">beta_1</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">probit_grid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">probability</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"#0072B2"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">scenario</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">pi</span><span class="op">)</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Probit response curves"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="23_Logistic_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" alt="Probit response curves showing how the intercept shifts the curve and how the slope changes its steepness." width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Both panels keep the fitted probability between 0 and 1. The curve changes on the probability scale, but the probit transformation changes linearly with <span class="math inline">\(x\)</span>.</p>
+</div>
+</div>
+</section></section><section id="logistic-mean-response-function" class="level2" data-number="23.3"><h2 data-number="23.3" class="anchored" data-anchor-id="logistic-mean-response-function">
+<span class="header-section-number">23.3</span> Logistic Mean Response Function</h2>
 <p>We have seen that the assumption of normally distributed errors for the underlying continuous response variable led to the use of the standard normal cumulative distribution function, <span class="math inline">\(\Phi\)</span> to model <span class="math inline">\(\pi_i\)</span>.</p>
 <p>An alternative error distribution that is very similar to the normal distribution is the <em>logistic</em> distribution.</p>
-<p>Plots of the standard normal density function and the logistic density function, each with mean zero and variance one are nearly indistinguishable, although the logistic distribution has slightly heavier tails.</p>
-<p><img src="dists.png" class="img-fluid"></p>
+<p>Plots of the standard normal density function and the logistic density function, each with mean zero and variance one, are very similar. The logistic distribution has slightly heavier tails.</p>
+<div id="exm-23_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Normal and logistic densities are similar
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following plot compares the standard normal density to a rescaled logistic density with mean 0 and variance 1.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">density_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, length.out <span class="op">=</span> <span class="fl">400</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    normal <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">dnorm</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>,</span>
+<span>    logistic <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">dlogis</a></span><span class="op">(</span><span class="va">x</span>, scale <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">3</span><span class="op">)</span> <span class="op">/</span> <span class="va">pi</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">normal</span>, <span class="va">logistic</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="st">"distribution"</span>,</span>
+<span>    values_to <span class="op">=</span> <span class="st">"density"</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">density_grid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">density</span>, color <span class="op">=</span> <span class="va">distribution</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"value"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"density"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Distribution"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Normal and logistic densities"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="23_Logistic_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" alt="Density curves for a standard normal distribution and a variance-standardized logistic distribution." width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This similarity is one reason probit and logistic regression often produce similar fitted probabilities.</p>
+</div>
+</div>
 <p>Note the cumulative distribution function of a logistic random variable <span class="math inline">\(\varepsilon_{L}\)</span> having mean 0 and standard deviation <span class="math inline">\(\sigma=\pi/\sqrt{3}\)</span> is: <span class="math display">\[
 \begin{align*}
 F_{L}\left(\varepsilon_{L}\right) &amp; =\frac{\exp\left(\varepsilon_{L}\right)}{1+\exp\left(\varepsilon_{L}\right)}
@@ -509,7 +654,7 @@ F_{L}\left(\varepsilon_{L}\right) &amp; =\frac{\exp\left(\varepsilon_{L}\right)}
 \]</span></p>
 <p>Suppose now that <span class="math inline">\(\varepsilon_{i}^{c}\)</span> has a logistic distribution with mean 0 and standard deviation <span class="math inline">\(\sigma_{c}\)</span>. Then we have <span class="math display">\[
 \begin{align*}
-P\left(y_{i}=1\right) &amp; =P\left(\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\beta_{0}^{*}+\beta_{1}^{*}x_{1}\right)
+P\left(y_{i}=1\right) &amp; =P\left(\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
 \end{align*}
 \]</span> where <span class="math inline">\(\varepsilon_{i}^{c}/\sigma_{c}\)</span> follows a logistic distribution with mean zero and standard deviation one.</p>
 <p>Multiplying both sides of the inequality inside the probability statement on the right by <span class="math inline">\(\pi/\sqrt{3}\)</span> gives us <span class="math display">\[
@@ -535,29 +680,139 @@ E\left[ y_{i}\right]  &amp; =\pi_{i}\\
 \]</span></p>
 <p>Applying the inverse of the cumulative distribution function <span class="math inline">\(F_{L}\)</span> gives <span class="math display">\[
 \begin{align*}
-F_{L}^{-1}\left(\pi_{i}\right) &amp; =\beta_{0}+\beta_{1}x_{1}=\pi_{i}^{\prime}
+F_{L}^{-1}\left(\pi_{i}\right) &amp; =\beta_{0}+\beta_{1}x_{i}=\pi_{i}^{\prime}
 \end{align*}
 \]</span></p>
 <p><span class="math inline">\(F_{L}^{-1}\left(\pi_{i}\right)\)</span> is called the <em>logit transformation</em> and is given by <span class="math display">\[
 \begin{align*}
 F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 \end{align*}
-\]</span> where the ratio <span class="math inline">\(\pi_{i}/\left(1-\pi_{i}\right)\)</span> is called the <em>odds} </em>ratio}.</p>
-<section id="example-beta_00-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_00-1">Example: <span class="math inline">\(\beta_0^*=0\)</span></h4>
-<p>black line: <span class="math inline">\(\beta_1^*=5\)</span></p>
-<p>red line: <span class="math inline">\(\beta_1^*=1\)</span></p>
-<p><img src="ex3.png" class="img-fluid"></p>
-</section>
-<section id="example-beta_1-1-1" class="level4">
-<h4 class="anchored" data-anchor-id="example-beta_1-1-1">Example: <span class="math inline">\(\beta_1^*=-1\)</span></h4>
-<p>black line: <span class="math inline">\(\beta_0^*=0\)</span></p>
-<p>red line: <span class="math inline">\(\beta_0^*=5\)</span></p>
-<p><img src="ex4.png" class="img-fluid"></p>
-</section>
-</section>
-<section id="interpretation-of-the-coefficients" class="level2" data-number="23.4">
-<h2 data-number="23.4" class="anchored" data-anchor-id="interpretation-of-the-coefficients"><span class="header-section-number">23.4</span> Interpretation of the Coefficients</h2>
+\]</span> where the ratio <span class="math inline">\(\pi_{i}/\left(1-\pi_{i}\right)\)</span> is called the <strong>odds</strong>.</p>
+<div id="exm-23_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>How logistic coefficients affect the probability curve
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The logistic mean response function is</p>
+<p><span class="math display">\[
+\pi_i = \frac{1}{1+\exp(-\beta_0-\beta_1x_i)}.
+\]</span></p>
+<p>The slope <span class="math inline">\(\beta_1\)</span> determines whether the probability increases or decreases as <span class="math inline">\(x\)</span> increases. Its magnitude controls how steeply the transition occurs.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">logistic_slope_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Negative slope"</span>,</span>
+<span>  <span class="st">"Small positive slope"</span>,</span>
+<span>  <span class="st">"Large positive slope"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">logistic_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html">expand_grid</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span>, length.out <span class="op">=</span> <span class="fl">200</span><span class="op">)</span>,</span>
+<span>  slope <span class="op">=</span> <span class="va">logistic_slope_levels</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    slope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">slope</span>, levels <span class="op">=</span> <span class="va">logistic_slope_levels</span><span class="op">)</span>,</span>
+<span>    beta_0 <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    beta_1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>      <span class="va">slope</span> <span class="op">==</span> <span class="st">"Negative slope"</span> <span class="op">~</span> <span class="op">-</span><span class="fl">1</span>,</span>
+<span>      <span class="va">slope</span> <span class="op">==</span> <span class="st">"Small positive slope"</span> <span class="op">~</span> <span class="fl">0.7</span>,</span>
+<span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">2</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    probability <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">beta_0</span> <span class="op">+</span> <span class="va">beta_1</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">logistic_grid</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">probability</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>linewidth <span class="op">=</span> <span class="fl">1</span>, color <span class="op">=</span> <span class="st">"#0072B2"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">slope</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="va">pi</span><span class="op">)</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Logistic response curves"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/lims.html">ylim</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="23_Logistic_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" alt="Logistic response curves for negative, small positive, and large positive slopes." width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The fitted relationship is linear on the logit scale, but it is S-shaped on the probability scale.</p>
+</div>
+</div>
+<div id="exm-23_5" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Probabilities, odds, and logits
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The logit transformation converts a probability to log-odds:</p>
+<p><span class="math display">\[
+\log\left(\frac{\pi}{1-\pi}\right).
+\]</span></p>
+<p>The table below shows how probabilities, odds, and logits are connected.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  probability <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.10</span>, <span class="fl">0.25</span>, <span class="fl">0.50</span>, <span class="fl">0.75</span>, <span class="fl">0.90</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    odds <span class="op">=</span> <span class="va">probability</span> <span class="op">/</span> <span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">probability</span><span class="op">)</span>,</span>
+<span>    logit <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">odds</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">probability</th>
+<th style="text-align: right;">odds</th>
+<th style="text-align: right;">logit</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.10</td>
+<td style="text-align: right;">0.111</td>
+<td style="text-align: right;">-2.197</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.25</td>
+<td style="text-align: right;">0.333</td>
+<td style="text-align: right;">-1.099</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.50</td>
+<td style="text-align: right;">1.000</td>
+<td style="text-align: right;">0.000</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.75</td>
+<td style="text-align: right;">3.000</td>
+<td style="text-align: right;">1.099</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.90</td>
+<td style="text-align: right;">9.000</td>
+<td style="text-align: right;">2.197</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>When <span class="math inline">\(\pi = 0.50\)</span>, the odds are 1 and the logit is 0. Probabilities below 0.50 have negative logits, and probabilities above 0.50 have positive logits.</p>
+</div>
+</div>
+</section><section id="interpretation-of-the-coefficients" class="level2" data-number="23.4"><h2 data-number="23.4" class="anchored" data-anchor-id="interpretation-of-the-coefficients">
+<span class="header-section-number">23.4</span> Interpretation of the Coefficients</h2>
 <p>The interpretation of the estimated regression coefficient <span class="math inline">\(\hat{\beta}_1\)</span> in the fitted logistic response function is not the straightforward interpretation of the slope in a linear regression model.</p>
 <p>The reason is that the effect of a unit increase in <span class="math inline">\(x\)</span> varies for the logistic regression model according to the location of the starting point on the <span class="math inline">\(x\)</span> scale.</p>
 <p>An interpretation of <span class="math inline">\(\hat{\beta}_1\)</span> is found in the property of the fitted logistic function that the estimated odds <span class="math display">\[
@@ -587,6 +842,258 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <p>Taking antilogs (exponentials) of each side, we see that the estimated ratio of the odds, called the odds ratio, <span class="math inline">\(\hat{OR}\)</span>, is <span class="math display">\[
 \hat{OR} = \frac{\text{odds}_2}{\text{odds}_1}=\exp(\hat{\beta}_1)
 \]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="A logistic slope is not a probability slope">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A logistic slope is not a probability slope
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>In simple linear regression, a slope describes an additive change in the mean response. In logistic regression, <span class="math inline">\(\beta_1\)</span> describes an additive change in <strong>log-odds</strong>.</p>
+<p>After exponentiating, <span class="math inline">\(\exp(\beta_1)\)</span> describes a multiplicative change in <strong>odds</strong>, not a direct additive change in probability.</p>
+</div>
+</div>
+</div>
+<div id="exm-23_6" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 23.6</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting a logistic regression model in R
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the <code>mtcars</code> data, the variable <code>am</code> equals 1 for manual transmission and 0 for automatic transmission. Suppose we model the probability that a car has manual transmission using weight, <code>wt</code>, measured in thousands of pounds.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars_logistic_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span></span>
+<span>  <span class="va">am</span> <span class="op">~</span> <span class="va">wt</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span>,</span>
+<span>  family <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/family.html">binomial</a></span><span class="op">(</span>link <span class="op">=</span> <span class="st">"logit"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/coef.html">coef</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">mtcars_logistic_fit</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"term"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>odds_ratio <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="va">Estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 16%">
+<col style="width: 12%">
+<col style="width: 15%">
+<col style="width: 11%">
+<col style="width: 26%">
+<col style="width: 16%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">Estimate</th>
+<th style="text-align: right;">Std. Error</th>
+<th style="text-align: right;">z value</th>
+<th style="text-align: right;">Pr(&gt;|z|)</th>
+<th style="text-align: right;">odds_ratio</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">12.0404</td>
+<td style="text-align: right;">4.5097</td>
+<td style="text-align: right;">2.6699</td>
+<td style="text-align: right;">0.0076</td>
+<td style="text-align: right;">169459.5711</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">wt</td>
+<td style="text-align: right;">-4.0240</td>
+<td style="text-align: right;">1.4364</td>
+<td style="text-align: right;">-2.8014</td>
+<td style="text-align: right;">0.0051</td>
+<td style="text-align: right;">0.0179</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The coefficient of <code>wt</code> is negative, so heavier cars are estimated to have lower odds of manual transmission. The odds ratio <span class="math inline">\(\exp(\hat{\beta}_1)\)</span> gives the multiplicative change in the odds for each additional 1000 pounds.</p>
+<p>We can also compute fitted probabilities for two car weights.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">2.5</span>, <span class="fl">3.5</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    predicted_probability <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span></span>
+<span>      <span class="va">mtcars_logistic_fit</span>,</span>
+<span>      newdata <span class="op">=</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>wt <span class="op">=</span> <span class="va">wt</span><span class="op">)</span>,</span>
+<span>      type <span class="op">=</span> <span class="st">"response"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">wt</th>
+<th style="text-align: right;">predicted_probability</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">0.879</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">0.115</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The probability decreases as weight increases, but the size of the probability change depends on where we are on the S-shaped curve.</p>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="23.5"><h2 data-number="23.5" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">23.5</span> Recap</h2>
+<p>In this chapter, we introduced logistic regression as a model for binary response variables.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Binary response</strong></td>
+<td>A response variable with two possible outcomes, often coded 0 and 1.</td>
+</tr>
+<tr class="even">
+<td><strong>Bernoulli response</strong></td>
+<td>A random variable that equals 1 with probability <span class="math inline">\(\pi\)</span> and 0 with probability <span class="math inline">\(1-\pi\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Mean of a binary response</strong></td>
+<td>For <span class="math inline">\(Y \in \{0,1\}\)</span>, <span class="math inline">\(E(Y)=P(Y=1)=\pi\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Linear probability model</strong></td>
+<td>A linear model applied directly to a binary response; it can produce fitted values outside <span class="math inline">\([0,1]\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Nonconstant variance</strong></td>
+<td>For a Bernoulli response, <span class="math inline">\(Var(Y)=\pi(1-\pi)\)</span>, so the variance depends on the probability.</td>
+</tr>
+<tr class="even">
+<td><strong>Sigmoidal response function</strong></td>
+<td>An S-shaped function that stays between 0 and 1.</td>
+</tr>
+<tr class="odd">
+<td><strong>Probit model</strong></td>
+<td>A binary-response model using the standard normal cumulative distribution function, <span class="math inline">\(\Phi\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Logistic model</strong></td>
+<td>A binary-response model using the logistic cumulative distribution function.</td>
+</tr>
+<tr class="odd">
+<td><strong>Linear predictor</strong></td>
+<td>The quantity <span class="math inline">\(\eta_i=\beta_0+\beta_1x_i\)</span>, which is linear in the model parameters.</td>
+</tr>
+<tr class="even">
+<td><strong>Logit transformation</strong></td>
+<td>The transformation <span class="math inline">\(\log\left(\frac{\pi}{1-\pi}\right)\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Odds</strong></td>
+<td>The ratio <span class="math inline">\(\frac{\pi}{1-\pi}\)</span>, comparing the probability of success to the probability of failure.</td>
+</tr>
+<tr class="even">
+<td><strong>Odds ratio</strong></td>
+<td>A ratio of two odds; in simple logistic regression, <span class="math inline">\(\exp(\beta_1)\)</span> is the odds ratio for a one-unit increase in <span class="math inline">\(x\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Coefficient interpretation</strong></td>
+<td>Logistic coefficients are additive on the log-odds scale and multiplicative on the odds scale.</td>
+</tr>
+<tr class="even">
+<td><strong>Fitted probability</strong></td>
+<td>A model-based estimate of <span class="math inline">\(P(Y=1)\)</span> for given predictor values.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="23.6"><h2 data-number="23.6" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">23.6</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why does the mean of a binary response equal a probability?</p></li>
+<li><p>What are the two possible values of a Bernoulli response coded as 0 and 1?</p></li>
+<li><p>Why can ordinary least squares be awkward for binary response data?</p></li>
+<li><p>What is the most serious limitation of using a straight-line response function for probabilities?</p></li>
+<li><p>What does it mean for a response function to be sigmoidal?</p></li>
+<li><p>How are the probit and logistic mean response functions similar?</p></li>
+<li><p>What is the linear predictor in simple logistic regression?</p></li>
+<li><p>What is the logit transformation?</p></li>
+<li><p>What are odds, in words?</p></li>
+<li><p>If a probability is 0.50, what are the odds and logit?</p></li>
+<li><p>Why is a logistic regression slope not interpreted like a linear regression slope?</p></li>
+<li><p>What does <span class="math inline">\(\exp(\beta_1)\)</span> represent in simple logistic regression?</p></li>
+<li><p>If <span class="math inline">\(\exp(\beta_1)&gt;1\)</span>, what does that imply about the odds as <span class="math inline">\(x\)</span> increases?</p></li>
+<li><p>If <span class="math inline">\(\exp(\beta_1)&lt;1\)</span>, what does that imply about the odds as <span class="math inline">\(x\)</span> increases?</p></li>
+<li><p>Why can the effect of <span class="math inline">\(x\)</span> on probability depend on the starting value of <span class="math inline">\(x\)</span>?</p></li>
+<li><p>What does <code>type = "response"</code> return when using <code><a href="https://rdrr.io/r/stats/predict.html">predict()</a></code> with a logistic regression model in R?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>A binary response can only be 0 or 1.</strong> Its expected value is <span class="math inline">\(1\cdot P(Y=1)+0\cdot P(Y=0)=P(Y=1)\)</span>.</p></li>
+<li><p><strong>The response equals either 0 or 1.</strong> Usually 1 represents the event or success of interest, and 0 represents its absence.</p></li>
+<li><p><strong>Binary data violate several usual linear-model assumptions.</strong> The errors are not normally distributed, the variance is not constant, and fitted values may fall outside the probability range.</p></li>
+<li><p><strong>Probabilities must stay between 0 and 1.</strong> A straight line can go below 0 or above 1, which produces impossible fitted probabilities.</p></li>
+<li><p><strong>It is S-shaped and bounded.</strong> A sigmoidal function approaches 0 and 1 gradually and never leaves the probability range.</p></li>
+<li><p><strong>Both map a linear predictor to a probability.</strong> Probit uses the standard normal cumulative distribution function, while logistic regression uses the logistic cumulative distribution function.</p></li>
+<li><p><strong>The linear predictor is <span class="math inline">\(\eta_i=\beta_0+\beta_1x_i\)</span>.</strong> It is the part of the model that is linear in the coefficients.</p></li>
+<li><p><strong>The logit is the log of the odds.</strong> It is <span class="math inline">\(\log\left(\frac{\pi}{1-\pi}\right)\)</span>.</p></li>
+<li><p><strong>Odds compare success to failure.</strong> If the probability of success is <span class="math inline">\(\pi\)</span>, then the odds are <span class="math inline">\(\pi/(1-\pi)\)</span>.</p></li>
+<li><p><strong>The odds are 1 and the logit is 0.</strong> A probability of 0.50 means success and failure are equally likely.</p></li>
+<li><p><strong>The slope is on the log-odds scale.</strong> It describes the additive change in log-odds for a one-unit increase in <span class="math inline">\(x\)</span>, not an additive change in probability.</p></li>
+<li><p><strong>It is an odds ratio.</strong> It gives the multiplicative change in the odds for a one-unit increase in <span class="math inline">\(x\)</span>.</p></li>
+<li><p><strong>The odds increase.</strong> An odds ratio greater than 1 means the odds of <span class="math inline">\(Y=1\)</span> are multiplied upward as <span class="math inline">\(x\)</span> increases.</p></li>
+<li><p><strong>The odds decrease.</strong> An odds ratio less than 1 means the odds of <span class="math inline">\(Y=1\)</span> are multiplied downward as <span class="math inline">\(x\)</span> increases.</p></li>
+<li><p><strong>The logistic curve is not a straight line on the probability scale.</strong> The same change in <span class="math inline">\(x\)</span> can produce a small probability change near 0 or 1 and a larger change near the middle of the curve.</p></li>
+<li><p><strong>It returns fitted probabilities.</strong> With <code>family = binomial(link = "logit")</code>, <code>type = "response"</code> converts predictions back to the probability scale.</p></li>
+</ol>
+</div>
+</div>
+</div>
 <!-- ## Multiple Logistic Regression} -->
 <!-- The simple logistic regression model  is easily extended to more than one predictor -->
 <!-- variable.  -->
@@ -1038,10 +1545,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <!-- \marginpar{} -->
 
 
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -1440,9 +1944,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
       }
     }
   });
-  </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+  </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./22_Validation.html" class="pagination-link" aria-label="Model Validation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">22</span>&nbsp; <span class="chapter-title">Model Validation</span></span>
       </a>          
@@ -1454,20 +1956,6 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>STA 3386</p>
-</div>   
-    <div class="nav-footer-center">
-      &nbsp;
-    </div>
-    <div class="nav-footer-right">
-<p>Fall 2024</p>
-</div>
-  </div>
-</footer>
-
 
 
 
