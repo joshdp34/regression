@@ -101,8 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<style>
+}</script><style>
 div.callout-example.callout {
   border-left-color: #008000;
 }
@@ -585,7 +584,7 @@ Var(b_0)
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Example</span>Example 4.3: Why spread in $x$ matters
+<span class="screen-reader-only">Example</span>Example 4.3: Why spread in x matters
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -736,39 +735,6 @@ Var(\hat{\beta}_1) &amp;= Var(b_1)+\sigma^2\sum d_i^2.
 <p>If both methods are linear and unbiased, the Gauss-Markov Theorem says the least squares slope estimator has the smallest possible variance among methods of that type. In plain language, among linear unbiased estimators, least squares gives the most stable slope estimates.</p>
 </div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="Big picture: from assumptions to inference">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Big picture: from assumptions to inference
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>The pieces in this chapter fit together like this:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"></figure><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-  A["Model assumptions&lt;br/&gt;mean zero errors&lt;br/&gt;constant variance&lt;br/&gt;normality&lt;br/&gt;independence"] --&gt; B["Properties of least squares&lt;br/&gt;unbiased estimators&lt;br/&gt;variance formulas&lt;br/&gt;BLUE"]
-  B --&gt; C["Sampling distribution&lt;br/&gt;how b1 varies&lt;br/&gt;from sample to sample"]
-  C --&gt; D["Studentized score&lt;br/&gt;replace unknown sigma&lt;br/&gt;with estimated s"]
-  D --&gt; E["Slope inference&lt;br/&gt;t test for beta1&lt;br/&gt;confidence interval"]
-</pre>
-</div>
-<p></p>
-</div>
-</div>
-</div>
-<p>The important story is not just that formulas exist. The assumptions give us a probability model for the data; that probability model gives us a sampling distribution for <span class="math inline">\(b_1\)</span>; and that sampling distribution makes hypothesis tests and confidence intervals possible.</p>
-</div>
-</div>
-</div>
 </section><section id="sampling-distribution-for-b_1" class="level2" data-number="4.5"><h2 data-number="4.5" class="anchored" data-anchor-id="sampling-distribution-for-b_1">
 <span class="header-section-number">4.5</span> Sampling Distribution for <span class="math inline">\(b_1\)</span>
 </h2>
@@ -844,7 +810,7 @@ t=\frac{b_1-\beta_1}{\sqrt{s^2/SS_{xx}}}.
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -853,7 +819,7 @@ t=\frac{b_1-\beta_1}{\sqrt{s^2/SS_{xx}}}.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div id="callout-10" class="callout-10-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>It is important to note the following theorem from mathematical statistics, presented here without proof.</p>
 <div id="thm-04_3" class="theorem">
@@ -908,7 +874,7 @@ b_1 \pm t_{\alpha/2}s_{b_1}
 s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
 \end{align*}\]</span> and <span class="math inline">\(t_{\alpha/2}\)</span> is the appropriate critical value from a <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-2\)</span> degrees of freedom.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="What the slope test does not say">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -917,7 +883,7 @@ s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>Rejecting <span class="math inline">\(H_0:\beta_1=0\)</span> means the data provide evidence of a nonzero linear association between <span class="math inline">\(x\)</span> and the mean of <span class="math inline">\(y\)</span>.</p>
 <p>It does not automatically prove causation, and it does not guarantee that a straight-line model is the best possible description of the relationship.</p>
@@ -925,7 +891,7 @@ s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
 </div>
 </div>
 <div class="callout callout-style-default callout-warning callout-titled" title="Common mistake: nonsignificant does not mean no relationship">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -934,7 +900,7 @@ s_{b_1} = \frac{s}{\sqrt{SS_{xx}}},
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>If we fail to reject <span class="math inline">\(H_0:\beta_1=0\)</span>, we should not say, “There is no relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.”</p>
 <p>A nonsignificant slope test means the data did not provide strong enough evidence of a nonzero <em>linear</em> slope under the model assumptions. There may be no relationship, but there may also be a weak relationship, a noisy dataset, a small sample size, or a relationship that is not well described by a straight line.</p>
@@ -987,7 +953,7 @@ H_a &amp;: \beta_1\ne 0
 \end{align*}\]</span> is approximately <span class="math inline">\(1.29e-10\)</span>.</p>
 <p>Because this p-value is very small, we have strong evidence that the true population slope relating automobile weight to fuel economy is different from 0.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Statistical significance vs. practical importance">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -996,7 +962,7 @@ H_a &amp;: \beta_1\ne 0
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>A small p-value tells us there is evidence that the population slope is not 0. It does not, by itself, tell us whether the effect is large enough to matter in practice.</p>
 <p>To judge practical importance, we should also interpret the estimated slope, the response units, the predictor units, the confidence interval, and the scientific or real-world context.</p>
@@ -1075,7 +1041,7 @@ wt          -6.486308 -4.202635</code></pre>
 </table></section><section id="check-your-understanding" class="level2" data-number="4.8"><h2 data-number="4.8" class="anchored" data-anchor-id="check-your-understanding">
 <span class="header-section-number">4.8</span> Check your understanding</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Problems">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1084,7 +1050,7 @@ wt          -6.486308 -4.202635</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>Why do the properties <span class="math inline">\(\sum k_i=0\)</span> and <span class="math inline">\(\sum k_ix_i=1\)</span> matter when finding <span class="math inline">\(E(b_1)\)</span>?</p></li>
@@ -1102,7 +1068,7 @@ wt          -6.486308 -4.202635</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1111,7 +1077,7 @@ wt          -6.486308 -4.202635</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p><strong>They make the expectation simplify.</strong> When <span class="math inline">\(E(b_1)\)</span> is expanded, the term involving <span class="math inline">\(\beta_0\)</span> is multiplied by <span class="math inline">\(\sum k_i\)</span>, which equals 0, and the term involving <span class="math inline">\(\beta_1\)</span> is multiplied by <span class="math inline">\(\sum k_ix_i\)</span>, which equals 1. That leaves <span class="math inline">\(E(b_1)=\beta_1\)</span>.</p></li>

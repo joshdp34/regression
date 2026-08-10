@@ -159,7 +159,7 @@ s^2\left(
 \end{align}
 $${#eq-w2_20}
 
-::: {.example title="Example 6.2: Interval width near and far from $\bar{x}$"}
+::: {.example title="Example 6.2: Interval width near and far from the mean of x"}
 
 The confidence interval for the mean response is narrowest near $\bar{x}$ and wider farther from $\bar{x}$. We can see this in the `trees` data by plotting the half-width of the confidence interval across possible `Girth` values.
 

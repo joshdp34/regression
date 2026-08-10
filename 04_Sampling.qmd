@@ -211,7 +211,7 @@ Var(b_0)
 \end{align}
 $${#eq-w1_15}
 
-::: {.example title="Example 4.3: Why spread in $x$ matters"}
+::: {.example title="Example 4.3: Why spread in x matters"}
 
 The variance of the slope estimator is
 \begin{align*}
@@ -377,21 +377,7 @@ If both methods are linear and unbiased, the Gauss-Markov Theorem says the least
 
 :::
 
-::: {.callout-note collapse="false" title="Big picture: from assumptions to inference"}
 
-The pieces in this chapter fit together like this:
-
-```{mermaid}
-flowchart LR
-  A["Model assumptions<br/>mean zero errors<br/>constant variance<br/>normality<br/>independence"] --> B["Properties of least squares<br/>unbiased estimators<br/>variance formulas<br/>BLUE"]
-  B --> C["Sampling distribution<br/>how b1 varies<br/>from sample to sample"]
-  C --> D["Studentized score<br/>replace unknown sigma<br/>with estimated s"]
-  D --> E["Slope inference<br/>t test for beta1<br/>confidence interval"]
-```
-
-The important story is not just that formulas exist. The assumptions give us a probability model for the data; that probability model gives us a sampling distribution for $b_1$; and that sampling distribution makes hypothesis tests and confidence intervals possible.
-
-:::
 
 ## Sampling Distribution for $b_1$
 

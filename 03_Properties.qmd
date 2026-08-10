@@ -127,7 +127,7 @@ b_0
 
 :::
 
-::: {.example title="Example 3.2: Seeing $b_0$ and $b_1$ as weighted sums"}
+::: {.example title="Example 3.2: Seeing the intercept and slope as weighted sums"}
 
 Suppose we have three observations with predictor values
 \begin{align*}
@@ -346,7 +346,7 @@ The empirical rule applies to distributions that are mound-shaped and symmetric.
 
 :::
 
-::: {.example title="Example 3.5: Estimating $\sigma$ with the `mtcars` model"}
+::: {.example title="Example 3.5: Estimating the standard deviation with the `mtcars` model"}
 
 We can use the `summary()` function with the fitted `lm()` object to obtain summary statistics for the regression model.
 

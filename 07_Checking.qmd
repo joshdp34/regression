@@ -1,356 +1,555 @@
 # Checking the Linearity and Constant Variance Assumptions {#sec-checking}
 
-> "…the statistician knows…that in nature there never was a normal distribution, there never was a straight line, yet with normal and linear assumptions, known to be false, he can often derive results which match, to a useful approximation, those found in the real world." - George Box
+> "...the statistician knows...that in nature there never was a normal distribution, there never was a straight line, yet with normal and linear assumptions, known to be false, he can often derive results which match, to a useful approximation, those found in the real world." - George Box
 
+Regression assumptions are not usually true in a perfect mathematical sense. The practical question is whether the assumptions are reasonable enough for the fitted model, standard errors, intervals, and tests to be useful.
 
+This chapter focuses on two assumptions:
 
-
-
+1. the mean relationship between $x$ and $y$ is linear, and
+2. the error variance is constant across values of $x$.
 
 ## Residual Diagnostics
 
-
 ### Model Assumptions
- 
- Let's review the assumptions for the simple linear regression model:
 
-1. The *mean* of the probability distribution of $\varepsilon$ is 0.
-2. The *variance* of the probability distribution of $\varepsilon$ is *constant* for all settings of the independent variable $x$. 
-3. The probability distribution of $\varepsilon$ is *normal*.
-4. The errors associated with any two different observations are *independent*.
+Recall the assumptions for the simple linear regression model:
 
+1. The mean of the probability distribution of $\varepsilon$ is 0.
+2. The variance of the probability distribution of $\varepsilon$ is constant for all settings of the predictor variable $x$.
+3. The probability distribution of $\varepsilon$ is normal.
+4. The errors associated with different observations are independent.
 
+After fitting the model, we need to check whether these assumptions appear reasonable.
 
-After fitting the model, we will need to check these assumptions.
+::: {.callout-note collapse="false" title="Diagnostics are about reasonableness, not perfection"}
+
+Regression diagnostics rarely give a perfect yes/no answer. A diagnostic plot helps us decide whether an assumption violation is serious enough to affect the analysis.
+
+Small imperfections are expected. Large, systematic patterns are the warning signs.
+
+:::
 
 ### Residuals
- 
+
 We check the assumptions of the model by examining the residuals:
 $$
 \begin{align}
-{e_{i}  =y_{i}-\hat{y}_{i}}
+e_i=y_i-\hat{y}_i.
 \end{align}
 $${#eq-w1_19}
 
-We do this since the assumptions, with the exception of the linearity assumption,  are based on the error terms $\varepsilon_i$. We can think of $e_i$ as an observed value of $\varepsilon_i$.   
+We do this because the model assumptions are about the unobserved error terms $\varepsilon_i$. Since we do not observe $\varepsilon_i$, we use residuals $e_i$ as observable approximations.
 
+::: {.callout-note collapse="false" title="Errors versus residuals"}
+
+The true error term is
+\begin{align*}
+\varepsilon_i = y_i - E(y_i),
+\end{align*}
+which depends on the unknown population regression line.
+
+The residual is
+\begin{align*}
+e_i = y_i-\hat y_i,
+\end{align*}
+which depends on the fitted regression line from the sample.
+
+Diagnostics use residuals because errors are not observed.
+
+:::
 
 ### Properties of Residuals
 
-Below are some properties of the residuals:
+For the least squares line with an intercept, the residuals have several useful properties:
 $$
 \begin{align}
-\sum e_{i} & =0\\
-\sum x_{i}e_{i} & =0\\
-\sum\hat{y}_{i}e_{i} & =0 \\
-\sum y_{i} & =\sum\hat{y}_{i}
+\sum e_i &=0\\
+\sum x_ie_i &=0\\
+\sum \hat{y}_ie_i &=0\\
+\sum y_i &=\sum \hat{y}_i.
 \end{align}
 $${#eq-w1_20-23}
 
-
-Clearly, from @eq-w1_20-23, the mean of the residuals is
+From @eq-w1_20-23, the mean of the residuals is
 $$
 \begin{align}
-    \bar{e}_i=0
+\bar e=0.
 \end{align}
 $${#eq-w3_1}
 
-
-The variance of all $n$ residuals, $e_1,\ldots,e_n$ is
+The residual mean square is
 $$
 \begin{align}
-\frac{\sum\left(e_{i}-\bar{e}\right)^{2}}{n-2} & =\frac{\sum e_{i}^{2}}{n-2}\\
-& =\frac{SSE}{n-2}\\
-& =MSE\\
-& =s^{2}
+\frac{\sum (e_i-\bar e)^2}{n-2}
+&=\frac{\sum e_i^2}{n-2}\\
+&=\frac{SSE}{n-2}\\
+&=MSE\\
+&=s^2.
 \end{align}
 $${#eq-w3_2}
 
+::: {.example title="Why residuals sum to zero"}
 
+Suppose a fitted regression line has residuals
+\begin{align*}
+2,\quad -1,\quad 3,\quad -4.
+\end{align*}
 
+These residuals sum to 0:
+\begin{align*}
+2+(-1)+3+(-4)=0.
+\end{align*}
 
+This does not mean the model is good. It only means the least squares line with an intercept balances positive and negative residuals. A residual plot can still show curvature, nonconstant variance, outliers, or other problems even when the residuals sum to 0.
 
+:::
 
 ### Semistudentized Residuals
 
-It will be helpful to *studentize* each residuals. As always, we do
-this by subtracting off the mean, $\bar{e}_{i}$, and dividing by
-the standard error of $e_{i}$.
-
-
-We know by @eq-w3_1 that $\bar{e}_{i}=0$.
-
-
-In  @eq-w3_2, we said the variance of the sample of the $e_{i}$'s is MSE.
-For each individual $e_{i}$, the standard error is not quite $\sqrt{MSE}$.
-The actual standard error is dependent on the predictor variable(s).
-We will discuss this more in multiple regression.
-
-
-
-For now, we will use the approximation
-$\sqrt{MSE}$ and calculate
+It is often helpful to put residuals on a standardized scale. Since @eq-w3_1 tells us $\bar e=0$, a simple standardized version is
 \begin{align*}
-e_{i}^{*} & =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
-& =\frac{e_{i}}{\sqrt{MSE}}
+e_i^*
+&=\frac{e_i-\bar e}{\sqrt{MSE}}\\
+&=\frac{e_i}{\sqrt{MSE}}.
 \end{align*}
-We call $e_{i}^{*}$ the *semistudentized* residual since the standard
-error is an approximation.
 
+We call $e_i^*$ the *semistudentized residual* because $\sqrt{MSE}$ is only an approximation to the standard error of an individual residual. The exact standard error depends on the predictor value. We will discuss fully studentized residuals later.
 
+::: {.callout-note collapse="false" title="Why standardize residuals?"}
 
+Raw residuals are measured in the units of the response variable. Semistudentized residuals put residuals on a scale that is easier to compare across observations.
 
+A semistudentized residual near 0 means the observation is close to the fitted line. Values with larger absolute magnitude are farther from the fitted line relative to the model's typical residual size.
 
-
-
-
-
+:::
 
 ## The Linearity Assumption
 
-
 ### Residual Plots
 
-We can check the linearity assumption by plotting the residuals vs the *predictor*   variable or plotting the residuals vs the  *fitted*  values.
+We can check the linearity assumption by plotting the residuals versus the predictor variable or by plotting the residuals versus the fitted values.
 
+We usually begin with a scatterplot of $y$ versus $x$ to decide whether a straight-line relationship appears appropriate. Sometimes, however, curvature is easier to see in a residual plot than in the original scatterplot.
 
-We usually examine a *scatterplot* to determine if a linear relationship between $x$ and $y$ is appropriate. There are times when the scatterplot makes it difficult to see if a nonlinear relationship exists. This may be the case if the observed $y$ are close to the fitted line $\hat{y}_i$. This usually means the slope is steep.
+In a residual plot, we hope to see residuals randomly scattered around 0 with no systematic pattern.
 
+::: {.callout-note collapse="false" title="Reading residual plots for linearity"}
 
-::: {#exm-7_1}
+For the linearity assumption:
 
-## Weight and Height Data
+| Pattern in residual plot | Possible interpretation |
+|---|---|
+| Random scatter around 0 | Linear form may be reasonable |
+| Clear curve | Mean relationship may not be linear |
+| Several large isolated residuals | Possible outliers or unusual observations |
+| Pattern that changes over time/order | Possible independence issue |
 
-In this example, we will consider the weights (in kg) and heights (in m) of 16 women ages 30-39. The dataset is from kaggle.
-
-
-```{r message=FALSE, warning=F}
-library(tidyverse)
-
-dat = read_csv("Weight_Height.csv")
-
-ggplot(dat, aes(x=Weight, y=Height))+
-  geom_point()
-
-
-#fit the model
-fit = lm(Weight~Height, data=dat)
-
-#plot with regression line
-ggplot(dat, aes(x=Weight, y=Height))+
-  geom_point()+
-  geom_smooth(method="lm", formula=y~x, se=F)
-
-#make dataset with Weight, the fitted values, and residuals
-dat2 = tibble(x = dat$Weight, 
-              yhat = fit$fitted.values, 
-              e = fit$residuals)
-
-#plot x by residuals
-ggplot(dat2, aes(x=x, y=e))+
-  geom_point()+
-  geom_hline(yintercept = 0, col="red")
-
-#plot fitted values by residuals
-ggplot(dat2, aes(x=yhat, y=e))+
-  geom_point()+
-  geom_hline(yintercept = 0, col="red")
-
-```
+This chapter focuses on the first two patterns. Normality, independence, and outliers are discussed in later chapters.
 
 :::
 
+::: {.example title="Visual guide to residual plot patterns"}
 
+The plots below show three common residual-plot patterns.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+set.seed(3386)
+
+n_diag <- 90
+x_diag <- seq(0, 10, length.out = n_diag)
+
+ideal_resid <- rnorm(n_diag, mean = 0, sd = 1)
+curve_signal <- 0.20 * (x_diag - 5)^2
+curve_resid <- curve_signal - mean(curve_signal) + rnorm(n_diag, mean = 0, sd = 0.55)
+funnel_resid <- rnorm(n_diag, mean = 0, sd = 0.25 + 0.18 * x_diag)
+
+residual_patterns <- tibble(
+  x = rep(x_diag, times = 3),
+  residual = c(ideal_resid, curve_resid, funnel_resid),
+  pattern = rep(
+    c(
+      "Ideal: random scatter",
+      "Curvature: nonlinear mean",
+      "Funnel: nonconstant variance"
+    ),
+    each = n_diag
+  )
+)
+
+ggplot(residual_patterns, aes(x = x, y = residual)) +
+  geom_point(alpha = 0.75) +
+  geom_hline(yintercept = 0, color = "red") +
+  facet_wrap(~pattern, nrow = 1) +
+  labs(x = "Predictor or fitted value", y = "Residual")
+```
+
+The first plot is what we hope to see: random scatter around 0 with roughly constant spread. The second plot suggests the straight-line mean structure is missing curvature. The third plot suggests the error variance changes across the range of the predictor.
+
+:::
+
+::: {.callout-warning collapse="false" title="Look for patterns, not one odd point"}
+
+A single unusual residual does not automatically mean the linearity or constant variance assumption is violated.
+
+One odd point may be an outlier, a data-entry issue, or simply an unusual observation. Assumption concerns usually come from systematic patterns: curves, funnels, clusters, or trends that involve many observations.
+
+:::
+
+::: {#exm-7_1 .example title="Weight and height residual diagnostics"}
+
+In this example, we consider the weights, in kg, and heights, in m, of 16 women ages 30-39. The dataset is from Kaggle.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+height_weight <- read_csv("Weight_Height.csv", show_col_types = FALSE)
+
+ggplot(height_weight, aes(x = Height, y = Weight)) +
+  geom_point() +
+  labs(x = "Height (m)", y = "Weight (kg)")
+```
+
+Here, `Weight` is the response and `Height` is the predictor. We fit the simple linear regression model:
+
+```{r}
+#| message: false
+#| warning: false
+
+fit_hw <- lm(Weight ~ Height, data = height_weight)
+
+ggplot(height_weight, aes(x = Height, y = Weight)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(x = "Height (m)", y = "Weight (kg)")
+```
+
+Now create residual diagnostic plots:
+
+```{r}
+#| message: false
+#| warning: false
+
+height_weight_diag <- height_weight |>
+  mutate(
+    yhat = fitted(fit_hw),
+    e = resid(fit_hw),
+    e_star = e / sigma(fit_hw)
+  )
+
+ggplot(height_weight_diag, aes(x = Height, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0, col = "red") +
+  labs(x = "Height (m)", y = "Residual")
+
+ggplot(height_weight_diag, aes(x = yhat, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0, col = "red") +
+  labs(x = "Fitted value", y = "Residual")
+```
+
+The two residual plots contain the same information in simple linear regression because the fitted values are a linear function of the one predictor. We look for obvious curvature or other systematic structure. A random cloud around 0 supports the linearity assumption.
+
+:::
 
 ### Plotting against Predictor Variable or Fitted Values
 
-Plotting the residuals against $x$  will provide the same information as plotting the residuals against $\hat{y}$ for the simple linear regression model.
+In simple linear regression, plotting residuals against $x$ gives the same information as plotting residuals against $\hat y$, because $\hat y=b_0+b_1x$ is a linear transformation of $x$.
 
-
-When more predictor variables are considered, then plotting against the $x$ variables and plotting against $\hat{y}$ may provide different information. It is usually helpful to plot both in that case.
-
+When multiple predictor variables are used, plotting residuals against individual predictor variables and plotting residuals against fitted values can provide different information. It is usually helpful to examine both.
 
 ### Data Transformation for Linearity
 
-When the linearity assumption does not hold (as seen in the residual plots), then a *nonlinear* model may be considered or a *transformation* on either $x$ or $y$ can be attempted to make the relationship linear.
+When the linearity assumption does not appear reasonable, we may consider a nonlinear model or a transformation of $x$ or $y$.
 
+If the main concern is the form of the relationship between $x$ and the mean of $y$, transforming $x$ is often a good first option. Common transformations include
+\begin{align*}
+\sqrt{x},\qquad \log(x),\qquad x^p,
+\end{align*}
+where $p$ is some real number.
 
-### Transforming $x$
+Transforming the response variable $y$ can also help in some cases, but it may affect other assumptions, such as constant variance or normality of the errors.
 
-Transforming the response variable $y$ may lead to issues with other assumptions such as the
-*constant variance* assumption or the *normality* of $\varepsilon$ assumption.
+Sometimes a transformation is not enough. In that case, the simple linear regression model may need to be replaced by a more appropriate nonlinear model.
 
+::: {.example title="Curvature suggests a different mean structure"}
 
+Suppose a residual plot shows negative residuals at low values of $x$, positive residuals in the middle, and negative residuals again at high values of $x$.
 
-If our only concern is the linearity assumption, then transforming $x$ will be the best option. This transformation may be a square root transformation $\sqrt{X}$, a log transformation $\log{X}$, or some power transformation $X^{p}$ were $p$ is some real number.
+That pattern suggests the fitted line is missing curvature. The issue is not simply that a few points are unusual; the residuals are systematically arranged.
 
-
-Sometimes a transformation of $x$ will not be enough to satisfy the linearity assumption. In that case, the simple linear regression model should be abandoned in favor of a nonlinear model.
-
-
-
-## Homogeneity of Variance
-
-
-
-### Residual Plots
-
-As we did previously, we can plot the residuals against the predictor variable $x$ or against the fitted values $\hat{y}$ to help determine whether the variance of the error term $\varepsilon$ is *constant*.
-
-
-
-When the variance is constant, we say the model has *homoscedasticity*. When the variance is nonconstant, we say the model has *heteroscedasticity*.
-
-
-
-### Absolute Residuals and Squared Residuals
-
-When examining a residual plot for non-constant variance, we look for any clear changes in the spread of the residuals. One common clear pattern seen when heteroscedasticity is present is a *cone* pattern.
-
-
-We are usually not concerned about the sign of the residual when examining for heteroscedasticity. Thus, it is common to plot the *absolute* residuals or the *squared* residuals vs the predictor variable or fitted values.
-
-
-Usually a least squares line is then fit to the absolute residual or squared residuals plot. If this line has a significant slope, then this gives evidence that the variance is nonconstant.
-
-
-::: {#exm-w3_3_1}
-
-## Diastolic Blood Pressure Data
-
-We will model the diastolic blood pressure by the age of 54 healthy adult women. The data are found in Kutner et al[^1^].
-
-[^1^]: Kutner, M. H., Nachtsheim, C. J., Neter, J., & Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences.
-
-```{r message=FALSE, warning=F}
-library(tidyverse)
-
-dat = read.table("bloodpressure.txt", header=T)
-
-fit = lm(dbp~age, data=dat)
-
-#add the fit line without using geom_smooth
-ggplot(dat, aes(x=age, y=dbp))+
-  geom_point()+
-  geom_abline(slope = fit$coefficients[2],
-              intercept = fit$coefficients[1])
-
-```
-
-
-By examining the scatterplot of dbp vs age, we already see evidence of nonconstant variance.
-
-```{r message=FALSE, warning=FALSE}
-dat$e = fit |> resid()
-dat$yhat = fit |> fitted()
-
-#use the geom_smooth function to add a least squares line
-#for the residuals, the least squares line will always be #horizontal at 0
-ggplot(dat, aes(x=age, y=e))+
-  geom_point()+
-  geom_smooth(method = "lm",se = F)
-
-#plot the squared residuals and add least squares line
-ggplot(dat, aes(x=age, y=e^2))+
-  geom_point()+
-  geom_smooth(method = "lm",se = F)
-
-#plot the squared residuals and add least squares line
-ggplot(dat, aes(x=age, y=abs(e)))+
-  geom_point()+
-  geom_smooth(method = "lm",se = F)
-
-
-```
-
-In any of the residual plots we examine, we see the "cone" shape of the residuals which indicates the variance is nonconstant.
+Possible remedies include transforming $x$, adding a quadratic term such as $x^2$, or using a nonlinear model. The right choice depends on the scientific context and the shape of the relationship.
 
 :::
 
+## Homogeneity of Variance
 
+### Residual Plots
+
+As before, we can plot residuals against the predictor variable $x$ or against the fitted values $\hat y$ to help determine whether the variance of the error term $\varepsilon$ is constant.
+
+When the variance is constant, we say the model has *homoscedasticity*. When the variance is nonconstant, we say the model has *heteroscedasticity*.
+
+### Absolute Residuals and Squared Residuals
+
+When examining a residual plot for nonconstant variance, we look for clear changes in the spread of the residuals. One common pattern is a cone or funnel shape.
+
+Because variance is about spread rather than sign, it is often helpful to plot absolute residuals or squared residuals versus the predictor or fitted values.
+
+::: {.callout-note collapse="false" title="What nonconstant variance looks like"}
+
+For constant variance, the vertical spread of the residuals should be roughly similar across the range of $x$ or fitted values.
+
+Warning signs include:
+
+- residuals fanning out as $x$ increases,
+- residuals narrowing as $x$ increases,
+- one part of the plot having much more vertical spread than another part.
+
+:::
+
+::: {#exm-w3_3_1 .example title="Diastolic blood pressure data"}
+
+We will model diastolic blood pressure by age for 54 healthy adult women. The data are from Kutner et al. (2004), *Applied Linear Statistical Models*.
+
+```{r}
+#| message: false
+#| warning: false
+
+library(tidyverse)
+
+blood_pressure <- read.table("bloodpressure.txt", header = TRUE)
+
+fit_bp <- lm(dbp ~ age, data = blood_pressure)
+
+ggplot(blood_pressure, aes(x = age, y = dbp)) +
+  geom_point() +
+  geom_abline(
+    slope = coef(fit_bp)[2],
+    intercept = coef(fit_bp)[1]
+  ) +
+  labs(x = "Age", y = "Diastolic blood pressure")
+```
+
+The scatterplot already suggests that the spread of `dbp` may increase with age.
+
+```{r}
+#| message: false
+#| warning: false
+
+blood_pressure_diag <- blood_pressure |>
+  mutate(
+    e = resid(fit_bp),
+    yhat = fitted(fit_bp),
+    abs_e = abs(e),
+    squared_e = e^2
+  )
+
+ggplot(blood_pressure_diag, aes(x = age, y = e)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "red") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(x = "Age", y = "Residual")
+
+ggplot(blood_pressure_diag, aes(x = age, y = abs_e)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(x = "Age", y = "Absolute residual")
+
+ggplot(blood_pressure_diag, aes(x = age, y = squared_e)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE) +
+  labs(x = "Age", y = "Squared residual")
+```
+
+The residual plots show a cone-like pattern: the spread of residuals appears to increase as age increases. This is evidence against the constant variance assumption.
+
+:::
 
 ### Tests for Heteroscedasticity
 
 We can set up a hypothesis test for heteroscedasticity:
 \begin{align*}
-H_0:&\text{ the variance is constant}\\
-H_a:&\text{ the variance is non-constant}
+H_0 &: \text{the variance is constant}\\
+H_a &: \text{the variance is nonconstant}.
 \end{align*}
 
-The procedures we will use usually test for variance that increases or decreases over the values of $x$. That is, the spread of the points about the line is a cone shape.
+The procedures below usually test for variance that increases or decreases over the values of $x$. That is, they are designed to detect patterns such as cone-shaped residual plots.
 
+::: {.callout-warning collapse="false" title="Plots come first"}
 
+Formal tests can be useful, but they should not replace diagnostic plots.
 
-
-### Levene's Test and Brown-Forsythe Test
-
-The *Levene test*[^2^] starts by dividing the range of the predictor variable $x$ into $k$ intervals. For each of the intervals, calculate the mean of the residuals in that interval $\bar{e}_{j}$ where $j$ denotes the $j$th interval.
-
-[^2^]: Levene, H. (1960) Robust Tests for Equality of Variances. In: Olkin, I., Ed., *Contributions to Probability and Statistics*, Stanford University Press, Palo Alto, 278-292.
-
-
-Now, define the absolute deviation from the mean
-$$
-d_{ik}=|e_{ik}-\bar{e}_{j}|
-$$
-
-An ANOVA F-test is then performed on the $k$ groups. The ANOVA F-test will be discussed more later in the course. A small p-value is evidence that the variance is non-constant over the values of $x$.
-
-
-The *Brown-Forsythe test*[^3^] is a modification of the Levene test in which the median $\tilde{e}_k$ is used instead of the mean $\bar{e}_l$. This test is robust against nonnormal errors.
-
-[^3^]: Brown, M. B., & Forsythe, A. B. (1974). Robust tests for the equality of variances. *Journal of the American statistical association*, 69(346), 364-367.
-
-
-
-### Breusch-Pagan Test
-
-A second test for non-constant variance is the *Breusch-Pagan* test[^4^]. This test assumes the variance for each $\varepsilon_i$ is related to the values of $x$ in the following way:
-$$
-\ln \sigma^2_i = \gamma_0 + \gamma_1 X_i
-$$
-Hence, a linear regression is assumed between $\sigma^2$ and $x$. We can fit the line by squaring the residuals and regressing on $x$. The   third plot in example above shows the squared residuals plotted against $x$ and the fitted line.
-
-[^4^]: Breusch, T. S., & Pagan, A. R. (1979). A simple test for heteroscedasticity and random coefficient variation. *Econometrica: Journal of the econometric society*, 1287-1294.
-
-
-If the variance is non-constant, then the slope of this line will be non-zero. Thus, a test for the slope is conducted. A small p-value is evidence that the variance is non-constant.
-
-
-Because it is testing the slope, the Brown-Forsythe test assumes the error terms are independent and normally distributed.
-
-
-
-::: {#exm-w3_3_2}
-
-## @exm-w3_3_1 revisited 
-
-
-Let's examine the blood pressure data from @exm-w3_3_1 again.
-
-If you want the Brown-Forsythe test, then you will need to determine the $k$ groups yourself and then use the `bf.test` function in `onewaytests` package.
-
-
-
-In the `lmtest` package, the Breusch-Pagan test can be conducted by using the `bptest` function.
-
-```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-library(lmtest)
-
-dat = read.table("bloodpressure.txt", header=T)
-
-fit = lm(dbp~age, data=dat)
-
-#Breusch-Pagan test
-bptest(dbp~age, data=dat)
-
-```
-
-
-Since the p-value is low, then there is sufficient evidence to conclude the variance is not constant through different values of $x$.
+With small samples, tests may miss important visual patterns. With very large samples, tests may flag tiny departures that do not matter much in practice. Residual plots help us judge the size and shape of the problem.
 
 :::
 
+### Levene's Test and Brown-Forsythe Test
 
+Levene's test starts by dividing the range of the predictor variable $x$ into $k$ intervals. For each interval, we calculate the mean residual in that interval, denoted $\bar e_j$.
 
+Then we define the absolute deviation from the group mean:
+$$
+d_{ij}=|e_{ij}-\bar e_j|.
+$$
+
+An ANOVA F-test is performed on the $k$ groups. A small p-value is evidence that the variance is nonconstant across values of $x$.
+
+The Brown-Forsythe test is a modification of Levene's test that uses the median residual in each group instead of the mean. This makes the procedure more robust to nonnormal errors.
+
+### Breusch-Pagan Test
+
+A second test for nonconstant variance is the *Breusch-Pagan* test. This test assumes the error variance is related to the predictor values. One way to motivate the idea is
+$$
+\ln(\sigma_i^2)=\gamma_0+\gamma_1x_i.
+$$
+
+In practice, the test asks whether the residual variation systematically changes with the predictor or fitted values. A small p-value is evidence of nonconstant variance.
+
+::: {#exm-w3_3_2 .example title="Breusch-Pagan test for the blood pressure data"}
+
+Let's examine the blood pressure data from @exm-w3_3_1 again.
+
+In R, the Breusch-Pagan test can be conducted with the `bptest()` function from the `lmtest` package.
+
+```{r}
+#| warning: false
+#| message: false
+
+if (requireNamespace("lmtest", quietly = TRUE)) {
+  lmtest::bptest(fit_bp)
+} else {
+  "Install the lmtest package to run lmtest::bptest()."
+}
+```
+
+For these data, a small p-value would support what we saw in the residual plots: the variance does not appear constant across different values of age.
+
+:::
+
+::: {.example title="Choosing a diagnostic for the problem"}
+
+Different residual displays answer different diagnostic questions.
+
+| Diagnostic display | Main question |
+|---|---|
+| Residuals vs. predictor | Is the mean relationship linear in this predictor? Does spread change across $x$? |
+| Residuals vs. fitted values | Is there overall curvature or changing spread in the fitted model? |
+| Absolute residuals vs. predictor | Does the size of the residuals increase or decrease with $x$? |
+| Squared residuals vs. predictor | Is residual variance systematically related to $x$? |
+
+The goal is not to memorize a separate rule for every plot. The goal is to ask: *Is there a systematic pattern left over after fitting the model?*
+
+:::
+
+## What to Do When Diagnostics Show Problems
+
+Finding a diagnostic problem does not automatically tell us the solution. The response should depend on the pattern, the context, and the goal of the analysis.
+
+| Diagnostic concern | Possible next step |
+|---|---|
+| Curved residual pattern | Transform $x$, add a polynomial term such as $x^2$, or consider a nonlinear model. |
+| Nonconstant variance | Transform $y$, use weighted least squares, or use methods that adjust standard errors. |
+| One unusual residual | Check for data-entry errors, examine whether the observation is influential, and consider a sensitivity analysis. |
+| Many unusual residuals | Reconsider the model form, omitted variables, data quality, or whether one model is appropriate for all observations. |
+| Pattern over time or order | Check independence; consider time-series methods or models that account for dependence. |
+
+The goal is not to force the data to satisfy assumptions at all costs. The goal is to build a model that is honest, useful, and appropriately qualified.
+
+::: {.callout-note collapse="false" title="Preview: robust standard errors"}
+
+When the mean structure is reasonable but the variance is not constant, one possible remedy is to use *robust standard errors*.
+
+Robust standard errors do not change the fitted line. Instead, they adjust the estimated standard errors used for inference so that tests and confidence intervals are less sensitive to heteroscedasticity.
+
+This is not a magic fix for every problem. If the mean relationship is wrong, robust standard errors do not repair the fitted model. They are mainly a tool for handling nonconstant variance when the model form is otherwise reasonable.
+
+:::
+
+## Recap
+
+This chapter introduced residual diagnostics for checking the linearity and constant variance assumptions.
+
+| Idea | Meaning |
+|---|---|
+| **Residual** | The observed difference between an actual response and a fitted value, $e_i=y_i-\hat y_i$. |
+| **Residual diagnostics** | Tools for checking whether the model assumptions appear reasonable. |
+| **Linearity assumption** | The mean response follows a straight-line relationship with the predictor. |
+| **Residual plot** | A plot of residuals against the predictor or fitted values. |
+| **Semistudentized residual** | A residual divided by $\sqrt{MSE}$, giving a rough standardized scale. |
+| **Homoscedasticity** | Constant error variance across values of the predictor. |
+| **Heteroscedasticity** | Nonconstant error variance across values of the predictor. |
+| **Cone/funnel pattern** | A residual plot pattern suggesting nonconstant variance. |
+| **Breusch-Pagan test** | A formal test for nonconstant variance. |
+| **Systematic pattern** | A repeated structure in the residuals, such as curvature or changing spread, that may indicate an assumption problem. |
+| **Robust standard errors** | A later-course method for adjusting inference when variance is nonconstant but the mean model is otherwise reasonable. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why do we examine residuals instead of the true errors $\varepsilon_i$?
+
+2. What should a residual plot look like if the linearity assumption is reasonable?
+
+3. A residual plot shows a clear U-shaped pattern. Which assumption is most directly in question?
+
+4. What is the difference between homoscedasticity and heteroscedasticity?
+
+5. Why might absolute residuals or squared residuals be useful when checking constant variance?
+
+6. What does a cone-shaped residual plot suggest?
+
+7. Why should diagnostic plots be examined before relying on formal tests such as the Breusch-Pagan test?
+
+8. If a Breusch-Pagan test has a small p-value, what does that suggest? What does it not tell us by itself?
+
+9. Why might transforming $x$ help with a linearity problem?
+
+10. Why can transforming $y$ affect more than just the linearity assumption?
+
+11. Why is one unusual residual not, by itself, enough to conclude that an assumption has failed?
+
+12. If a residual plot shows curvature, what are two possible next steps?
+
+13. What do robust standard errors change, and what do they not change?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Errors are unobserved.** The true errors compare observations to the unknown population regression line. Residuals compare observations to the fitted sample regression line, so residuals are observable after fitting the model.
+
+2. **Random scatter around 0.** If linearity is reasonable, the residuals should show no systematic curve or pattern. They should be scattered around the horizontal line at 0.
+
+3. **Linearity.** A U-shaped residual plot suggests that the straight-line model is missing curvature in the mean relationship.
+
+4. **Constant versus changing spread.** Homoscedasticity means the error variance is constant across values of $x$. Heteroscedasticity means the error variance changes across values of $x$.
+
+5. **Variance is about size, not sign.** Absolute and squared residuals remove the sign of the residuals, making it easier to see whether residual magnitude changes with $x$ or fitted values.
+
+6. **Nonconstant variance.** A cone or funnel shape suggests that residual spread increases or decreases across the range of $x$, which is evidence against the constant variance assumption.
+
+7. **Plots show shape and practical importance.** Formal tests give p-values, but plots show the type, direction, and severity of the pattern. Tests can miss problems in small samples or flag minor issues in large samples.
+
+8. **Evidence of changing variance.** A small Breusch-Pagan p-value suggests nonconstant variance. By itself, it does not identify the best remedy, prove the mean relationship is correct, or check all other assumptions.
+
+9. **It can straighten the mean relationship.** If the relationship between $x$ and the mean of $y$ is curved, transforming $x$ can sometimes make the relationship more nearly linear.
+
+10. **It changes the response scale.** Transforming $y$ changes the scale on which the errors are measured and interpreted. This can affect constant variance, normality, and the interpretation of model coefficients.
+
+11. **We look for systematic evidence.** One unusual residual may indicate an outlier, data-entry issue, or unusual observation. Assumption violations are usually diagnosed from patterns involving many observations, such as curves or changing spread.
+
+12. **Change the mean structure.** Possible next steps include transforming $x$, adding a polynomial term such as $x^2$, or using a nonlinear model. The choice should be guided by the plot and by the context of the problem.
+
+13. **They adjust inference, not the fitted line.** Robust standard errors change the estimated standard errors used in tests and confidence intervals. They do not change the fitted regression coefficients, and they do not fix a badly misspecified mean relationship.
+
+:::

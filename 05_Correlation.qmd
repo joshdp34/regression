@@ -386,21 +386,7 @@ $$
 
 SSE does include $x$ because the fitted value $\hat{y}$ is a function of $x$.
 
-::: {.callout-note collapse="false" title="Decomposing variation in $y$"}
 
-The total variation in $y$ can be separated into the part explained by the regression model and the part left unexplained:
-
-```{mermaid}
-flowchart LR
-  A["Total variation in y<br/>SSyy"] --> B["Explained variation<br/>SSR"]
-  A --> C["Unexplained variation<br/>SSE"]
-  B --> D["SSyy = SSR + SSE"]
-  C --> D
-```
-
-This decomposition is the foundation for $r^2$. A model has a larger $r^2$ when the explained part, SSR, is large relative to the total variation, $SS_{yy}$.
-
-:::
 
 Here are a few key points about these sums of squares:
 
@@ -454,7 +440,7 @@ It means 80% of the sample variation in the response variable is explained by th
 
 :::
 
-::: {.example title="Example 5.7: Finding $r^2$ for the `trees` model"}
+::: {.example title="Example 5.7: Finding coefficient of determination for the `trees` model"}
 
 We can find the coefficient of determination using the `summary()` function with an `lm` object.
 
@@ -488,7 +474,7 @@ So the correlation between `Girth` and `Volume` is approximately `r round(trees_
 
 :::
 
-::: {.example title="Example 5.8: Interpreting a low $r^2$"}
+::: {.example title="Example 5.8: Interpreting a low coefficient of determination"}
 
 Suppose a regression model has $r^2=0.18$.
 
@@ -498,7 +484,7 @@ That does not automatically mean the model is useless. In some fields, especiall
 
 :::
 
-::: {.example title="Example 5.9: Choosing slope, correlation, or $r^2$"}
+::: {.example title="Example 5.9: Choosing slope, correlation, or coefficient of determination"}
 
 Each summary is useful, but each answers a different question.
 

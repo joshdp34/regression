@@ -336,9 +336,8 @@ window.Quarto = {
 <li>
 <a href="#checking-for-outliers" id="toc-checking-for-outliers" class="nav-link active" data-scroll-target="#checking-for-outliers"><span class="header-section-number">8.1</span> Checking for Outliers</a>
   <ul class="collapse">
-<li><a href="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable" id="toc-outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="nav-link" data-scroll-target="#outliers-with-respect-to-the-predictor-variable-and-the-response-variable"><span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</a></li>
-  <li><a href="#effect-on-the-fitted-line" id="toc-effect-on-the-fitted-line" class="nav-link" data-scroll-target="#effect-on-the-fitted-line"><span class="header-section-number">8.1.2</span> Effect on the Fitted Line</a></li>
-  <li><a href="#detecting-outliers-with-semistudentized-residual-plots" id="toc-detecting-outliers-with-semistudentized-residual-plots" class="nav-link" data-scroll-target="#detecting-outliers-with-semistudentized-residual-plots"><span class="header-section-number">8.1.3</span> Detecting Outliers with Semistudentized Residual Plots</a></li>
+<li><a href="#outliers-with-respect-to-the-predictor-and-response" id="toc-outliers-with-respect-to-the-predictor-and-response" class="nav-link" data-scroll-target="#outliers-with-respect-to-the-predictor-and-response"><span class="header-section-number">8.1.1</span> Outliers with Respect to the Predictor and Response</a></li>
+  <li><a href="#detecting-outliers-with-semistudentized-residual-plots" id="toc-detecting-outliers-with-semistudentized-residual-plots" class="nav-link" data-scroll-target="#detecting-outliers-with-semistudentized-residual-plots"><span class="header-section-number">8.1.2</span> Detecting Outliers with Semistudentized Residual Plots</a></li>
   </ul>
 </li>
   <li>
@@ -358,10 +357,14 @@ window.Quarto = {
   <ul class="collapse">
 <li><a href="#the-normality-assumption" id="toc-the-normality-assumption" class="nav-link" data-scroll-target="#the-normality-assumption"><span class="header-section-number">8.3.1</span> The Normality Assumption</a></li>
   <li><a href="#graphically-checking-normality" id="toc-graphically-checking-normality" class="nav-link" data-scroll-target="#graphically-checking-normality"><span class="header-section-number">8.3.2</span> Graphically Checking Normality</a></li>
-  <li><a href="#examples-of-qq-plots" id="toc-examples-of-qq-plots" class="nav-link" data-scroll-target="#examples-of-qq-plots"><span class="header-section-number">8.3.3</span> Examples of QQ-plots</a></li>
+  <li><a href="#examples-of-q-q-plots" id="toc-examples-of-q-q-plots" class="nav-link" data-scroll-target="#examples-of-q-q-plots"><span class="header-section-number">8.3.3</span> Examples of Q-Q Plots</a></li>
   <li><a href="#the-shapiro-wilk-test" id="toc-the-shapiro-wilk-test" class="nav-link" data-scroll-target="#the-shapiro-wilk-test"><span class="header-section-number">8.3.4</span> The Shapiro-Wilk Test</a></li>
   </ul>
 </li>
+  <li><a href="#what-to-do-when-normality-or-independence-looks-problematic" id="toc-what-to-do-when-normality-or-independence-looks-problematic" class="nav-link" data-scroll-target="#what-to-do-when-normality-or-independence-looks-problematic"><span class="header-section-number">8.4</span> What to Do When Normality or Independence Looks Problematic</a></li>
+  <li><a href="#diagnostic-workflow-checklist" id="toc-diagnostic-workflow-checklist" class="nav-link" data-scroll-target="#diagnostic-workflow-checklist"><span class="header-section-number">8.5</span> Diagnostic Workflow Checklist</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">8.6</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">8.7</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -381,129 +384,380 @@ window.Quarto = {
 
 
 </header><blockquote class="blockquote">
-<p>“If it’s green or wriggles, it’s biology. If it stinks, it’s chemistry. If it doesn’t work, it’s physics or engineering. If it’s green and wiggles and stinks and still doesn’t work, it’s psychology. If it’s incomprehensible, it’s mathematics. If it puts you to sleep, it’s statistics.” - Anonymous (in <em>Journal of the South African Institute of Mining and Metallurgy</em> (1978))</p>
+<p>“If it’s green or wriggles, it’s biology. If it stinks, it’s chemistry. If it doesn’t work, it’s physics or engineering. If it’s green and wiggles and stinks and still doesn’t work, it’s psychology. If it’s incomprehensible, it’s mathematics. If it puts you to sleep, it’s statistics.” - Anonymous, <em>Journal of the South African Institute of Mining and Metallurgy</em> (1978)</p>
 </blockquote>
+<p>In the previous chapter, we focused on checking linearity and constant variance. In this chapter, we continue the diagnostic process by examining:</p>
+<ol type="1">
+<li>outliers,</li>
+<li>correlated errors, and</li>
+<li>normality of the errors.</li>
+</ol>
+<p>As before, the goal is not to find perfect assumptions. The goal is to decide whether the assumptions are reasonable enough for the regression analysis to be useful.</p>
 <section id="checking-for-outliers" class="level2" data-number="8.1"><h2 data-number="8.1" class="anchored" data-anchor-id="checking-for-outliers">
 <span class="header-section-number">8.1</span> Checking for Outliers</h2>
-<section id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable" class="level3" data-number="8.1.1"><h3 data-number="8.1.1" class="anchored" data-anchor-id="outliers-with-respect-to-the-predictor-variable-and-the-response-variable">
-<span class="header-section-number">8.1.1</span> Outliers With Respect to the Predictor Variable and the Response Variable</h3>
-<p>When checking for <em>outliers</em>, we must think in terms of two dimensions since we have two variables, <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
-<p>Since we are interested in modeling the response variable <span class="math inline">\(y\)</span> in the model, we will mainly be concerned with outliers with respect to <span class="math inline">\(y\)</span>. However, outliers with respect to <span class="math inline">\(x\)</span> may also be of concern if it affects the fitted line.</p>
-</section><section id="effect-on-the-fitted-line" class="level3" data-number="8.1.2"><h3 data-number="8.1.2" class="anchored" data-anchor-id="effect-on-the-fitted-line">
-<span class="header-section-number">8.1.2</span> Effect on the Fitted Line</h3>
-<p>A demonstration on the effect of outliers on the fitted line can be found at <a href="http://www.jpstats.org/Regression/ch_03_04.html#sub1_1">http://www.jpstats.org/Regression/ch_03_04.html#sub1_1</a></p>
-<iframe width="900" height="500" object-position="right top" src="http://www.jpstats.org/Regression/ch_03_04.html#sub1_1" title=""></iframe>
-</section><section id="detecting-outliers-with-semistudentized-residual-plots" class="level3" data-number="8.1.3"><h3 data-number="8.1.3" class="anchored" data-anchor-id="detecting-outliers-with-semistudentized-residual-plots">
-<span class="header-section-number">8.1.3</span> Detecting Outliers with Semistudentized Residual Plots</h3>
-<p>Since the effect on the fitted line is determined mainly by how far the point is from the line, we will identify outliers by examining the residuals, in particular, the semistudentized residuals <span class="math display">\[\begin{align*}
-e_{i}^{*} &amp; =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
-&amp; =\frac{e_{i}}{\sqrt{MSE}}
-\end{align*}\]</span></p>
-<p>We can plot <span class="math inline">\(e_{i}^{*}\)</span> against <span class="math inline">\(x\)</span> or against <span class="math inline">\(\hat{y}\)</span>. A general rule of thumb is any value of <span class="math inline">\(e_{i}^{*}\)</span> below -4 or above 4 should be considered an outlier. Note that this rule is only applicable to large <span class="math inline">\(n\)</span>.</p>
-<p>We will discuss other methods for detecting outliers after we cover multiple regression.</p>
-<div id="exm-8_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 8.1 (Calculating Semistudentized Residuals)</strong></span> Let’s examine 50 observations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>:</p>
+<section id="outliers-with-respect-to-the-predictor-and-response" class="level3" data-number="8.1.1"><h3 data-number="8.1.1" class="anchored" data-anchor-id="outliers-with-respect-to-the-predictor-and-response">
+<span class="header-section-number">8.1.1</span> Outliers with Respect to the Predictor and Response</h3>
+<p>When checking for outliers in regression, we must think in two dimensions because we have both a predictor variable <span class="math inline">\(x\)</span> and a response variable <span class="math inline">\(y\)</span>.</p>
+<p>An observation can be unusual because:</p>
+<ul>
+<li>its response value is far from the fitted line,</li>
+<li>its predictor value is far from the rest of the observed <span class="math inline">\(x\)</span> values, or</li>
+<li>both.</li>
+</ul>
+<p>Since regression models the response variable <span class="math inline">\(y\)</span>, we are often especially concerned with observations that have unusual residuals. However, an observation with an unusual <span class="math inline">\(x\)</span> value can also be important because it may strongly affect the fitted line.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Outlier, leverage, and influence">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Outlier, leverage, and influence
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>These three ideas are related but not identical.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Term</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Outlier in <span class="math inline">\(y\)</span></strong></td>
+<td>An observation with a response far from what the model predicts.</td>
+</tr>
+<tr class="even">
+<td><strong>High leverage point</strong></td>
+<td>An observation with an unusual predictor value.</td>
+</tr>
+<tr class="odd">
+<td><strong>Influential point</strong></td>
+<td>An observation that noticeably changes the fitted regression line.</td>
+</tr>
+</tbody>
+</table>
+<p>A point can be high leverage without being influential. A point can also have a large residual without greatly changing the fitted line. Later, especially in multiple regression, we will use more formal tools for leverage and influence.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Comparing an outlier, a high leverage point, and an influential point
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The plots below show three different kinds of unusual observations. The highlighted point plays a different role in each panel.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"example_08_01.csv"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">808</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>,y<span class="op">=</span><span class="va">y</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">base_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">35</span>, <span class="fl">0</span>, <span class="fl">10</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">1.4</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">35</span>, sd <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">case_points</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  pattern <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>    <span class="st">"Outlier in y\nlarge residual, ordinary x"</span>,</span>
+<span>    <span class="st">"High leverage\nunusual x, follows pattern"</span>,</span>
+<span>    <span class="st">"Influential\nunusual x and changes line"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">15</span>, <span class="fl">15</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">19</span>, <span class="fl">23</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">base_by_pattern</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">case_points</span><span class="op">$</span><span class="va">pattern</span>, \<span class="op">(</span><span class="va">this_pattern</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">base_points</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>        pattern <span class="op">=</span> <span class="va">this_pattern</span>,</span>
+<span>        point_type <span class="op">=</span> <span class="st">"Original data"</span></span>
+<span>      <span class="op">)</span></span>
+<span>  <span class="op">}</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnostic_cases</span> <span class="op">&lt;-</span> <span class="va">case_points</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>point_type <span class="op">=</span> <span class="st">"Highlighted point"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnostic_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">base_by_pattern</span>, <span class="va">diagnostic_cases</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">diagnostic_comparison</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">point_type</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">pattern</span>, nrow <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"Highlighted point"</span> <span class="op">=</span> <span class="st">"red"</span>, <span class="st">"Original data"</span> <span class="op">=</span> <span class="st">"gray35"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"x"</span>, y <span class="op">=</span> <span class="st">"y"</span>, color <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span><span class="op">~</span><span class="va">x</span>, data<span class="op">=</span><span class="va">dat</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#calculate semistudentized residuals</span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>e.star <span class="op">=</span> <span class="va">fit</span><span class="op">$</span><span class="va">residuals</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span><span class="op">$</span><span class="va">sigma</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">x</span>, y<span class="op">=</span><span class="va">e.star</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-1-2.png" class="img-fluid figure-img" width="576"></p>
-</figure>
+</div>
+<p>The first highlighted point is unusual mainly because it is far above the fitted line. The second is far out in the <span class="math inline">\(x\)</span> direction but follows the same pattern as the rest of the data. The third is far out in <span class="math inline">\(x\)</span> and pulls the fitted line toward itself, making it influential.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Preview: Cook's distance">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Preview: Cook’s distance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Cook’s distance is a diagnostic measure that combines residual size and leverage. It is designed to flag observations that may have a large influence on the fitted regression model.</p>
+<p>A common rough guideline is to investigate observations with Cook’s distance larger than <span class="math inline">\(4/n\)</span>, where <span class="math inline">\(n\)</span> is the sample size. This is not an automatic deletion rule. It is a prompt to ask whether the observation is valid, whether the model is appropriate, and how much the conclusions depend on that point.</p>
+<p>We will return to influence diagnostics in more detail later.</p>
 </div>
 </div>
 </div>
-<p>We can see from the semistudentized plot that there is one observation with a value of <span class="math inline">\(e^*\)</span> below -3. Although this is not below the rule of thumb of -4, we note that our sample size <span class="math inline">\(n\)</span> is only moderate and not large. So we may want to investigate an observation with a value of <span class="math inline">\(e^*\)</span> below -3.</p>
+</section><section id="detecting-outliers-with-semistudentized-residual-plots" class="level3" data-number="8.1.2"><h3 data-number="8.1.2" class="anchored" data-anchor-id="detecting-outliers-with-semistudentized-residual-plots">
+<span class="header-section-number">8.1.2</span> Detecting Outliers with Semistudentized Residual Plots</h3>
+<p>Because outliers in <span class="math inline">\(y\)</span> are determined mainly by how far a point is from the fitted line, we identify potential outliers by examining residuals. A useful scale is the semistudentized residual: <span class="math display">\[\begin{align*}
+e_i^*
+&amp;=\frac{e_i-\bar e}{\sqrt{MSE}}\\
+&amp;=\frac{e_i}{\sqrt{MSE}}.
+\end{align*}\]</span></p>
+<p>We can plot <span class="math inline">\(e_i^*\)</span> against <span class="math inline">\(x\)</span> or against <span class="math inline">\(\hat y\)</span>.</p>
+<p>As a rough rule of thumb, values of <span class="math inline">\(e_i^*\)</span> below -4 or above 4 should be considered possible outliers. For moderate sample sizes, values beyond about -3 or 3 may also be worth investigating. These are not automatic deletion rules; they are flags for investigation.</p>
+<div id="exm-8_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 8.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
 </div>
-<p>Once we see there is a potential outlier, we must investigate <em>why</em> it is an outlier. If the observation is unusually small or large due to a data recording error, then perhaps the value can be corrected or just deleted from the dataset. If we cannot determine this is the cause of the outlier for certain, then we should not remove the observation. This observation could be unusual just due to chance.</p>
-</section></section><section id="correlated-error-terms" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="correlated-error-terms">
-<span class="header-section-number">8.2</span> Correlated Error Terms</h2>
-<section id="assumption-of-independence" class="level3" data-number="8.2.1"><h3 data-number="8.2.1" class="anchored" data-anchor-id="assumption-of-independence">
-<span class="header-section-number">8.2.1</span> Assumption of Independence</h3>
-<p>Since we are assuming the random error term <span class="math inline">\(\varepsilon\)</span> are <em>normal</em>, we want to check to see the uncorrelated errors assumption. If there is no correlation between the residuals, then we can assume <em>independence</em>.</p>
-</section><section id="residual-sequence-plots" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="residual-sequence-plots">
-<span class="header-section-number">8.2.2</span> Residual Sequence Plots</h3>
-<p>The usual cause of correlation in the residuals is data taken in some type of sequence such as <em>time</em> or <em>space</em>. When the error terms are correlated over time or some other sequence, we say they are <em>serially</em> correlated or <em>autocorrelated</em>.</p>
-<p>When the data are taken in some sequence, a <em>sequence plot</em> of the residuals may show a pattern indicating autocorrelation. In a sequence plot, the residuals are plotted against the observation index <span class="math inline">\(i\)</span>. If there is no autocorrelation, then the residuals should be “randomly” spread about zero. If there is a pattern, then there is evidence of autocorrelation.</p>
-</section><section id="autocorrelation-function-plot" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="autocorrelation-function-plot">
-<span class="header-section-number">8.2.3</span> Autocorrelation Function Plot</h3>
-<p>Sometime a residual sequence plot may not show an obvious pattern but autocorrelation may still exist.</p>
-<p>Another plot that helps examine correlation that may not be visible in the sequence plot is the <em>autocorrelation</em> <em>function</em> plot (ACF).</p>
-<p>In the ACF plot, correlations are calculated between residuals some <span class="math inline">\(k\)</span> index away. That is, <span id="eq-w3_4"><span class="math display">\[
-\begin{align}
-r_{k} &amp; =\widehat{Cor}\left[e_{i},e_{i+k}\right]\\
-&amp; =\frac{\sum_{i=1}^{n-k}\left(e_{i}-\bar{e}\right)\left(e_{i+k}-\bar{e}\right)}{\sum_{i=1}^{n}\left(e_{i}-\bar{e}\right)^{2}}
-\end{align}
-\tag{8.1}\]</span></span></p>
-<p>In an ACF plot, <span class="math inline">\(r_k\)</span> is plotted for varying values of <span class="math inline">\(k\)</span>. If the value of <span class="math inline">\(r_k\)</span> is larger in magnitude than some threshold shown on the plot (usually a 95% confidence interval), then we consider this evidence of autocorrelation.</p>
-</section><section id="tests-for-autocorrelation" class="level3" data-number="8.2.4"><h3 data-number="8.2.4" class="anchored" data-anchor-id="tests-for-autocorrelation">
-<span class="header-section-number">8.2.4</span> Tests for Autocorrelation</h3>
-<p>In addition to examining serial plots and ACF plots, tests can be conducted for significant autocorrelation. In each of these tests, the null hypothesis is there is no autocorrelation.</p>
-</section><section id="durbin-watson-test" class="level3" data-number="8.2.5"><h3 data-number="8.2.5" class="anchored" data-anchor-id="durbin-watson-test">
-<span class="header-section-number">8.2.5</span> Durbin-Watson Test</h3>
-<p>The <em>Durbin-Watson</em>[<sup>1</sup>] test is for autocorrelation at <span class="math inline">\(k=1\)</span> in <a href="#eq-w3_4" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>. That is, it tests for correlation one index (one time point) away.</p>
-<p>[<sup>1</sup>]: Durbin, J., &amp; Watson, G. S. (1951). Testing for Serial Correlation in Least Squares Regression. II. <em>Biometrika</em>. Vol 38. (pp.&nbsp;159-177).</p>
-<p>The Durbin-Watson test can be conducted in R with the <code>dwtest</code> function in the <code>lmtest</code> package.</p>
-</section><section id="ljung-box-test" class="level3" data-number="8.2.6"><h3 data-number="8.2.6" class="anchored" data-anchor-id="ljung-box-test">
-<span class="header-section-number">8.2.6</span> Ljung-Box Test</h3>
-<p>The <em>Ljung-Box</em>[<sup>2</sup>] test differs from the Durbin-Watson test in that it tests for <em>overall</em> correlation over all lags up to <span class="math inline">\(k\)</span> in <a href="#eq-w3_4" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>. For example, if <span class="math inline">\(k=4\)</span> then the Ljung-Box test is for significant autocorrelation over all lags up to <span class="math inline">\(k=4\)</span>.</p>
-<p>[<sup>2</sup>]: Ljung, G. M., &amp; Box, G. E. (1978). On a measure of lack of fit in time series models. <em>Biometrika</em>, 65(2), 297-303.</p>
-<p>The Ljung-Box test can be conducted in <code>R</code> with the <code>Box.test</code> function with the argument <code>type=("Ljung")</code>. This function is in base <code>R</code>.</p>
-</section><section id="breusch-godfrey-test" class="level3" data-number="8.2.7"><h3 data-number="8.2.7" class="anchored" data-anchor-id="breusch-godfrey-test">
-<span class="header-section-number">8.2.7</span> Breusch-Godfrey Test</h3>
-<p>The <em>Breusch-Godfrey</em>[<sup>3</sup>][<sup>4</sup>] test is similar to the Ljung-Box test in that it tests for overall correlation over all lags up to <span class="math inline">\(k\)</span>. The difference between the two test is not of concern in the regression models we will examine in this course. When using time series models, then the Breusch-Godfrey test is preferred over the Ljung-Box test due to asymptotic justification.</p>
-<p>[<sup>3</sup>]: Breusch, T. S. (1978). Testing for Autocorrelation in Dynamic Linear Models. <em>Australian Economic Papers</em>. 17: 334–355.</p>
-<p>[<sup>4</sup>]: Godfrey, L. G. (1978). Testing Against General Autoregressive and Moving Average Error Models when the Regressors Include Lagged Dependent Variables. <em>Econometrica</em>. 46: 1293–1301</p>
-<p>The Breusch-Godfrey test can be conducted in R with the <code>bgtest</code> function in the <code>lmtest</code> package.</p>
-<div id="exm-8_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 8.2 (Portland Crime Data)</strong></span> Let’s look at data collected on the mean temperature for each day in Portland, OR, and the number of non-violent crimes reported that day. The crime data was part of a public database gathered from www.portlandoregon.gov. The data are presented in order by day. The variable <span class="math inline">\(x\)</span> in the dataset is the day index number.</p>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Calculating semistudentized residuals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s examine 50 observations of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">lmtest</span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://pkg.robjhyndman.com/forecast/">forecast</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"PortlandWeatherCrime.csv"</span><span class="op">)</span></span>
+<span><span class="va">outlier_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"example_08_01.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#the file does not have a name for the index variable</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">=</span> <span class="st">"day"</span></span>
-<span></span>
-<span><span class="va">dat</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">Mean_Temp</span>, y<span class="op">=</span><span class="va">Num_Total_Crimes</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method<span class="op">=</span><span class="st">"lm"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">outlier_dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"x"</span>, y <span class="op">=</span> <span class="st">"y"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Num_Total_Crimes</span><span class="op">~</span><span class="va">Mean_Temp</span>, data<span class="op">=</span><span class="va">dat</span><span class="op">)</span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now fit the simple linear regression model and calculate semistudentized residuals.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_outlier</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">outlier_dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">outlier_diag</span> <span class="op">&lt;-</span> <span class="va">outlier_dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    obs <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    yhat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/fitted.values.html">fitted</a></span><span class="op">(</span><span class="va">fit_outlier</span><span class="op">)</span>,</span>
+<span>    e <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">fit_outlier</span><span class="op">)</span>,</span>
+<span>    e_star <span class="op">=</span> <span class="va">e</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/sigma.html">sigma</a></span><span class="op">(</span><span class="va">fit_outlier</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">outlier_diag</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">e_star</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"orange"</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"darkred"</span>, linetype <span class="op">=</span> <span class="st">"dotted"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"x"</span>, y <span class="op">=</span> <span class="st">"Semistudentized residual"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The dashed orange lines mark <span class="math inline">\(\pm 3\)</span>, and the dotted dark red lines mark <span class="math inline">\(\pm 4\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">outlier_diag</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">e_star</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">obs</span>, <span class="va">x</span>, <span class="va">y</span>, <span class="va">yhat</span>, <span class="va">e</span>, <span class="va">e_star</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">obs</th>
+<th style="text-align: right;">x</th>
+<th style="text-align: right;">y</th>
+<th style="text-align: right;">yhat</th>
+<th style="text-align: right;">e</th>
+<th style="text-align: right;">e_star</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">40</td>
+<td style="text-align: right;">7.0</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">2.901</td>
+<td style="text-align: right;">-0.901</td>
+<td style="text-align: right;">-3.105</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">2.7</td>
+<td style="text-align: right;">2.029</td>
+<td style="text-align: right;">0.671</td>
+<td style="text-align: right;">2.312</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">2.381</td>
+<td style="text-align: right;">0.619</td>
+<td style="text-align: right;">2.132</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">34</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">2.331</td>
+<td style="text-align: right;">-0.531</td>
+<td style="text-align: right;">-1.829</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">46</td>
+<td style="text-align: right;">0.3</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">1.777</td>
+<td style="text-align: right;">-0.477</td>
+<td style="text-align: right;">-1.645</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The largest semistudentized residual should be investigated. It may be a data-entry error, a genuinely unusual case, or a sign that the model is missing something important.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not delete just because a point is unusual">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not delete just because a point is unusual
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Once we identify a potential outlier, we must investigate why it is unusual.</p>
+<p>If the observation is unusual because of a clear data recording error, the value may be corrected or removed. If we cannot determine that the point is erroneous, we should not delete it simply because it is inconvenient. Real data often contain real unusual observations.</p>
+</div>
+</div>
+</div>
+</section></section><section id="correlated-error-terms" class="level2" data-number="8.2"><h2 data-number="8.2" class="anchored" data-anchor-id="correlated-error-terms">
+<span class="header-section-number">8.2</span> Correlated Error Terms</h2>
+<section id="assumption-of-independence" class="level3" data-number="8.2.1"><h3 data-number="8.2.1" class="anchored" data-anchor-id="assumption-of-independence">
+<span class="header-section-number">8.2.1</span> Assumption of Independence</h3>
+<p>The regression model assumes that the errors associated with different observations are independent. If errors are correlated, then the model may underestimate or overestimate uncertainty, making confidence intervals and hypothesis tests unreliable.</p>
+<p>When the errors are normally distributed, uncorrelated errors imply independent errors. Since true errors are not observed, we examine residuals for evidence of dependence.</p>
+</section><section id="residual-sequence-plots" class="level3" data-number="8.2.2"><h3 data-number="8.2.2" class="anchored" data-anchor-id="residual-sequence-plots">
+<span class="header-section-number">8.2.2</span> Residual Sequence Plots</h3>
+<p>The usual cause of correlated residuals is data collected in some sequence, such as time or space. When errors are correlated over time or another sequence, we say they are <em>serially correlated</em> or <em>autocorrelated</em>.</p>
+<p>When data are collected in a meaningful order, a residual sequence plot can show evidence of autocorrelation. In a sequence plot, residuals are plotted against the observation index <span class="math inline">\(i\)</span>.</p>
+<p>If there is no autocorrelation, the residuals should be randomly scattered around 0. If there is a pattern, such as long runs above or below 0, then there is evidence of autocorrelation.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>What autocorrelation can look like
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose a residual sequence plot shows 20 residuals below 0 followed by 20 residuals above 0.</p>
+<p>That pattern suggests the errors are not independent. Consecutive observations are behaving similarly, so the effective amount of information in the data may be less than the sample size suggests.</p>
+<p>Autocorrelation is especially common with time-ordered data, such as daily measurements, monthly sales, annual economic indicators, or repeated measurements from nearby locations.</p>
+</div>
+</div>
+</section><section id="autocorrelation-function-plot" class="level3" data-number="8.2.3"><h3 data-number="8.2.3" class="anchored" data-anchor-id="autocorrelation-function-plot">
+<span class="header-section-number">8.2.3</span> Autocorrelation Function Plot</h3>
+<p>Sometimes a residual sequence plot may not show an obvious pattern, even though autocorrelation exists.</p>
+<p>Another useful plot is the <em>autocorrelation function</em> plot, or ACF plot.</p>
+<p>In the ACF plot, correlations are calculated between residuals that are <span class="math inline">\(k\)</span> indices apart: <span id="eq-w3_4"><span class="math display">\[
+\begin{align}
+r_k
+&amp;=\widehat{Cor}(e_i,e_{i+k})\\
+&amp;=\frac{\sum_{i=1}^{n-k}(e_i-\bar e)(e_{i+k}-\bar e)}{\sum_{i=1}^n(e_i-\bar e)^2}.
+\end{align}
+\tag{8.1}\]</span></span></p>
+<p>In an ACF plot, <span class="math inline">\(r_k\)</span> is plotted for varying values of <span class="math inline">\(k\)</span>. If the value of <span class="math inline">\(r_k\)</span> is larger in magnitude than the threshold shown on the plot, usually based on an approximate 95% interval, then this is evidence of autocorrelation.</p>
+</section><section id="tests-for-autocorrelation" class="level3" data-number="8.2.4"><h3 data-number="8.2.4" class="anchored" data-anchor-id="tests-for-autocorrelation">
+<span class="header-section-number">8.2.4</span> Tests for Autocorrelation</h3>
+<p>In addition to sequence plots and ACF plots, formal tests can be conducted for significant autocorrelation. In each of these tests, the null hypothesis is that there is no autocorrelation.</p>
+</section><section id="durbin-watson-test" class="level3" data-number="8.2.5"><h3 data-number="8.2.5" class="anchored" data-anchor-id="durbin-watson-test">
+<span class="header-section-number">8.2.5</span> Durbin-Watson Test</h3>
+<p>The <em>Durbin-Watson</em> test is for autocorrelation at lag 1 in <a href="#eq-w3_4" class="quarto-xref">Equation&nbsp;<span>8.1</span></a>. That is, it tests for correlation one index, or one time point, apart.</p>
+<p>The Durbin-Watson test can be conducted in R with the <code>dwtest()</code> function in the <code>lmtest</code> package.</p>
+</section><section id="ljung-box-test" class="level3" data-number="8.2.6"><h3 data-number="8.2.6" class="anchored" data-anchor-id="ljung-box-test">
+<span class="header-section-number">8.2.6</span> Ljung-Box Test</h3>
+<p>The <em>Ljung-Box</em> test differs from the Durbin-Watson test because it tests for overall autocorrelation over all lags up to some value <span class="math inline">\(k\)</span>. For example, if <span class="math inline">\(k=4\)</span>, then the Ljung-Box test looks for significant autocorrelation over lags 1 through 4.</p>
+<p>The Ljung-Box test can be conducted in R with the base R function <code><a href="https://rdrr.io/r/stats/box.test.html">Box.test()</a></code> using <code>type = "Ljung-Box"</code>.</p>
+</section><section id="breusch-godfrey-test" class="level3" data-number="8.2.7"><h3 data-number="8.2.7" class="anchored" data-anchor-id="breusch-godfrey-test">
+<span class="header-section-number">8.2.7</span> Breusch-Godfrey Test</h3>
+<p>The <em>Breusch-Godfrey</em> test is similar to the Ljung-Box test because it can test for autocorrelation over several lags. When using time series regression models, the Breusch-Godfrey test is often preferred.</p>
+<p>The Breusch-Godfrey test can be conducted in R with the <code>bgtest()</code> function in the <code>lmtest</code> package.</p>
+<div id="exm-8_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 8.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Portland crime data and autocorrelation
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s look at data collected on the mean temperature for each day in Portland, Oregon, and the number of non-violent crimes reported that day. The crime data were part of a public database gathered from <code>www.portlandoregon.gov</code>.</p>
+<p>The data are ordered by day. The variable <code>day</code> is the day index number.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">portland</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"PortlandWeatherCrime.csv"</span>, show_col_types <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">portland</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="st">"day"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">portland</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Mean_Temp</span>, y <span class="op">=</span> <span class="va">Num_Total_Crimes</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, formula <span class="op">=</span> <span class="va">y</span> <span class="op">~</span> <span class="va">x</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Mean temperature"</span>, y <span class="op">=</span> <span class="st">"Number of non-violent crimes"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_portland</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span><span class="va">Num_Total_Crimes</span> <span class="op">~</span> <span class="va">Mean_Temp</span>, data <span class="op">=</span> <span class="va">portland</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_portland</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
 Call:
-lm(formula = Num_Total_Crimes ~ Mean_Temp, data = dat)
+lm(formula = Num_Total_Crimes ~ Mean_Temp, data = portland)
 
 Residuals:
      Min       1Q   Median       3Q      Max 
@@ -520,78 +774,133 @@ Residual standard error: 55.69 on 1765 degrees of freedom
 Multiple R-squared:  0.4576,    Adjusted R-squared:  0.4573 
 F-statistic:  1489 on 1 and 1765 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span><span class="op">$</span><span class="va">res</span> <span class="op">=</span> <span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="op">)</span></span>
+</div>
+<p>Now examine the residuals in time order.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">portland_diag</span> <span class="op">&lt;-</span> <span class="va">portland</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>res <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">fit_portland</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">dat</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">day</span>, y<span class="op">=</span><span class="va">res</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">portland_diag</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">day</span>, y <span class="op">=</span> <span class="va">res</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Day"</span>, y <span class="op">=</span> <span class="st">"Residual"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-2-2.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>We can see that the residuals have a pattern where the values at the lower levels of the index tend to be below zero whereas the values at the higher levels of the index tend to be above zero. This is evidence of autocorrelation in the residuals.</p>
+<p>The residuals show long runs below and above 0, which suggests autocorrelation.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://pkg.robjhyndman.com/forecast/reference/autoplot.acf.html">ggAcf</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">res</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/acf.html">acf</a></span><span class="op">(</span><span class="va">portland_diag</span><span class="op">$</span><span class="va">res</span>, main <span class="op">=</span> <span class="st">"ACF of Portland regression residuals"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>The values of the ACF at all lags are beyond the blue guideline for significant autocorreleation.</p>
-<p>Note that in the Ljung-Box test and the Breusch-Godfrey test below, we tested up to lag 7. We chose this lag since the data was taken over time and it would make sense for values at seven days apart to be similar. That is, we expect the number of crimes on Mondays to be similar, the number of crimes on Tuesdays to be similar, etc.</p>
+<p>The ACF plot gives another view of residual correlation across lags.</p>
+<p>For the Ljung-Box and Breusch-Godfrey tests below, we test up to lag 7 because the data were collected daily. In a daily dataset, a 7-day lag may be meaningful because the same day of the week could have similar behavior.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"lmtest"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/dwtest.html">dwtest</a></span><span class="op">(</span><span class="va">fit_portland</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="st">"Install the lmtest package to run lmtest::dwtest()."</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Durbin-Watson test
 
-data:  fit
+data:  fit_portland
 DW = 0.66764, p-value &lt; 2.2e-16
 alternative hypothesis: true autocorrelation is greater than 0</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/box.test.html">Box.test</a></span><span class="op">(</span><span class="va">dat</span><span class="op">$</span><span class="va">res</span>, lag<span class="op">=</span><span class="fl">7</span>,type<span class="op">=</span><span class="st">"Ljung"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/box.test.html">Box.test</a></span><span class="op">(</span><span class="va">portland_diag</span><span class="op">$</span><span class="va">res</span>, lag <span class="op">=</span> <span class="fl">7</span>, type <span class="op">=</span> <span class="st">"Ljung-Box"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Box-Ljung test
 
-data:  dat$res
+data:  portland_diag$res
 X-squared = 3865, df = 7, p-value &lt; 2.2e-16</code></pre>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/bgtest.html">bgtest</a></span><span class="op">(</span><span class="va">fit</span>, order<span class="op">=</span><span class="fl">7</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ns-load.html">requireNamespace</a></span><span class="op">(</span><span class="st">"lmtest"</span>, quietly <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">lmtest</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/lmtest/man/bgtest.html">bgtest</a></span><span class="op">(</span><span class="va">fit_portland</span>, order <span class="op">=</span> <span class="fl">7</span><span class="op">)</span></span>
+<span><span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
+<span>  <span class="st">"Install the lmtest package to run lmtest::bgtest()."</span></span>
+<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>
     Breusch-Godfrey test for serial correlation of order up to 7
 
-data:  fit
+data:  fit_portland
 LM test = 977.84, df = 7, p-value &lt; 2.2e-16</code></pre>
 </div>
 </div>
+<p>Small p-values provide evidence of autocorrelation. If the independence assumption is violated, then ordinary regression standard errors, confidence intervals, and tests may be misleading.</p>
 </div>
-<p>When the assumption of independence is violated, then a <em>difference</em> in the <span class="math inline">\(y\)</span> values could help remove the autocorrelation. This difference is <span class="math display">\[
-y^{\prime} = y_i - y_{i-k}
-\]</span> where <span class="math inline">\(k\)</span> is some max lag where autocorrelation is significant. This difference <span class="math inline">\(Y^{\prime}\)</span> is then regressed on <span class="math inline">\(x\)</span>. This difference may not help, in which case a time series model would be necessary.</p>
+</div>
+<p>When independence is violated, one possible remedy is to model changes instead of levels. For example, a difference in the response values can be defined as <span class="math display">\[
+y_i' = y_i-y_{i-k},
+\]</span> where <span class="math inline">\(k\)</span> is a lag where autocorrelation is important.</p>
+<p>This kind of differencing may help remove autocorrelation, but it also changes the interpretation of the model. If differencing does not solve the problem, a time series model may be necessary.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Dependence changes the information in the data">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Dependence changes the information in the data
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>When observations are positively autocorrelated, nearby observations tend to carry overlapping information.</p>
+<p>This means 100 time-ordered observations may contain less independent information than 100 randomly sampled observations. That is why independence matters for standard errors and hypothesis tests.</p>
+</div>
+</div>
+</div>
 </section></section><section id="normality-of-the-residuals" class="level2" data-number="8.3"><h2 data-number="8.3" class="anchored" data-anchor-id="normality-of-the-residuals">
 <span class="header-section-number">8.3</span> Normality of the Residuals</h2>
 <section id="the-normality-assumption" class="level3" data-number="8.3.1"><h3 data-number="8.3.1" class="anchored" data-anchor-id="the-normality-assumption">
 <span class="header-section-number">8.3.1</span> The Normality Assumption</h3>
-<p>If we do not have normality of the error terms, then the <em>t-tests</em> and <em>t-intervals</em> for <span class="math inline">\({\beta}_0\)</span> and <span class="math inline">\({\beta}_1\)</span> would not be valid.</p>
-<p>Furthermore, the confidence interval for the <em>mean</em> response and the <em>prediction</em> interval for the response would not be valid.</p>
-<p>We can check the normality of error terms by examining the residuals of the fitted line.</p>
+<p>The normality assumption says the error terms are normally distributed at each value of <span class="math inline">\(x\)</span>.</p>
+<p>Normality is especially important for exact small-sample <span class="math inline">\(t\)</span> tests and <span class="math inline">\(t\)</span> intervals for <span class="math inline">\(\beta_0\)</span> and <span class="math inline">\(\beta_1\)</span>. It is also important for confidence intervals for the mean response and prediction intervals for individual responses.</p>
+<p>We check normality by examining the residuals from the fitted line.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Normal errors, not necessarily normal response values">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Normal errors, not necessarily normal response values
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The normality assumption is about the errors around the regression line, not necessarily about the raw response variable <span class="math inline">\(y\)</span>.</p>
+<p>The response variable can have a nonnormal marginal distribution even when the errors around the mean response are approximately normal.</p>
+</div>
+</div>
+</div>
 </section><section id="graphically-checking-normality" class="level3" data-number="8.3.2"><h3 data-number="8.3.2" class="anchored" data-anchor-id="graphically-checking-normality">
 <span class="header-section-number">8.3.2</span> Graphically Checking Normality</h3>
-<p>We can graphically check the distribution of the residuals. The two most common ways to do this is with a <em>histogram</em> or with a <em>normal</em> <em>probability</em> plot.</p>
-<p>Another (more general) name for a normal probability plot is a normal <em>quantile</em>-<em>quantile</em> (QQ) plot.</p>
-<p>For a histogram, we check to see if the shape is approximately close to that of a normal distribution.</p>
-<p>For a QQ plot, we check to see if the points approximately follow a straight line. Major departures from a straight line indicates <em>nonnormality</em>.</p>
-<p>It is important to note that we will never see an exact normal distribution is real-world data. Thus, we will always look for approximate normality in the residuals.</p>
-<p>The inferences discussed previously are still valid for small departure of normality. However, major departures from normality will lead to incorrect <em>p-values</em> in the hypothesis tests and incorrect <em>coverages</em> in the intervals.</p>
-</section><section id="examples-of-qq-plots" class="level3" data-number="8.3.3"><h3 data-number="8.3.3" class="anchored" data-anchor-id="examples-of-qq-plots">
-<span class="header-section-number">8.3.3</span> Examples of QQ-plots</h3>
-<p>Below are some examples of histograms and QQ-plots for some simulated datasets.</p>
+<p>We can graphically check the distribution of the residuals. The two most common displays are:</p>
+<ul>
+<li>a histogram of residuals, and</li>
+<li>a normal quantile-quantile plot, usually called a normal Q-Q plot.</li>
+</ul>
+<p>For a histogram, we check whether the shape is approximately mound-shaped and symmetric.</p>
+<p>For a Q-Q plot, we check whether the points approximately follow a straight line. Major departures from a straight line indicate nonnormality.</p>
+<p>It is important to note that we will never see an exact normal distribution in real-world data. We look for approximate normality in the residuals.</p>
+<p>The inferences discussed previously are still useful for small departures from normality. However, major departures from normality can lead to incorrect p-values and interval coverages.</p>
+</section><section id="examples-of-q-q-plots" class="level3" data-number="8.3.3"><h3 data-number="8.3.3" class="anchored" data-anchor-id="examples-of-q-q-plots">
+<span class="header-section-number">8.3.3</span> Examples of Q-Q Plots</h3>
+<p>Below are examples of histograms and Q-Q plots for simulated datasets.</p>
 <div id="fig-08_01" class="quarto-layout-panel">
 <figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-08_01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
 <div class="quarto-layout-row">
@@ -728,19 +1037,299 @@ y^{\prime} = y_i - y_{i-k}
 </div>
 </div>
 <figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-08_01-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;8.1: Examples of QQ-Plots
+Figure&nbsp;8.1: Examples of Q-Q plots
 </figcaption></figure>
+</div>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Checking normality of residuals
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We can check the residuals from the earlier outlier example using a histogram and a Q-Q plot.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">outlier_diag</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">e</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">12</span>, color <span class="op">=</span> <span class="st">"white"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Residual"</span>, y <span class="op">=</span> <span class="st">"Count"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">outlier_diag</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">e</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq_line</a></span><span class="op">(</span>color <span class="op">=</span> <span class="st">"red"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Theoretical quantiles"</span>, y <span class="op">=</span> <span class="st">"Sample residual quantiles"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="08_Checking2_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If the residuals are approximately normal, the Q-Q plot points should roughly follow the red line. Large bends, strong S-shapes, or isolated points far from the line suggest departures from normality.</p>
+</div>
 </div>
 </section><section id="the-shapiro-wilk-test" class="level3" data-number="8.3.4"><h3 data-number="8.3.4" class="anchored" data-anchor-id="the-shapiro-wilk-test">
 <span class="header-section-number">8.3.4</span> The Shapiro-Wilk Test</h3>
-<p>There are a number of hypothesis test for normality. The most popular test is the <em>Shapiro-Wilk</em>[<sup>5</sup>] test. This test has been found to have the most power among many of the other tests for normality[<sup>6</sup>].</p>
-<p>[<sup>5</sup>]: Shapiro, S. S., &amp; Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). <em>Biometrika</em>, 52(3-4), 591-611.</p>
-<p>[<sup>6</sup>]: Razali, N. M., &amp; Wah, Y. B. (2011). Power comparisons of shapiro-wilk, kolmogorov-smirnov, lilliefors and anderson-darling tests. <em>Journal of statistical modeling and analytics</em>, 2(1), 21-33.</p>
-<p>In the Shapiro-Wilk test, the null hypothesis is that the data are normally distributed and the alternative is that the data are not normally distributed.</p>
-<p>This test can be conducted using the <code>shapiro.test</code> function in base R.</p>
+<p>There are many hypothesis tests for normality. One common test is the <em>Shapiro-Wilk</em> test.</p>
+<p>In the Shapiro-Wilk test, the null hypothesis is that the data are normally distributed: <span class="math display">\[\begin{align*}
+H_0 &amp;: \text{the residuals are normally distributed}\\
+H_a &amp;: \text{the residuals are not normally distributed}.
+\end{align*}\]</span></p>
+<p>This test can be conducted using the <code><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test()</a></code> function in base R.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Shapiro-Wilk test for residual normality
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For the residuals from the outlier example, we can run:</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/stats/shapiro.test.html">shapiro.test</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/residuals.html">resid</a></span><span class="op">(</span><span class="va">fit_outlier</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Shapiro-Wilk normality test
+
+data:  resid(fit_outlier)
+W = 0.97444, p-value = 0.3474</code></pre>
+</div>
+</div>
+<p>A small p-value provides evidence against normality. However, as with other diagnostic tests, the result should be interpreted alongside plots.</p>
+<p>With small samples, normality tests may have low power. With large samples, they may flag tiny deviations from normality that do not matter much in practice.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Plots and tests answer different questions">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Plots and tests answer different questions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>A Q-Q plot shows the shape of the departure from normality. A Shapiro-Wilk test gives a p-value.</p>
+<p>Use both ideas carefully. A p-value can tell us that something is unusual under normality, but the plot helps us see whether the problem is skewness, heavy tails, outliers, or something else.</p>
+</div>
+</div>
+</div>
+</section></section><section id="what-to-do-when-normality-or-independence-looks-problematic" class="level2" data-number="8.4"><h2 data-number="8.4" class="anchored" data-anchor-id="what-to-do-when-normality-or-independence-looks-problematic">
+<span class="header-section-number">8.4</span> What to Do When Normality or Independence Looks Problematic</h2>
+<p>Diagnostics are useful because they suggest next steps. The right response depends on the problem.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Diagnostic concern</th>
+<th>Possible next step</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>One or two extreme residuals</td>
+<td>Check for data-entry errors, examine context, and consider sensitivity analysis.</td>
+</tr>
+<tr class="even">
+<td>Strong skewness in residuals</td>
+<td>Consider transforming <span class="math inline">\(y\)</span>, using a model appropriate for skewed responses, or using resampling methods.</td>
+</tr>
+<tr class="odd">
+<td>Heavy-tailed residuals</td>
+<td>Investigate outliers, consider robust methods, and be cautious with small-sample <span class="math inline">\(t\)</span> inference.</td>
+</tr>
+<tr class="even">
+<td>Autocorrelation over time</td>
+<td>Add relevant time variables, difference the response, or use a time-series model.</td>
+</tr>
+<tr class="odd">
+<td>Dependence from clusters or repeated measurements</td>
+<td>Consider methods that account for grouping, such as mixed models or clustered standard errors.</td>
+</tr>
+</tbody>
+</table>
+<p>No diagnostic remedy should be applied mechanically. A transformation or new model should make sense for the context, not just make a plot look prettier.</p>
+</section><section id="diagnostic-workflow-checklist" class="level2" data-number="8.5"><h2 data-number="8.5" class="anchored" data-anchor-id="diagnostic-workflow-checklist">
+<span class="header-section-number">8.5</span> Diagnostic Workflow Checklist</h2>
+<p>Chapters 07 and 08 together give a basic diagnostic workflow for simple linear regression.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="A practical diagnostic sequence">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>A practical diagnostic sequence
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>After fitting a simple linear regression model:</p>
+<ol type="1">
+<li>
+<strong>Start with the scatterplot.</strong> Does a straight-line relationship appear reasonable?</li>
+<li>
+<strong>Check residuals versus <span class="math inline">\(x\)</span> and fitted values.</strong> Look for curvature and changing spread.</li>
+<li>
+<strong>Check semistudentized residuals.</strong> Look for unusually large residuals.</li>
+<li>
+<strong>Check leverage and influence.</strong> Ask whether unusual <span class="math inline">\(x\)</span> values are pulling the fitted line.</li>
+<li>
+<strong>If data are ordered, check residuals over order.</strong> Look for runs, trends, cycles, or autocorrelation.</li>
+<li>
+<strong>Check normality of residuals.</strong> Use a histogram and Q-Q plot, then possibly a formal test.</li>
+<li>
+<strong>Connect diagnostics to the research question.</strong> Decide whether any violations are serious enough to change the analysis or qualify the conclusions.</li>
+</ol>
+<p>The point of diagnostics is not to punish the model. It is to learn where the model is trustworthy and where it may be fragile.</p>
+</div>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="8.6"><h2 data-number="8.6" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">8.6</span> Recap</h2>
+<p>This chapter completed the basic diagnostic toolkit for simple linear regression.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Outlier in <span class="math inline">\(y\)</span></strong></td>
+<td>An observation with a response value far from the fitted line.</td>
+</tr>
+<tr class="even">
+<td><strong>High leverage point</strong></td>
+<td>An observation with an unusual predictor value.</td>
+</tr>
+<tr class="odd">
+<td><strong>Influential point</strong></td>
+<td>An observation that noticeably changes the fitted regression line.</td>
+</tr>
+<tr class="even">
+<td><strong>Semistudentized residual</strong></td>
+<td>A residual divided by <span class="math inline">\(\sqrt{MSE}\)</span>, useful for flagging unusually large residuals.</td>
+</tr>
+<tr class="odd">
+<td><strong>Autocorrelation</strong></td>
+<td>Correlation among errors or residuals across an ordered sequence.</td>
+</tr>
+<tr class="even">
+<td><strong>Residual sequence plot</strong></td>
+<td>A plot of residuals against observation order, useful for detecting dependence.</td>
+</tr>
+<tr class="odd">
+<td><strong>ACF plot</strong></td>
+<td>A plot of residual correlations at different lags.</td>
+</tr>
+<tr class="even">
+<td><strong>Durbin-Watson test</strong></td>
+<td>A test for lag-1 autocorrelation.</td>
+</tr>
+<tr class="odd">
+<td><strong>Ljung-Box test</strong></td>
+<td>A test for overall autocorrelation up to a chosen lag.</td>
+</tr>
+<tr class="even">
+<td><strong>Normal Q-Q plot</strong></td>
+<td>A diagnostic plot for checking whether residuals are approximately normal.</td>
+</tr>
+<tr class="odd">
+<td><strong>Shapiro-Wilk test</strong></td>
+<td>A formal test of normality.</td>
+</tr>
+<tr class="even">
+<td><strong>Cook’s distance</strong></td>
+<td>A diagnostic measure that combines residual size and leverage to flag potentially influential observations.</td>
+</tr>
+<tr class="odd">
+<td><strong>Diagnostic workflow</strong></td>
+<td>A structured sequence for checking model assumptions and deciding what to investigate next.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="8.7"><h2 data-number="8.7" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">8.7</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why do we need to think about outliers in both the <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> directions?</p></li>
+<li><p>What is the difference between an outlier, a high leverage point, and an influential point?</p></li>
+<li><p>Why should a large semistudentized residual be treated as a flag for investigation rather than an automatic reason to delete an observation?</p></li>
+<li><p>What does a residual sequence plot show that an ordinary residual-versus-<span class="math inline">\(x\)</span> plot may not show?</p></li>
+<li><p>What does autocorrelation mean in the context of regression residuals?</p></li>
+<li><p>Why can autocorrelation make regression standard errors and hypothesis tests unreliable?</p></li>
+<li><p>What is the difference between the Durbin-Watson test and the Ljung-Box test?</p></li>
+<li><p>What should residuals look like in a normal Q-Q plot if the normality assumption is reasonable?</p></li>
+<li><p>Why is it incorrect to say that the response variable <span class="math inline">\(y\)</span> must be normally distributed for regression inference to be valid?</p></li>
+<li><p>Why should the Shapiro-Wilk test be interpreted together with a histogram or Q-Q plot?</p></li>
+<li><p>Why can a high leverage point be harmless in one dataset but influential in another?</p></li>
+<li><p>What does Cook’s distance try to measure?</p></li>
+<li><p>If residuals show autocorrelation, what are two possible next steps?</p></li>
+<li><p>If residuals are strongly skewed, why might transforming <span class="math inline">\(y\)</span> be considered?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Regression is two-dimensional.</strong> An observation can be unusual because its response is far from the fitted line or because its predictor value is far from the rest of the observed predictor values. Both can matter for the fitted model.</p></li>
+<li><p><strong>Three different diagnostic roles.</strong> An outlier has an unusual response relative to the model. A high leverage point has an unusual predictor value. An influential point noticeably changes the fitted regression line.</p></li>
+<li><p><strong>Unusual does not mean wrong.</strong> A large semistudentized residual may indicate a data-entry error, but it may also be a real unusual observation or evidence that the model is missing something. We investigate before deciding what to do.</p></li>
+<li><p><strong>Order matters.</strong> A residual sequence plot shows residuals in the order the data were collected. It can reveal runs, trends, cycles, or other dependence patterns that may not be visible in a residual-versus-<span class="math inline">\(x\)</span> plot.</p></li>
+<li><p><strong>Residuals are related across order.</strong> Autocorrelation means residuals close together in time, space, or sequence tend to be related. For example, a positive residual today may make a positive residual tomorrow more likely.</p></li>
+<li><p><strong>Less independent information than expected.</strong> If errors are correlated, then observations do not provide fully independent pieces of information. The usual standard error formulas may be too small or otherwise misleading.</p></li>
+<li><p><strong>Lag 1 versus multiple lags.</strong> The Durbin-Watson test focuses on lag-1 autocorrelation. The Ljung-Box test looks for overall autocorrelation across all lags up to a chosen maximum lag.</p></li>
+<li><p><strong>Approximately straight.</strong> If residuals are approximately normal, the points in the Q-Q plot should fall roughly along a straight line. Large bends, S-shapes, or extreme points suggest nonnormality.</p></li>
+<li><p><strong>The assumption is about errors.</strong> Regression inference assumes the errors around the regression line are normally distributed, not necessarily that the raw response values are normally distributed.</p></li>
+<li><p><strong>The p-value does not show the shape.</strong> The Shapiro-Wilk test gives a p-value, but it does not show whether the problem is skewness, heavy tails, outliers, or something else. The plots provide that diagnostic context.</p></li>
+<li><p><strong>Leverage alone is not influence.</strong> A high leverage point has an unusual predictor value. If it follows the same linear pattern as the rest of the data, it may not change the fitted line much. If it is far from the pattern, it can pull the fitted line strongly and become influential.</p></li>
+<li><p><strong>Influence on the fitted model.</strong> Cook’s distance combines information about residual size and leverage to flag observations that may substantially affect the fitted regression model.</p></li>
+<li><p><strong>Model the dependence.</strong> Possible next steps include adding relevant time-related predictors, differencing the response, or using a time-series model. The right choice depends on why the residuals are autocorrelated.</p></li>
+<li><p><strong>To make residuals more nearly symmetric.</strong> A transformation of <span class="math inline">\(y\)</span> may reduce skewness or stabilize variation, which can make normal-based inference more reasonable. However, it also changes the interpretation of the model, so it should be used thoughtfully.</p></li>
+</ol>
+</div>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

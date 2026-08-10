@@ -1,362 +1,623 @@
 # Simple Linear Regression with Tidymodels
 
-> "Knowledge is a process of piling up facts; wisdom lies in their simplification." - Martin Luther King Jr. 
+> "Knowledge is a process of piling up facts; wisdom lies in their simplification." - Martin Luther King Jr.
 
+In earlier chapters, we fit simple linear regression models using base R functions such as `lm()`. In this chapter, we introduce the `tidymodels` framework for fitting the same kind of model in a more organized and reusable way.
 
+`tidymodels` is a collection of R packages that work together to support the modeling process, including:
 
-In this chapter, we will introduce the `tidymodels` framework for fitting a simple linear regression model. `tidymodels` is a collection of R packages that work together to streamline the modeling process, from data preparation to model tuning and evaluation. The main packages involved in fitting models are `parsnip` for specifying models and `recipes` for preprocessing data. Most necessary packages used in this framework can be loaded with the `tidymodels` package.
+- specifying a model,
+- defining preprocessing steps,
+- fitting the model,
+- generating predictions,
+- evaluating performance, and
+- organizing diagnostics.
 
-```{r warning=FALSE, message=FALSE}
+```{r}
+#| warning: false
+#| message: false
+
 library(tidymodels)
-
+tidymodels_prefer()
 ```
 
+We will illustrate the workflow using the `mtcars` data first used in @exm-3_1.
 
-We will illustrate with the `mtcars` data first used in @exm-3_1.
+::: {.example title="Example 9.1: The modeling goal"}
 
+Suppose we want to model fuel economy using horsepower.
+
+In this chapter:
+
+- the response variable is `mpg`, miles per gallon,
+- the predictor variable is `hp`, horsepower,
+- the statistical model is simple linear regression.
+
+The model is
+\begin{align*}
+mpg = \beta_0+\beta_1 hp+\varepsilon.
+\end{align*}
+
+The `tidymodels` workflow will let us fit this model, extract coefficients, make predictions, calculate metrics, and create diagnostic plots in a consistent framework.
+
+:::
 
 ## Specifying the Model
 
-In `tidymodels`, the first step in model building is to define the type of model you want to fit. The `parsnip` package is the tool within `tidymodels` that handles model specification. Unlike the traditional approach where you directly use a modeling function like `lm()`, `parsnip` separates the model definition from the model fitting, making the process more modular and adaptable to different engines (i.e., different computational backends).
+In `tidymodels`, the first step is to define the type of model we want to fit. The `parsnip` package handles model specification.
+
+Unlike the traditional approach where we directly call a function such as `lm()`, `parsnip` separates the model definition from the model fitting. This makes the modeling process more modular.
 
 ### Model Specification with `parsnip`
 
-The primary function to specify a model in `parsnip` is `linear_reg()`, which indicates that you are building a linear regression model. However, `linear_reg()` does not fit the model by itself. Instead, it allows you to define the general structure of the model, which is then paired with a computational engine. An engine is the specific function or package that will perform the calculations. For linear regression, the default engine is `"lm"`, which corresponds to R's base `lm()` function.
+The primary function for specifying a linear regression model is `linear_reg()`. This function says what kind of model we want, but it does not fit the model by itself.
 
-Let’s break down how the model specification works:
+We also specify an *engine*, which is the computational method used to estimate the model. For ordinary least squares regression, the engine is `"lm"`.
+
+::: {.example title="Example 9.2: Specifying a linear regression model"}
 
 ```{r}
-# Specify a linear regression model
-lm_model = linear_reg() |>
+lm_model <- linear_reg() |>
   set_engine("lm")
+
+lm_model
 ```
 
-- `linear_reg()`: This specifies that we are interested in a linear regression model. The model type is abstracted, allowing us to focus on the statistical method (linear regression) rather than the computational details.
-- `set_engine("lm")`: This command specifies that we will use the `"lm"` engine to estimate the linear regression parameters. `parsnip` supports other engines, such as `glmnet` for penalized regression models and `stan` for Bayesian regression models, which allows for great flexibility in model building.
+The model specification says:
+
+- use linear regression as the model type,
+- use base R's `lm()` function as the computational engine.
+
+At this point, no data have been used and no coefficients have been estimated. We have only described the model we plan to fit.
+
+:::
+
+::: {.callout-note collapse="false" title="Model specification is not model fitting"}
+
+A common beginner mistake is to think that `linear_reg()` fits the model. It does not.
+
+The model specification is like saying, "I want to use linear regression." The actual fitting happens later when we combine the model with a formula and data.
+
+:::
 
 ### Hyperparameters and Engine Customization
 
-You can also specify hyperparameters, which are settings that influence the model fitting process. For simple linear regression with the `"lm"` engine, there are no specific hyperparameters to set, but with more complex models (such as regularized regression), you might need to tune parameters like the penalty term or the mixture parameter for Lasso or Ridge regression (discussed in a later chapter).
+Some models have *hyperparameters*, which are settings chosen before the model is fit. Simple linear regression with the `"lm"` engine has no tuning parameters, but more complex models do.
 
-An example of specifying a model with hyperparameters (for demonstration purposes):
+For example, ridge regression uses a penalty parameter:
 
 ```r
-# Example for models that require hyperparameters
-ridge_model = linear_reg(penalty = 0.1, mixture = 0) |>
+ridge_model <- linear_reg(penalty = 0.1, mixture = 0) |>
   set_engine("glmnet")
 ```
 
-Although these hyperparameters are not necessary for simple linear regression, `parsnip` enables seamless transition to more complex models, and this flexibility is a key feature of the `tidymodels` framework.
+Although these hyperparameters are not needed for simple linear regression, `parsnip` makes it easier to move from simple models to more complex models later in the course.
 
 ### Choosing the Right Model and Engine
 
-One of the strengths of the `parsnip` package is that it decouples the conceptual model (linear regression) from the computational engine (e.g., `"lm"`, `"glmnet"`, `"stan"`). This allows the user to switch engines without changing the model structure.
+One strength of `parsnip` is that it separates the conceptual model from the computational engine.
 
-For example, suppose you wanted to fit the same linear regression model using a Bayesian approach via the `stan` engine:
+For example:
 
 ```r
-# Specify a Bayesian linear regression model
-bayesian_lm_model = linear_reg() |>
+bayesian_lm_model <- linear_reg() |>
   set_engine("stan")
 ```
 
-In this case, the model structure remains the same, but the estimation procedure differs (frequentist vs. Bayesian). This level of abstraction enhances the flexibility of your workflow, especially as you explore different modeling approaches.
-
-### Benefits of Model Specification with `parsnip`
-
-The model specification process in `parsnip` offers several key benefits. Its modularity allows for the separation of model specification from model fitting, enabling you to reuse the same model definition across different datasets or engines. This framework provides flexibility, making it easy to switch between various engines, such as `lm()`, `glmnet()`, or `stan`, without altering the core model structure. 
-
-Additionally, `parsnip` enhances scalability by simplifying the process of extending models. For example, moving from simple linear regression to more complex models like Ridge or Lasso regression only requires adjusting the engine and hyperparameters, without the need to rewrite your code.
-
-In this section, we have seen how to specify a linear regression model using `parsnip` and set the engine to `"lm"`. Next, we will define the relationship between the predictor and response variables and organize our workflow before fitting the model.
-
-
-
+The conceptual model is still linear regression, but the estimation method is Bayesian rather than ordinary least squares. This kind of modularity becomes more useful as the models become more complex.
 
 ## Defining the Workflow
 
-In the `tidymodels` ecosystem, workflows serve as a central organizing structure that ties together the components of a model-building process. A workflow in `tidymodels` allows you to combine different elements, such as the model specification, preprocessing steps, and the formula that defines the relationship between the predictor(s) and response. This section will explain the importance of workflows and demonstrate how to create one for simple linear regression.
+In the `tidymodels` ecosystem, a workflow is an organizing structure that ties together the pieces of the modeling process.
 
-### What is a Workflow?
+A workflow can contain:
 
-A workflow can be thought of as a blueprint that organizes how data flows through different steps of the modeling process. It encapsulates model specification and data preprocessing tasks, which can include transformations such as scaling, normalization, or encoding categorical variables. In traditional modeling approaches, these steps are often written separately, which can lead to code that is harder to manage and prone to errors, especially as the complexity of the model increases.
+- the model specification,
+- the formula,
+- preprocessing steps, and
+- eventually the fitted model.
 
-With workflows, the entire process becomes more organized and reproducible. The key benefit is that you don’t need to repeatedly specify how the data should be prepared or how the model should be fit. Once a workflow is defined, it can be reused or modified easily to fit different models or datasets.
+::: {.callout-note collapse="false" title="Tidymodels workflow map"}
+
+The basic simple regression workflow looks like this:
+
+```{mermaid}
+flowchart LR
+  A["Model specification<br/>linear_reg() + engine"] --> C["Workflow"]
+  B["Formula<br/>mpg ~ hp"] --> C
+  C --> D["Fit with data<br/>fit(data = mtcars)"]
+  D --> E["Results<br/>coefficients, predictions,<br/>metrics, diagnostics"]
+```
+
+The workflow keeps the modeling pieces together so the process is easier to reuse, modify, and debug.
+
+:::
 
 ### Creating a Workflow for Simple Linear Regression
 
-For a simple linear regression model, our workflow consists of two main components: the formula that defines the relationship between the response and predictor variables, and the model specification itself. Since simple linear regression does not require extensive preprocessing (like handling categorical variables or missing data), the workflow is relatively straightforward.
+For simple linear regression, our workflow consists of two main components:
 
-Let’s begin by constructing the workflow for predicting miles per gallon (`mpg`) using horsepower (`hp`) from the `mtcars` dataset. Recall that the model specification (`lm_model`) was defined in the previous section.
+1. the model specification, and
+2. the formula that defines the response and predictor.
+
+::: {.example title="Example 9.3: Building a workflow"}
+
+We will predict `mpg` using `hp` from the `mtcars` dataset.
 
 ```{r}
-# Define a workflow
-lm_workflow = workflow() |>
+lm_workflow <- workflow() |>
   add_model(lm_model) |>
   add_formula(mpg ~ hp)
+
+lm_workflow
 ```
 
 In this code:
 
-- `workflow()` initializes an empty workflow.
-- `add_model()` adds the linear regression model (`lm_model`) that was specified earlier using the `parsnip` package.
-- `add_formula()` defines the model’s formula, which indicates that the response variable `mpg` is modeled as a function of the predictor `hp`.
+- `workflow()` initializes an empty workflow,
+- `add_model()` adds the model specification,
+- `add_formula()` defines the response and predictor.
 
-The formula-based approach used in this workflow is intuitive for most users familiar with R’s base modeling functions, such as `lm()` and `glm()`. However, workflows also support more advanced techniques, such as specifying custom preprocessing steps with the `recipes` package, which we will explore later.
+The formula `mpg ~ hp` means that `mpg` is the response and `hp` is the predictor.
 
-### The Formula Interface
+:::
 
-The formula interface in `tidymodels` is a key aspect of defining relationships between variables. The tilde (`~`) symbol is used to separate the response variable (on the left-hand side) from the predictor(s) (on the right-hand side). In the example `mpg ~ hp`, the model will predict `mpg` using `hp` as the predictor. This is a simple linear regression model, where the model assumes a linear relationship between these two variables.
+### Formula Interface
 
-If there were multiple predictors, the formula would include them on the right-hand side, separated by a plus sign (`+`), such as `mpg ~ hp + wt + qsec`, indicating a multiple linear regression model. The formula syntax allows for flexible model building, including interaction terms (`*` or `:`) and transformations (e.g., `log()` or polynomial terms).
+The formula interface uses the tilde symbol, `~`, to separate the response variable from the predictor variables.
+
+For example:
+
+```r
+mpg ~ hp
+```
+
+means "model `mpg` using `hp`."
+
+If we had multiple predictors, the formula could be written as
+
+```r
+mpg ~ hp + wt + qsec
+```
+
+which would fit a multiple regression model.
 
 ### Preprocessing in Workflows
 
-One of the primary advantages of using workflows is the ability to integrate preprocessing steps seamlessly into the model-building process. While simple linear regression may not require extensive preprocessing, workflows can easily handle more complex tasks, such as:
+Simple linear regression may not require much preprocessing, but workflows can also include preprocessing through the `recipes` package.
 
-- **Standardizing predictors**: Scaling variables to have mean 0 and standard deviation 1.
-- **Handling missing data**: Imputing missing values.
-- **Encoding categorical variables**: Converting factors into dummy or one-hot encoded variables.
+Common preprocessing steps include:
 
-For example, suppose that instead of horsepower (`hp`), we had a categorical variable representing car transmission type (`am`), and we wanted to include it as a predictor. In this case, we could use the `recipes` package to preprocess the data by encoding the categorical variable. The workflow can be extended as follows:
+- standardizing predictors,
+- handling missing data,
+- encoding categorical predictors,
+- transforming variables.
 
-```r
-# Example of adding preprocessing using recipes
-recipe = recipe(mpg ~ hp + am, data = mtcars) |>
+For example, if `am` were treated as a categorical predictor, we could create dummy variables using a recipe. This is a small example, but it shows the key idea: preprocessing can live inside the modeling workflow instead of being handled separately.
+
+::: {.example title="Example 9.4: Using a recipe to create dummy variables"}
+
+First, treat `am` as a categorical variable rather than a numeric 0/1 variable.
+
+```{r}
+mtcars_recipe_data <- mtcars |>
+  mutate(
+    am = factor(
+      am,
+      levels = c(0, 1),
+      labels = c("automatic", "manual")
+    )
+  )
+
+mtcars_recipe <- recipe(mpg ~ hp + am, data = mtcars_recipe_data) |>
   step_dummy(all_nominal_predictors())
 
-lm_workflow = workflow() |>
-  add_model(lm_model) |>
-  add_recipe(recipe)
+mtcars_recipe |>
+  prep() |>
+  bake(new_data = NULL) |>
+  select(mpg, hp, starts_with("am_")) |>
+  head() |>
+  knitr::kable(digits = 3)
 ```
 
-In this example, `recipe()` initializes a preprocessing recipe that converts the categorical predictor `am` into a set of dummy variables. `step_dummy()` is one of many preprocessing steps available in the `recipes` package.
+The recipe has converted the categorical predictor `am` into a dummy variable that can be used by the linear regression model.
 
-### Why Use Workflows?
+Now we can put the recipe inside a workflow and fit the model.
 
-Workflows provide several key benefits when building models with `tidymodels`:
+```{r}
+recipe_workflow <- workflow() |>
+  add_model(lm_model) |>
+  add_recipe(mtcars_recipe)
 
-- **Reproducibility**: By encapsulating the entire modeling process into a workflow, the model can be easily reproduced, reducing the chances of human error. Each step is clearly defined and can be executed in a consistent manner.
-- **Modularity**: You can modify or swap out different components of the workflow—such as changing the model from linear regression to a different type of regression—without rewriting significant portions of your code.
-- **Separation of Concerns**: Workflows help you organize your code by clearly separating data preprocessing, model specification, and model fitting. This makes it easier to debug, extend, or modify your models later on.
-- **Preprocessing Integration**: Workflows enable the integration of complex preprocessing pipelines, ensuring that data transformations and model fitting occur seamlessly within a single structure. This is especially useful for more advanced models, where data preprocessing steps are often critical to model performance.
+recipe_fit <- recipe_workflow |>
+  fit(data = mtcars_recipe_data)
 
+extract_fit_engine(recipe_fit) |>
+  tidy() |>
+  knitr::kable(digits = 4)
+```
 
-In this section, we introduced the concept of workflows in `tidymodels`, which serves as a crucial tool for organizing and managing the different components of the modeling process. For simple linear regression, the workflow was relatively simple, involving a formula and a model specification. However, workflows can be extended to handle more complex models and preprocessing tasks as we will see in later chapters. By using workflows, you ensure that your model-building process is organized, reproducible, and adaptable to future changes.
+This model is no longer simple linear regression because it uses both `hp` and `am` as predictors. The point of the example is not to replace our `mpg ~ hp` model, but to show why recipes are useful: the workflow remembers the preprocessing steps and applies them consistently.
 
+:::
 
+::: {.example title="Example 9.5: Why workflows help"}
 
+Imagine fitting a model where you:
 
+1. replace missing values,
+2. create dummy variables,
+3. standardize predictors,
+4. fit the model,
+5. predict on new data.
+
+If those steps are written separately, it is easy to accidentally preprocess the training data differently from the new data.
+
+A workflow helps prevent that mistake by keeping the preprocessing and modeling steps bundled together.
+
+:::
 
 ## Fitting the Model
 
-Once the model and workflow have been defined, the next step is to fit the model to the data. In `tidymodels`, this is done using the `fit()` function, which estimates the model parameters (such as the intercept and slope in simple linear regression) based on the data provided. The fitting process involves using the workflow to apply the model specification and formula to the dataset.
+Once the model and workflow have been defined, the next step is to fit the model to data.
 
-### The `fit()` Function
+In `tidymodels`, this is done with `fit()`.
 
-The `fit()` function is a central function in the modeling process that takes the workflow and the data as inputs. It applies the formula and estimates the model’s parameters by minimizing the SSE (for linear regression models) or another appropriate criterion depending on the model type.
-
-For our simple linear regression model, we fit the model using the `mtcars` dataset, where the response variable is `mpg` (miles per gallon) and the predictor is `hp` (horsepower).
+::: {.example title="Example 9.6: Fitting the workflow"}
 
 ```{r}
-# Fit the model
-lm_fit = lm_workflow |>
+lm_fit <- lm_workflow |>
   fit(data = mtcars)
-```
 
-In this command:
-
-- `lm_workflow`: The workflow containing the model and the formula for simple linear regression.
-- `data = mtcars`: The dataset used to fit the model. The model will use this data to estimate the parameters $\beta_0$ (the intercept) and $\beta_1$ (the slope).
-
-The `fit()` function then processes the data, applies the specified formula (`mpg ~ hp`), and estimates the model parameters using the specified engine (`lm` in this case). In the background, `tidymodels` calls the R base `lm()` function to fit the model, but the workflow structure abstracts these technical details, making it easier to switch between engines without altering the core syntax.
-
-### Model Output
-
-After fitting the model, it’s essential to inspect the model’s output to understand the estimated relationship between the predictor and response variables. The fitted workflow object (`lm_fit`) contains a number of important details, including the estimated coefficients for the linear model, the residuals, and performance metrics.
-
-Let’s start by examining the output of the fitted model:
-
-```{r}
-# View the model fit summary
 lm_fit
 ```
 
-The output of `lm_fit` provides an overview of the fitted model, including the coefficients for the intercept and slope. This information is crucial for interpreting the relationship between the predictor and the response variable. Specifically, the estimated intercept ($b_0$) represents the expected value of `mpg` when `hp` is zero, and the slope ($b_1$) represents the expected change in `mpg` for each one-unit increase in `hp`.
+The fitted workflow contains the model specification, formula, and estimated model.
+
+Behind the scenes, `tidymodels` uses the `"lm"` engine, so the fitted model is ultimately based on base R's `lm()` function.
+
+:::
 
 ### Extracting Model Coefficients
 
-To better understand the results, you can extract the estimated coefficients from the model using the `tidy()` function from the `broom` package, which is part of the `tidymodels` ecosystem. This function provides a clean, easy-to-read summary of the model’s coefficients, along with other important statistics such as standard errors, t-values, and p-values.
+To extract the estimated coefficients in a tidy table, we can use `tidy()`.
+
+For a fitted workflow, it is often useful to extract the fitted engine first and then apply `tidy()`.
+
+::: {.example title="Example 9.7: Extracting and interpreting coefficients"}
 
 ```{r}
-# Extract coefficients
-tidy(lm_fit)
+lm_engine <- extract_fit_engine(lm_fit)
+
+coefs <- tidy(lm_engine)
+
+knitr::kable(coefs, digits = 4)
 ```
 
+The estimated slope for `hp` is `r round(coefs$estimate[coefs$term == "hp"], 4)`. This means that for each additional unit of horsepower, the predicted fuel economy decreases by about `r abs(round(coefs$estimate[coefs$term == "hp"], 4))` miles per gallon, on average.
 
-This table shows the estimated coefficients for the intercept and slope:
+The estimated intercept is `r round(coefs$estimate[coefs$term == "(Intercept)"], 4)`. In this context, the intercept is the predicted `mpg` when `hp = 0`. Since `hp = 0` is not realistic for the cars in this dataset, the intercept is needed mathematically but is not very meaningful as a practical interpretation.
 
-- **Intercept**: The estimated intercept ($b_0$) is 30.10, meaning that when `hp` is zero, the predicted `mpg` is approximately 30.10. In this example, the interpretation is not practical.
-- **Slope**: The estimated slope ($b_1$) is -0.068, indicating that for each additional unit of horsepower, the `mpg` decreases by about 0.068 miles per gallon, on average. The negative sign confirms an inverse relationship between `mpg` and `hp`.
+:::
 
-Additionally, the table provides the standard errors, t-statistics, and p-values, which are useful for assessing the statistical significance of the estimated coefficients. In this case, both the intercept and the slope have very small p-values (less than 0.001), suggesting that they are statistically significant at conventional significance levels (e.g., 0.05).
+::: {.example title="Example 9.8: Comparing Tidymodels to base R"}
 
-### Model Predictions
-
-After fitting the model, it’s often useful to make predictions based on new or existing data. The `predict()` function allows you to generate predictions from the fitted model. In this case, we’ll generate predictions using the original dataset (`mtcars`), though in practice, you would typically use the model to predict on new, unseen data.
+Since we used the `"lm"` engine, the fitted coefficients agree with base R's `lm()` function.
 
 ```{r}
-# Make predictions on the original data
-predictions = lm_fit |>
-  predict(new_data = mtcars)
+base_lm_fit <- lm(mpg ~ hp, data = mtcars)
 
-# Add predictions to the original data
-mtcars_with_preds = mtcars |>
-  select(mpg, hp) |> 
-  mutate(predicted_mpg = predictions$.pred)
-
-# View the predictions
-head(mtcars_with_preds)
+bind_rows(
+  tidy(lm_engine) |> mutate(method = "tidymodels workflow"),
+  tidy(base_lm_fit) |> mutate(method = "base lm")
+) |>
+  select(method, term, estimate, std.error, statistic, p.value) |>
+  knitr::kable(digits = 4)
 ```
 
-In this example, we use the `predict()` function to generate predicted values of `mpg` for each observation in the `mtcars` dataset. These predictions are stored in a new column called `predicted_mpg`. Comparing the predicted values to the actual values allows us to assess how well the model fits the data.
+The advantage of `tidymodels` is not that it changes ordinary least squares. The advantage is that it gives us a consistent framework that scales well as modeling tasks become more complex.
 
-### Performance Metrics
+:::
 
-Once predictions have been made, it’s important to evaluate the model’s performance. One common metric for regression models is the Root Mean Squared Error (RMSE), which measures the average difference between the predicted and actual values. Lower RMSE values indicate better model performance.
+### Base R and Tidymodels Side-by-Side
 
-You can calculate the RMSE and other performance metrics using the `yardstick` package, another component of the `tidymodels` framework.
+For ordinary least squares regression, `tidymodels` can use base R's `lm()` function as the engine. That means the estimated line is the same, but the organization of the modeling process is different.
+
+| Modeling task | Base R approach | Tidymodels approach |
+|---|---|---|
+| Specify the model | Usually done inside `lm()` | `linear_reg()` and `set_engine("lm")` |
+| Attach the formula | `lm(mpg ~ hp, data = mtcars)` | `add_formula(mpg ~ hp)` or `add_recipe()` |
+| Fit the model | `lm()` fits immediately | `fit(data = mtcars)` fits the workflow |
+| Extract coefficients | `coef()`, `summary()`, or `broom::tidy()` | `extract_fit_engine()` and `tidy()` |
+| Make predictions | `predict(object, newdata = ...)` | `predict(object, new_data = ...)` |
+| Add preprocessing | Manually before fitting | Store steps in a `recipe()` |
+| Reuse the process | Recreate steps by hand | Reuse the workflow object |
+
+The two approaches are not enemies. Base R is direct and compact. Tidymodels is more structured and becomes especially helpful when the modeling process includes preprocessing, resampling, tuning, or repeated prediction on new data.
+
+## Making Predictions
+
+After fitting the model, we can use `predict()` to generate fitted values for existing data or predictions for new data.
+
+::: {.example title="Example 9.9: Predicting on the original data"}
 
 ```{r}
-# Calculate RMSE
-metrics = lm_fit |>
+mtcars_with_preds <- lm_fit |>
+  predict(new_data = mtcars) |>
+  bind_cols(mtcars |> select(mpg, hp))
+
+head(mtcars_with_preds) |>
+  knitr::kable(digits = 3)
+```
+
+The `.pred` column contains the predicted value of `mpg` from the fitted model.
+
+Comparing `.pred` to the observed `mpg` helps us understand how far the model's predictions are from the actual values.
+
+:::
+
+::: {.example title="Example 9.10: Predicting for new horsepower values"}
+
+Suppose we want predicted fuel economy for cars with horsepower values 100, 150, and 200.
+
+```{r}
+new_cars <- tibble(hp = c(100, 150, 200))
+
+lm_fit |>
+  predict(new_data = new_cars) |>
+  bind_cols(new_cars) |>
+  select(hp, predicted_mpg = .pred) |>
+  knitr::kable(digits = 3)
+```
+
+These are point predictions from the fitted line. They are not prediction intervals; they do not show uncertainty around the predictions.
+
+:::
+
+## Performance Metrics
+
+Once predictions have been made, we can evaluate model performance.
+
+Common regression metrics include:
+
+- RMSE: root mean squared error,
+- MAE: mean absolute error,
+- $R^2$: proportion of variation explained.
+
+::: {.example title="Example 9.11: Calculating model metrics"}
+
+```{r}
+model_metrics <- lm_fit |>
   predict(new_data = mtcars) |>
   bind_cols(mtcars) |>
-  metrics(truth = mpg, estimate = .pred)
+  yardstick::metrics(truth = mpg, estimate = .pred)
 
-# View performance metrics
-metrics
+knitr::kable(model_metrics, digits = 4)
 ```
 
-This will output the RMSE, along with other useful metrics like the Mean Absolute Error (MAE) and R-squared.
+The RMSE is approximately `r round(model_metrics$.estimate[model_metrics$.metric == "rmse"], 3)`, so the model's fitted values are typically off by about that many miles per gallon.
 
-- `rmse`: The Root Mean Squared Error (RMSE) is approximately 3.74, meaning that, on average, the model’s predictions are off by about 3.74 miles per gallon.
-- `rsq`: The R-squared value is 0.60, indicating that the model explains about 60% of the variation in `mpg`.
+The $R^2$ value is approximately `r round(model_metrics$.estimate[model_metrics$.metric == "rsq"], 3)`, so the model explains about `r round(100 * model_metrics$.estimate[model_metrics$.metric == "rsq"], 1)`% of the sample variation in `mpg`.
 
+:::
 
-In this section, we demonstrated how to fit a simple linear regression model using the `fit()` function in `tidymodels`. We also explored how to extract and interpret the model coefficients, make predictions, and evaluate model performance using metrics like RMSE and R-squared. By abstracting the fitting process into a workflow, `tidymodels` makes it easy to manage and evaluate models in a structured and reproducible way. In the next section, we will delve into model diagnostics to assess how well the assumptions of linear regression are met in this fitted model.
+::: {.callout-warning collapse="false" title="Training metrics are optimistic"}
 
+The metrics above are calculated on the same data used to fit the model. These are training-set metrics.
 
+Training-set performance can make a model look better than it will perform on new data. Later, we will use tools such as data splitting, cross-validation, and resampling to estimate performance more honestly.
+
+:::
 
 ## Model Diagnostics
 
-After fitting a linear regression model, it’s essential to check the underlying assumptions to ensure that the model is appropriate for the data and that the results can be trusted. These assumptions include linearity, constant variance (homoscedasticity) of the residuals, independence of errors, and normally distributed errors. Violations of these assumptions can lead to biased estimates or misleading inference. In this section, we will focus on diagnosing these assumptions using residual plots and other techniques, leveraging the `tidymodels` framework.
+After fitting a linear regression model, we still need to check whether the assumptions appear reasonable.
+
+The main assumptions are:
+
+- linearity,
+- constant variance,
+- independence,
+- normality of errors.
 
 ### Residuals and Fitted Values
 
+We can generate residuals and fitted values using `augment()` from the `broom` package.
 
-To start our diagnostics, we will generate the residuals and fitted values using the `augment()` function from the `broom` package, which adds additional information such as residuals and fitted values to the original dataset. To use `augment` we must first extract the fitted model from the overall fitted workflow with the `extract_fit_engine` function.
+To use `augment()` with the fitted `lm` object, we first extract the fitted engine from the workflow.
+
+::: {.example title="Example 9.12: Creating diagnostic data with `augment()`"}
 
 ```{r}
-# Augment the model with residuals and fitted values
-predictions = extract_fit_engine(lm_fit) |> 
+diagnostic_data <- lm_engine |>
   augment()
 
-# View the first few rows of augmented data
-head(predictions)
-
+head(diagnostic_data) |>
+  knitr::kable(digits = 3)
 ```
 
+The augmented dataset includes columns such as:
 
+- `.fitted`: fitted values,
+- `.resid`: residuals,
+- `.std.resid`: standardized residuals.
 
-### Plotting Residuals vs. Fitted Values
+These columns are useful for diagnostic plots.
 
-A key diagnostic plot for linear regression is the residuals versus fitted values plot. This plot helps assess the assumption of linearity and constant variance (homoscedasticity). In a well-behaved model, the residuals should exhibit no clear pattern and should have constant spread across all levels of the fitted values.
+:::
 
-Let’s create the residuals vs. fitted values plot:
+### Residuals versus Fitted Values
+
+A residuals-versus-fitted-values plot helps assess linearity and constant variance.
+
+::: {.example title="Example 9.13: Residuals versus fitted values"}
 
 ```{r}
-# Plot residuals vs. fitted values
-ggplot(predictions, aes(x = .fitted, y = .resid)) +
+ggplot(diagnostic_data, aes(x = .fitted, y = .resid)) +
   geom_point() +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  labs(x = "Fitted Values", y = "Residuals", title = "Residuals vs. Fitted Values") +
+  labs(
+    x = "Fitted values",
+    y = "Residuals",
+    title = "Residuals vs. fitted values"
+  ) +
   theme_minimal()
 ```
 
-In this plot:
+If the model is appropriate, we hope to see residuals scattered randomly around 0 with no strong curve or funnel shape.
 
-- The x-axis represents the fitted values (predicted `mpg` from the model).
-- The y-axis represents the residuals (differences between observed and predicted `mpg`).
-- The dashed red line at zero represents where the residuals would lie if the model were perfect.
-
-
-### Checking Homoscedasticity (Constant Variance)
-
-Another assumption of linear regression is that the residuals should have constant variance, also known as homoscedasticity. If the spread of residuals increases or decreases with the fitted values, the assumption of constant variance is violated, which can lead to inefficient estimates and biased standard errors.
-
-In the residuals vs. fitted values plot, this would manifest as a "funnel" shape, where the residuals get larger (or smaller) as the fitted values increase. If you observe this pattern, it suggests heteroscedasticity, and you may need to consider a transformation of the response variable or use robust standard errors to account for the non-constant variance.
+:::
 
 ### Normality of Residuals
 
-Linear regression assumes that the residuals are normally distributed. A common way to check this assumption is to create a Q-Q (quantile-quantile) plot, which compares the quantiles of the residuals to the quantiles of a normal distribution. If the residuals are normally distributed, the points should fall roughly along a 45-degree line.
+A Q-Q plot helps us check whether the residuals are approximately normal.
 
-Let’s create a Q-Q plot using `ggplot2`:
+::: {.example title="Example 9.14: Q-Q plot of residuals"}
 
 ```{r}
-# Q-Q plot of residuals
-ggplot(predictions, aes(sample = .resid)) +
+ggplot(diagnostic_data, aes(sample = .resid)) +
   stat_qq() +
-  stat_qq_line() +
-  labs(title = "Q-Q Plot of Residuals") +
+  stat_qq_line(color = "red") +
+  labs(
+    title = "Q-Q plot of residuals",
+    x = "Theoretical quantiles",
+    y = "Sample residual quantiles"
+  ) +
   theme_minimal()
 ```
 
-In the Q-Q plot:
+If the residuals are approximately normal, the points should roughly follow the reference line.
 
-- If the residuals are normally distributed, the points will fall along the 45-degree reference line.
-- Deviations from this line, especially at the tails, suggest that the residuals may not follow a normal distribution.
+:::
 
-If the normality assumption is violated (e.g., heavy tails or skewness), it may be necessary to apply a transformation to the response variable or explore alternative models that do not assume normality, such as generalized linear models.
+### Independence of Errors
 
-### Checking for Independence of Errors
+If the data are ordered in time, space, or another meaningful sequence, we should check for autocorrelation in the residuals.
 
-Another important assumption is that the errors (or residuals) should be independent of one another. This is especially relevant in time series data, where errors may be autocorrelated (i.e., residuals at one time point may be related to residuals at nearby time points). We can used the residuals in an ACF plot to determine if there is significant autocorrelation at a lag.
-
-```{r warning=FALSE, message=FALSE}
-library(forecast)
-
-ggAcf(predictions$.resid)
-
-```
-
-
-
-
-
-### Detecting Outliers
-
-To identify potential outliers, you can plot the standardized residuals, which are residuals divided by their estimated standard deviation. Residuals with an absolute value greater than 2 or 3 are often considered potential outliers.
+::: {.example title="Example 9.15: ACF plot of residuals"}
 
 ```{r}
-# Plot standardized residuals
-ggplot(predictions, aes(x = .fitted, y = .std.resid)) +
+acf(diagnostic_data$.resid, main = "ACF of residuals")
+```
+
+For `mtcars`, the row order is not a meaningful time order, so this plot is not as important as it would be for time series data. The main lesson is procedural: when observations have a meaningful order, check residual dependence.
+
+:::
+
+### Detecting Potential Outliers
+
+Standardized residuals help identify observations that are unusually far from the fitted line.
+
+::: {.example title="Example 9.16: Standardized residuals"}
+
+```{r}
+ggplot(diagnostic_data, aes(x = .fitted, y = .std.resid)) +
   geom_point() +
-  geom_hline(yintercept = c(-2, 2), linetype = "dashed", color = "red") +
-  labs(x = "Fitted Values", y = "Standardized Residuals", title = "Standardized Residuals vs. Fitted Values") +
+  geom_hline(yintercept = 0, color = "gray40") +
+  geom_hline(yintercept = c(-2, 2), linetype = "dashed", color = "orange") +
+  geom_hline(yintercept = c(-3, 3), linetype = "dotted", color = "red") +
+  labs(
+    x = "Fitted values",
+    y = "Standardized residuals",
+    title = "Standardized residuals vs. fitted values"
+  ) +
   theme_minimal()
 ```
 
-In this plot:
+Observations outside the dashed or dotted lines should be investigated, especially if they also have high leverage or strong influence.
 
-- Points outside the dashed lines (at standardized residuals of -2 and 2) are potential outliers. These points should be investigated further to understand why they deviate from the model’s predictions.
+:::
 
+::: {.callout-warning collapse="false" title="Common Tidymodels troubleshooting"}
 
+When Tidymodels code fails, the issue is often about the object being used rather than the regression idea itself.
 
+| Symptom | Likely issue | What to check |
+|---|---|---|
+| `predict()` gives an error about `new_data` | The argument name is wrong or the object is not fitted | Use `new_data = ...` and make sure the workflow has been fit |
+| New predictions fail after using a recipe | The new data do not contain the variables required by the recipe | Supply the original predictor columns expected by the recipe, not manually created dummy columns |
+| Coefficients are not available directly from the workflow | The fitted engine is nested inside the workflow | Use `extract_fit_engine()` before `tidy()` |
+| The model uses the wrong response or predictor | The formula sides were reversed | Remember: response on the left, predictors on the right |
+| Results differ from what you expected | A preprocessing step changed the variables used by the model | Inspect the recipe with `prep()` and `bake()` |
 
-## Summary
+The useful habit is to ask, "Which object do I have right now: a model specification, a recipe, an unfitted workflow, or a fitted workflow?" Many Tidymodels errors become easier to diagnose once that distinction is clear.
 
-In this chapter, we demonstrated how to use the `tidymodels` framework to fit a simple linear regression model. We covered the key steps, including specifying the model with `parsnip`, building a workflow, and fitting the model. Additionally, we explored how to extract model results and perform basic diagnostics.
+:::
 
-The `tidymodels` ecosystem offers a flexible and organized approach to model building, and in future chapters, we will expand this framework to handle more complex regression models and advanced techniques such as cross-validation and model tuning.
+## Recap
 
+This chapter introduced a `tidymodels` workflow for simple linear regression.
+
+| Idea | Meaning |
+|---|---|
+| **`linear_reg()`** | Specifies a linear regression model. |
+| **Engine** | The computational method used to fit the model, such as `"lm"`. |
+| **Workflow** | An object that bundles the model specification with a formula or recipe. |
+| **`recipe()`** | Stores preprocessing steps such as dummy-variable creation, transformations, or standardization. |
+| **`add_recipe()`** | Adds a recipe to a workflow instead of using a plain formula. |
+| **`fit()`** | Fits the workflow to data. |
+| **`tidy()`** | Extracts model coefficients and inferential summaries in a clean table. |
+| **`predict()`** | Generates predictions for existing or new data. |
+| **`yardstick::metrics()`** | Calculates model performance metrics such as RMSE and $R^2$. |
+| **`augment()`** | Adds fitted values, residuals, and diagnostic quantities to the data. |
+| **Training-set metrics** | Performance metrics calculated on the same data used to fit the model; often optimistic. |
+| **Base R vs. Tidymodels** | The fitted least-squares line can be identical, but Tidymodels organizes the modeling process more explicitly. |
+| **Diagnostics** | Residual-based checks for model assumptions. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. What is the difference between specifying a model with `linear_reg()` and fitting a model with `fit()`?
+
+2. What role does the engine play in a `parsnip` model specification?
+
+3. Why might a workflow be useful even for simple linear regression?
+
+4. What problem does a `recipe()` solve in the modeling workflow?
+
+5. If Tidymodels uses the `"lm"` engine, why should the coefficient estimates agree with base R's `lm()`?
+
+6. In the formula `mpg ~ hp`, which variable is the response and which is the predictor?
+
+7. Why is the intercept in the `mpg ~ hp` model not very meaningful in practice?
+
+8. What does `predict()` return in the examples from this chapter?
+
+9. Why are training-set metrics often optimistic?
+
+10. What is the difference between `tidy()` and `augment()`?
+
+11. If prediction fails after you use a recipe, what is one of the first things you should check?
+
+12. Why is the ACF plot not especially meaningful for `mtcars`, but important for time-ordered data?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Specification versus fitting.** `linear_reg()` describes the type of model to use. `fit()` estimates the model parameters from data.
+
+2. **The engine performs the computation.** The engine specifies which underlying function or package will fit the model. For ordinary least squares regression, the `"lm"` engine uses base R's `lm()` function.
+
+3. **Workflows organize the process.** A workflow keeps the model specification, formula, and preprocessing steps together. This makes the modeling process more reproducible and easier to modify later.
+
+4. **Recipes store preprocessing.** A recipe records steps such as dummy-variable creation, transformations, or standardization. This helps ensure that the same preprocessing is applied when the model is fit and when predictions are made on new data.
+
+5. **Same engine, same least-squares fit.** When Tidymodels uses the `"lm"` engine, it is using base R's ordinary least squares machinery behind the scenes. The organization is different, but the estimated line should be the same.
+
+6. **Left side is the response.** In `mpg ~ hp`, `mpg` is the response variable and `hp` is the predictor variable.
+
+7. **Zero horsepower is not realistic.** The intercept is the predicted `mpg` when `hp = 0`. Since cars in this dataset do not have 0 horsepower, the intercept is needed mathematically but is not practically meaningful.
+
+8. **Predicted values.** `predict()` returns a tibble with a `.pred` column containing predicted values from the fitted model.
+
+9. **The model has already seen the data.** Training-set metrics evaluate the model on the same data used to fit it, so they usually make the model look better than it may perform on new data.
+
+10. **Model summary versus observation-level diagnostics.** `tidy()` summarizes model coefficients, standard errors, test statistics, and p-values. `augment()` gives observation-level information such as fitted values and residuals.
+
+11. **Check the required predictor columns.** New data should contain the original predictor variables expected by the workflow or recipe. If the recipe creates dummy variables, do not usually supply the dummy variables yourself; supply the original categorical predictor and let the recipe handle the encoding.
+
+12. **Order matters for autocorrelation.** The ACF plot is meaningful when observations have a meaningful order, such as time. The row order of `mtcars` is not a natural time sequence, so autocorrelation is not a central concern for that dataset.
+
+:::

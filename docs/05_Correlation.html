@@ -101,8 +101,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script><script src="site_libs/quarto-diagram/mermaid.min.js"></script><script src="site_libs/quarto-diagram/mermaid-init.js"></script><link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
-<style>
+}</script><style>
 div.callout-example.callout {
   border-left-color: #008000;
 }
@@ -1116,39 +1115,6 @@ SS_{yy}=\sum (y_i-\bar{y})^2.
 SSE=\sum (y_i-\hat{y}_i)^2.
 \]</span></p>
 <p>SSE does include <span class="math inline">\(x\)</span> because the fitted value <span class="math inline">\(\hat{y}\)</span> is a function of <span class="math inline">\(x\)</span>.</p>
-<div class="callout callout-style-default callout-note callout-titled" title="Decomposing variation in $y$">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Note</span>Decomposing variation in <span class="math inline">\(y\)</span>
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>The total variation in <span class="math inline">\(y\)</span> can be separated into the part explained by the regression model and the part left unexplained:</p>
-<div class="cell" data-layout-align="default">
-<div class="cell-output-display">
-<div>
-<p></p><figure class="figure"></figure><p></p>
-<div>
-<pre class="mermaid mermaid-js">flowchart LR
-  A["Total variation in y&lt;br/&gt;SSyy"] --&gt; B["Explained variation&lt;br/&gt;SSR"]
-  A --&gt; C["Unexplained variation&lt;br/&gt;SSE"]
-  B --&gt; D["SSyy = SSR + SSE"]
-  C --&gt; D
-</pre>
-</div>
-<p></p>
-</div>
-</div>
-</div>
-<p>This decomposition is the foundation for <span class="math inline">\(r^2\)</span>. A model has a larger <span class="math inline">\(r^2\)</span> when the explained part, SSR, is large relative to the total variation, <span class="math inline">\(SS_{yy}\)</span>.</p>
-</div>
-</div>
-</div>
 <p>Here are a few key points about these sums of squares:</p>
 <ul>
 <li>If <span class="math inline">\(x\)</span> provides little to no useful information for predicting <span class="math inline">\(y\)</span>, then <span class="math inline">\(SS_{yy}\)</span> and <span class="math inline">\(SSE\)</span> will be nearly equal.</li>
@@ -1189,7 +1155,7 @@ r^2=\frac{SSR}{SS_{yy}}.
 <p>Practical interpretation:</p>
 <p>About <span class="math inline">\(100(r^2)\%\)</span> of the sample variation in <span class="math inline">\(y\)</span>, measured by the total sum of squares of deviations of the sample <span class="math inline">\(y\)</span> values around their mean <span class="math inline">\(\bar{y}\)</span>, can be explained by using <span class="math inline">\(x\)</span> to predict <span class="math inline">\(y\)</span> in the straight-line model.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="$r^2$ is not a percent correct">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1198,7 +1164,7 @@ r^2=\frac{SSR}{SS_{yy}}.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <p>An <span class="math inline">\(r^2\)</span> value of 0.80 does not mean the model predicts 80% of observations correctly.</p>
 <p>It means 80% of the sample variation in the response variable is explained by the linear model using the predictor variable.</p>
@@ -1211,7 +1177,7 @@ r^2=\frac{SSR}{SS_{yy}}.
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Example</span>Example 5.7: Finding $r^2$ for the `trees` model
+<span class="screen-reader-only">Example</span>Example 5.7: Finding coefficient of determination for the `trees` model
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1260,7 +1226,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Example</span>Example 5.8: Interpreting a low $r^2$
+<span class="screen-reader-only">Example</span>Example 5.8: Interpreting a low coefficient of determination
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1275,7 +1241,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Example</span>Example 5.9: Choosing slope, correlation, or $r^2$
+<span class="screen-reader-only">Example</span>Example 5.9: Choosing slope, correlation, or coefficient of determination
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -1381,7 +1347,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 </table></section><section id="check-your-understanding" class="level2" data-number="5.4"><h2 data-number="5.4" class="anchored" data-anchor-id="check-your-understanding">
 <span class="header-section-number">5.4</span> Check your understanding</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Problems">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1390,7 +1356,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-16" class="callout-16-contents callout-collapse collapse show">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>What does the sign of <span class="math inline">\(SS_{xy}\)</span> tell us about the direction of a linear association?</p></li>
@@ -1410,7 +1376,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-17-contents" aria-controls="callout-17" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1419,7 +1385,7 @@ F-statistic: 419.4 on 1 and 29 DF,  p-value: &lt; 2.2e-16</code></pre>
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-17" class="callout-17-contents callout-collapse collapse">
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p><strong>Direction of association.</strong> If <span class="math inline">\(SS_{xy}\)</span> is positive, then larger values of <span class="math inline">\(x\)</span> tend to occur with larger values of <span class="math inline">\(y\)</span>. If <span class="math inline">\(SS_{xy}\)</span> is negative, then larger values of <span class="math inline">\(x\)</span> tend to occur with smaller values of <span class="math inline">\(y\)</span>.</p></li>

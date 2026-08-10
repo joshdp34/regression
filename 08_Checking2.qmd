@@ -1,291 +1,374 @@
 # Checking the Normality and Independence Assumptions and Outliers {#sec-checking2}
 
-> "If it's green or wriggles, it's biology. If it stinks, it's chemistry. If it doesn't work, it's physics or engineering. If it's green and wiggles and stinks and still doesn't work, it's psychology. If it's incomprehensible, it's mathematics. If it puts you to sleep, it's statistics." - Anonymous (in *Journal of the South African Institute of Mining and Metallurgy* (1978))
+> "If it's green or wriggles, it's biology. If it stinks, it's chemistry. If it doesn't work, it's physics or engineering. If it's green and wiggles and stinks and still doesn't work, it's psychology. If it's incomprehensible, it's mathematics. If it puts you to sleep, it's statistics." - Anonymous, *Journal of the South African Institute of Mining and Metallurgy* (1978)
 
+In the previous chapter, we focused on checking linearity and constant variance. In this chapter, we continue the diagnostic process by examining:
+
+1. outliers,
+2. correlated errors, and
+3. normality of the errors.
+
+As before, the goal is not to find perfect assumptions. The goal is to decide whether the assumptions are reasonable enough for the regression analysis to be useful.
 
 ## Checking for Outliers
 
+### Outliers with Respect to the Predictor and Response
 
-### Outliers With Respect to the Predictor Variable and the Response Variable
+When checking for outliers in regression, we must think in two dimensions because we have both a predictor variable $x$ and a response variable $y$.
 
+An observation can be unusual because:
 
-When checking for *outliers*, we must think in terms of two dimensions since we have two variables, $x$ and $y$.
+- its response value is far from the fitted line,
+- its predictor value is far from the rest of the observed $x$ values, or
+- both.
 
+Since regression models the response variable $y$, we are often especially concerned with observations that have unusual residuals. However, an observation with an unusual $x$ value can also be important because it may strongly affect the fitted line.
 
+::: {.callout-note collapse="false" title="Outlier, leverage, and influence"}
 
-Since we are interested in modeling the response variable $y$ in the model, we will mainly be concerned with outliers with respect to $y$. However, outliers with respect to $x$ may also be of concern if it affects the fitted line. 
+These three ideas are related but not identical.
 
+| Term | Meaning |
+|---|---|
+| **Outlier in $y$** | An observation with a response far from what the model predicts. |
+| **High leverage point** | An observation with an unusual predictor value. |
+| **Influential point** | An observation that noticeably changes the fitted regression line. |
 
+A point can be high leverage without being influential. A point can also have a large residual without greatly changing the fitted line. Later, especially in multiple regression, we will use more formal tools for leverage and influence.
 
+:::
 
-### Effect on the Fitted Line
+::: {.example title="Comparing an outlier, a high leverage point, and an influential point"}
 
-A demonstration on the effect of outliers on the fitted line can be found at
-[http://www.jpstats.org/Regression/ch_03_04.html#sub1_1](http://www.jpstats.org/Regression/ch_03_04.html#sub1_1)
+The plots below show three different kinds of unusual observations. The highlighted point plays a different role in each panel.
 
-```{=html}
-<iframe width="900" height="500" object-position="right top" src="http://www.jpstats.org/Regression/ch_03_04.html#sub1_1" title=""></iframe>
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+
+set.seed(808)
+
+base_points <- tibble(
+  x = runif(35, 0, 10),
+  y = 2 + 1.4 * x + rnorm(35, sd = 1)
+)
+
+case_points <- tibble(
+  pattern = c(
+    "Outlier in y\nlarge residual, ordinary x",
+    "High leverage\nunusual x, follows pattern",
+    "Influential\nunusual x and changes line"
+  ),
+  x = c(5, 15, 15),
+  y = c(19, 23, 5)
+)
+
+base_by_pattern <- bind_rows(
+  lapply(case_points$pattern, \(this_pattern) {
+    base_points |>
+      mutate(
+        pattern = this_pattern,
+        point_type = "Original data"
+      )
+  })
+)
+
+diagnostic_cases <- case_points |>
+  mutate(point_type = "Highlighted point")
+
+diagnostic_comparison <- bind_rows(base_by_pattern, diagnostic_cases)
+
+ggplot(diagnostic_comparison, aes(x = x, y = y)) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE, color = "steelblue") +
+  geom_point(aes(color = point_type), size = 2) +
+  facet_wrap(~pattern, nrow = 1) +
+  scale_color_manual(values = c("Highlighted point" = "red", "Original data" = "gray35")) +
+  labs(x = "x", y = "y", color = NULL)
 ```
 
+The first highlighted point is unusual mainly because it is far above the fitted line. The second is far out in the $x$ direction but follows the same pattern as the rest of the data. The third is far out in $x$ and pulls the fitted line toward itself, making it influential.
 
+:::
 
+::: {.callout-note collapse="false" title="Preview: Cook's distance"}
 
+Cook's distance is a diagnostic measure that combines residual size and leverage. It is designed to flag observations that may have a large influence on the fitted regression model.
 
+A common rough guideline is to investigate observations with Cook's distance larger than $4/n$, where $n$ is the sample size. This is not an automatic deletion rule. It is a prompt to ask whether the observation is valid, whether the model is appropriate, and how much the conclusions depend on that point.
 
+We will return to influence diagnostics in more detail later.
+
+:::
 
 ### Detecting Outliers with Semistudentized Residual Plots
 
-Since the effect on the fitted line is determined mainly by how far   the point is from the line, we will identify outliers by examining the residuals, in particular, the semistudentized residuals
+Because outliers in $y$ are determined mainly by how far a point is from the fitted line, we identify potential outliers by examining residuals. A useful scale is the semistudentized residual:
 \begin{align*}
-e_{i}^{*} & =\frac{e_{i}-\bar{e}}{\sqrt{MSE}}\\
-& =\frac{e_{i}}{\sqrt{MSE}}
+e_i^*
+&=\frac{e_i-\bar e}{\sqrt{MSE}}\\
+&=\frac{e_i}{\sqrt{MSE}}.
 \end{align*}
 
-We can plot $e_{i}^{*}$ against $x$ or against $\hat{y}$. A general rule of thumb is any value of $e_{i}^{*}$ below -4 or above 4  should be considered an outlier. Note that this rule is only applicable to large $n$.
+We can plot $e_i^*$ against $x$ or against $\hat y$.
 
+As a rough rule of thumb, values of $e_i^*$ below -4 or above 4 should be considered possible outliers. For moderate sample sizes, values beyond about -3 or 3 may also be worth investigating. These are not automatic deletion rules; they are flags for investigation.
 
-We will discuss other methods for detecting outliers after we cover multiple regression.
+::: {#exm-8_1 .example title="Calculating semistudentized residuals"}
 
+Let's examine 50 observations of $x$ and $y$.
 
-::: {#exm-8_1}
+```{r}
+#| warning: false
+#| message: false
 
-## Calculating Semistudentized Residuals 
-
-
-Let's examine 50 observations of $x$ and $y$:
-```{r warning=FALSE, message=FALSE}
 library(tidyverse)
 
-dat = read_csv("example_08_01.csv")
+outlier_dat <- read_csv("example_08_01.csv", show_col_types = FALSE)
 
-dat |> 
-  ggplot(aes(x=x,y=y))+
-    geom_point()+
-    geom_smooth(method = "lm")
-
-fit = lm(y~x, data=dat)
-
-#calculate semistudentized residuals
-dat = dat |> 
-  mutate(e.star = fit$residuals / summary(fit)$sigma)
-
-dat |> 
-  ggplot(aes(x=x, y=e.star))+
-    geom_point()
-
-
+ggplot(outlier_dat, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  labs(x = "x", y = "y")
 ```
 
+Now fit the simple linear regression model and calculate semistudentized residuals.
 
+```{r}
+#| warning: false
+#| message: false
 
-We can see from the semistudentized plot that there is one observation with a value of $e^*$ below -3. Although this is not below the rule of thumb of -4, we note that our sample size $n$ is only moderate and not large. So we may want to investigate an observation with a value of $e^*$ below -3.
+fit_outlier <- lm(y ~ x, data = outlier_dat)
+
+outlier_diag <- outlier_dat |>
+  mutate(
+    obs = row_number(),
+    yhat = fitted(fit_outlier),
+    e = resid(fit_outlier),
+    e_star = e / sigma(fit_outlier)
+  )
+
+ggplot(outlier_diag, aes(x = x, y = e_star)) +
+  geom_point() +
+  geom_hline(yintercept = 0, color = "red") +
+  geom_hline(yintercept = c(-3, 3), color = "orange", linetype = "dashed") +
+  geom_hline(yintercept = c(-4, 4), color = "darkred", linetype = "dotted") +
+  labs(x = "x", y = "Semistudentized residual")
+```
+
+The dashed orange lines mark $\pm 3$, and the dotted dark red lines mark $\pm 4$.
+
+```{r}
+outlier_diag |>
+  arrange(desc(abs(e_star))) |>
+  select(obs, x, y, yhat, e, e_star) |>
+  slice_head(n = 5) |>
+  knitr::kable(digits = 3)
+```
+
+The largest semistudentized residual should be investigated. It may be a data-entry error, a genuinely unusual case, or a sign that the model is missing something important.
 
 :::
 
+::: {.callout-warning collapse="false" title="Do not delete just because a point is unusual"}
 
-Once we see there is a potential outlier, we must investigate *why* it is an outlier. If the observation is unusually small or large due to a data recording error, then perhaps the value can be corrected or just deleted from the dataset. If we cannot determine this is the cause of the outlier for certain, then we should not remove the observation. This observation could be unusual just due to chance.
+Once we identify a potential outlier, we must investigate why it is unusual.
 
+If the observation is unusual because of a clear data recording error, the value may be corrected or removed. If we cannot determine that the point is erroneous, we should not delete it simply because it is inconvenient. Real data often contain real unusual observations.
 
+:::
 
 ## Correlated Error Terms
 
-
 ### Assumption of Independence
 
-Since we are assuming the random error term $\varepsilon$ are *normal*, we want to check to see the uncorrelated errors assumption. If there is no correlation between the residuals, then we can assume *independence*.
+The regression model assumes that the errors associated with different observations are independent. If errors are correlated, then the model may underestimate or overestimate uncertainty, making confidence intervals and hypothesis tests unreliable.
 
-
+When the errors are normally distributed, uncorrelated errors imply independent errors. Since true errors are not observed, we examine residuals for evidence of dependence.
 
 ### Residual Sequence Plots
 
-The usual cause of correlation in the residuals is data taken in some type of sequence such as *time* or *space*. When the error terms are correlated over time or some other sequence, we say they are *serially* correlated or *autocorrelated*.
+The usual cause of correlated residuals is data collected in some sequence, such as time or space. When errors are correlated over time or another sequence, we say they are *serially correlated* or *autocorrelated*.
 
+When data are collected in a meaningful order, a residual sequence plot can show evidence of autocorrelation. In a sequence plot, residuals are plotted against the observation index $i$.
 
+If there is no autocorrelation, the residuals should be randomly scattered around 0. If there is a pattern, such as long runs above or below 0, then there is evidence of autocorrelation.
 
-When the data are taken in some sequence, a *sequence plot*  of the residuals may show a pattern indicating autocorrelation. In a sequence plot, the residuals are plotted against the observation index $i$. If there is no autocorrelation, then the residuals should be "randomly" spread about zero. If there is a pattern, then there is evidence of autocorrelation.
+::: {.example title="What autocorrelation can look like"}
 
+Suppose a residual sequence plot shows 20 residuals below 0 followed by 20 residuals above 0.
 
+That pattern suggests the errors are not independent. Consecutive observations are behaving similarly, so the effective amount of information in the data may be less than the sample size suggests.
 
-### Autocorrelation Function Plot
-
-Sometime a residual sequence plot may not show an obvious pattern but autocorrelation may still exist.
-
-
-
-Another plot that helps examine correlation that may not be visible in the sequence plot is the *autocorrelation* *function* plot (ACF).
-
-
-
-
-In the ACF plot, correlations are calculated between residuals some $k$ index away. That is,
-$$
-\begin{align}
-r_{k} & =\widehat{Cor}\left[e_{i},e_{i+k}\right]\\
-& =\frac{\sum_{i=1}^{n-k}\left(e_{i}-\bar{e}\right)\left(e_{i+k}-\bar{e}\right)}{\sum_{i=1}^{n}\left(e_{i}-\bar{e}\right)^{2}}
-\end{align}
-$${#eq-w3_4}
-
-In an ACF plot, $r_k$ is plotted for varying values of $k$. If the value of $r_k$ is larger in magnitude than some threshold shown on the plot (usually a 95% confidence interval), then we consider this evidence of autocorrelation.
-
-
-### Tests for Autocorrelation
-
-In addition to examining serial plots and ACF plots, tests can be conducted for significant autocorrelation.
-In each of these tests, the null hypothesis is there is no autocorrelation.
-
-
-### Durbin-Watson Test
-
-The *Durbin-Watson*[^1^] test is for autocorrelation at $k=1$ in @eq-w3_4. That is, it tests for correlation one index (one time point) away.
-
-[^1^]: Durbin, J., & Watson, G. S. (1951). Testing for Serial Correlation in Least Squares Regression. II. *Biometrika*. Vol 38. (pp. 159-177).
-
-
-The Durbin-Watson test can be conducted in R with the `dwtest` function in the `lmtest` package.
-
-
-### Ljung-Box Test
-
-The *Ljung-Box*[^2^] test differs from the Durbin-Watson test in that it tests for *overall* correlation over all lags up to $k$ in @eq-w3_4. For example, if $k=4$ then the Ljung-Box test is for significant autocorrelation over all lags up to $k=4$.
-
-[^2^]: Ljung, G. M., & Box, G. E. (1978). On a measure of lack of fit in time series models. *Biometrika*, 65(2), 297-303.
-
-
-
-The Ljung-Box test can be conducted in `R` with the `Box.test` function with the argument `type=("Ljung")`. This function is in base `R`.
-
-
-
-### Breusch-Godfrey Test
-
-The *Breusch-Godfrey*[^3^][^4^] test is similar to the Ljung-Box test in that it tests for overall correlation over all lags up to $k$. The difference between the two test is not of concern in the regression models we will examine in this course. When using time series models, then the Breusch-Godfrey test is preferred over the Ljung-Box test due to asymptotic justification.
-
-[^3^]: Breusch, T. S. (1978). Testing for Autocorrelation in Dynamic Linear Models. *Australian Economic Papers*. 17: 334–355.
-
-[^4^]: Godfrey, L. G. (1978). Testing Against General Autoregressive and Moving Average Error Models when the Regressors Include Lagged Dependent Variables. *Econometrica*. 46: 1293–1301
-
-
-The Breusch-Godfrey test can be conducted in R with the `bgtest` function in the `lmtest` package.
-
-::: {#exm-8_1}
-
-## Portland Crime Data
-
-
-Let's look at data collected on the mean temperature for each day in Portland, OR, and the number of non-violent crimes reported that day. The crime data was part of a public database gathered from www.portlandoregon.gov. The data are presented in order by day. The variable $x$ in the dataset is the day index number.
-
-```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-library(lmtest)
-library(forecast)
-
-dat = read_csv("PortlandWeatherCrime.csv")
-
-#the file does not have a name for the index variable
-names(dat)[1] = "day"
-
-dat |> 
-  ggplot(aes(x=Mean_Temp, y=Num_Total_Crimes))+
-    geom_point()+
-    geom_smooth(method="lm")
-
-fit = lm(Num_Total_Crimes~Mean_Temp, data=dat)
-fit |> summary()
-
-dat$res = fit |> resid()
-
-ggplot(dat, aes(x=day, y=res))+
-  geom_point()
-
-```
-
-
-We can see that the residuals have a pattern where the values at the lower levels of the index tend to be below zero whereas the values at the higher levels of the index tend to be above zero. This is evidence of autocorrelation in the residuals.
-
-```{r}
-ggAcf(dat$res)
-```
-
-
-
-The values of the ACF at all lags are beyond the blue guideline for significant autocorreleation.
-
-
-Note that in the Ljung-Box test and the Breusch-Godfrey test below, we tested up to lag 7. We chose this lag since the data was taken over time and it would make sense for values at seven days apart to be similar. That is, we expect the number of crimes on Mondays to be similar, the number of crimes on Tuesdays to be similar, etc.
-
-```{r warning=FALSE, message=FALSE}
-dwtest(fit)
-
-Box.test(dat$res, lag=7,type="Ljung")
-
-bgtest(fit, order=7)
-```
+Autocorrelation is especially common with time-ordered data, such as daily measurements, monthly sales, annual economic indicators, or repeated measurements from nearby locations.
 
 :::
 
+### Autocorrelation Function Plot
 
-When the assumption of independence is violated, then a *difference* in the $y$ values could help remove the autocorrelation. This difference  is
-$$
-y^{\prime} = y_i - y_{i-k}
-$$
-where $k$ is some max lag where autocorrelation is significant. This difference $Y^{\prime}$ is then regressed on $x$. This difference may not help, in which case a time series model would be necessary. 
+Sometimes a residual sequence plot may not show an obvious pattern, even though autocorrelation exists.
 
+Another useful plot is the *autocorrelation function* plot, or ACF plot.
+
+In the ACF plot, correlations are calculated between residuals that are $k$ indices apart:
+$$
+\begin{align}
+r_k
+&=\widehat{Cor}(e_i,e_{i+k})\\
+&=\frac{\sum_{i=1}^{n-k}(e_i-\bar e)(e_{i+k}-\bar e)}{\sum_{i=1}^n(e_i-\bar e)^2}.
+\end{align}
+$${#eq-w3_4}
+
+In an ACF plot, $r_k$ is plotted for varying values of $k$. If the value of $r_k$ is larger in magnitude than the threshold shown on the plot, usually based on an approximate 95% interval, then this is evidence of autocorrelation.
+
+### Tests for Autocorrelation
+
+In addition to sequence plots and ACF plots, formal tests can be conducted for significant autocorrelation. In each of these tests, the null hypothesis is that there is no autocorrelation.
+
+### Durbin-Watson Test
+
+The *Durbin-Watson* test is for autocorrelation at lag 1 in @eq-w3_4. That is, it tests for correlation one index, or one time point, apart.
+
+The Durbin-Watson test can be conducted in R with the `dwtest()` function in the `lmtest` package.
+
+### Ljung-Box Test
+
+The *Ljung-Box* test differs from the Durbin-Watson test because it tests for overall autocorrelation over all lags up to some value $k$. For example, if $k=4$, then the Ljung-Box test looks for significant autocorrelation over lags 1 through 4.
+
+The Ljung-Box test can be conducted in R with the base R function `Box.test()` using `type = "Ljung-Box"`.
+
+### Breusch-Godfrey Test
+
+The *Breusch-Godfrey* test is similar to the Ljung-Box test because it can test for autocorrelation over several lags. When using time series regression models, the Breusch-Godfrey test is often preferred.
+
+The Breusch-Godfrey test can be conducted in R with the `bgtest()` function in the `lmtest` package.
+
+::: {#exm-8_2 .example title="Portland crime data and autocorrelation"}
+
+Let's look at data collected on the mean temperature for each day in Portland, Oregon, and the number of non-violent crimes reported that day. The crime data were part of a public database gathered from `www.portlandoregon.gov`.
+
+The data are ordered by day. The variable `day` is the day index number.
+
+```{r}
+#| warning: false
+#| message: false
+
+library(tidyverse)
+
+portland <- read_csv("PortlandWeatherCrime.csv", show_col_types = FALSE)
+names(portland)[1] <- "day"
+
+ggplot(portland, aes(x = Mean_Temp, y = Num_Total_Crimes)) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ x) +
+  labs(x = "Mean temperature", y = "Number of non-violent crimes")
+
+fit_portland <- lm(Num_Total_Crimes ~ Mean_Temp, data = portland)
+summary(fit_portland)
+```
+
+Now examine the residuals in time order.
+
+```{r}
+#| warning: false
+#| message: false
+
+portland_diag <- portland |>
+  mutate(res = resid(fit_portland))
+
+ggplot(portland_diag, aes(x = day, y = res)) +
+  geom_point() +
+  geom_line(alpha = 0.5) +
+  geom_hline(yintercept = 0, color = "red") +
+  labs(x = "Day", y = "Residual")
+```
+
+The residuals show long runs below and above 0, which suggests autocorrelation.
+
+```{r}
+acf(portland_diag$res, main = "ACF of Portland regression residuals")
+```
+
+The ACF plot gives another view of residual correlation across lags.
+
+For the Ljung-Box and Breusch-Godfrey tests below, we test up to lag 7 because the data were collected daily. In a daily dataset, a 7-day lag may be meaningful because the same day of the week could have similar behavior.
+
+```{r}
+#| warning: false
+#| message: false
+
+if (requireNamespace("lmtest", quietly = TRUE)) {
+  lmtest::dwtest(fit_portland)
+} else {
+  "Install the lmtest package to run lmtest::dwtest()."
+}
+
+Box.test(portland_diag$res, lag = 7, type = "Ljung-Box")
+
+if (requireNamespace("lmtest", quietly = TRUE)) {
+  lmtest::bgtest(fit_portland, order = 7)
+} else {
+  "Install the lmtest package to run lmtest::bgtest()."
+}
+```
+
+Small p-values provide evidence of autocorrelation. If the independence assumption is violated, then ordinary regression standard errors, confidence intervals, and tests may be misleading.
+
+:::
+
+When independence is violated, one possible remedy is to model changes instead of levels. For example, a difference in the response values can be defined as
+$$
+y_i' = y_i-y_{i-k},
+$$
+where $k$ is a lag where autocorrelation is important.
+
+This kind of differencing may help remove autocorrelation, but it also changes the interpretation of the model. If differencing does not solve the problem, a time series model may be necessary.
+
+::: {.callout-note collapse="false" title="Dependence changes the information in the data"}
+
+When observations are positively autocorrelated, nearby observations tend to carry overlapping information.
+
+This means 100 time-ordered observations may contain less independent information than 100 randomly sampled observations. That is why independence matters for standard errors and hypothesis tests.
+
+:::
 
 ## Normality of the Residuals
 
-
-
 ### The Normality Assumption
 
+The normality assumption says the error terms are normally distributed at each value of $x$.
 
-If we do not have normality of the error terms, then the *t-tests* and *t-intervals* for ${\beta}_0$ and ${\beta}_1$  would not be valid.
+Normality is especially important for exact small-sample $t$ tests and $t$ intervals for $\beta_0$ and $\beta_1$. It is also important for confidence intervals for the mean response and prediction intervals for individual responses.
 
+We check normality by examining the residuals from the fitted line.
 
+::: {.callout-note collapse="false" title="Normal errors, not necessarily normal response values"}
 
-Furthermore, the confidence interval for the *mean* response and the *prediction* interval for the response would not be valid.
+The normality assumption is about the errors around the regression line, not necessarily about the raw response variable $y$.
 
+The response variable can have a nonnormal marginal distribution even when the errors around the mean response are approximately normal.
 
-
-We can check the normality of error terms by examining the residuals of the fitted line.
-
-
+:::
 
 ### Graphically Checking Normality
 
-We can graphically check the distribution of the residuals. The two most common ways to do this is with a *histogram* or with a *normal* *probability* plot.
+We can graphically check the distribution of the residuals. The two most common displays are:
 
+- a histogram of residuals, and
+- a normal quantile-quantile plot, usually called a normal Q-Q plot.
 
+For a histogram, we check whether the shape is approximately mound-shaped and symmetric.
 
-Another (more general) name for a normal probability plot is a normal *quantile*-*quantile* (QQ) plot.
+For a Q-Q plot, we check whether the points approximately follow a straight line. Major departures from a straight line indicate nonnormality.
 
+It is important to note that we will never see an exact normal distribution in real-world data. We look for approximate normality in the residuals.
 
+The inferences discussed previously are still useful for small departures from normality. However, major departures from normality can lead to incorrect p-values and interval coverages.
 
+### Examples of Q-Q Plots
 
-For a histogram, we check to see if the shape is approximately close to that of a normal distribution.
-
-
-
-
-For a QQ plot, we check to see if the points approximately follow a straight line. Major departures from a straight line indicates *nonnormality*.
-
-
-
-
-It is important to note that we will never see an exact normal distribution is real-world data. Thus, we will always look for approximate normality in the residuals.
-
-
-
-
-The inferences discussed previously are still valid for small departure of normality. However, major departures from normality will lead to incorrect *p-values* in the hypothesis tests and incorrect *coverages* in the intervals.
-
-
-
-
-
-
-### Examples of QQ-plots
-
-Below are some examples of histograms and QQ-plots for some simulated datasets.
+Below are examples of histograms and Q-Q plots for simulated datasets.
 
 ::: {#fig-08_01 layout-ncol=2}
 
@@ -309,29 +392,185 @@ Below are some examples of histograms and QQ-plots for some simulated datasets.
 
 ![Heavy tails - QQ plot](fig05b.png){#fig-08_01j}
 
-
 ![No tails - Histogram](fig06a.png){#fig-08_01k}
-
 
 ![No tails - QQ plot](fig06b.png){#fig-08_01l}
 
-Examples of QQ-Plots
+Examples of Q-Q plots
 :::
 
+::: {.example title="Checking normality of residuals"}
+
+We can check the residuals from the earlier outlier example using a histogram and a Q-Q plot.
+
+```{r}
+#| warning: false
+#| message: false
+
+ggplot(outlier_diag, aes(x = e)) +
+  geom_histogram(bins = 12, color = "white") +
+  labs(x = "Residual", y = "Count")
+
+ggplot(outlier_diag, aes(sample = e)) +
+  stat_qq() +
+  stat_qq_line(color = "red") +
+  labs(x = "Theoretical quantiles", y = "Sample residual quantiles")
+```
+
+If the residuals are approximately normal, the Q-Q plot points should roughly follow the red line. Large bends, strong S-shapes, or isolated points far from the line suggest departures from normality.
+
+:::
 
 ### The Shapiro-Wilk Test
 
-There are a number of hypothesis test for normality. The most popular test is the *Shapiro-Wilk*[^5^] test. This test has been found to have the most power among many of the other tests for normality[^6^].
+There are many hypothesis tests for normality. One common test is the *Shapiro-Wilk* test.
 
-[^5^]: Shapiro, S. S., & Wilk, M. B. (1965). An analysis of variance test for normality (complete samples). *Biometrika*, 52(3-4), 591-611.
+In the Shapiro-Wilk test, the null hypothesis is that the data are normally distributed:
+\begin{align*}
+H_0 &: \text{the residuals are normally distributed}\\
+H_a &: \text{the residuals are not normally distributed}.
+\end{align*}
 
-[^6^]: Razali, N. M., & Wah, Y. B. (2011). Power comparisons of shapiro-wilk, kolmogorov-smirnov, lilliefors and anderson-darling tests. *Journal of statistical modeling and analytics*, 2(1), 21-33.
+This test can be conducted using the `shapiro.test()` function in base R.
 
-In the Shapiro-Wilk test, the null hypothesis is that the data are normally distributed and the alternative is that the data are not normally distributed.
+::: {.example title="Shapiro-Wilk test for residual normality"}
 
+For the residuals from the outlier example, we can run:
 
+```{r}
+shapiro.test(resid(fit_outlier))
+```
 
-This test can be conducted using the `shapiro.test` function in base R.
+A small p-value provides evidence against normality. However, as with other diagnostic tests, the result should be interpreted alongside plots.
 
+With small samples, normality tests may have low power. With large samples, they may flag tiny deviations from normality that do not matter much in practice.
 
+:::
 
+::: {.callout-warning collapse="false" title="Plots and tests answer different questions"}
+
+A Q-Q plot shows the shape of the departure from normality. A Shapiro-Wilk test gives a p-value.
+
+Use both ideas carefully. A p-value can tell us that something is unusual under normality, but the plot helps us see whether the problem is skewness, heavy tails, outliers, or something else.
+
+:::
+
+## What to Do When Normality or Independence Looks Problematic
+
+Diagnostics are useful because they suggest next steps. The right response depends on the problem.
+
+| Diagnostic concern | Possible next step |
+|---|---|
+| One or two extreme residuals | Check for data-entry errors, examine context, and consider sensitivity analysis. |
+| Strong skewness in residuals | Consider transforming $y$, using a model appropriate for skewed responses, or using resampling methods. |
+| Heavy-tailed residuals | Investigate outliers, consider robust methods, and be cautious with small-sample $t$ inference. |
+| Autocorrelation over time | Add relevant time variables, difference the response, or use a time-series model. |
+| Dependence from clusters or repeated measurements | Consider methods that account for grouping, such as mixed models or clustered standard errors. |
+
+No diagnostic remedy should be applied mechanically. A transformation or new model should make sense for the context, not just make a plot look prettier.
+
+## Diagnostic Workflow Checklist
+
+Chapters 07 and 08 together give a basic diagnostic workflow for simple linear regression.
+
+::: {.callout-note collapse="false" title="A practical diagnostic sequence"}
+
+After fitting a simple linear regression model:
+
+1. **Start with the scatterplot.** Does a straight-line relationship appear reasonable?
+2. **Check residuals versus $x$ and fitted values.** Look for curvature and changing spread.
+3. **Check semistudentized residuals.** Look for unusually large residuals.
+4. **Check leverage and influence.** Ask whether unusual $x$ values are pulling the fitted line.
+5. **If data are ordered, check residuals over order.** Look for runs, trends, cycles, or autocorrelation.
+6. **Check normality of residuals.** Use a histogram and Q-Q plot, then possibly a formal test.
+7. **Connect diagnostics to the research question.** Decide whether any violations are serious enough to change the analysis or qualify the conclusions.
+
+The point of diagnostics is not to punish the model. It is to learn where the model is trustworthy and where it may be fragile.
+
+:::
+
+## Recap
+
+This chapter completed the basic diagnostic toolkit for simple linear regression.
+
+| Idea | Meaning |
+|---|---|
+| **Outlier in $y$** | An observation with a response value far from the fitted line. |
+| **High leverage point** | An observation with an unusual predictor value. |
+| **Influential point** | An observation that noticeably changes the fitted regression line. |
+| **Semistudentized residual** | A residual divided by $\sqrt{MSE}$, useful for flagging unusually large residuals. |
+| **Autocorrelation** | Correlation among errors or residuals across an ordered sequence. |
+| **Residual sequence plot** | A plot of residuals against observation order, useful for detecting dependence. |
+| **ACF plot** | A plot of residual correlations at different lags. |
+| **Durbin-Watson test** | A test for lag-1 autocorrelation. |
+| **Ljung-Box test** | A test for overall autocorrelation up to a chosen lag. |
+| **Normal Q-Q plot** | A diagnostic plot for checking whether residuals are approximately normal. |
+| **Shapiro-Wilk test** | A formal test of normality. |
+| **Cook's distance** | A diagnostic measure that combines residual size and leverage to flag potentially influential observations. |
+| **Diagnostic workflow** | A structured sequence for checking model assumptions and deciding what to investigate next. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why do we need to think about outliers in both the $x$ and $y$ directions?
+
+2. What is the difference between an outlier, a high leverage point, and an influential point?
+
+3. Why should a large semistudentized residual be treated as a flag for investigation rather than an automatic reason to delete an observation?
+
+4. What does a residual sequence plot show that an ordinary residual-versus-$x$ plot may not show?
+
+5. What does autocorrelation mean in the context of regression residuals?
+
+6. Why can autocorrelation make regression standard errors and hypothesis tests unreliable?
+
+7. What is the difference between the Durbin-Watson test and the Ljung-Box test?
+
+8. What should residuals look like in a normal Q-Q plot if the normality assumption is reasonable?
+
+9. Why is it incorrect to say that the response variable $y$ must be normally distributed for regression inference to be valid?
+
+10. Why should the Shapiro-Wilk test be interpreted together with a histogram or Q-Q plot?
+
+11. Why can a high leverage point be harmless in one dataset but influential in another?
+
+12. What does Cook's distance try to measure?
+
+13. If residuals show autocorrelation, what are two possible next steps?
+
+14. If residuals are strongly skewed, why might transforming $y$ be considered?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Regression is two-dimensional.** An observation can be unusual because its response is far from the fitted line or because its predictor value is far from the rest of the observed predictor values. Both can matter for the fitted model.
+
+2. **Three different diagnostic roles.** An outlier has an unusual response relative to the model. A high leverage point has an unusual predictor value. An influential point noticeably changes the fitted regression line.
+
+3. **Unusual does not mean wrong.** A large semistudentized residual may indicate a data-entry error, but it may also be a real unusual observation or evidence that the model is missing something. We investigate before deciding what to do.
+
+4. **Order matters.** A residual sequence plot shows residuals in the order the data were collected. It can reveal runs, trends, cycles, or other dependence patterns that may not be visible in a residual-versus-$x$ plot.
+
+5. **Residuals are related across order.** Autocorrelation means residuals close together in time, space, or sequence tend to be related. For example, a positive residual today may make a positive residual tomorrow more likely.
+
+6. **Less independent information than expected.** If errors are correlated, then observations do not provide fully independent pieces of information. The usual standard error formulas may be too small or otherwise misleading.
+
+7. **Lag 1 versus multiple lags.** The Durbin-Watson test focuses on lag-1 autocorrelation. The Ljung-Box test looks for overall autocorrelation across all lags up to a chosen maximum lag.
+
+8. **Approximately straight.** If residuals are approximately normal, the points in the Q-Q plot should fall roughly along a straight line. Large bends, S-shapes, or extreme points suggest nonnormality.
+
+9. **The assumption is about errors.** Regression inference assumes the errors around the regression line are normally distributed, not necessarily that the raw response values are normally distributed.
+
+10. **The p-value does not show the shape.** The Shapiro-Wilk test gives a p-value, but it does not show whether the problem is skewness, heavy tails, outliers, or something else. The plots provide that diagnostic context.
+
+11. **Leverage alone is not influence.** A high leverage point has an unusual predictor value. If it follows the same linear pattern as the rest of the data, it may not change the fitted line much. If it is far from the pattern, it can pull the fitted line strongly and become influential.
+
+12. **Influence on the fitted model.** Cook's distance combines information about residual size and leverage to flag observations that may substantially affect the fitted regression model.
+
+13. **Model the dependence.** Possible next steps include adding relevant time-related predictors, differencing the response, or using a time-series model. The right choice depends on why the residuals are autocorrelated.
+
+14. **To make residuals more nearly symmetric.** A transformation of $y$ may reduce skewness or stabilize variation, which can make normal-based inference more reasonable. However, it also changes the interpretation of the model, so it should be used thoughtfully.
+
+:::
