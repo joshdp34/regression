@@ -376,17 +376,17 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“And I knew exactly what to do. But in a much more real sense, I had no idea what to do.” - Michael Scott</p>
 </blockquote>
-<p>We discussed checking the assumptions of a simple linear regression model in <a href="07_Checking.html" class="quarto-xref"><span>Chapter 7</span></a> and <a href="08_Checking2.html" class="quarto-xref"><span>Chapter 8</span></a>. For multiple regression, we have already discussed the linearity assumption in <a href="16_Linearity.html" class="quarto-xref"><span>Chapter 16</span></a> and multicollinearity in <a href="14_Multicollinearity.html" class="quarto-xref"><span>Chapter 14</span></a>. We will now revisit the remaining assumptions of the multiple regression model and present some remedial measures.</p>
+<p>We discussed checking the assumptions of a simple linear regression model in <a href="#sec-checking" class="quarto-xref"><span class="quarto-unresolved-ref">sec-checking</span></a> and <a href="#sec-checking2" class="quarto-xref"><span class="quarto-unresolved-ref">sec-checking2</span></a>. For multiple regression, we have already discussed the linearity assumption in <a href="#sec-linearity" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linearity</span></a> and multicollinearity in <a href="#sec-multicollinearity" class="quarto-xref"><span class="quarto-unresolved-ref">sec-multicollinearity</span></a>. We will now revisit the remaining assumptions of the multiple regression model and present some remedial measures.</p>
 <section id="assumptions-for-the-multiple-regression-model" class="level2" data-number="21.1"><h2 data-number="21.1" class="anchored" data-anchor-id="assumptions-for-the-multiple-regression-model">
 <span class="header-section-number">21.1</span> Assumptions for the Multiple Regression Model</h2>
-<p>For the normal errors multiple regression model in <a href="11_Regression_Matrix.html#eq-w4_18" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> we need to check the assumptions.</p>
+<p>For the normal errors multiple regression model in <a href="#eq-w4_18" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_18</span></a> we need to check the assumptions.</p>
 <p>We will use the residuals here as we did in simple regression.</p>
-<p>Let’s begin by listing all of the assumptions for the model in <a href="11_Regression_Matrix.html#eq-w4_18" class="quarto-xref">Equation&nbsp;<span>11.1</span></a>:</p>
+<p>Let’s begin by listing all of the assumptions for the model in <a href="#eq-w4_18" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_18</span></a>:</p>
 <ol type="1">
 <li>
-<em>Linearity</em>: There is a linear relationship between <span class="math inline">\(y\)</span> and each of the predictor variables. (see <a href="16_Linearity.html" class="quarto-xref"><span>Chapter 16</span></a>)</li>
+<em>Linearity</em>: There is a linear relationship between <span class="math inline">\(y\)</span> and each of the predictor variables. (see <a href="#sec-linearity" class="quarto-xref"><span class="quarto-unresolved-ref">sec-linearity</span></a>)</li>
 <li>
-<em>Normality</em> of the residuals: In the normal error model, the error terms should be approximately normally distributed. 3.<em>Constant</em> variance: The variance of the error terms should be constant throughout the range of the predictor variables. 4.<em>Independence</em> of the residuals: We assume the error terms are independent of each other. 5.<em>Uncorrelated</em> predictor variables: There is no multicollinearity present between the predictor variables (see <a href="14_Multicollinearity.html" class="quarto-xref"><span>Chapter 14</span></a>).</li>
+<em>Normality</em> of the residuals: In the normal error model, the error terms should be approximately normally distributed. 3.<em>Constant</em> variance: The variance of the error terms should be constant throughout the range of the predictor variables. 4.<em>Independence</em> of the residuals: We assume the error terms are independent of each other. 5.<em>Uncorrelated</em> predictor variables: There is no multicollinearity present between the predictor variables (see <a href="#sec-multicollinearity" class="quarto-xref"><span class="quarto-unresolved-ref">sec-multicollinearity</span></a>).</li>
 </ol>
 <p>#3# Normality and Transformations</p>
 <p>We can check normality as we did in simple regression by plotting the residuals in a <em>QQ plot</em> or by using the <em>Shapiro Wilk</em> test.</p>
@@ -402,7 +402,7 @@ Y^\prime =&amp; \ln Y &amp; \text{ if }\lambda= 0
 \]</span> that results in a regression fit with residuals as close to normality as possible.</p>
 <p>In tidymodels, we can conduct a Box-Cox transformation using <code>step_BoxCox</code> in the recipe.</p>
 <div id="exm-21_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 21.1 (Handspan data)</strong></span> Let’s look at the handspan data first examine in <a href="15_Indicator.html#exm-15_1" class="quarto-xref">Example&nbsp;<span>15.1</span></a>.</p>
+<p><span class="theorem-title"><strong>Example 21.1 (Handspan data)</strong></span> Let’s look at the handspan data first examine in <a href="#exm-15_1" class="quarto-xref">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_1</span></a>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
@@ -486,7 +486,7 @@ Y^\prime =&amp; \ln Y &amp; \text{ if }\lambda= 0
 <span class="header-section-number">21.2</span> Remedial Measures</h2>
 <section id="overview-of-assumptions-and-remedial-measures" class="level3" data-number="21.2.1"><h3 data-number="21.2.1" class="anchored" data-anchor-id="overview-of-assumptions-and-remedial-measures">
 <span class="header-section-number">21.2.1</span> Overview of Assumptions and Remedial Measures</h3>
-<p>We will list again the assumptions of model <a href="11_Regression_Matrix.html#eq-w4_18" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> and also discuss the problems violations of these assumptions present and what can be done when they are violated.</p>
+<p>We will list again the assumptions of model <a href="#eq-w4_18" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_18</span></a> and also discuss the problems violations of these assumptions present and what can be done when they are violated.</p>
 <ol type="1">
 <li>
 <p>Linearity: Violating linearity will lead to incorrect conclusions about the relationship between <span class="math inline">\(y\)</span> and the predictor variables and thus lead to incorrect estimations and predictions.</p>
@@ -498,12 +498,12 @@ Y^\prime =&amp; \ln Y &amp; \text{ if }\lambda= 0
 <p>If we cannot obtain normality through a transformation, or we wish to keep interpretation and not do a transformation, then we can still do inferences based on <em>bootstrapping</em>. We will discuss bootstrapping in more detail below.</p>
 </li>
 <li>
-<p>Constant variance: Very much like the normality assumption, the constant variance assumption affects the inferences made for the model. Recall all the equations for the variance of the estimated coefficients (<a href="13_Inferences.html#eq-w4_31" class="quarto-xref">Equation&nbsp;<span>13.3</span></a>), the variance of the mean response (<a href="13_Inferences.html#eq-w4_47" class="quarto-xref">Equation&nbsp;<span>13.10</span></a>), and the variance of the prediction (<a href="13_Inferences.html#eq-w4_50" class="quarto-xref">Equation&nbsp;<span>13.13</span></a>). Each involves MSE which is an estimate of the constant variance <span class="math inline">\(\sigma^2\)</span>. If <span class="math inline">\(\sigma^2\)</span> is not constant, then MSE is not the estimator we need. We would need an estimator that takes into account the nonconstant variance.</p>
+<p>Constant variance: Very much like the normality assumption, the constant variance assumption affects the inferences made for the model. Recall all the equations for the variance of the estimated coefficients (<a href="#eq-w4_31" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_31</span></a>), the variance of the mean response (<a href="#eq-w4_47" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_47</span></a>), and the variance of the prediction (<a href="#eq-w4_50" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_50</span></a>). Each involves MSE which is an estimate of the constant variance <span class="math inline">\(\sigma^2\)</span>. If <span class="math inline">\(\sigma^2\)</span> is not constant, then MSE is not the estimator we need. We would need an estimator that takes into account the nonconstant variance.</p>
 <p>Taking a transformation of <span class="math inline">\(y\)</span> could help stabilize the variance, however, we would lose interpretation due to the transformation. Using a method known as weighted least squares (discussed below) can help with nonconstant variance.</p>
 </li>
 <li>
 <p>Independence of the residuals: If there is significant autocorrelation in the residuals, then a time series model will be needed.</p>
-<p>In simple regression, we discussed that a difference could be used to remove simple autocorrelation (see <a href="08_Checking2.html" class="quarto-xref"><span>Chapter 8</span></a>). The downside to doing a difference is that, once again, you lose interpretation in your inferences.</p>
+<p>In simple regression, we discussed that a difference could be used to remove simple autocorrelation (see <a href="#sec-checking2" class="quarto-xref"><span class="quarto-unresolved-ref">sec-checking2</span></a>). The downside to doing a difference is that, once again, you lose interpretation in your inferences.</p>
 </li>
 <li>
 <p>Uncorrelated predictor variables: Previously, we discussed the problems of having highly correlated predictor variables which is known as multicollinearity.</p>
@@ -513,7 +513,7 @@ Y^\prime =&amp; \ln Y &amp; \text{ if }\lambda= 0
 <span class="header-section-number">21.2.2</span> Bootstrap Sampling</h3>
 <section id="repeated-sampling" class="level4"><h4 class="anchored" data-anchor-id="repeated-sampling">Repeated Sampling</h4>
 <p>If we were to repeatedly take a sample of size <span class="math inline">\(n\)</span> from the population of interest and then find the least squares estimates each time, we could plot these estimates to estimate their sampling distributions. This is known as <em>repeated sampling</em>.</p>
-<p>For example, let’s consider the handspan and height measurements from <a href="15_Indicator.html#exm-15_1" class="quarto-xref">Example&nbsp;<span>15.1</span></a>. These measurements were from 1102 college students. Suppose these students are now the population of interest.</p>
+<p>For example, let’s consider the handspan and height measurements from <a href="#exm-15_1" class="quarto-xref">Example&nbsp;<span class="quarto-unresolved-ref">exm-15_1</span></a>. These measurements were from 1102 college students. Suppose these students are now the population of interest.</p>
 <p>We will take a random sample of <span class="math inline">\(n=30\)</span> from this population of 1102 college students. We could look at all possible samples of size <span class="math inline">\(n=30\)</span> and the resulting least squares estimates <span class="math inline">\(b_0\)</span> and <span class="math inline">\(b_1\)</span>. This would give us the exact sampling distribution for each. In this example with a relatively small population size of 1102, the number of possible samples of size 30 is <span class="math display">\[
 \begin{align*}
 \binom{1102}{30} &amp; =4.6645012\times 10^{58}
@@ -752,13 +752,13 @@ y^*_i = \hat{y}_i +e^*_i
 </section></section><section id="weighted-least-squares" class="level3" data-number="21.2.5"><h3 data-number="21.2.5" class="anchored" data-anchor-id="weighted-least-squares">
 <span class="header-section-number">21.2.5</span> Weighted Least Squares</h3>
 <p>Sometimes a transformation on <span class="math inline">\(y\)</span>, such as a log transformation, can help stabilize nonconstant variance. However, if the linearity assumption between <span class="math inline">\(y\)</span> and the predictor variables seem reasonable, then transforming <span class="math inline">\(y\)</span> may violate the linearity assumption.</p>
-<p>If we cannot transform <span class="math inline">\(y\)</span>, we can adjust model <a href="11_Regression_Matrix.html#eq-w4_18" class="quarto-xref">Equation&nbsp;<span>11.1</span></a> so that the variance term is allow to vary for different observations. Thus, we will have <span id="eq-w5_18"><span class="math display">\[
+<p>If we cannot transform <span class="math inline">\(y\)</span>, we can adjust model <a href="#eq-w4_18" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_18</span></a> so that the variance term is allow to vary for different observations. Thus, we will have <span id="eq-w5_18"><span class="math display">\[
 \begin{align}
 {\textbf{Y}}= &amp; {\textbf{X}}{\boldsymbol{\beta}}+{\boldsymbol{\varepsilon}}\\
 &amp; \boldsymbol{\varepsilon} \overset{iid}{\sim} N\left(0,\sigma_i^{2}\right)
 \end{align}
 \tag{21.2}\]</span></span></p>
-<p>The least squares estimators <a href="11_Regression_Matrix.html#eq-w4_21" class="quarto-xref">Equation&nbsp;<span>11.4</span></a> could still be used. These estimators are <em>unbiased</em> but they no longer have <em>minimum variance</em>. That is, they are no longer the BLUEs.</p>
+<p>The least squares estimators <a href="#eq-w4_21" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_21</span></a> could still be used. These estimators are <em>unbiased</em> but they no longer have <em>minimum variance</em>. That is, they are no longer the BLUEs.</p>
 <p>To obtain unbiased estimators with minimum variance, we must take into account the different variances for the different <span class="math inline">\(y\)</span> observations. Observations with small variances provide more reliable information about the regression function than those with large variances.</p>
 <p>Therefore, we will want to <em>weight</em> the observations on the fit based on the variances of the observations.</p>
 </section><section id="wls-estimators" class="level3" data-number="21.2.6"><h3 data-number="21.2.6" class="anchored" data-anchor-id="wls-estimators">
@@ -788,10 +788,10 @@ w_{1} &amp; 0 &amp; \cdots &amp; 0\\
 {\bf s}^{2}\left[{\bf b}_{w}\right] &amp; =\left({\bf X}^{\prime}{\bf W}{\bf X}\right)^{-1}
 \end{align}
 \tag{21.6}\]</span></span></p>
-<p>Compare this to the estimated covariance matrix for the <em>ordinary</em> (un-weighted) least squares (ols) estimators in <a href="13_Inferences.html#eq-w4_31" class="quarto-xref">Equation&nbsp;<span>13.3</span></a>. Instead of using MSE for an estimate of <span class="math inline">\(\sigma^{2}\)</span>, <a href="#eq-w5_22" class="quarto-xref">Equation&nbsp;<span>21.6</span></a> uses the weight matrix which takes into account how the variance changes for different observations.</p>
+<p>Compare this to the estimated covariance matrix for the <em>ordinary</em> (un-weighted) least squares (ols) estimators in <a href="#eq-w4_31" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w4_31</span></a>. Instead of using MSE for an estimate of <span class="math inline">\(\sigma^{2}\)</span>, <a href="#eq-w5_22" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w5_22</span></a> uses the weight matrix which takes into account how the variance changes for different observations.</p>
 </section><section id="the-variance-and-standard-deviation-functions" class="level3" data-number="21.2.7"><h3 data-number="21.2.7" class="anchored" data-anchor-id="the-variance-and-standard-deviation-functions">
 <span class="header-section-number">21.2.7</span> The Variance and Standard Deviation Functions</h3>
-<p>For the wls estimators in <a href="#eq-w5_22" class="quarto-xref">Equation&nbsp;<span>21.6</span></a>, it is fairly straight forward if the variances <span class="math inline">\(\sigma^2_i\)</span> are known. In practice, these variances will be unknown and need to estimated.</p>
+<p>For the wls estimators in <a href="#eq-w5_22" class="quarto-xref">Equation&nbsp;<span class="quarto-unresolved-ref">eq-w5_22</span></a>, it is fairly straight forward if the variances <span class="math inline">\(\sigma^2_i\)</span> are known. In practice, these variances will be unknown and need to estimated.</p>
 <p>Most of the time, the variance will vary in some systematic pattern. For example, the cone shape.</p>
 <p>We can estimate a pattern like this by first fitting the model without any weights. We then examine the absolute values of the residuals vs the fitted values. We can regress these absolute residuals on the fitted values. This fitted model will be an estimate of the standard deviation function. Squaring these fitted values gives us an estimate of the variance function. The reciprocal of this variance function provides an estimate of the weights.</p>
 <p>Other systematic patterns in the residual plots may require other ways to obtain an estimated variance function.</p>
@@ -799,7 +799,7 @@ w_{1} &amp; 0 &amp; \cdots &amp; 0\\
 <p>If the wls estimates differs greatly from the ols estimates, it is common to take the squared or absolute residuals from the wls fit and then re-estimate the variance function. This is done again until the changes in the estimates become small between iterations.</p>
 <p>This is known as <em>iteratively</em> <em>reweighted</em> least squares (irls).</p>
 <div id="exm-21_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 21.3 (<code>bloodpressure</code> data)</strong></span> Let’s revisit the blood pressure data used in <a href="07_Checking.html#exm-w3_3_1" class="quarto-xref">Example&nbsp;<span>7.2</span></a>.</p>
+<p><span class="theorem-title"><strong>Example 21.3 (<code>bloodpressure</code> data)</strong></span> Let’s revisit the blood pressure data used in <a href="#exm-w3_3_1" class="quarto-xref">Example&nbsp;<span class="quarto-unresolved-ref">exm-w3_3_1</span></a>.</p>
 <p>Let’s first fit a regression model using typical ordinary least squares.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.table</a></span><span class="op">(</span><span class="st">"bloodpressure.txt"</span>, header<span class="op">=</span><span class="cn">T</span><span class="op">)</span></span>

@@ -352,6 +352,9 @@ window.Quarto = {
   <li><a href="#influence-on-the-coefficients" id="toc-influence-on-the-coefficients" class="nav-link" data-scroll-target="#influence-on-the-coefficients"><span class="header-section-number">20.6.3</span> Influence on the Coefficients</a></li>
   </ul>
 </li>
+  <li><a href="#putting-diagnostics-into-practice" id="toc-putting-diagnostics-into-practice" class="nav-link" data-scroll-target="#putting-diagnostics-into-practice"><span class="header-section-number">20.7</span> Putting Diagnostics into Practice</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">20.8</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">20.9</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -381,7 +384,54 @@ window.Quarto = {
 <p>Recall that a point can be outlying with respect to <span class="math inline">\(y\)</span> or with respect to <span class="math inline">\(x\)</span> but have little effect on the <em>fitted line</em>.</p>
 <p>If an observation is outlying with respect to <span class="math inline">\(y\)</span> but has an <span class="math inline">\(x\)</span> value close to <span class="math inline">\(\bar{x}\)</span>, then it will have little effect on <span class="math inline">\(\hat{y}\)</span>. If it is far from <span class="math inline">\(\bar{x}\)</span>, it will have a large effect.</p>
 <p>If an observation is an outlier with respect to <span class="math inline">\(x\)</span> but still follows the linear relationship between <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, then it will also have little effect on <span class="math inline">\(\hat{y}\)</span>.</p>
-<p>In multiple regression, we will still need to view the outliers with respect to <span class="math inline">\(y\)</span> and with respect to the predictor variables <span class="math inline">\(x_1\ldots,x_{p-1}\)</span>. We will identify these outlying observations by how they affect the fitted model <span class="math inline">\(\hat{y}\)</span>.</p>
+<p>In multiple regression, we will still need to view the outliers with respect to <span class="math inline">\(y\)</span> and with respect to the predictor variables <span class="math inline">\(x_1,\ldots,x_{p-1}\)</span>. We will identify these outlying observations by how they affect the fitted model <span class="math inline">\(\hat{y}\)</span>.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Outlying, high leverage, and influential are different ideas">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Outlying, high leverage, and influential are different ideas
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>It is useful to separate three related but different ideas.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>What is unusual?</th>
+<th>Main diagnostic</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Outlier with respect to <span class="math inline">\(y\)</span></strong></td>
+<td>The response value is far from what the model predicts.</td>
+<td>Studentized or studentized deleted residuals</td>
+</tr>
+<tr class="even">
+<td><strong>High leverage observation</strong></td>
+<td>The predictor values are far from the center of the predictor space.</td>
+<td>Hat value, <span class="math inline">\(h_{ii}\)</span>
+</td>
+</tr>
+<tr class="odd">
+<td><strong>Influential observation</strong></td>
+<td>Removing the observation noticeably changes fitted values or coefficients.</td>
+<td>DFFITS, Cook’s distance, DFBETAS</td>
+</tr>
+</tbody>
+</table>
+<p>An observation can have high leverage without being influential, and an observation can have a large residual without changing the fitted model much. The most concerning observations are often those that combine unusual predictor values with a large residual.</p>
+</div>
+</div>
+</div>
 </section><section id="studentized-residuals" class="level2" data-number="20.2"><h2 data-number="20.2" class="anchored" data-anchor-id="studentized-residuals">
 <span class="header-section-number">20.2</span> Studentized Residuals</h2>
 <p>Recall from <a href="07_Checking.html" class="quarto-xref"><span>Chapter 7</span></a> that semistudentized residuals <span class="math display">\[
@@ -404,18 +454,18 @@ Var\left[e_{i}\right] &amp; ={\sigma^{2}\left(1-h_{ii}\right)}
 s^2\left[e_{i}\right] &amp; =MSE\left(1-h_{ii}\right)
 \end{align}
 \tag{20.2}\]</span></span></p>
-<p>Dividing <span class="math inline">\(e_i\)</span> by <span class="math inline">\(s\left[e_{i}\right]\)</span> gives us a true t-score. Thus the *{studentized} residual is <span id="eq-w5_5"><span class="math display">\[
+<p>Dividing <span class="math inline">\(e_i\)</span> by <span class="math inline">\(s\left[e_{i}\right]\)</span> gives us a true t-score. Thus the <em>studentized</em> residual is <span id="eq-w5_5"><span class="math display">\[
 \begin{align}
 r_{i} &amp; =\frac{e_{i}}{\sqrt{MSE\left(1-h_{ii}\right)}}
 \end{align}
 \tag{20.3}\]</span></span></p>
-<p>A rule of thumb is any <span class="math inline">\(r_i\)</span> greater than 3 in absolute value should be considered an outlier with respect to <span class="math inline">\(y\)</span>.</p>
+<p>A rule of thumb is that any <span class="math inline">\(r_i\)</span> greater than 3 in absolute value should be considered an outlier with respect to <span class="math inline">\(y\)</span>.</p>
 </section><section id="deleted-residuals" class="level2" data-number="20.3"><h2 data-number="20.3" class="anchored" data-anchor-id="deleted-residuals">
 <span class="header-section-number">20.3</span> Deleted Residuals</h2>
 <p>As we stated above, it is possible for an observation to be outlying with respect to <span class="math inline">\(y\)</span> but not have an effect on the fitted value.</p>
-<p>Also, if <span class="math inline">\(y\)</span> does effect the fit greatly, then the fitted value <span class="math inline">\(\hat{y}\)</span> will be “pulled” towards <span class="math inline">\(y\)</span> and thus make <span class="math inline">\(r_i\)</span> not so large.</p>
-<p>One way to see how an (potentially outlying) observation <span class="math inline">\(y_i\)</span> influences the fit is by first fitting the model without <span class="math inline">\(y_i\)</span> and then try to predict <span class="math inline">\(y_i\)</span> based on that fitted model.</p>
-<p>The difference from the observed <span class="math inline">\(y_i\)</span> and the predicted value based on the model fitted with the remaining <span class="math inline">\(n-1\)</span> observations <span class="math inline">\(\hat{y}_{i(i)}\)</span> is called the <em>deleted</em> <em>residual</em>: <span id="eq-w5_6"><span class="math display">\[
+<p>Also, if <span class="math inline">\(y\)</span> does affect the fit greatly, then the fitted value <span class="math inline">\(\hat{y}\)</span> will be “pulled” toward <span class="math inline">\(y\)</span> and thus make <span class="math inline">\(r_i\)</span> not so large.</p>
+<p>One way to see how a potentially outlying observation <span class="math inline">\(y_i\)</span> influences the fit is by first fitting the model without <span class="math inline">\(y_i\)</span> and then trying to predict <span class="math inline">\(y_i\)</span> based on that fitted model.</p>
+<p>The difference between the observed <span class="math inline">\(y_i\)</span> and the predicted value based on the model fitted with the remaining <span class="math inline">\(n-1\)</span> observations <span class="math inline">\(\hat{y}_{i(i)}\)</span> is called the <em>deleted residual</em>: <span id="eq-w5_6"><span class="math display">\[
 \begin{align}
 d_{i} &amp; =y_{i}-\hat{y}_{i\left(i\right)}
 \end{align}
@@ -443,7 +493,7 @@ t_{i} &amp; =\frac{d_{i}}{s\left[d_{i}\right]}\nonumber\\
 MSE_{(i)} &amp; =\left(\frac{n-p}{n-p-1}\right)MSE-\frac{e_{i}^{2}}{\left(n-p-1\right)\left(1-h_{ii}\right)}
 \end{align}
 \tag{20.8}\]</span></span></p>
-<p>Since <span class="math inline">\(t_{i}\)</span> follows a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom, then any <span class="math inline">\(t_{i}\)</span> greater than <span class="math inline">\(t_{\alpha/2n}\)</span> will be considered a potential outlier.</p>
+<p>Since <span class="math inline">\(t_{i}\)</span> follows a Student’s <span class="math inline">\(t\)</span> distribution with <span class="math inline">\(n-p-1\)</span> degrees of freedom, then any <span class="math inline">\(t_{i}\)</span> greater than <span class="math inline">\(t_{\alpha/(2n)}\)</span> in absolute value will be considered a potential outlier.</p>
 <p>Note that the <span class="math inline">\(\alpha/2n\)</span> is called a <em>Bonferroni</em> adjustment in that it divides the significance level <span class="math inline">\(\alpha\)</span> by <span class="math inline">\(2n\)</span>. This is done to control for an overall significance level of <span class="math inline">\(\alpha\)</span> when examining the <span class="math inline">\(n\)</span> studentized deleted residuals.</p>
 </section><section id="outliers-with-respect-to-the-predictor-variables" class="level2" data-number="20.5"><h2 data-number="20.5" class="anchored" data-anchor-id="outliers-with-respect-to-the-predictor-variables">
 <span class="header-section-number">20.5</span> Outliers with Respect to the Predictor Variables</h2>
@@ -452,18 +502,34 @@ MSE_{(i)} &amp; =\left(\frac{n-p}{n-p-1}\right)MSE-\frac{e_{i}^{2}}{\left(n-p-1\
 <p>We will now use the diagonal elements of <span class="math inline">\({\bf H}\)</span>, <span class="math inline">\(h_{ii}\)</span>, as a measure of how far the <span class="math inline">\(x\)</span> values of an observation are from the center <span class="math inline">\(x\)</span> value of all the observations.</p>
 <section id="leverage-values" class="level3" data-number="20.5.1"><h3 data-number="20.5.1" class="anchored" data-anchor-id="leverage-values">
 <span class="header-section-number">20.5.1</span> Leverage Values</h3>
-<p>We first note some properties or <span class="math inline">\(h_{ii}\)</span>: <span id="eq-w5_11"><span class="math display">\[
+<p>We first note some properties of <span class="math inline">\(h_{ii}\)</span>: <span id="eq-w5_11"><span class="math display">\[
 \begin{align}
 &amp; 0\le h_{ii}\le1 &amp;\\
 &amp; \sum h_{ii}=p &amp;
 \end{align}
 \tag{20.9}\]</span></span></p>
-<p>The larger the value of <span class="math inline">\(h_{ii}\)</span>, the further the <span class="math inline">\(i\)</span>th observation is from the center of all the <span class="math inline">\(x\)</span>’s. Thus, we call <span class="math inline">\(h_{ii}\)</span> the <em>leverage</em>. If an observation has a large leverage value, then it has a substantial “leverage’’ in determining <span class="math inline">\(\hat{y}_{i}\)</span>.</p>
+<p>The larger the value of <span class="math inline">\(h_{ii}\)</span>, the farther the <span class="math inline">\(i\)</span>th observation is from the center of all the <span class="math inline">\(x\)</span>’s. Thus, we call <span class="math inline">\(h_{ii}\)</span> the <em>leverage</em>. If an observation has a large leverage value, then it has a substantial “leverage’’ in determining <span class="math inline">\(\hat{y}_{i}\)</span>.</p>
 <p>Leverage values greater than <span class="math inline">\(2p/n\)</span> are considered large when <span class="math inline">\(n\)</span> is reasonably large.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Why the guideline uses 2p/n">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Why the guideline uses 2p/n
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Because <span class="math inline">\(\sum h_{ii}=p\)</span>, the average leverage value is <span class="math inline">\(p/n\)</span>. The guideline <span class="math inline">\(2p/n\)</span> flags observations with leverage at least twice the average. This is only a screening rule; it tells us which observations deserve attention, not which observations must be deleted.</p>
+</div>
+</div>
+</div>
 </section><section id="using-leverage-to-identify-hidden-extrapolation" class="level3" data-number="20.5.2"><h3 data-number="20.5.2" class="anchored" data-anchor-id="using-leverage-to-identify-hidden-extrapolation">
 <span class="header-section-number">20.5.2</span> Using Leverage to Identify Hidden Extrapolation</h3>
 <p>In simple regression, we stated that we did not want to <em>extrapolate</em> outside the range of the <span class="math inline">\(x\)</span> variable.</p>
-<p>In multiple regression, we still do not want to extrapolate but now we cannot just think in terms of the range of each individual predictor variable. We must now think in terms of extrapolating for values combinations of the <span class="math inline">\(x\)</span> variables that we may not have seen information for in our data.</p>
+<p>In multiple regression, we still do not want to extrapolate but now we cannot just think in terms of the range of each individual predictor variable. We must now think in terms of extrapolating for combinations of the <span class="math inline">\(x\)</span> variables that we may not have seen information for in our data.</p>
 <p>For example in the bodyfat data, tri had a range of about 14 to 32. The variable thigh had a range of values from about 42 to about 58.5. However, we did not have any observations with a tri of, say, 16 and a thigh of, say, 55. Those with small tri values also tended to have small thigh values. So this would be <em>hidden</em> extrapolation.</p>
 <p>We can use the hat matrix to identify hidden extrapolation. This is done by using the vector of <span class="math inline">\(x\)</span> values you want to predict at, <span class="math inline">\({\bf X}_{new}\)</span>, and then including it in the hat matrix as <span id="eq-w5_13"><span class="math display">\[
 \begin{align}
@@ -488,7 +554,7 @@ DFFITS_{i} &amp; =\frac{\hat{y}_{i}-\hat{y}_{i\left(i\right)}}{\sqrt{MSE_{(i)}h_
 DFFITS_{i} &amp; =t_{i}\left(\frac{h_{ii}}{1-h_{ii}}\right)^{1/2}
 \end{align}
 \tag{20.12}\]</span></span> which does not require a new regression fit excluding the <span class="math inline">\(i\)</span>th observation.</p>
-<p>A general guideline is that a value of DFFITS greater than 1 for small to medium datasets and greater than <span class="math inline">\(2\sqrt{p/n}\)</span> for large datasets indicates an influential observation.</p>
+<p>A general guideline is that a value of DFFITS greater than 1 in absolute value for small to medium datasets and greater than <span class="math inline">\(2\sqrt{p/n}\)</span> in absolute value for large datasets indicates an influential observation.</p>
 </section><section id="influence-on-all-fitted-values" class="level3" data-number="20.6.2"><h3 data-number="20.6.2" class="anchored" data-anchor-id="influence-on-all-fitted-values">
 <span class="header-section-number">20.6.2</span> Influence on All Fitted Values</h3>
 <p>We can consider the influence of the <span class="math inline">\(i\)</span>th observation on all the fitted values <span class="math inline">\(\hat{y}_{i}\)</span> with a measure known as <em>Cook’s distance</em>.</p>
@@ -505,7 +571,25 @@ D_{i} &amp; =\frac{\sum_{j=1}^{n}\left(\hat{y}_{j}-\hat{y}_{j\left(i\right)}\rig
 <li>large residual <span class="math inline">\(e_{i}\)</span> and a moderate leverage <span class="math inline">\(h_{ii}\)</span>,</li>
 <li>a large leverage <span class="math inline">\(h_{ii}\)</span> and a moderate residual <span class="math inline">\(e_{i}\)</span>,</li>
 <li>or both a large residual and large leverage.</li>
-</ol></section><section id="influence-on-the-coefficients" class="level3" data-number="20.6.3"><h3 data-number="20.6.3" class="anchored" data-anchor-id="influence-on-the-coefficients">
+</ol>
+<div class="callout callout-style-default callout-important callout-titled" title="Influence is a diagnostic, not an automatic delete button">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Influence is a diagnostic, not an automatic delete button
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>An influential observation should be investigated. It may be a data-entry error, a case from a different population, or a perfectly valid observation that teaches us something important about the relationship. Removing an observation should be justified by context, not only by a large diagnostic value.</p>
+<p>One good practice is a sensitivity analysis: fit the model with and without the flagged observation and report whether the substantive conclusions change.</p>
+</div>
+</div>
+</div>
+</section><section id="influence-on-the-coefficients" class="level3" data-number="20.6.3"><h3 data-number="20.6.3" class="anchored" data-anchor-id="influence-on-the-coefficients">
 <span class="header-section-number">20.6.3</span> Influence on the Coefficients</h3>
 <p>We can also see the influence of an observation on the individual coefficients <span class="math inline">\(\hat{\beta}_{k}\)</span>, <span class="math inline">\(k=0,1,\ldots,p-1\)</span>. Again, we do this by seeing how much <span class="math inline">\(\hat{\beta}_{k}\)</span> changes when that observation is removed.</p>
 <p>A measure of this change is <span class="math display">\[
@@ -515,29 +599,45 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 \]</span> where <span class="math inline">\(c_{kk}\)</span> is the <span class="math inline">\(k\)</span>th diagonal element of <span class="math inline">\(\left({\bf X}^{\prime}{\bf X}\right)^{-1}\)</span>.</p>
 <p>The sign of <span class="math inline">\(DFBETAS\)</span> indicates whether <span class="math inline">\(\hat{\beta}_{k}\)</span> increases or decreases when the <span class="math inline">\(i\)</span>th observation is removed from the data. A large magnitude of <span class="math inline">\(DFBETAS\)</span> indicates the <span class="math inline">\(i\)</span>th observation is influential on the <span class="math inline">\(k\)</span>th coefficient.</p>
 <p>A rule of thumb is a <span class="math inline">\(DFBETAS\)</span> value greater than 1 in absolute value for small to medium datasets and greater than <span class="math inline">\(2/\sqrt{n}\)</span> for large datasets indicates an influential observation.</p>
-<div id="exm-20_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 20.1 (Bodyfat data)</strong></span> Let’s examine the <code>bodyfat</code> data and determine if there is any observations that we should be concerned about.</p>
+<div id="exm-20_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 20.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Outliers and influence in the bodyfat data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s examine the <code>bodyfat</code> data and determine whether there are any observations that deserve additional attention.</p>
 <p>We have already seen that there is an issue of multicollinearity in this data. The lasso fit in <a href="19_Ridge.html#exm-19_4" class="quarto-xref">Example&nbsp;<span>19.4</span></a> showed that <code>tri</code> and <code>midarm</code> would have an important impact on <code>bfat</code>.</p>
-<p>We can plot the studenitzed residuals versus the leverage values using the <code>olsrr</code> library.</p>
+<p>We can plot the studentized residuals versus the leverage values using the <code>olsrr</code> library.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://olsrr.rsquaredacademy.com/">olsrr</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://broom.tidymodels.org/">broom</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
+<span><span class="va">bodyfat_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span><span class="op">~</span><span class="va">tri</span><span class="op">+</span><span class="va">midarm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">bodyfat_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">midarm</span>, data <span class="op">=</span> <span class="va">bodyfat_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">bodyfat_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="va">bodyfat_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">bodyfat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">bodyfat_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">bodyfat_fit</span> <span class="op">&lt;-</span> <span class="va">bodyfat_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">bodyfat_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_resid_lev.html">ols_plot_resid_lev</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">bodyfat_engine</span> <span class="op">&lt;-</span> <span class="va">bodyfat_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bodyfat_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_resid_lev.html">ols_plot_resid_lev</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="576"></p>
@@ -545,20 +645,127 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 </div>
 </div>
 </div>
-<p>We see from this plot that there are no outliers with respect to <span class="math inline">\(y\)</span> but there are two values that are potential outliers with respect to the predictor variables.</p>
-<p>To determine if either of these points are also influential, we can use the</p>
+<p>We see from this plot that there are no severe outliers with respect to <span class="math inline">\(y\)</span>, but there are two observations that are potential outliers with respect to the predictor variables.</p>
+<p>It can also help to look at the diagnostic values in a table. The following code sorts the observations by Cook’s distance.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_cooksd_chart.html">ols_plot_cooksd_chart</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_diagnostics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">bodyfat_engine</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>bfat <span class="op">=</span> <span class="va">..y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    observation <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    studentized_deleted_residual <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstudent</a></span><span class="op">(</span><span class="va">bodyfat_engine</span><span class="op">)</span>,</span>
+<span>    dffits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">dffits</a></span><span class="op">(</span><span class="va">bodyfat_engine</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">observation</span>, <span class="va">bfat</span>, <span class="va">tri</span>, <span class="va">midarm</span>, <span class="va">.fitted</span>, <span class="va">.resid</span>, <span class="va">.std.resid</span>,</span>
+<span>    <span class="va">studentized_deleted_residual</span>, <span class="va">.hat</span>, <span class="va">.cooksd</span>, <span class="va">dffits</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">.cooksd</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bodyfat_diagnostics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-2-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 11%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 7%">
+<col style="width: 10%">
+<col style="width: 26%">
+<col style="width: 6%">
+<col style="width: 7%">
+<col style="width: 7%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">observation</th>
+<th style="text-align: right;">bfat</th>
+<th style="text-align: right;">tri</th>
+<th style="text-align: right;">midarm</th>
+<th style="text-align: right;">.fitted</th>
+<th style="text-align: right;">.resid</th>
+<th style="text-align: right;">.std.resid</th>
+<th style="text-align: right;">studentized_deleted_residual</th>
+<th style="text-align: right;">.hat</th>
+<th style="text-align: right;">.cooksd</th>
+<th style="text-align: right;">dffits</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">30.7</td>
+<td style="text-align: right;">37.0</td>
+<td style="text-align: right;">21.5462</td>
+<td style="text-align: right;">-2.8462</td>
+<td style="text-align: right;">-1.4706</td>
+<td style="text-align: right;">-1.5271</td>
+<td style="text-align: right;">0.3988</td>
+<td style="text-align: right;">0.4783</td>
+<td style="text-align: right;">-1.2439</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">11.7</td>
+<td style="text-align: right;">18.7</td>
+<td style="text-align: right;">23.0</td>
+<td style="text-align: right;">15.5794</td>
+<td style="text-align: right;">-3.8794</td>
+<td style="text-align: right;">-1.7063</td>
+<td style="text-align: right;">-1.8183</td>
+<td style="text-align: right;">0.1704</td>
+<td style="text-align: right;">0.1994</td>
+<td style="text-align: right;">-0.8242</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">17.8</td>
+<td style="text-align: right;">19.7</td>
+<td style="text-align: right;">28.6</td>
+<td style="text-align: right;">14.1639</td>
+<td style="text-align: right;">3.6361</td>
+<td style="text-align: right;">1.5855</td>
+<td style="text-align: right;">1.6663</td>
+<td style="text-align: right;">0.1560</td>
+<td style="text-align: right;">0.1549</td>
+<td style="text-align: right;">0.7163</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">25.4</td>
+<td style="text-align: right;">27.9</td>
+<td style="text-align: right;">30.6</td>
+<td style="text-align: right;">21.5058</td>
+<td style="text-align: right;">3.8942</td>
+<td style="text-align: right;">1.6322</td>
+<td style="text-align: right;">1.7243</td>
+<td style="text-align: right;">0.0865</td>
+<td style="text-align: right;">0.0841</td>
+<td style="text-align: right;">0.5306</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">20.1</td>
+<td style="text-align: right;">29.8</td>
+<td style="text-align: right;">31.1</td>
+<td style="text-align: right;">23.1912</td>
+<td style="text-align: right;">-3.0912</td>
+<td style="text-align: right;">-1.3140</td>
+<td style="text-align: right;">-1.3449</td>
+<td style="text-align: right;">0.1119</td>
+<td style="text-align: right;">0.0725</td>
+<td style="text-align: right;">-0.4774</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-</div>
-<p>We see that observation 3 (which was also high leverage) is influential to the fit. We can see which of the coefficients it has the largest influence on with DFBETAs.</p>
+<p>To determine whether either high-leverage point is also influential, we can use Cook’s distance.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_dfbetas.html">ols_plot_dfbetas</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_cooksd_chart.html">ols_plot_cooksd_chart</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-3-1.png" class="img-fluid figure-img" width="576"></p>
@@ -566,11 +773,10 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 </div>
 </div>
 </div>
-<p>Since observation 3 has a large value of DFBETA for <code>midarm</code>, then we say that it is influential for this variable. Since the DFBETA is negative, then when we don’t have observation 3, then the estimated coefficient become larger than when we do have observation 3. To further investigate this observation, let’s do a scatterplot of <code>bfat</code> and <code>midarm</code> and highlight observation 3.</p>
+<p>We see that observation 3, which was also high leverage, is influential to the fit. We can see which coefficients it has the largest influence on with DFBETAS.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">midarm</span>, y <span class="op">=</span> <span class="va">bfat</span><span class="op">)</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span><span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>data<span class="op">=</span> <span class="va">dat</span><span class="op">[</span><span class="fl">3</span>,<span class="op">]</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x<span class="op">=</span><span class="va">midarm</span>, y <span class="op">=</span> <span class="va">bfat</span><span class="op">)</span>, color<span class="op">=</span><span class="st">"red"</span>, size <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_dfbetas.html">ols_plot_dfbetas</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
@@ -578,20 +784,56 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 </div>
 </div>
 </div>
-<p>We see that this observation has an “average” <code>bfat</code> value but the <code>midarm</code> value is larger than any other observation. Further investigation would be needed to determine if this is an observation that should be deleted. For example, suppose this is a subject who also lifted weights. Is this the type of subject we want to include in this population of interest? If not, then the observation can be removed.</p>
-</div>
-<div id="exm-20_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 20.2 (Hidden Extrapolation)</strong></span> Suppose we want to predict <code>bfat</code> for a woman in this population with <code>tri = 19.5</code> and <code>midarm = 29</code>.</p>
-<p>Was our model fit with combinations of these two predictors close to the values we want to predict? If so, then the the hat value for this new observation, determined by <a href="#eq-w5_13" class="quarto-xref">Equation&nbsp;<span>20.10</span></a> should be close to the hat values of the observations that were used to fit the model. If the hat value for the new observation is much larger than the other observation hat values, then this new value is <em>extrapolation</em>.</p>
-<p>The <code>applicable</code> library allows us to compare the hat value of a new observation to that of the observations used to fit the data</p>
+<p>Observation 3 has a large DFBETA value for <code>midarm</code>, so we say that it is influential for this coefficient. Since the DFBETA is negative, the estimated <code>midarm</code> coefficient becomes larger when observation 3 is removed than when observation 3 is included. To further investigate this observation, let’s make a scatterplot of <code>bfat</code> and <code>midarm</code> and highlight observation 3.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/applicable">applicable</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_plot_dat</span> <span class="op">&lt;-</span> <span class="va">bodyfat_dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>observation <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
+<span><span class="va">bodyfat_plot_dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">midarm</span>, y <span class="op">=</span> <span class="va">bfat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">bodyfat_plot_dat</span>, <span class="va">observation</span> <span class="op">==</span> <span class="fl">3</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">3</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Midarm circumference"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Body fat"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Observation 3 has an unusually large midarm value"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We see that this observation has an “average” <code>bfat</code> value but the <code>midarm</code> value is larger than any other observation. Further investigation would be needed to determine whether this is an observation that should be deleted. For example, suppose this is a subject who also lifted weights. Is this the type of subject we want to include in this population of interest? If not, then the observation can be removed. If yes, then the observation may be important to keep.</p>
+</div>
+</div>
+<div id="exm-20_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 20.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Checking hidden extrapolation with hat values
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose we want to predict <code>bfat</code> for a woman in this population with <code>tri = 19.5</code> and <code>midarm = 29</code>.</p>
+<p>Was our model fit with combinations of these two predictors close to the values we want to predict? If so, then the hat value for this new observation, determined by <a href="#eq-w5_13" class="quarto-xref">Equation&nbsp;<span>20.10</span></a>, should be close to the hat values of the observations that were used to fit the model. If the hat value for the new observation is much larger than the other observation hat values, then this new value is <em>extrapolation</em>.</p>
+<p>The <code>applicable</code> library allows us to compare the hat value of a new observation to that of the observations used to fit the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/tidymodels/applicable">applicable</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">xnew</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>tri<span class="op">=</span><span class="fl">19.5</span>, midarm<span class="op">=</span><span class="fl">29</span><span class="op">)</span></span>
+<span><span class="va">bodyfat_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://applicable.tidymodels.org/reference/apd_hat_values.html">apd_hat_values</a></span><span class="op">(</span><span class="va">bodyfat_recipe</span>, <span class="va">bodyfat_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">hat</span> <span class="op">=</span> <span class="fu"><a href="https://applicable.tidymodels.org/reference/apd_hat_values.html">apd_hat_values</a></span><span class="op">(</span><span class="va">dat_recipe</span>, <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">hat</span>, <span class="va">xnew</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">typical_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>tri <span class="op">=</span> <span class="fl">19.5</span>, midarm <span class="op">=</span> <span class="fl">29</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">bodyfat_hat</span>, <span class="va">typical_new</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   hat_values hat_values_pctls
@@ -599,13 +841,12 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 1      0.175             88.7</code></pre>
 </div>
 </div>
-<p>The hat value for this observation is in the 88.6th percentile of the hat values of the observations used to fit the model. Thus, this is not hidden extrapolation.</p>
-<p>Let’s now try an observation with <code>tri=14</code> and <code>midarm=30</code>.</p>
+<p>The hat value for this observation is within the range of the hat values of the observations used to fit the model. Thus, this is not hidden extrapolation.</p>
+<p>Let’s now try an observation with <code>tri = 14</code> and <code>midarm = 30</code>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">xnew</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>tri<span class="op">=</span><span class="fl">14</span>, midarm<span class="op">=</span><span class="fl">30</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">unusual_new</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>tri <span class="op">=</span> <span class="fl">14</span>, midarm <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">hat</span> <span class="op">=</span> <span class="fu"><a href="https://applicable.tidymodels.org/reference/apd_hat_values.html">apd_hat_values</a></span><span class="op">(</span><span class="va">dat_recipe</span>, <span class="va">dat</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">hat</span>, <span class="va">xnew</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://applicable.tidymodels.org/reference/score.html">score</a></span><span class="op">(</span><span class="va">bodyfat_hat</span>, <span class="va">unusual_new</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1 × 2
   hat_values hat_values_pctls
@@ -615,37 +856,45 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 </div>
 <p>This new observation has a hat value higher than any hat value of the observations used to fit the model. This indicates that this combination of the predictor variable values was not used to fit the model. Thus, this is hidden extrapolation.</p>
 </div>
-<div id="exm-20_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 20.3 (Surgical Unit data)</strong></span> Let’s examine the surgical unit data first seen in <a href="18_Stepwise.html#exm-18_1" class="quarto-xref">Example&nbsp;<span>18.1</span></a>. Recall that the predictors <code>bcs</code>, <code>pindex</code>, <code>enzyme_test</code>, and <code>alc_heavy</code> were selected for a model determined by best subsets regression. We will now check for outliers and influential observations for this model.</p>
+</div>
+<div id="exm-20_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 20.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Outliers and influence in the surgical unit data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s examine the surgical unit data first seen in <a href="18_Stepwise.html#exm-18_1" class="quarto-xref">Example&nbsp;<span>18.1</span></a>. Recall that the predictors <code>bcs</code>, <code>pindex</code>, <code>enzyme_test</code>, and <code>alc_heavy</code> were selected for a model determined by best subsets regression. We will now check for outliers and influential observations for this model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">=</span> <span class="va">surgical</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">surgical_dat</span> <span class="op">&lt;-</span> <span class="va">surgical</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
 <span>    ln_y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">ln_y</span><span class="op">~</span><span class="va">bcs</span><span class="op">+</span><span class="va">pindex</span><span class="op">+</span><span class="va">enzyme_test</span><span class="op">+</span><span class="va">alc_heavy</span>,</span>
-<span>                    data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">surgical_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">ln_y</span> <span class="op">~</span> <span class="va">bcs</span> <span class="op">+</span> <span class="va">pindex</span> <span class="op">+</span> <span class="va">enzyme_test</span> <span class="op">+</span> <span class="va">alc_heavy</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">surgical_dat</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">surgical_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="va">surgical_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">surgical_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">surgical_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">surgical_fit</span> <span class="op">&lt;-</span> <span class="va">surgical_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">surgical_dat</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_resid_lev.html">ols_plot_resid_lev</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>There is one clear outlier with respect to the response variable (observation 17). Examining the leverage values, we see there are five observations beyond the guideline. In a situation line this, we look for leverage values that are clearly separated from the others. There are two such values (observations 28 and 38). We will now examine these three in terms of influence.</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_cooksd_chart.html">ols_plot_cooksd_chart</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">surgical_engine</span> <span class="op">&lt;-</span> <span class="va">surgical_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_resid_lev.html">ols_plot_resid_lev</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
@@ -653,27 +902,513 @@ DFBETAS_{k\left(i\right)} &amp; =\frac{\hat{\beta}_{k}-\hat{\beta}_{k\left(i\rig
 </div>
 </div>
 </div>
-<p>Observations 17 and 38 are influential while observation 28 is not. So these two observations should be investigated further to determine if they should be removed. Let’s look at DFBETAs to get a better idea which coefficients are influenced by these observations.</p>
+<p>There is one clear outlier with respect to the response variable, observation 17. Examining the leverage values, we see there are five observations beyond the guideline. In a situation like this, we look for leverage values that are clearly separated from the others. There are two such values, observations 28 and 38. We will now examine these three observations in terms of influence.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_dfbetas.html">ols_plot_dfbetas</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">surgical_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_cooksd_chart.html">ols_plot_cooksd_chart</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-9-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
+</div>
+<p>Observations 17 and 38 are influential, while observation 28 is not. So observations 17 and 38 should be investigated further to determine whether they represent errors, unusual but valid cases, or cases from a different population.</p>
+<p>The table below sorts observations by Cook’s distance.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">surgical_diagnostics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://generics.r-lib.org/reference/augment.html">augment</a></span><span class="op">(</span><span class="va">surgical_engine</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename</a></span><span class="op">(</span>ln_y <span class="op">=</span> <span class="va">..y</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    observation <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    studentized_deleted_residual <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">rstudent</a></span><span class="op">(</span><span class="va">surgical_engine</span><span class="op">)</span>,</span>
+<span>    dffits <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/influence.measures.html">dffits</a></span><span class="op">(</span><span class="va">surgical_engine</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span></span>
+<span>    <span class="va">observation</span>, <span class="va">ln_y</span>, <span class="va">bcs</span>, <span class="va">pindex</span>, <span class="va">enzyme_test</span>, <span class="va">alc_heavy</span>,</span>
+<span>    <span class="va">.fitted</span>, <span class="va">.resid</span>, <span class="va">.std.resid</span>, <span class="va">studentized_deleted_residual</span>,</span>
+<span>    <span class="va">.hat</span>, <span class="va">.cooksd</span>, <span class="va">dffits</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">.cooksd</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_diagnostics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice_head</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 5%">
+<col style="width: 3%">
+<col style="width: 5%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 6%">
+<col style="width: 6%">
+<col style="width: 8%">
+<col style="width: 22%">
+<col style="width: 5%">
+<col style="width: 6%">
+<col style="width: 6%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">observation</th>
+<th style="text-align: right;">ln_y</th>
+<th style="text-align: right;">bcs</th>
+<th style="text-align: right;">pindex</th>
+<th style="text-align: right;">enzyme_test</th>
+<th style="text-align: right;">alc_heavy</th>
+<th style="text-align: right;">.fitted</th>
+<th style="text-align: right;">.resid</th>
+<th style="text-align: right;">.std.resid</th>
+<th style="text-align: right;">studentized_deleted_residual</th>
+<th style="text-align: right;">.hat</th>
+<th style="text-align: right;">.cooksd</th>
+<th style="text-align: right;">dffits</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">17</td>
+<td style="text-align: right;">6.5250</td>
+<td style="text-align: right;">6.0</td>
+<td style="text-align: right;">85</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5.9313</td>
+<td style="text-align: right;">0.5938</td>
+<td style="text-align: right;">3.0547</td>
+<td style="text-align: right;">3.3602</td>
+<td style="text-align: right;">0.1499</td>
+<td style="text-align: right;">0.3291</td>
+<td style="text-align: right;">1.4111</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">38</td>
+<td style="text-align: right;">5.8916</td>
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">119</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.1195</td>
+<td style="text-align: right;">-0.2279</td>
+<td style="text-align: right;">-1.2974</td>
+<td style="text-align: right;">-1.3067</td>
+<td style="text-align: right;">0.3059</td>
+<td style="text-align: right;">0.1484</td>
+<td style="text-align: right;">-0.8675</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">32</td>
+<td style="text-align: right;">5.1985</td>
+<td style="text-align: right;">8.7</td>
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">5.4844</td>
+<td style="text-align: right;">-0.2859</td>
+<td style="text-align: right;">-1.5360</td>
+<td style="text-align: right;">-1.5582</td>
+<td style="text-align: right;">0.2202</td>
+<td style="text-align: right;">0.1333</td>
+<td style="text-align: right;">-0.8281</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">23</td>
+<td style="text-align: right;">6.3953</td>
+<td style="text-align: right;">6.7</td>
+<td style="text-align: right;">26</td>
+<td style="text-align: right;">68</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6.1164</td>
+<td style="text-align: right;">0.2789</td>
+<td style="text-align: right;">1.4686</td>
+<td style="text-align: right;">1.4866</td>
+<td style="text-align: right;">0.1885</td>
+<td style="text-align: right;">0.1002</td>
+<td style="text-align: right;">0.7165</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">45</td>
+<td style="text-align: right;">6.1779</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">77</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">6.6310</td>
+<td style="text-align: right;">-0.4531</td>
+<td style="text-align: right;">-2.2445</td>
+<td style="text-align: right;">-2.3453</td>
+<td style="text-align: right;">0.0831</td>
+<td style="text-align: right;">0.0914</td>
+<td style="text-align: right;">-0.7063</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Let’s look at DFBETAS to get a better idea of which coefficients are influenced by these observations.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">surgical_engine</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://olsrr.rsquaredacademy.com/reference/ols_plot_dfbetas.html">ols_plot_dfbetas</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-9-2.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-11-2.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
 <p>Observation 17 is influential on the coefficients of <code>pindex</code> and <code>enzyme_test</code>. Observation 38 is influential on the coefficient of <code>pindex</code> and slightly influential for <code>enzyme_test</code>.</p>
 </div>
+</div>
+</section></section><section id="putting-diagnostics-into-practice" class="level2" data-number="20.7"><h2 data-number="20.7" class="anchored" data-anchor-id="putting-diagnostics-into-practice">
+<span class="header-section-number">20.7</span> Putting Diagnostics into Practice</h2>
+<p>The diagnostics in this chapter are most useful when they are used together. A single large diagnostic value is a starting point for investigation, not a final decision.</p>
+<div id="exm-20_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 20.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Visualizing outliers, leverage, and influence
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following simulated data show why outliers, leverage, and influence should not be treated as the same idea.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">base_simulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, length.out <span class="op">=</span> <span class="fl">25</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">1.2</span> <span class="op">*</span> <span class="va">x</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">25</span>, sd <span class="op">=</span> <span class="fl">0.6</span><span class="op">)</span>,</span>
+<span>  point_type <span class="op">=</span> <span class="st">"Regular observations"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnostic_simulation</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">base_simulation</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="st">"Original pattern"</span><span class="op">)</span>,</span>
+<span>  <span class="va">base_simulation</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="st">"Outlier with respect to y"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fl">2.5</span>,</span>
+<span>    y <span class="op">=</span> <span class="fl">8.5</span>,</span>
+<span>    point_type <span class="op">=</span> <span class="st">"Flagged observation"</span>,</span>
+<span>    panel <span class="op">=</span> <span class="st">"Outlier with respect to y"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="va">base_simulation</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="st">"High leverage, low influence"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>    y <span class="op">=</span> <span class="fl">2</span> <span class="op">+</span> <span class="fl">1.2</span> <span class="op">*</span> <span class="fl">8</span>,</span>
+<span>    point_type <span class="op">=</span> <span class="st">"Flagged observation"</span>,</span>
+<span>    panel <span class="op">=</span> <span class="st">"High leverage, low influence"</span></span>
+<span>  <span class="op">)</span>,</span>
+<span>  <span class="va">base_simulation</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="st">"High leverage and influential"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="fl">8</span>,</span>
+<span>    y <span class="op">=</span> <span class="fl">4</span>,</span>
+<span>    point_type <span class="op">=</span> <span class="st">"Flagged observation"</span>,</span>
+<span>    panel <span class="op">=</span> <span class="st">"High leverage and influential"</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    panel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
+<span>      <span class="va">panel</span>,</span>
+<span>      levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>        <span class="st">"Original pattern"</span>,</span>
+<span>        <span class="st">"Outlier with respect to y"</span>,</span>
+<span>        <span class="st">"High leverage, low influence"</span>,</span>
+<span>        <span class="st">"High leverage and influential"</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">diagnostic_simulation</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span>, color <span class="op">=</span> <span class="va">point_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"black"</span>, linewidth <span class="op">=</span> <span class="fl">0.7</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">panel</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Flagged observation"</span> <span class="op">=</span> <span class="st">"red"</span>,</span>
+<span>      <span class="st">"Regular observations"</span> <span class="op">=</span> <span class="st">"gray35"</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Predictor x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Response y"</span>,</span>
+<span>    color <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"bottom"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="20_Outliers_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The vertical outlier has an unusual response value but is near the middle of the predictor values. The high-leverage, low-influence point is far out in the predictor direction but follows the existing linear trend. The most concerning case is the high-leverage and influential point, because it is far from the center of the predictor values and pulls the fitted line toward itself.</p>
+</div>
+</div>
+<div id="exm-20_5" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 20.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Sensitivity analysis for influential surgical observations
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In <a href="#exm-20_3" class="quarto-xref">Example&nbsp;<span>20.3</span></a>, observations 17 and 38 were flagged as influential. One way to investigate their effect is to refit the model without those observations and compare the estimated coefficients.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">surgical_flagged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">17</span>, <span class="fl">38</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_with_observation</span> <span class="op">&lt;-</span> <span class="va">surgical_dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>observation <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_without_flagged</span> <span class="op">&lt;-</span> <span class="va">surgical_with_observation</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="va">observation</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">surgical_flagged</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_without_flagged_fit</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>  <span class="va">ln_y</span> <span class="op">~</span> <span class="va">bcs</span> <span class="op">+</span> <span class="va">pindex</span> <span class="op">+</span> <span class="va">enzyme_test</span> <span class="op">+</span> <span class="va">alc_heavy</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">surgical_without_flagged</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_sensitivity</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">surgical_engine</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>analysis <span class="op">=</span> <span class="st">"All observations"</span><span class="op">)</span>,</span>
+<span>  <span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">surgical_without_flagged_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>analysis <span class="op">=</span> <span class="st">"Without observations 17 and 38"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">analysis</span>, <span class="va">term</span>, <span class="va">estimate</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">analysis</span>, values_from <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    change <span class="op">=</span> <span class="va">`Without observations 17 and 38`</span> <span class="op">-</span> <span class="va">`All observations`</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="va">surgical_sensitivity</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 17%">
+<col style="width: 25%">
+<col style="width: 45%">
+<col style="width: 11%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">All observations</th>
+<th style="text-align: right;">Without observations 17 and 38</th>
+<th style="text-align: right;">change</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">3.8527</td>
+<td style="text-align: right;">3.8300</td>
+<td style="text-align: right;">-0.0227</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">bcs</td>
+<td style="text-align: right;">0.0733</td>
+<td style="text-align: right;">0.0756</td>
+<td style="text-align: right;">0.0023</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">pindex</td>
+<td style="text-align: right;">0.0142</td>
+<td style="text-align: right;">0.0113</td>
+<td style="text-align: right;">-0.0029</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">enzyme_test</td>
+<td style="text-align: right;">0.0154</td>
+<td style="text-align: right;">0.0179</td>
+<td style="text-align: right;">0.0025</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">alc_heavy</td>
+<td style="text-align: right;">0.3532</td>
+<td style="text-align: right;">0.3317</td>
+<td style="text-align: right;">-0.0215</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This comparison does not automatically tell us which model is “correct.” Instead, it tells us how much the fitted coefficients depend on the flagged observations. If the conclusions change substantially after removing observations 17 and 38, then the analysis should report that sensitivity clearly.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="What to report for influential observations">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What to report for influential observations
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>When reporting influential-observation diagnostics in an applied analysis, include:</p>
+<ol type="1">
+<li>
+<strong>Which observations were flagged</strong> and which diagnostics flagged them.</li>
+<li>
+<strong>Why the observations are unusual</strong>, such as a large residual, high leverage, or both.</li>
+<li>
+<strong>Whether there is a contextual explanation</strong>, such as a measurement error, data-entry error, or a case from a different population.</li>
+<li>
+<strong>A sensitivity analysis</strong>, comparing the model with and without the flagged observations.</li>
+<li>
+<strong>Your final decision</strong>, including whether the observations were retained or removed and why.</li>
+<li>
+<strong>Whether the substantive conclusions changed</strong>, since that is usually more important than whether one coefficient changed slightly.</li>
+</ol>
+</div>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="20.8"><h2 data-number="20.8" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">20.8</span> Recap</h2>
+<p>In this chapter, we introduced diagnostics for identifying outliers, high-leverage observations, hidden extrapolation, and influential observations in multiple regression.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Studentized residual</strong></td>
+<td>A residual divided by an estimated standard error that accounts for leverage through <span class="math inline">\(1-h_{ii}\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Deleted residual</strong></td>
+<td>The difference between <span class="math inline">\(y_i\)</span> and the prediction for observation <span class="math inline">\(i\)</span> from a model fit without observation <span class="math inline">\(i\)</span>.</td>
+</tr>
+<tr class="odd">
+<td><strong>Studentized deleted residual</strong></td>
+<td>A deleted-residual version of a t-score; useful for detecting outliers with respect to <span class="math inline">\(y\)</span>.</td>
+</tr>
+<tr class="even">
+<td><strong>Bonferroni adjustment</strong></td>
+<td>A way to control the overall error rate when checking many residuals at once.</td>
+</tr>
+<tr class="odd">
+<td><strong>Leverage</strong></td>
+<td>The hat value <span class="math inline">\(h_{ii}\)</span>; large leverage means the predictor values are far from the center of the predictor space.</td>
+</tr>
+<tr class="even">
+<td><strong>Hidden extrapolation</strong></td>
+<td>Predicting at a combination of predictor values not represented by the data, even if each individual predictor value is within its observed range.</td>
+</tr>
+<tr class="odd">
+<td><strong>DFFITS</strong></td>
+<td>Measures how much observation <span class="math inline">\(i\)</span> influences its own fitted value.</td>
+</tr>
+<tr class="even">
+<td><strong>Cook’s distance</strong></td>
+<td>Measures how much observation <span class="math inline">\(i\)</span> influences all fitted values.</td>
+</tr>
+<tr class="odd">
+<td><strong>DFBETAS</strong></td>
+<td>Measures how much observation <span class="math inline">\(i\)</span> influences an individual regression coefficient.</td>
+</tr>
+<tr class="even">
+<td><strong>Influential observation</strong></td>
+<td>An observation whose removal noticeably changes fitted values or coefficient estimates.</td>
+</tr>
+<tr class="odd">
+<td><strong>Sensitivity analysis</strong></td>
+<td>Refitting the model with and without a flagged observation to see whether conclusions change.</td>
+</tr>
+<tr class="even">
+<td><strong>Reporting influential observations</strong></td>
+<td>State what was flagged, why it was unusual, whether it was investigated, and whether conclusions changed.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="20.9"><h2 data-number="20.9" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">20.9</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>What is the difference between an outlier with respect to <span class="math inline">\(y\)</span> and a high-leverage observation?</p></li>
+<li><p>Why can a high-leverage observation have little influence on the fitted model?</p></li>
+<li><p>Why does the variance of a residual depend on <span class="math inline">\(1-h_{ii}\)</span>?</p></li>
+<li><p>What is the main idea behind a deleted residual?</p></li>
+<li><p>Why might a studentized deleted residual reveal an outlier that an ordinary residual does not make obvious?</p></li>
+<li><p>Why is a Bonferroni adjustment used when checking many studentized deleted residuals?</p></li>
+<li><p>What does hidden extrapolation mean in multiple regression?</p></li>
+<li><p>What does Cook’s distance measure?</p></li>
+<li><p>How is DFFITS different from Cook’s distance?</p></li>
+<li><p>What does DFBETAS help us diagnose?</p></li>
+<li><p>Why should we avoid automatically deleting observations just because they have large diagnostic values?</p></li>
+<li><p>What is the purpose of a sensitivity analysis?</p></li>
+<li><p>In the simulated diagnostic plots, why is the high-leverage and influential point more concerning than the high-leverage, low-influence point?</p></li>
+<li><p>If a sensitivity analysis gives noticeably different coefficient estimates after removing flagged observations, what should be done?</p></li>
+<li><p>What should be included when reporting influential observations in an applied regression analysis?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>An outlier with respect to <span class="math inline">\(y\)</span> has an unusual response value.</strong> A high-leverage observation has an unusual combination of predictor values. The first is about vertical distance from the fitted model; the second is about location in predictor space.</p></li>
+<li><p><strong>It may follow the same pattern as the rest of the data.</strong> High leverage means the observation has unusual predictor values, but if its response value is consistent with the fitted relationship, it may not pull the regression model very much.</p></li>
+<li><p><strong>Residual variability is smaller for high-leverage observations.</strong> A high-leverage point helps determine its own fitted value, so its ordinary residual can be artificially small. The factor <span class="math inline">\(1-h_{ii}\)</span> adjusts for this.</p></li>
+<li><p><strong>It asks how well the model predicts observation <span class="math inline">\(i\)</span> without using observation <span class="math inline">\(i\)</span>.</strong> If the deleted residual is large, the observation is not well predicted by the pattern in the rest of the data.</p></li>
+<li><p><strong>The observation may pull the fitted model toward itself.</strong> When that happens, the ordinary residual can look modest. Removing the observation before predicting it can reveal its unusualness more clearly.</p></li>
+<li><p><strong>We are making many checks at once.</strong> The more residuals we examine, the more likely we are to flag something by chance. The Bonferroni adjustment controls the overall Type I error rate.</p></li>
+<li><p><strong>It means predicting at an unusual combination of predictors.</strong> Each predictor value may be within its individual observed range, but the combination of values may be far from the combinations used to fit the model.</p></li>
+<li><p><strong>It measures overall influence on fitted values.</strong> Cook’s distance is large when removing an observation would noticeably change the fitted values for the model.</p></li>
+<li><p><strong>DFFITS focuses on one fitted value; Cook’s distance focuses on all fitted values.</strong> DFFITS measures how much observation <span class="math inline">\(i\)</span> changes its own fitted value, while Cook’s distance summarizes the effect on the fitted model more broadly.</p></li>
+<li><p><strong>It identifies coefficient-specific influence.</strong> DFBETAS tells us which regression coefficient changes when a particular observation is removed.</p></li>
+<li><p><strong>Large diagnostics are flags, not verdicts.</strong> The observation might be a measurement error, but it might also be valid and important. Deletion should be based on context and analysis, not diagnostics alone.</p></li>
+<li><p><strong>It checks whether conclusions depend on a flagged observation.</strong> By comparing models with and without the observation, we can see whether the scientific or practical interpretation changes.</p></li>
+<li><p><strong>It combines unusual predictor values with a response value that pulls the fitted line.</strong> A high-leverage point that follows the existing pattern may not change the model much. A high-leverage point with a large residual can strongly affect the fitted line.</p></li>
+<li><p><strong>Report the sensitivity clearly and investigate the observations.</strong> Large changes mean the conclusions depend on those observations. The analyst should explain the issue, consider context, and justify whether the observations are retained or removed.</p></li>
+<li><p><strong>Report the flags, context, sensitivity analysis, and decision.</strong> A good write-up identifies the observations, explains which diagnostics flagged them, discusses whether there is a practical explanation, compares results with and without them, and states whether the main conclusions changed.</p></li>
+</ol>
+</div>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

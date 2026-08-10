@@ -347,6 +347,16 @@ window.Quarto = {
 <li><a href="#shrinkage-as-a-variable-selector" id="toc-shrinkage-as-a-variable-selector" class="nav-link" data-scroll-target="#shrinkage-as-a-variable-selector"><span class="header-section-number">19.2.1</span> Shrinkage as a Variable Selector</a></li>
   </ul>
 </li>
+  <li><a href="#elastic-net" id="toc-elastic-net" class="nav-link" data-scroll-target="#elastic-net"><span class="header-section-number">19.3</span> Elastic Net</a></li>
+  <li>
+<a href="#comparing-shrinkage-methods" id="toc-comparing-shrinkage-methods" class="nav-link" data-scroll-target="#comparing-shrinkage-methods"><span class="header-section-number">19.4</span> Comparing Shrinkage Methods</a>
+  <ul class="collapse">
+<li><a href="#coefficient-paths" id="toc-coefficient-paths" class="nav-link" data-scroll-target="#coefficient-paths"><span class="header-section-number">19.4.1</span> Coefficient paths</a></li>
+  <li><a href="#prediction-performance" id="toc-prediction-performance" class="nav-link" data-scroll-target="#prediction-performance"><span class="header-section-number">19.4.2</span> Prediction performance</a></li>
+  </ul>
+</li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">19.5</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">19.6</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -376,6 +386,23 @@ window.Quarto = {
 E\left[\left(\hat{\beta}-\beta\right)^{2}\right] &amp; =Var\left[\hat{\beta}\right]+\left(E\left[\hat{\beta}\right]-\beta\right)^{2}
 \end{align*}
 \]</span></p>
+<div class="callout callout-style-default callout-note callout-titled" title="Bias-variance tradeoff">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Bias-variance tradeoff
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Least squares estimators are unbiased under the usual model assumptions, but they can have large variance when predictors are highly correlated. Ridge regression accepts a little bias in exchange for more stable coefficient estimates.</p>
+<p>The goal is not to make the coefficients unbiased. The goal is to reduce overall prediction error by shrinking unstable estimates toward 0.</p>
+</div>
+</div>
+</div>
 <p><em>Ridge</em> regression starts by transforming the variables as <span class="math display">\[
 \begin{align}
 Y_{i}^{*} &amp; =\frac{1}{\sqrt{n-1}}\left(\frac{Y_{i}-\overline{Y}}{s_{Y}}\right)\nonumber\\
@@ -388,58 +415,121 @@ Q &amp; =\sum\left[Y_{i}^{*}-\left(b_{1}^{*}X_{i1}^{*}+\cdots+b_{p-1}^{*}X_{i,p-
 \end{align}
 \tag{19.1}\]</span></span></p>
 <p>The added term gives a penalty for large coefficients. Thus, the estimators are biased toward 0. Because of this, the ridge estimators are called <em>shrinkage</em> estimators.</p>
-<p>There are a number of methods for determining <span class="math inline">\(\lambda\)</span> which are beyond the scope of our class. In R, we will use the <code>glmnet</code> engine to fit the model.</p>
-<p>The ridge estimators are more stable than the ols estimators, however, the distributional properties of these estimators are not easily found.</p>
-<div id="exm-19_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 19.1 (Ridge Regression for <code>mtcars</code>)</strong></span> Let’s examine the <code>mtcars</code> data last seen in <a href="16_Linearity.html#exm-16_3" class="quarto-xref">Example&nbsp;<span>16.3</span></a>. Recall that <code>disp</code>, <code>hp</code>, and <code>wt</code> need to be log-transformed to make the relationships linear.</p>
+<p>There are a number of methods for determining <span class="math inline">\(\lambda\)</span>, which are beyond the scope of our class. In R, we will use the <code>glmnet</code> engine to fit the model.</p>
+<p>The ridge estimators are more stable than the OLS estimators. However, the distributional properties of these estimators are not easily found.</p>
+<div class="callout callout-style-default callout-important callout-titled" title="Standardize predictors before penalizing coefficients">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>Standardize predictors before penalizing coefficients
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Ridge and lasso penalties are applied to coefficient sizes. If predictors are on very different scales, the penalty will not treat them fairly. A predictor measured in thousands may have a much smaller coefficient than a predictor measured in fractions, even if both are important.</p>
+<p>This is why the examples below use <code>step_normalize(all_numeric_predictors())</code> before fitting ridge or lasso models.</p>
+</div>
+</div>
+</div>
+<div id="exm-19_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Ridge regression for mtcars
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s examine the <code>mtcars</code> data last seen in <a href="16_Linearity.html#exm-16_3" class="quarto-xref">Example&nbsp;<span>16.3</span></a>. Recall that <code>disp</code>, <code>hp</code>, and <code>wt</code> need to be log-transformed to make the relationships linear.</p>
 <p>We will now use the “glmnet” engine for ridge regression. We set the value of <span class="math inline">\(\lambda\)</span> in <a href="#eq-w5_24" class="quarto-xref">Equation&nbsp;<span>19.1</span></a> with the <code>penalty</code> argument in <code>linear_reg</code>. We will just arbitrarily use 0.1 for now. We will later in this section discuss how to choose a value of <code>penalty</code>.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">ridge_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#penalty is the lambda hyperparameter</span></span>
-<span><span class="co">#mixture = 0 indicates ridge regression</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># penalty is the lambda hyperparameter</span></span>
+<span><span class="co"># mixture = 0 indicates ridge regression</span></span>
+<span><span class="va">ridge_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
+<span><span class="va">ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">ridge_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">ridge_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit</span><span class="op">(</span><span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">ridge_fit</span> <span class="op">&lt;-</span> <span class="va">ridge_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  term        estimate penalty
-  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-1 (Intercept)   20.1       0.1
-2 drat           0.283     0.1
-3 qsec           0.362     0.1
-4 log_disp      -1.27      0.1
-5 log_hp        -1.54      0.1
-6 log_wt        -2.64      0.1</code></pre>
+<span><span class="va">ridge_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.0906</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.2831</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.3623</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_disp</td>
+<td style="text-align: right;">-1.2736</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log_hp</td>
+<td style="text-align: right;">-1.5389</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_wt</td>
+<td style="text-align: right;">-2.6418</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>We see that <code>log_wt</code> has the biggest impact on <code>mpg</code> since it has the largest coefficient in magnitude. The negative sign just indicates that the linear relationship between <code>log_wt</code> and <code>mpg</code> is negative.</p>
-<p>We also see that <code>drat</code> has the smallest impact on <code>mpg</code> given the other variables are in the model, followed by <code>qsec</code> for the second smallest impact. Let’s reexamine the scatterplot matrix to see if this make sense.</p>
+<p>We also see that <code>drat</code> has the smallest impact on <code>mpg</code> given the other variables are in the model, followed by <code>qsec</code> for the second smallest impact. Let’s reexamine the scatterplot matrix to see if this makes sense.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">mtcars</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>         log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
-<span>         log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">drat</span>, <span class="va">qsec</span>, <span class="va">log_disp</span>, <span class="va">log_hp</span>, <span class="va">log_wt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>         log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">mpg</span>, <span class="va">drat</span>, <span class="va">qsec</span>, <span class="va">log_disp</span>, <span class="va">log_hp</span>, <span class="va">log_wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
@@ -450,28 +540,108 @@ Q &amp; =\sum\left[Y_{i}^{*}-\left(b_{1}^{*}X_{i1}^{*}+\cdots+b_{p-1}^{*}X_{i,p-
 </div>
 <p>Looking at the plots of <code>mpg</code> versus the other variables, we see that a linear relationship is apparent for all of the predictors. Between <code>drat</code> and <code>qsec</code>, <code>drat</code> appears stronger (<span class="math inline">\(r=0.681\)</span>) than <code>qsec</code> (<span class="math inline">\(r=0.419\)</span>). But why did ridge regression show us that <code>qsec</code> has a larger impact on <code>mpg</code> than <code>drat</code>? Ridge regression shows the impact given the other variables are included in the model. Looking at the scatterplot matrix, <code>drat</code> is more correlated with the other predictor variables than <code>qsec</code>. Thus, when every other predictor is included, <code>drat</code> does not explain much more variability in <code>mpg</code>. Thus, it is not as important.</p>
 </div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="Ridge and lasso in tidymodels">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ridge and lasso in tidymodels
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>In <code>tidymodels</code>, the <code>linear_reg()</code> arguments <code>penalty</code> and <code>mixture</code> control the type and strength of shrinkage.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Argument</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>penalty</code></td>
+<td>The value of <span class="math inline">\(\lambda\)</span>. Larger values create stronger shrinkage.</td>
+</tr>
+<tr class="even">
+<td><code>mixture = 0</code></td>
+<td>Ridge regression. Coefficients shrink toward 0 but usually do not become exactly 0.</td>
+</tr>
+<tr class="odd">
+<td><code>mixture = 1</code></td>
+<td>Lasso regression. Some coefficients can shrink exactly to 0.</td>
+</tr>
+<tr class="even">
+<td><code>0 &lt; mixture &lt; 1</code></td>
+<td>Elastic net, a blend of ridge and lasso.</td>
+</tr>
+</tbody>
+</table>
+<p>In this chapter, we focus on ridge and lasso.</p>
+</div>
+</div>
+</div>
 <section id="the-effect-of-the-penalty" class="level3" data-number="19.1.1"><h3 data-number="19.1.1" class="anchored" data-anchor-id="the-effect-of-the-penalty">
 <span class="header-section-number">19.1.1</span> The effect of the <code>penalty</code>
 </h3>
 <p>In <a href="#exm-19_1" class="quarto-xref">Example&nbsp;<span>19.1</span></a>, we chose the <code>penalty</code> (<span class="math inline">\(\lambda\)</span>) arbitrarily to be 0.1. Are there other values of <code>penalty</code> that would fit the data better?</p>
 <p>We can try different penalties using the <code>tidy</code> function:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fl">.75</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  term        estimate penalty
-  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-1 (Intercept)   20.1      0.75
-2 drat           0.348    0.75
-3 qsec           0.362    0.75
-4 log_disp      -1.34     0.75
-5 log_hp        -1.51     0.75
-6 log_wt        -2.48     0.75</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>penalty <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.0906</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.3481</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.3615</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_disp</td>
+<td style="text-align: right;">-1.3365</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log_hp</td>
+<td style="text-align: right;">-1.5133</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_wt</td>
+<td style="text-align: right;">-2.4824</td>
+<td style="text-align: right;">0.75</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>We can even plot the value of each coefficient for different penalties.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="576"></p>
@@ -510,149 +680,396 @@ Q &amp; =\sum\left[Y_{i}^{*}-\left(b_{1}^{*}X_{i1}^{*}+\cdots+b_{p-1}^{*}X_{i,p-
 </ol></section><section id="implementing-cross-validation-in-tidymodels" class="level4"><h4 class="anchored" data-anchor-id="implementing-cross-validation-in-tidymodels">Implementing Cross-Validation in tidymodels</h4>
 <p>To implement cross-validation, the <code>rsample</code> package (part of tidymodels) provides essential tools for splitting the data. Below is an example of performing <strong>5-fold cross-validation</strong>:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co">#to reproduce results</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co"># to reproduce results</span></span>
 <span></span>
 <span></span>
-<span><span class="va">cv_folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">cv_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="using-cross-validation-with-workflows" class="level4"><h4 class="anchored" data-anchor-id="using-cross-validation-with-workflows">Using Cross-Validation with Workflows</h4>
 <p>Within tidymodels, you can streamline model fitting with workflows and use <code>fit_resamples()</code> to fit models on the resamples created by cross-validation:</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">ridge_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
+<span><span class="va">ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">ridge_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">ridge_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fits</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span> <span class="fu">fit_resamples</span><span class="op">(</span><span class="va">wf</span>, resamples <span class="op">=</span> <span class="va">cv_folds</span><span class="op">)</span></span>
+<span><span class="va">resample_fit</span> <span class="op">&lt;-</span> <span class="va">ridge_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit_resamples</span><span class="op">(</span>resamples <span class="op">=</span> <span class="va">cv_folds</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Collect and summarize performance metrics</span></span>
-<span><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">fits</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 2 × 6
-  .metric .estimator  mean     n std_err .config        
-  &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;          
-1 rmse    standard   2.16      5  0.144  pre0_mod0_post0
-2 rsq     standard   0.886     5  0.0200 pre0_mod0_post0</code></pre>
+<span><span class="fu">collect_metrics</span><span class="op">(</span><span class="va">resample_fit</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.1629</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.1441</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8858</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0200</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 </section></section><section id="tune-the-penalty" class="level3" data-number="19.1.3"><h3 data-number="19.1.3" class="anchored" data-anchor-id="tune-the-penalty">
 <span class="header-section-number">19.1.3</span> Tune the Penalty</h3>
-<p>We can now have tidymodels try different values of <code>penalty</code> and determine what is the best by checking the performance on the folded data. Using the folded data helps us determine what value of <code>penalty</code> provides the best fit but also what value does the best job at predicting data that was not used to determine the <code>penalty</code>.</p>
-<p>We need to setup some values of <code>penalty</code> to try. These values can be constructed using <code>grid_regular</code>. After constructing the grid of possible values of <code>penalty</code> to try, we can then have tidymodels do all of the fitting using <code>tune_grid</code>.</p>
+<p>We can now have tidymodels try different values of <code>penalty</code> and determine which one is best by checking performance on the folded data. Using the folded data helps us determine which value of <code>penalty</code> provides a good fit while also predicting data that was not used to determine the <code>penalty</code>.</p>
+<p>We need to set up some values of <code>penalty</code> to try. These values can be constructed using <code>grid_regular</code>. After constructing the grid of possible values of <code>penalty</code> to try, we can then have tidymodels do all of the fitting using <code>tune_grid</code>.</p>
 <p>We will put all of these pieces together in the following example.</p>
-<div id="exm-19_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 19.2 (Fine tune the penalty for <code>mtcars</code>)</strong></span> &nbsp;</p>
+<div id="exm-19_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Tuning the ridge penalty for mtcars
+</div>
+</div>
+<div class="callout-body-container callout-body">
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co">#to reproduce results</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co"># to reproduce results</span></span>
 <span></span>
-<span><span class="co">#prepare the recipe</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Prepare the recipe</span></span>
+<span><span class="va">tuned_ridge_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the folded data, let's try 5 folds</span></span>
-<span><span class="va">cv_folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co"># Set up the folded data, let's try 5 folds</span></span>
+<span><span class="va">ridge_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the model and set penalty to tune</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up the model and set penalty to tune</span></span>
+<span><span class="va">tuned_ridge_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
+<span><span class="va">tuned_ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">tuned_ridge_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">tuned_ridge_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup possible values of penalty</span></span>
-<span><span class="co">#this will try 100 different values of penalty</span></span>
-<span><span class="va">penalty_grid</span> <span class="op">=</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co"># Set up possible values of penalty.</span></span>
+<span><span class="co"># This will try 100 different values of penalty.</span></span>
+<span><span class="va">ridge_penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span></span>
+<span>  <span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">6</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#now tune the grid with everthing we just set up</span></span>
-<span><span class="va">tune_model</span> <span class="op">=</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">wf</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">cv_folds</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">penalty_grid</span>,</span>
+<span><span class="co"># Now tune the grid with everything we just set up.</span></span>
+<span><span class="va">tuned_ridge</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>  <span class="va">tuned_ridge_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">ridge_folds</span>,</span>
+<span>  grid <span class="op">=</span> <span class="va">ridge_penalty_grid</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<p>At the point, differing values of <code>penalty</code> has been tried as determined by <code>grid_regular</code>. We can view the results in a few ways. We can plot the mean metric for each value of the penalty, or we can just ask R to show the top few penalties based on either “rmse” or “rsq”.</p>
+<p>At this point, different values of <code>penalty</code> have been tried as determined by <code>grid_regular()</code>. We can view the results in a few ways. We can plot the mean metric for each value of the penalty, or we can ask R to show the top few penalties based on either “rmse” or “rsq”.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#plot the metrics for different values of the penalty</span></span>
-<span><span class="va">tune_model</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Plot the metrics for different values of the penalty</span></span>
+<span><span class="va">tuned_ridge</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#find the best penalty in terms of rmse</span></span>
-<span><span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu">show_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 7
-     penalty .metric .estimator  mean     n std_err .config          
-       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;            
-1 0.000001   rmse    standard    2.30     5   0.283 pre0_mod001_post0
-2 0.00000126 rmse    standard    2.30     5   0.283 pre0_mod002_post0
-3 0.00000159 rmse    standard    2.30     5   0.283 pre0_mod003_post0
-4 0.00000201 rmse    standard    2.30     5   0.283 pre0_mod004_post0
-5 0.00000254 rmse    standard    2.30     5   0.283 pre0_mod005_post0</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Find the best penalty in terms of rmse</span></span>
+<span><span class="va">tuned_ridge</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">show_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.3031</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.2825</td>
+<td style="text-align: left;">pre0_mod001_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.3031</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.2825</td>
+<td style="text-align: left;">pre0_mod002_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.3031</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.2825</td>
+<td style="text-align: left;">pre0_mod003_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.3031</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.2825</td>
+<td style="text-align: left;">pre0_mod004_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.3031</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.2825</td>
+<td style="text-align: left;">pre0_mod005_post0</td>
+</tr>
+</tbody>
+</table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">#find the best penalty in terms of rsq</span></span>
-<span><span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu">show_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 5 × 7
-     penalty .metric .estimator  mean     n std_err .config          
-       &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;      &lt;dbl&gt; &lt;int&gt;   &lt;dbl&gt; &lt;chr&gt;            
-1 0.572      rsq     standard   0.924     5  0.0139 pre0_mod058_post0
-2 0.000001   rsq     standard   0.924     5  0.0137 pre0_mod001_post0
-3 0.00000126 rsq     standard   0.924     5  0.0137 pre0_mod002_post0
-4 0.00000159 rsq     standard   0.924     5  0.0137 pre0_mod003_post0
-5 0.00000201 rsq     standard   0.924     5  0.0137 pre0_mod004_post0</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Find the best penalty in terms of rsq</span></span>
+<span><span class="va">tuned_ridge</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">show_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">0.5722</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9242</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0139</td>
+<td style="text-align: left;">pre0_mod058_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9242</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0137</td>
+<td style="text-align: left;">pre0_mod001_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9242</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0137</td>
+<td style="text-align: left;">pre0_mod002_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9242</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0137</td>
+<td style="text-align: left;">pre0_mod003_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9242</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0137</td>
+<td style="text-align: left;">pre0_mod004_post0</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
 <p>Note the “best” penalty value differs from “rmse” to “rsq”. Looking at the plot above, we can see there is not much difference in either metric for the “best” penalty value for either case.</p>
 <p>Let’s now get the best penalty from one of the metrics. We will use “rsq” here.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_penalty</span> <span class="op">=</span> <span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
-<span><span class="va">best_penalty</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 2
-  penalty .config          
-    &lt;dbl&gt; &lt;chr&gt;            
-1   0.572 pre0_mod058_post0</code></pre>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_ridge_penalty</span> <span class="op">&lt;-</span> <span class="va">tuned_ridge</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">best_ridge_penalty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.5722</td>
+<td style="text-align: left;">pre0_mod058_post0</td>
+</tr></tbody>
+</table>
 </div>
 </div>
 <p>With this best penalty, we can finalize the workflow to use this penalty for the ridge regression.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_wf</span> <span class="op">=</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">wf</span>, <span class="va">best_penalty</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_ridge_workflow</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span></span>
+<span>  <span class="va">tuned_ridge_workflow</span>,</span>
+<span>  <span class="va">best_ridge_penalty</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">final_fit</span> <span class="op">=</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_wf</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span><span class="va">final_ridge_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_ridge_workflow</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">final_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  term        estimate penalty
-  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-1 (Intercept)   20.1     0.572
-2 drat           0.294   0.572
-3 qsec           0.362   0.572
-4 log_disp      -1.29    0.572
-5 log_hp        -1.53    0.572
-6 log_wt        -2.61    0.572</code></pre>
+<span><span class="va">final_ridge_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.0906</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.2942</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.3617</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_disp</td>
+<td style="text-align: right;">-1.2862</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log_hp</td>
+<td style="text-align: right;">-1.5345</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_wt</td>
+<td style="text-align: right;">-2.6132</td>
+<td style="text-align: right;">0.5722</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="The best penalty is not a magic number">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>The best penalty is not a magic number
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-6" class="callout-6-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The selected penalty depends on the folds used in cross-validation, the metric used to choose the penalty, and the grid of values we tried. Another random split, another metric, or a finer grid could produce a different value.</p>
+<p>For that reason, the goal is usually not to defend one exact value of <span class="math inline">\(\lambda\)</span>. The goal is to find a region of penalty values that gives good predictive performance while keeping the model stable.</p>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="One-standard-error rule">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>One-standard-error rule
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-7" class="callout-7-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Sometimes the penalty with the best cross-validated performance is not much better than a simpler model. The <em>one-standard-error rule</em> chooses the simplest model whose performance is within one standard error of the best-performing model.</p>
+<p>For ridge and lasso, “simpler” usually means a larger penalty, because a larger penalty creates more shrinkage. The code below asks for the largest ridge penalty whose cross-validated <span class="math inline">\(R^2\)</span> is close enough to the best observed <span class="math inline">\(R^2\)</span>.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">ridge_one_se_penalty</span> <span class="op">&lt;-</span> <span class="va">tuned_ridge</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select_by_one_std_err</span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/desc.html">desc</a></span><span class="op">(</span><span class="va">penalty</span><span class="op">)</span>, metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ridge_one_se_penalty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">4977.024</td>
+<td style="text-align: left;">pre0_mod097_post0</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>The one-standard-error rule is useful when several penalty values perform almost equally well. It favors a model that is more regularized and often more stable.</p>
 </div>
 </div>
 </div>
@@ -660,147 +1077,791 @@ Q &amp; =\sum\left[Y_{i}^{*}-\left(b_{1}^{*}X_{i1}^{*}+\cdots+b_{p-1}^{*}X_{i,p-
 <span class="header-section-number">19.2</span> Lasso</h2>
 <section id="shrinkage-as-a-variable-selector" class="level3" data-number="19.2.1"><h3 data-number="19.2.1" class="anchored" data-anchor-id="shrinkage-as-a-variable-selector">
 <span class="header-section-number">19.2.1</span> Shrinkage as a Variable Selector</h3>
-<p>In ridge regression, the estimates <em>shrink</em> to zero for predictors that do not have a significant linear relationship on <span class="math inline">\(Y\)</span> given the other variables.</p>
+<p>In ridge regression, the estimates <em>shrink</em> toward zero for predictors that do not have a strong linear relationship with <span class="math inline">\(Y\)</span> given the other variables.</p>
 <p>The coefficient estimates shrink to zero, but do not equal zero.</p>
 <p>The lasso (<em>least</em> <em>absolute</em> <em>shrinkage</em> and <em>selection</em> <em>operator</em>) is a shrinkage method like ridge, with subtle but important differences.</p>
-<p>The lasso estimate is defined by <span id="eq-w7_9"><span class="math display">\[
+<p>The lasso fitting criterion is defined by <span id="eq-w7_9"><span class="math display">\[
 \begin{align}
 Q_{lasso} &amp; =\sum_{i=1}^{n}\left(Y_{i}-\left(\beta_{0}+\beta_{1}X_{1i}+\cdots+\beta_{p-1}X_{p-1,i}\right)\right)^{2}+\lambda\sum_{j=1}^{p-1}\left|\beta_{j}\right|
 \end{align}
 \tag{19.2}\]</span></span></p>
 <p>Similarly to ridge regression, the value of <span class="math inline">\(\lambda\)</span> determines how biased the estimates will be.</p>
-<p>As <span class="math inline">\(\lambda\)</span> increases, the beta coefficients shrink toward zero with the <em>least</em> associated beta coefficients decreasing all the way to 0 before the more strongly associated beta coefficients.</p>
-<p>As a result, numerous beta coefficients that are not strongly associated with the outcome are decreased to <em>zero</em>, which is equivalent to removing those variables from the model.</p>
+<p>As <span class="math inline">\(\lambda\)</span> increases, the beta coefficients shrink toward zero, with the weakest predictor associations shrinking all the way to 0 before the more strongly associated predictors.</p>
+<p>As a result, some beta coefficients that are not strongly associated with the outcome are decreased to <em>zero</em>, which is equivalent to removing those variables from the fitted model.</p>
 <p>In this way, the lasso can be used as a <em>variable</em> <em>selection</em> method.</p>
-<div id="exm-19_3" class="theorem example">
-<p><span class="theorem-title"><strong>Example 19.3 (Lasso for <code>mtcars</code>)</strong></span> The procedure to fit the lasso is very similar to ridge regression. The only change is in the <code>mixture</code> argument in <code>linear_reg</code>. We will set this to 1 to do lasso.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Ridge vs. lasso">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-8-contents" aria-controls="callout-8" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Ridge vs.&nbsp;lasso
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-8" class="callout-8-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Ridge and lasso both shrink coefficients, but they behave differently.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead><tr class="header">
+<th>Method</th>
+<th>Penalty</th>
+<th>What happens to coefficients?</th>
+<th>Main use</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ridge</strong></td>
+<td>Sum of squared coefficients</td>
+<td>Coefficients shrink toward 0 but usually remain nonzero.</td>
+<td>Stabilize estimates when predictors are correlated.</td>
+</tr>
+<tr class="even">
+<td><strong>Lasso</strong></td>
+<td>Sum of absolute values of coefficients</td>
+<td>Some coefficients can become exactly 0.</td>
+<td>Shrinkage plus variable selection.</td>
+</tr>
+</tbody>
+</table>
+<p>If the goal is prediction with many correlated predictors, ridge can be attractive. If the goal is a smaller model, lasso can be attractive. But lasso’s selected variables should still be interpreted cautiously.</p>
+</div>
+</div>
+</div>
+<div id="exm-19_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Lasso for mtcars
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The procedure to fit the lasso is very similar to ridge regression. The only change is in the <code>mixture</code> argument in <code>linear_reg</code>. We will set this to 1 to do lasso.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co">#to reproduce results</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span> <span class="co"># to reproduce results</span></span>
 <span></span>
-<span><span class="co">#prepare the recipe</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="co"># Prepare the recipe</span></span>
+<span><span class="va">lasso_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the folded data, let's try 5 folds</span></span>
-<span><span class="va">cv_folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co"># Set up the folded data, let's try 5 folds</span></span>
+<span><span class="va">lasso_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup the model and set penalty to tune</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">1</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="co"># Set up the model and set penalty to tune</span></span>
+<span><span class="va">lasso_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">1</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
+<span><span class="va">lasso_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">lasso_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lasso_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#setup possible values of penalty</span></span>
-<span><span class="co">#this will try 100 different values of penalty</span></span>
-<span><span class="va">penalty_grid</span> <span class="op">=</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="co"># Set up possible values of penalty.</span></span>
+<span><span class="co"># This will try 100 different values of penalty.</span></span>
+<span><span class="va">lasso_penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span></span>
+<span>  <span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">#now tune the grid with everything we just set up</span></span>
-<span><span class="va">tune_model</span> <span class="op">=</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">wf</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">cv_folds</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">penalty_grid</span>,</span>
+<span><span class="co"># Now tune the grid with everything we just set up.</span></span>
+<span><span class="va">tuned_lasso</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>  <span class="va">lasso_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">lasso_folds</span>,</span>
+<span>  grid <span class="op">=</span> <span class="va">lasso_penalty_grid</span>,</span>
 <span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">tune_model</span> <span class="op">|&gt;</span>   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output-display">
-<div>
-<figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-11-1.png" class="img-fluid figure-img" width="576"></p>
-</figure>
-</div>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_penalty</span> <span class="op">=</span> <span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">final_wf</span> <span class="op">=</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">wf</span>, <span class="va">best_penalty</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">final_fit</span> <span class="op">=</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_wf</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">final_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 3
-  term        estimate penalty
-  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-1 (Intercept)   20.1     0.359
-2 drat           0       0.359
-3 qsec           0       0.359
-4 log_disp      -0.910   0.359
-5 log_hp        -1.86    0.359
-6 log_wt        -2.88    0.359</code></pre>
-</div>
-</div>
-<p>We see in this dataset, <code>drat</code> and <code>qsec</code> shrunk to 0. This indicates that they are not important to modeling <code>mpg</code>. The largest magnitude is <code>log_wt</code> which indicates that it has the largest impact on <code>mpg</code></p>
-<p>In the next example, we will fit a lasso model to the bodyfat data.</p>
-</div>
-<div id="exm-19_4" class="theorem example">
-<p><span class="theorem-title"><strong>Example 19.4 (Lasso for the bodyfat data.)</strong></span> &nbsp;</p>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"bodyfat.txt"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#prepare the recipe</span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#setup the folded data, let's try 5 folds</span></span>
-<span><span class="va">cv_folds</span> <span class="op">=</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">dat</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#setup the model and set penalty to tune</span></span>
-<span><span class="va">lm_model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">1</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#setup possible values of penalty</span></span>
-<span><span class="co">#this will try 100 different values of penalty</span></span>
-<span><span class="va">penalty_grid</span> <span class="op">=</span> <span class="fu">grid_regular</span><span class="op">(</span><span class="fu">penalty</span><span class="op">(</span>range<span class="op">=</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co">#now tune the grid with everything we just set up</span></span>
-<span><span class="va">tune_model</span> <span class="op">=</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
-<span>  <span class="va">wf</span>,</span>
-<span>  resamples <span class="op">=</span> <span class="va">cv_folds</span>, </span>
-<span>  grid <span class="op">=</span> <span class="va">penalty_grid</span>,</span>
-<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">tuned_lasso</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_penalty</span> <span class="op">=</span> <span class="va">tune_model</span> <span class="op">|&gt;</span> <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_lasso_penalty</span> <span class="op">&lt;-</span> <span class="va">tuned_lasso</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">final_wf</span> <span class="op">=</span> <span class="fu">finalize_workflow</span><span class="op">(</span><span class="va">wf</span>, <span class="va">best_penalty</span><span class="op">)</span></span>
+<span><span class="va">best_lasso_penalty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.3594</td>
+<td style="text-align: left;">pre0_mod045_post0</td>
+</tr></tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_lasso_workflow</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span></span>
+<span>  <span class="va">lasso_workflow</span>,</span>
+<span>  <span class="va">best_lasso_penalty</span></span>
+<span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">final_fit</span> <span class="op">=</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_wf</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">final_lasso_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_lasso_workflow</span>, data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">final_fit</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 4 × 3
-  term        estimate penalty
-  &lt;chr&gt;          &lt;dbl&gt;   &lt;dbl&gt;
-1 (Intercept)    20.2   0.0152
-2 tri             5.00  0.0152
-3 thigh           0     0.0152
-4 midarm         -1.54  0.0152</code></pre>
+<span><span class="va">final_lasso_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.0906</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_disp</td>
+<td style="text-align: right;">-0.9099</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log_hp</td>
+<td style="text-align: right;">-1.8574</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_wt</td>
+<td style="text-align: right;">-2.8828</td>
+<td style="text-align: right;">0.3594</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>We see that <code>tri</code> has the biggest impact on <code>bfat</code>. The predictor <code>thigh</code> shrunk down to 0. Recall in previous examples when we used the bodyfat data that <code>tri</code> and <code>thigh</code> are highly correlated.</p>
-<p>When two predictor variables are highly correlated, the lasso will arbitrarily have one of those variables shrink to zero. The practitioner should understand that the one variable that was not selected could in fact be more appropriate for their model than the one that was selected.</p>
+<p>We see in this dataset that <code>drat</code> and <code>qsec</code> shrunk to 0. This indicates that, for this fitted lasso model and penalty value, they were not selected. The largest fitted coefficient in magnitude is <code>log_wt</code>, which indicates that it has the largest impact on <code>mpg</code> among the selected predictors.</p>
+<p>In the next example, we will fit a lasso model to the bodyfat data.</p>
+</div>
+</div>
+<div id="exm-19_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Lasso for the bodyfat data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In this example, we return to the bodyfat data, where the predictors are strongly correlated.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Prepare the recipe</span></span>
+<span><span class="va">bodyfat_lasso_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span> <span class="op">+</span> <span class="va">midarm</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">bodyfat_dat</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set up the folded data, let's try 5 folds</span></span>
+<span><span class="va">bodyfat_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">bodyfat_dat</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set up the model and set penalty to tune</span></span>
+<span><span class="va">bodyfat_lasso_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">1</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bodyfat_lasso_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">bodyfat_lasso_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">bodyfat_lasso_model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Set up possible values of penalty.</span></span>
+<span><span class="co"># This will try 100 different values of penalty.</span></span>
+<span><span class="va">bodyfat_penalty_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span></span>
+<span>  <span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fl">100</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Now tune the grid with everything we just set up.</span></span>
+<span><span class="va">tuned_bodyfat_lasso</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>  <span class="va">bodyfat_lasso_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">bodyfat_folds</span>,</span>
+<span>  grid <span class="op">=</span> <span class="va">bodyfat_penalty_grid</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tuned_bodyfat_lasso</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/autoplot.html">autoplot</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">best_bodyfat_penalty</span> <span class="op">&lt;-</span> <span class="va">tuned_bodyfat_lasso</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">select_best</span><span class="op">(</span>metric <span class="op">=</span> <span class="st">"rsq"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">best_bodyfat_penalty</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">penalty</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.0152</td>
+<td style="text-align: left;">pre0_mod028_post0</td>
+</tr></tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">final_bodyfat_lasso_workflow</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span></span>
+<span>  <span class="va">bodyfat_lasso_workflow</span>,</span>
+<span>  <span class="va">best_bodyfat_penalty</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">final_bodyfat_lasso_fit</span> <span class="op">&lt;-</span> <span class="fu">fit</span><span class="op">(</span><span class="va">final_bodyfat_lasso_workflow</span>, data <span class="op">=</span> <span class="va">bodyfat_dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">final_bodyfat_lasso_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.1950</td>
+<td style="text-align: right;">0.0152</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">tri</td>
+<td style="text-align: right;">4.9974</td>
+<td style="text-align: right;">0.0152</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">thigh</td>
+<td style="text-align: right;">0.0000</td>
+<td style="text-align: right;">0.0152</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">midarm</td>
+<td style="text-align: right;">-1.5447</td>
+<td style="text-align: right;">0.0152</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We see that <code>tri</code> has the largest fitted coefficient in magnitude for predicting <code>bfat</code>. The predictor <code>thigh</code> shrunk down to 0. Recall in previous examples when we used the bodyfat data that <code>tri</code> and <code>thigh</code> are highly correlated.</p>
+<p>When two predictor variables are highly correlated, the lasso may select one variable and shrink the other to zero. The practitioner should understand that the variable that was not selected could still be scientifically or practically important.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled" title="Lasso selection is not the same as causal importance">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Lasso selection is not the same as causal importance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>When predictors are highly correlated, lasso may keep one predictor and set another to 0 even though both contain similar information. Which one is selected can depend on the sample, the folds used in cross-validation, and the exact penalty value.</p>
+<p>A coefficient of 0 means “not selected by this fitted lasso model.” It does not necessarily mean the variable is scientifically unimportant.</p>
+</div>
+</div>
+</div>
+</section></section><section id="elastic-net" class="level2" data-number="19.3"><h2 data-number="19.3" class="anchored" data-anchor-id="elastic-net">
+<span class="header-section-number">19.3</span> Elastic Net</h2>
+<p>Ridge regression and lasso are two endpoints of a larger family of shrinkage methods. The <em>elastic net</em> combines the ridge penalty and the lasso penalty.</p>
+<p>The elastic net fitting criterion can be written as <span class="math display">\[
+\begin{align}
+Q_{elastic} =
+\sum_{i=1}^{n}\left(Y_{i}-\hat{Y}_{i}\right)^{2}
++ \lambda\left[\frac{1-\alpha}{2}\sum_{j=1}^{p-1}\beta_j^2 + \alpha\sum_{j=1}^{p-1}|\beta_j|\right],
+\end{align}
+\]</span> where <span class="math inline">\(\lambda\)</span> controls the overall amount of shrinkage and <span class="math inline">\(\alpha\)</span> controls the balance between ridge-like and lasso-like behavior.</p>
+<table class="caption-top table">
+<thead><tr class="header">
+<th>Value of <span class="math inline">\(\alpha\)</span>
+</th>
+<th>Model</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\alpha = 0\)</span></td>
+<td>Ridge regression</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(0 &lt; \alpha &lt; 1\)</span></td>
+<td>Elastic net</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\alpha = 1\)</span></td>
+<td>Lasso regression</td>
+</tr>
+</tbody>
+</table>
+<p>In <code>tidymodels</code>, the <code>mixture</code> argument plays the role of <span class="math inline">\(\alpha\)</span>. Thus, <code>mixture = 0</code> fits ridge regression, <code>mixture = 1</code> fits lasso, and values between 0 and 1 fit elastic net models.</p>
+<div id="exm-19_5" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Fitting an elastic net model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s fit an elastic net model to the <code>mtcars</code> data by setting <code>mixture = 0.5</code>. This gives the model both ridge-like shrinkage and lasso-like variable selection behavior.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">elastic_net_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
+<span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
+<span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
+<span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">elastic_net_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0.5</span>, penalty <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">elastic_net_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">elastic_net_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">elastic_net_model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">elastic_net_fit</span> <span class="op">&lt;-</span> <span class="va">elastic_net_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">elastic_net_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">penalty</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">20.0906</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">drat</td>
+<td style="text-align: right;">0.0742</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">qsec</td>
+<td style="text-align: right;">0.3849</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_disp</td>
+<td style="text-align: right;">-0.7856</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">log_hp</td>
+<td style="text-align: right;">-1.6465</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">log_wt</td>
+<td style="text-align: right;">-3.3115</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This example fixes <code>mixture = 0.5</code> to show how elastic net is fit. In a full analysis, both <code>penalty</code> and <code>mixture</code> can be tuned.</p>
+</div>
+</div>
+<p>Elastic net is especially useful when there are many correlated predictors. Ridge tends to keep correlated predictors together, while lasso may choose only one. Elastic net can behave as a compromise: it can shrink correlated groups while still allowing some coefficients to become 0.</p>
+</section><section id="comparing-shrinkage-methods" class="level2" data-number="19.4"><h2 data-number="19.4" class="anchored" data-anchor-id="comparing-shrinkage-methods">
+<span class="header-section-number">19.4</span> Comparing Shrinkage Methods</h2>
+<p>Ridge, lasso, and elastic net are all shrinkage methods, but they answer slightly different modeling needs. Coefficient path plots and held-out model comparisons can help us see these differences.</p>
+<section id="coefficient-paths" class="level3" data-number="19.4.1"><h3 data-number="19.4.1" class="anchored" data-anchor-id="coefficient-paths">
+<span class="header-section-number">19.4.1</span> Coefficient paths</h3>
+<p>A <em>coefficient path</em> shows how each coefficient changes as the penalty changes. These plots are useful because shrinkage is not a single event. Coefficients move gradually as <span class="math inline">\(\lambda\)</span> changes, and lasso coefficients may eventually become exactly 0.</p>
+<div id="exm-19_6" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.6</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Side-by-side coefficient paths
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following plot compares the ridge and lasso coefficient paths for the <code>mtcars</code> predictors. Each line represents one fitted coefficient as the penalty changes.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">coefficient_paths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">final_ridge_fit</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"Ridge"</span><span class="op">)</span>,</span>
+<span>  <span class="va">final_lasso_fit</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">extract_fit_parsnip</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://purrr.tidyverse.org/reference/pluck.html">pluck</a></span><span class="op">(</span><span class="st">"fit"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"Lasso"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">"(Intercept)"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">coefficient_paths</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lambda</span>, y <span class="op">=</span> <span class="va">estimate</span>, color <span class="op">=</span> <span class="va">term</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">method</span>, nrow <span class="op">=</span> <span class="fl">1</span>, scales <span class="op">=</span> <span class="st">"free_x"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Penalty, lambda, on the log scale"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Coefficient estimate"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Predictor"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="19_Ridge_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The ridge panel shows coefficients shrinking toward 0. The lasso panel shows that some coefficients can hit 0 exactly. That exact-zero behavior is what allows lasso to perform variable selection.</p>
+</div>
+</div>
+</section><section id="prediction-performance" class="level3" data-number="19.4.2"><h3 data-number="19.4.2" class="anchored" data-anchor-id="prediction-performance">
+<span class="header-section-number">19.4.2</span> Prediction performance</h3>
+<p>Coefficient paths help us understand how the methods behave, but prediction performance should be checked on data that were not used to fit the model. One approach is to split the data into training and testing sets. The training set is used to tune the models; the testing set is saved for the final comparison.</p>
+<div id="exm-19_7" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 19.7</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Comparing OLS, ridge, and lasso on test data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Here we compare ordinary least squares, ridge regression, and lasso using the same train/test split. Ridge and lasso are tuned on cross-validation folds created from the training data, then all three models are evaluated on the testing data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">1004</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">mtcars</span>, prop <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
+<span><span class="va">mtcars_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">mtcars_split</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparison_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span></span>
+<span>  <span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">drat</span> <span class="op">+</span> <span class="va">wt</span> <span class="op">+</span> <span class="va">qsec</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">mtcars_train</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
+<span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
+<span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
+<span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_numeric_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparison_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars_train</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparison_grid</span> <span class="op">&lt;-</span> <span class="fu">grid_regular</span><span class="op">(</span></span>
+<span>  <span class="fu">penalty</span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">4</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  levels <span class="op">=</span> <span class="fl">20</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ols_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">comparison_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ridge_comparison_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">comparison_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">0</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lasso_comparison_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">comparison_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="fu">linear_reg</span><span class="op">(</span>mixture <span class="op">=</span> <span class="fl">1</span>, penalty <span class="op">=</span> <span class="fu">tune</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu">set_engine</span><span class="op">(</span><span class="st">"glmnet"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tuned_comparison_ridge</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>  <span class="va">ridge_comparison_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">comparison_folds</span>,</span>
+<span>  grid <span class="op">=</span> <span class="va">comparison_grid</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">tuned_comparison_lasso</span> <span class="op">&lt;-</span> <span class="fu">tune_grid</span><span class="op">(</span></span>
+<span>  <span class="va">lasso_comparison_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">comparison_folds</span>,</span>
+<span>  grid <span class="op">=</span> <span class="va">comparison_grid</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">final_comparison_ridge</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span></span>
+<span>  <span class="va">ridge_comparison_workflow</span>,</span>
+<span>  <span class="fu">select_best</span><span class="op">(</span><span class="va">tuned_comparison_ridge</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">final_comparison_lasso</span> <span class="op">&lt;-</span> <span class="fu">finalize_workflow</span><span class="op">(</span></span>
+<span>  <span class="va">lasso_comparison_workflow</span>,</span>
+<span>  <span class="fu">select_best</span><span class="op">(</span><span class="va">tuned_comparison_lasso</span>, metric <span class="op">=</span> <span class="st">"rmse"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparison_metrics</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="fu">last_fit</span><span class="op">(</span><span class="va">ols_workflow</span>, split <span class="op">=</span> <span class="va">mtcars_split</span>, metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"OLS"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">last_fit</span><span class="op">(</span><span class="va">final_comparison_ridge</span>, split <span class="op">=</span> <span class="va">mtcars_split</span>, metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"Ridge"</span><span class="op">)</span>,</span>
+<span>  <span class="fu">last_fit</span><span class="op">(</span><span class="va">final_comparison_lasso</span>, split <span class="op">=</span> <span class="va">mtcars_split</span>, metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"Lasso"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    direction <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">.metric</span> <span class="op">==</span> <span class="st">"rmse"</span>, <span class="st">"smaller is better"</span>, <span class="st">"larger is better"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">.metric</span>, <span class="va">direction</span>, <span class="va">.estimate</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/arrange.html">arrange</a></span><span class="op">(</span><span class="va">.metric</span>, <span class="va">model</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">comparison_metrics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">model</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">direction</th>
+<th style="text-align: right;">.estimate</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Lasso</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">smaller is better</td>
+<td style="text-align: right;">2.3439</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">OLS</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">smaller is better</td>
+<td style="text-align: right;">2.5064</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Ridge</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">smaller is better</td>
+<td style="text-align: right;">1.8746</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Lasso</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">larger is better</td>
+<td style="text-align: right;">0.9448</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">OLS</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">larger is better</td>
+<td style="text-align: right;">0.9426</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ridge</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">larger is better</td>
+<td style="text-align: right;">0.9481</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Because <code>mtcars</code> is a small dataset, the numerical winner should not be treated as permanent. The main lesson is the workflow: tune using training data, then compare final models on held-out testing data.</p>
+</div>
+</div>
+</section></section><section id="recap" class="level2" data-number="19.5"><h2 data-number="19.5" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">19.5</span> Recap</h2>
+<p>In this chapter, we introduced ridge regression, lasso, and elastic net as alternatives to ordinary least squares when coefficient stability, prediction, or variable selection are important.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Shrinkage</strong></td>
+<td>Pulling coefficient estimates toward 0 by adding a penalty to the fitting criterion.</td>
+</tr>
+<tr class="even">
+<td><strong>Bias-variance tradeoff</strong></td>
+<td>Ridge and lasso intentionally introduce bias to reduce variance and improve stability or prediction.</td>
+</tr>
+<tr class="odd">
+<td><strong>Penalty parameter</strong></td>
+<td>The value <span class="math inline">\(\lambda\)</span> controlling the amount of shrinkage; larger values create stronger shrinkage.</td>
+</tr>
+<tr class="even">
+<td><strong>Standardization</strong></td>
+<td>Predictors should be placed on a comparable scale before applying penalties to coefficient sizes.</td>
+</tr>
+<tr class="odd">
+<td><strong>Ridge regression</strong></td>
+<td>Uses a squared-coefficient penalty. Coefficients shrink toward 0 but usually do not become exactly 0.</td>
+</tr>
+<tr class="even">
+<td><strong>Lasso</strong></td>
+<td>Uses an absolute-value penalty. Some coefficients can become exactly 0, so lasso can perform variable selection.</td>
+</tr>
+<tr class="odd">
+<td><strong><code>mixture = 0</code></strong></td>
+<td>Ridge regression in <code>tidymodels</code> with the <code>glmnet</code> engine.</td>
+</tr>
+<tr class="even">
+<td><strong><code>mixture = 1</code></strong></td>
+<td>Lasso regression in <code>tidymodels</code> with the <code>glmnet</code> engine.</td>
+</tr>
+<tr class="odd">
+<td><strong>Elastic net</strong></td>
+<td>Uses a blend of ridge and lasso penalties; in <code>tidymodels</code>, values of <code>mixture</code> between 0 and 1 fit elastic net models.</td>
+</tr>
+<tr class="even">
+<td><strong>Cross-validation</strong></td>
+<td>A resampling approach used to estimate how well different penalty values predict new data.</td>
+</tr>
+<tr class="odd">
+<td><strong>Tuned penalty</strong></td>
+<td>A penalty selected using a performance metric such as RMSE or <span class="math inline">\(R^2\)</span> across cross-validation folds.</td>
+</tr>
+<tr class="even">
+<td><strong>One-standard-error rule</strong></td>
+<td>Chooses a simpler penalty value whose cross-validated performance is within one standard error of the best-performing value.</td>
+</tr>
+<tr class="odd">
+<td><strong>Coefficient path</strong></td>
+<td>A plot showing how each fitted coefficient changes as the penalty changes.</td>
+</tr>
+<tr class="even">
+<td><strong>Held-out test set</strong></td>
+<td>Data saved for final model comparison after fitting and tuning are complete.</td>
+</tr>
+<tr class="odd">
+<td><strong>Correlated predictors and lasso</strong></td>
+<td>Lasso may select one variable from a correlated group and set another to 0, even if both contain similar information.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="19.6"><h2 data-number="19.6" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">19.6</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-15" class="callout-15-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why might we prefer a biased estimator if ordinary least squares is unbiased?</p></li>
+<li><p>What does the penalty parameter <span class="math inline">\(\lambda\)</span> control in ridge and lasso regression?</p></li>
+<li><p>Why should predictors be standardized before fitting ridge or lasso models?</p></li>
+<li><p>What is the main difference between ridge and lasso in terms of coefficient behavior?</p></li>
+<li><p>In <code>tidymodels</code>, what do <code>mixture = 0</code> and <code>mixture = 1</code> represent?</p></li>
+<li><p>Why is cross-validation useful when choosing the penalty value?</p></li>
+<li><p>Why might the best penalty based on RMSE differ from the best penalty based on <span class="math inline">\(R^2\)</span>?</p></li>
+<li><p>Why should a lasso coefficient of 0 not automatically be interpreted as proof that the variable is scientifically unimportant?</p></li>
+<li><p>When predictors are highly correlated, why might ridge be more stable than lasso?</p></li>
+<li><p>Why is the selected penalty not a “magic” value?</p></li>
+<li><p>What does elastic net combine?</p></li>
+<li><p>What does a coefficient path plot help you see?</p></li>
+<li><p>Why might the one-standard-error rule choose a different penalty than <code>select_best()</code>?</p></li>
+<li><p>Why should final model comparisons use data that were not used for fitting or tuning?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-16-contents" aria-controls="callout-16" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-16" class="callout-16-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>Prediction error depends on both bias and variance.</strong> Ordinary least squares can have high variance when predictors are correlated. Ridge and lasso accept some bias to reduce variance and make predictions or estimates more stable.</p></li>
+<li><p><strong>It controls the strength of shrinkage.</strong> When <span class="math inline">\(\lambda\)</span> is small, the penalty has little effect. When <span class="math inline">\(\lambda\)</span> is large, coefficients are pulled more strongly toward 0.</p></li>
+<li><p><strong>The penalty acts on coefficient size.</strong> If predictors are measured on different scales, coefficient sizes are not directly comparable. Standardization helps ensure that the penalty treats predictors more fairly.</p></li>
+<li><p><strong>Ridge shrinks; lasso can select.</strong> Ridge coefficients shrink toward 0 but usually remain nonzero. Lasso coefficients can shrink exactly to 0, which removes those predictors from the fitted model.</p></li>
+<li><p><strong>They choose the penalty type.</strong> <code>mixture = 0</code> fits ridge regression. <code>mixture = 1</code> fits lasso regression. Values between 0 and 1 fit elastic net models.</p></li>
+<li><p><strong>It estimates performance on unseen data.</strong> Cross-validation fits the model on some folds and evaluates it on held-out folds, helping choose a penalty that predicts well beyond the training data.</p></li>
+<li><p><strong>The metrics emphasize different things.</strong> RMSE measures typical prediction error in response units, while <span class="math inline">\(R^2\)</span> measures explained variation. The penalty that optimizes one metric may not optimize the other.</p></li>
+<li><p><strong>Lasso selection is sample-dependent.</strong> A coefficient of 0 means the variable was not selected by this fitted lasso model at this penalty value. With correlated predictors or different folds, another variable could be selected instead.</p></li>
+<li><p><strong>Ridge tends to share information among correlated predictors.</strong> Lasso may choose one correlated predictor and discard another. Ridge usually keeps both but shrinks them, which can be more stable when predictors carry overlapping information.</p></li>
+<li><p><strong>It depends on choices made during tuning.</strong> The selected penalty depends on the folds, metric, and grid of penalty values. It is better to think of a useful range of penalties than a single perfect value.</p></li>
+<li><p><strong>Elastic net combines ridge and lasso.</strong> It uses both a squared-coefficient penalty and an absolute-value penalty. In <code>tidymodels</code>, this is controlled by setting <code>mixture</code> between 0 and 1.</p></li>
+<li><p><strong>It shows how coefficients change as shrinkage increases.</strong> Ridge paths usually move smoothly toward 0, while lasso paths can show coefficients becoming exactly 0.</p></li>
+<li><p><strong>It favors a simpler model when performance is nearly tied.</strong> <code>select_best()</code> chooses the numerically best penalty for a metric. The one-standard-error rule chooses a more regularized penalty if its performance is close enough to the best value.</p></li>
+<li><p><strong>Held-out data give a cleaner estimate of future performance.</strong> If the same data are used to tune and judge the models, the comparison can be too optimistic. Testing on data not used during fitting or tuning gives a better sense of generalization.</p></li>
+</ol>
+</div>
+</div>
 </div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();

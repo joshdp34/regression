@@ -333,7 +333,7 @@ seek to find a few subsets for which $R^2_{a,p}$  is at the maximum or so close 
 that adding more variables is not worthwhile.
 
 
-The $R^2_{a,p}$ criterion is equivalent to using the mean square error $MSE_p$ as the criterion. This comes from the relationship in @eq-w4_44
+The $R^2_{a,p}$ criterion is equivalent to using the mean square error $MSE_p$ as the criterion. This comes from the relationship
 $$
 \begin{align*}
 R_{a}^{2} & =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
@@ -569,6 +569,22 @@ The table shows that different criteria may prefer different models. A model wit
 
 :::
 
+::: {.callout-tip collapse="false" title="What if the criteria disagree?"}
+
+Model-selection criteria often disagree because they value different things. When that happens, use the disagreement as a prompt for deeper comparison.
+
+1. **Start with the goal.** If prediction is the main goal, give more weight to PRESS, predicted $R^2$, validation error, or cross-validation. If explanation is the main goal, give more weight to interpretability and subject-matter justification.
+
+2. **Prefer simpler models when performance is similar.** If two models have nearly identical performance, the more parsimonious model is usually easier to explain, teach, and defend.
+
+3. **Look for unstable variables.** If a predictor only appears in the model favored by one criterion, ask whether it has a meaningful interpretation or whether it is mostly taking advantage of this sample.
+
+4. **Check diagnostics.** A model with attractive criteria can still violate assumptions. Residual plots, influential observations, and multicollinearity still matter.
+
+5. **Avoid automatic selection.** Criteria help narrow the search. They should not replace thinking about the research question, data quality, and consequences of model complexity.
+
+:::
+
 ## Recap
 
 In this chapter, we introduced several criteria for comparing candidate regression models.
@@ -577,13 +593,16 @@ In this chapter, we introduced several criteria for comparing candidate regressi
 |---|---|
 | **Subset model** | A model formed by including only some of the available predictors. |
 | **Number of possible models** | With $p-1$ possible predictors, there are $2^{p-1}$ possible subset models. |
+| **Exhaustive subset selection** | Fitting every possible subset model from a chosen predictor pool. This is feasible only when the number of candidate predictors is small. |
 | **$R_p^2$** | Measures in-sample fit for a model with $p$ parameters; larger is better, but it never decreases when predictors are added. |
 | **$R_{a,p}^2$** | Adjusted $R^2$; penalizes unnecessary predictors through the degrees of freedom. |
 | **AIC** | A model-selection criterion that balances fit and complexity; smaller is better. |
 | **BIC/SBC** | Similar to AIC but usually applies a stronger penalty for complexity; smaller is better. |
 | **Parsimonious model** | A model that achieves the goal with relatively few predictors. |
 | **PRESS** | A leave-one-out prediction error criterion; smaller values indicate better predictive performance. |
+| **LOOCV** | Leave-one-out cross-validation; fit the model leaving out one observation, then predict the omitted observation. |
 | **Predicted $R^2$** | An $R^2$-style measure based on PRESS; larger values indicate better prediction. |
+| **Overfitting** | A model fitting random or sample-specific noise rather than useful signal. |
 | **Criterion disagreement** | Different criteria may select different models because they reward fit and penalize complexity differently. |
 
 ## Check your understanding
@@ -610,6 +629,14 @@ In this chapter, we introduced several criteria for comparing candidate regressi
 
 10. Why should AIC and BIC usually be compared only among models fit to the same response using the same observations?
 
+11. Why does exhaustive subset selection become difficult as the number of candidate predictors grows?
+
+12. How is PRESS connected to leave-one-out cross-validation?
+
+13. Why can adding random noise predictors increase $R^2$ without improving the model?
+
+14. If several criteria disagree, why is it usually better to compare a small set of candidate models than to automatically choose the winner from one criterion?
+
 :::
 
 ::: {.callout-tip collapse="true" title="Solutions"}
@@ -633,5 +660,13 @@ In this chapter, we introduced several criteria for comparing candidate regressi
 9. **No.** Different criteria emphasize different tradeoffs. AIC may prefer a somewhat larger model, while BIC may prefer a simpler one. This disagreement is a reason to examine the models carefully, not a sign that one criterion is invalid.
 
 10. **The criteria are relative comparisons.** AIC and BIC are designed to compare candidate models fit to the same data and response. If the response or observations change, the numerical values are no longer directly comparable.
+
+11. **The number of models grows exponentially.** Each predictor can be included or excluded, so adding one more candidate predictor doubles the number of possible subset models.
+
+12. **PRESS sums leave-one-out squared prediction errors.** Each observation is predicted by a model that was fit without that observation. The squared errors from those omitted-observation predictions are added to form PRESS.
+
+13. **Ordinary least squares can chase sample noise.** Adding predictors gives the model more flexibility, so in-sample SSE can decrease and $R^2$ can increase even when the new predictors have no real meaning. Prediction-focused criteria may reveal that the added complexity does not generalize.
+
+14. **Criteria are tools, not commandments.** AIC, BIC, adjusted $R^2$, and PRESS emphasize different tradeoffs. Comparing a small set of candidate models lets us consider prediction, interpretation, diagnostics, and subject-matter relevance together.
 
 :::

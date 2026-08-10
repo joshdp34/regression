@@ -29,7 +29,21 @@ If an observation is an outlier with respect to $x$ but still follows the linear
 
 
 
-In multiple regression, we will still need to view the outliers with respect to $y$ and with respect to the predictor variables $x_1\ldots,x_{p-1}$. We will identify these outlying observations by how they affect the fitted model $\hat{y}$.
+In multiple regression, we will still need to view the outliers with respect to $y$ and with respect to the predictor variables $x_1,\ldots,x_{p-1}$. We will identify these outlying observations by how they affect the fitted model $\hat{y}$.
+
+::: {.callout-note collapse="false" title="Outlying, high leverage, and influential are different ideas"}
+
+It is useful to separate three related but different ideas.
+
+| Idea | What is unusual? | Main diagnostic |
+|---|---|---|
+| **Outlier with respect to $y$** | The response value is far from what the model predicts. | Studentized or studentized deleted residuals |
+| **High leverage observation** | The predictor values are far from the center of the predictor space. | Hat value, $h_{ii}$ |
+| **Influential observation** | Removing the observation noticeably changes fitted values or coefficients. | DFFITS, Cook's distance, DFBETAS |
+
+An observation can have high leverage without being influential, and an observation can have a large residual without changing the fitted model much. The most concerning observations are often those that combine unusual predictor values with a large residual.
+
+:::
 
 ## Studentized Residuals
 
@@ -81,14 +95,14 @@ $${#eq-w5_4}
 
 
 
-Dividing $e_i$ by $s\left[e_{i}\right]$ gives us a true t-score. Thus the *{studentized} residual is
+Dividing $e_i$ by $s\left[e_{i}\right]$ gives us a true t-score. Thus the *studentized* residual is
 $$
 \begin{align}
 r_{i} & =\frac{e_{i}}{\sqrt{MSE\left(1-h_{ii}\right)}}
 \end{align}
 $${#eq-w5_5}
 
-A rule of thumb is any $r_i$ greater than 3 in absolute value should be considered an outlier with respect to $y$.
+A rule of thumb is that any $r_i$ greater than 3 in absolute value should be considered an outlier with respect to $y$.
 
 ## Deleted Residuals
 
@@ -99,19 +113,19 @@ As we stated above, it is possible for an observation to be outlying with respec
 
 
 
-Also, if $y$ does effect the fit greatly, then the fitted value $\hat{y}$ will be "pulled" towards $y$ and thus make $r_i$ not so large. 
+Also, if $y$ does affect the fit greatly, then the fitted value $\hat{y}$ will be "pulled" toward $y$ and thus make $r_i$ not so large.
 
 
 
 
 
-One way to see how an (potentially outlying) observation $y_i$ influences the fit is by first fitting the model without $y_i$ and then try to predict $y_i$ based on that fitted model. 
+One way to see how a potentially outlying observation $y_i$ influences the fit is by first fitting the model without $y_i$ and then trying to predict $y_i$ based on that fitted model.
 
 
 
 
 
-The difference from the observed $y_i$ and the predicted value based on the model fitted with the remaining $n-1$ observations $\hat{y}_{i(i)}$ is called the *deleted*  *residual*:
+The difference between the observed $y_i$ and the predicted value based on the model fitted with the remaining $n-1$ observations $\hat{y}_{i(i)}$ is called the *deleted residual*:
 $$
 \begin{align}
 d_{i} & =y_{i}-\hat{y}_{i\left(i\right)}
@@ -159,8 +173,8 @@ MSE_{(i)} & =\left(\frac{n-p}{n-p-1}\right)MSE-\frac{e_{i}^{2}}{\left(n-p-1\righ
 $${#eq-w5_10}
 
 Since $t_{i}$ follows a Student's $t$ distribution with $n-p-1$
-degrees of freedom, then any $t_{i}$ greater than $t_{\alpha/2n}$
-will be considered a potential outlier. 
+degrees of freedom, then any $t_{i}$ greater than $t_{\alpha/(2n)}$
+in absolute value will be considered a potential outlier.
 
 
 
@@ -194,7 +208,7 @@ value of all the observations.
 ### Leverage Values
 
 
-We first note some properties or $h_{ii}$:
+We first note some properties of $h_{ii}$:
 $$
 \begin{align}
 & 0\le h_{ii}\le1 &\\
@@ -202,7 +216,7 @@ $$
 \end{align}
 $${#eq-w5_11}
 
-The larger the value of $h_{ii}$, the further the $i$th observation
+The larger the value of $h_{ii}$, the farther the $i$th observation
 is from the center of all the $x$'s. Thus, we call $h_{ii}$ the
 *leverage*. If an observation has a large leverage value, then it has
 a substantial "leverage'' in determining $\hat{y}_{i}$. 
@@ -213,6 +227,12 @@ a substantial "leverage'' in determining $\hat{y}_{i}$.
 
 Leverage values greater than $2p/n$ are considered large when $n$
 is reasonably large.
+
+::: {.callout-note collapse="false" title="Why the guideline uses 2p/n"}
+
+Because $\sum h_{ii}=p$, the average leverage value is $p/n$. The guideline $2p/n$ flags observations with leverage at least twice the average. This is only a screening rule; it tells us which observations deserve attention, not which observations must be deleted.
+
+:::
 
 ### Using Leverage to Identify Hidden Extrapolation
 
@@ -227,7 +247,7 @@ outside the range of the $x$ variable.
 In multiple regression, we
 still do not want to extrapolate but now we cannot just think in terms
 of the range of each individual predictor variable. We must now think
-in terms of extrapolating for values combinations of the $x$ variables
+in terms of extrapolating for combinations of the $x$ variables
 that we may not have seen information for in our data. 
 
 
@@ -304,8 +324,8 @@ which does not require a new regression fit excluding the $i$th observation.
 
 
 
-A general guideline is that a value of DFFITS greater than 1 for small
-to medium datasets and greater than $2\sqrt{p/n}$ for large datasets
+A general guideline is that a value of DFFITS greater than 1 in absolute value for small
+to medium datasets and greater than $2\sqrt{p/n}$ in absolute value for large datasets
 indicates an influential observation.
 
 ### Influence on All Fitted Values
@@ -344,6 +364,14 @@ observation can have a
 1. large residual $e_{i}$ and a moderate leverage $h_{ii}$, 
 2. a large leverage $h_{ii}$ and a moderate residual $e_{i}$, 
 3. or both a large residual and large leverage.
+
+::: {.callout-important collapse="false" title="Influence is a diagnostic, not an automatic delete button"}
+
+An influential observation should be investigated. It may be a data-entry error, a case from a different population, or a perfectly valid observation that teaches us something important about the relationship. Removing an observation should be justified by context, not only by a large diagnostic value.
+
+One good practice is a sensitivity analysis: fit the model with and without the flagged observation and report whether the substantive conclusions change.
+
+:::
 
 ### Influence on the Coefficients
 
@@ -385,159 +413,282 @@ datasets indicates an influential observation.
 
 
 
-::: {#exm-20_1}
+::: {#exm-20_1 .example title="Outliers and influence in the bodyfat data"}
 
-## Bodyfat data
+Let's examine the `bodyfat` data and determine whether there are any observations that deserve additional attention.
 
-Let's examine the `bodyfat` data and determine if there is any observations that we should be concerned about.
+We have already seen that there is an issue of multicollinearity in this data. The lasso fit in @exm-19_4 showed that `tri` and `midarm` would have an important impact on `bfat`.
 
-We have already seen that there is an issue of multicollinearity in this data. The lasso fit in @exm-19_4 showed that `tri` and `midarm` would have an important impact on `bfat`. 
+We can plot the studentized residuals versus the leverage values using the `olsrr` library.
 
-
-We can plot the studenitzed residuals versus the leverage values using the `olsrr` library. 
-
-
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
 library(olsrr)
+library(broom)
 
-dat = read_table("BodyFat.txt")
+bodyfat_dat <- read_table("BodyFat.txt")
 
-dat_recipe = recipe(bfat~tri+midarm, data = dat)
+bodyfat_recipe <- recipe(bfat ~ tri + midarm, data = bodyfat_dat)
 
-model = linear_reg() |> 
+bodyfat_model <- linear_reg() |>
   set_engine("lm")
 
-wf = workflow() |> 
-  add_recipe(dat_recipe) |> 
-  add_model(model)
+bodyfat_workflow <- workflow() |>
+  add_recipe(bodyfat_recipe) |>
+  add_model(bodyfat_model)
 
-fit = wf |> fit(data = dat)
+bodyfat_fit <- bodyfat_workflow |>
+  fit(data = bodyfat_dat)
 
-fit |> extract_fit_engine() |> ols_plot_resid_lev()
+bodyfat_engine <- bodyfat_fit |>
+  extract_fit_engine()
 
+bodyfat_engine |>
+  ols_plot_resid_lev()
 ```
 
+We see from this plot that there are no severe outliers with respect to $y$, but there are two observations that are potential outliers with respect to the predictor variables.
 
-We see from this plot that there are no outliers with respect to $y$ but there are two values that are potential outliers with respect to the predictor variables. 
+It can also help to look at the diagnostic values in a table. The following code sorts the observations by Cook's distance.
 
-To determine if either of these points are also influential, we can use the 
+```{r message=FALSE, warning=FALSE}
+bodyfat_diagnostics <- augment(bodyfat_engine) |>
+  rename(bfat = ..y) |>
+  mutate(
+    observation = row_number(),
+    studentized_deleted_residual = rstudent(bodyfat_engine),
+    dffits = dffits(bodyfat_engine)
+  ) |>
+  select(
+    observation, bfat, tri, midarm, .fitted, .resid, .std.resid,
+    studentized_deleted_residual, .hat, .cooksd, dffits
+  ) |>
+  arrange(desc(.cooksd))
 
-
-```{r message=FALSE, warning=F}
-fit |> extract_fit_engine() |> ols_plot_cooksd_chart()
+bodyfat_diagnostics |>
+  slice_head(n = 5) |>
+  knitr::kable(digits = 4)
 ```
 
+To determine whether either high-leverage point is also influential, we can use Cook's distance.
 
-
-We see that observation 3 (which was also high leverage) is influential to the fit. We can see which of the coefficients it has the largest influence on with DFBETAs.
-
-
-```{r message=FALSE, warning=F}
-fit |> extract_fit_engine() |> ols_plot_dfbetas()
+```{r message=FALSE, warning=FALSE}
+bodyfat_engine |>
+  ols_plot_cooksd_chart()
 ```
 
-Since observation 3 has a large value of DFBETA for `midarm`, then we say that it is influential for this variable. Since the DFBETA is negative, then when we don't have observation 3, then the estimated coefficient become larger than when we do have observation 3. To further investigate this observation, let's do a scatterplot of `bfat` and `midarm` and highlight observation 3.
+We see that observation 3, which was also high leverage, is influential to the fit. We can see which coefficients it has the largest influence on with DFBETAS.
 
-```{r message=FALSE, warning=F}
-dat |> ggplot(aes(x=midarm, y = bfat))+
-  geom_point()+
-  geom_point(data= dat[3,], aes(x=midarm, y = bfat), color="red", size = 3)
+```{r message=FALSE, warning=FALSE}
+bodyfat_engine |>
+  ols_plot_dfbetas()
 ```
 
-We see that this observation has an "average" `bfat` value but the `midarm` value is larger than any other observation. Further investigation would be needed to determine if this is an observation that should be deleted. For example, suppose this is a subject who also lifted weights. Is this the type of subject we want to include in this population of interest? If not, then the observation can be removed.
+Observation 3 has a large DFBETA value for `midarm`, so we say that it is influential for this coefficient. Since the DFBETA is negative, the estimated `midarm` coefficient becomes larger when observation 3 is removed than when observation 3 is included. To further investigate this observation, let's make a scatterplot of `bfat` and `midarm` and highlight observation 3.
+
+```{r message=FALSE, warning=FALSE}
+bodyfat_plot_dat <- bodyfat_dat |>
+  mutate(observation = row_number())
+
+bodyfat_plot_dat |>
+  ggplot(aes(x = midarm, y = bfat)) +
+  geom_point() +
+  geom_point(
+    data = filter(bodyfat_plot_dat, observation == 3),
+    color = "red",
+    size = 3
+  ) +
+  labs(
+    x = "Midarm circumference",
+    y = "Body fat",
+    title = "Observation 3 has an unusually large midarm value"
+  )
+```
+
+We see that this observation has an "average" `bfat` value but the `midarm` value is larger than any other observation. Further investigation would be needed to determine whether this is an observation that should be deleted. For example, suppose this is a subject who also lifted weights. Is this the type of subject we want to include in this population of interest? If not, then the observation can be removed. If yes, then the observation may be important to keep.
 
 :::
 
+::: {#exm-20_2 .example title="Checking hidden extrapolation with hat values"}
 
+Suppose we want to predict `bfat` for a woman in this population with `tri = 19.5` and `midarm = 29`.
 
+Was our model fit with combinations of these two predictors close to the values we want to predict? If so, then the hat value for this new observation, determined by @eq-w5_13, should be close to the hat values of the observations that were used to fit the model. If the hat value for the new observation is much larger than the other observation hat values, then this new value is *extrapolation*.
 
-::: {#exm-20_2}
+The `applicable` library allows us to compare the hat value of a new observation to that of the observations used to fit the data.
 
-## Hidden Extrapolation
-
-Suppose we want to predict `bfat` for a woman in this population with `tri = 19.5` and `midarm = 29`. 
-
-Was our model fit with combinations of these two predictors close to the values we want to predict? If so, then the the hat value for this new observation, determined by @eq-w5_13 should be close to the hat values of the observations that were used to fit the model. If the hat value for the new observation is much larger than the other observation hat values, then this new value is *extrapolation*.
-
-The `applicable` library allows us to compare the hat value of a new observation to that of the observations used to fit the data
-
-
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
 library(applicable)
 
+bodyfat_hat <- apd_hat_values(bodyfat_recipe, bodyfat_dat)
 
-xnew = data.frame(tri=19.5, midarm=29)
+typical_new <- tibble(tri = 19.5, midarm = 29)
 
-hat = apd_hat_values(dat_recipe, dat)
-score(hat, xnew)
-
+score(bodyfat_hat, typical_new)
 ```
 
-The hat value for this observation is in the 88.6th percentile of the hat values of the observations used to fit the model. Thus, this is not hidden extrapolation. 
+The hat value for this observation is within the range of the hat values of the observations used to fit the model. Thus, this is not hidden extrapolation.
 
-Let's now try an observation with `tri=14` and `midarm=30`.
+Let's now try an observation with `tri = 14` and `midarm = 30`.
 
-```{r message=FALSE, warning=F}
+```{r message=FALSE, warning=FALSE}
+unusual_new <- tibble(tri = 14, midarm = 30)
 
-xnew = data.frame(tri=14, midarm=30)
-
-hat = apd_hat_values(dat_recipe, dat)
-score(hat, xnew)
-
+score(bodyfat_hat, unusual_new)
 ```
 
-This new observation has a hat value higher than any hat value of the observations used to fit the model. This indicates that this combination of the predictor variable values was not used to fit the model. Thus, this is hidden extrapolation. 
+This new observation has a hat value higher than any hat value of the observations used to fit the model. This indicates that this combination of the predictor variable values was not used to fit the model. Thus, this is hidden extrapolation.
 
 :::
 
-
-::: {#exm-20_3}
-
-## Surgical Unit data
+::: {#exm-20_3 .example title="Outliers and influence in the surgical unit data"}
 
 Let's examine the surgical unit data first seen in @exm-18_1. Recall that the predictors `bcs`, `pindex`, `enzyme_test`, and `alc_heavy` were selected for a model determined by best subsets regression. We will now check for outliers and influential observations for this model.
 
 ```{r warning=FALSE, message=FALSE}
-dat = surgical |> 
+surgical_dat <- surgical |>
   mutate(
     ln_y = log(y)
   )
 
-dat_recipe = recipe(ln_y~bcs+pindex+enzyme_test+alc_heavy,
-                    data = dat)
+surgical_recipe <- recipe(
+  ln_y ~ bcs + pindex + enzyme_test + alc_heavy,
+  data = surgical_dat
+)
 
-model = linear_reg() |> 
+surgical_model <- linear_reg() |>
   set_engine("lm")
 
-wf = workflow() |> 
-  add_recipe(dat_recipe) |> 
-  add_model(model)
+surgical_workflow <- workflow() |>
+  add_recipe(surgical_recipe) |>
+  add_model(surgical_model)
 
-fit = wf |> fit(data = dat)
+surgical_fit <- surgical_workflow |>
+  fit(data = surgical_dat)
 
-fit |> extract_fit_engine() |> ols_plot_resid_lev()
+surgical_engine <- surgical_fit |>
+  extract_fit_engine()
 
+surgical_engine |>
+  ols_plot_resid_lev()
 ```
 
+There is one clear outlier with respect to the response variable, observation 17. Examining the leverage values, we see there are five observations beyond the guideline. In a situation like this, we look for leverage values that are clearly separated from the others. There are two such values, observations 28 and 38. We will now examine these three observations in terms of influence.
 
-There is one clear outlier with respect to the response variable (observation 17). Examining the leverage values, we see there are five observations beyond the guideline. In a situation line this, we look for leverage values that are clearly separated from the others. There are two such values (observations 28 and 38). We will now examine these three in terms of influence. 
-
-
-
-```{r message=FALSE, warning=F}
-fit |> extract_fit_engine() |> ols_plot_cooksd_chart()
+```{r message=FALSE, warning=FALSE}
+surgical_engine |>
+  ols_plot_cooksd_chart()
 ```
 
-Observations 17 and 38 are influential while observation 28 is not. So these two observations should be investigated further to determine if they should be removed. Let's look at DFBETAs to get a better idea which coefficients are influenced by these observations. 
+Observations 17 and 38 are influential, while observation 28 is not. So observations 17 and 38 should be investigated further to determine whether they represent errors, unusual but valid cases, or cases from a different population.
 
-```{r message=FALSE, warning=F}
-fit |> extract_fit_engine() |> ols_plot_dfbetas()
+The table below sorts observations by Cook's distance.
+
+```{r message=FALSE, warning=FALSE}
+surgical_diagnostics <- augment(surgical_engine) |>
+  rename(ln_y = ..y) |>
+  mutate(
+    observation = row_number(),
+    studentized_deleted_residual = rstudent(surgical_engine),
+    dffits = dffits(surgical_engine)
+  ) |>
+  select(
+    observation, ln_y, bcs, pindex, enzyme_test, alc_heavy,
+    .fitted, .resid, .std.resid, studentized_deleted_residual,
+    .hat, .cooksd, dffits
+  ) |>
+  arrange(desc(.cooksd))
+
+surgical_diagnostics |>
+  slice_head(n = 5) |>
+  knitr::kable(digits = 4)
 ```
 
+Let's look at DFBETAS to get a better idea of which coefficients are influenced by these observations.
 
-Observation 17 is influential on the coefficients of `pindex` and `enzyme_test`. Observation 38 is influential on the coefficient of `pindex` and slightly influential for `enzyme_test`. 
+```{r message=FALSE, warning=FALSE}
+surgical_engine |>
+  ols_plot_dfbetas()
+```
+
+Observation 17 is influential on the coefficients of `pindex` and `enzyme_test`. Observation 38 is influential on the coefficient of `pindex` and slightly influential for `enzyme_test`.
+
+:::
+
+## Recap
+
+In this chapter, we introduced diagnostics for identifying outliers, high-leverage observations, hidden extrapolation, and influential observations in multiple regression.
+
+| Idea | Meaning |
+|---|---|
+| **Studentized residual** | A residual divided by an estimated standard error that accounts for leverage through $1-h_{ii}$. |
+| **Deleted residual** | The difference between $y_i$ and the prediction for observation $i$ from a model fit without observation $i$. |
+| **Studentized deleted residual** | A deleted-residual version of a t-score; useful for detecting outliers with respect to $y$. |
+| **Bonferroni adjustment** | A way to control the overall error rate when checking many residuals at once. |
+| **Leverage** | The hat value $h_{ii}$; large leverage means the predictor values are far from the center of the predictor space. |
+| **Hidden extrapolation** | Predicting at a combination of predictor values not represented by the data, even if each individual predictor value is within its observed range. |
+| **DFFITS** | Measures how much observation $i$ influences its own fitted value. |
+| **Cook's distance** | Measures how much observation $i$ influences all fitted values. |
+| **DFBETAS** | Measures how much observation $i$ influences an individual regression coefficient. |
+| **Influential observation** | An observation whose removal noticeably changes fitted values or coefficient estimates. |
+| **Sensitivity analysis** | Refitting the model with and without a flagged observation to see whether conclusions change. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. What is the difference between an outlier with respect to $y$ and a high-leverage observation?
+
+2. Why can a high-leverage observation have little influence on the fitted model?
+
+3. Why does the variance of a residual depend on $1-h_{ii}$?
+
+4. What is the main idea behind a deleted residual?
+
+5. Why might a studentized deleted residual reveal an outlier that an ordinary residual does not make obvious?
+
+6. Why is a Bonferroni adjustment used when checking many studentized deleted residuals?
+
+7. What does hidden extrapolation mean in multiple regression?
+
+8. What does Cook's distance measure?
+
+9. How is DFFITS different from Cook's distance?
+
+10. What does DFBETAS help us diagnose?
+
+11. Why should we avoid automatically deleting observations just because they have large diagnostic values?
+
+12. What is the purpose of a sensitivity analysis?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **An outlier with respect to $y$ has an unusual response value.** A high-leverage observation has an unusual combination of predictor values. The first is about vertical distance from the fitted model; the second is about location in predictor space.
+
+2. **It may follow the same pattern as the rest of the data.** High leverage means the observation has unusual predictor values, but if its response value is consistent with the fitted relationship, it may not pull the regression model very much.
+
+3. **Residual variability is smaller for high-leverage observations.** A high-leverage point helps determine its own fitted value, so its ordinary residual can be artificially small. The factor $1-h_{ii}$ adjusts for this.
+
+4. **It asks how well the model predicts observation $i$ without using observation $i$.** If the deleted residual is large, the observation is not well predicted by the pattern in the rest of the data.
+
+5. **The observation may pull the fitted model toward itself.** When that happens, the ordinary residual can look modest. Removing the observation before predicting it can reveal its unusualness more clearly.
+
+6. **We are making many checks at once.** The more residuals we examine, the more likely we are to flag something by chance. The Bonferroni adjustment controls the overall Type I error rate.
+
+7. **It means predicting at an unusual combination of predictors.** Each predictor value may be within its individual observed range, but the combination of values may be far from the combinations used to fit the model.
+
+8. **It measures overall influence on fitted values.** Cook's distance is large when removing an observation would noticeably change the fitted values for the model.
+
+9. **DFFITS focuses on one fitted value; Cook's distance focuses on all fitted values.** DFFITS measures how much observation $i$ changes its own fitted value, while Cook's distance summarizes the effect on the fitted model more broadly.
+
+10. **It identifies coefficient-specific influence.** DFBETAS tells us which regression coefficient changes when a particular observation is removed.
+
+11. **Large diagnostics are flags, not verdicts.** The observation might be a measurement error, but it might also be valid and important. Deletion should be based on context and analysis, not diagnostics alone.
+
+12. **It checks whether conclusions depend on a flagged observation.** By comparing models with and without the observation, we can see whether the scientific or practical interpretation changes.
 
 :::
 

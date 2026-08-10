@@ -6,9 +6,9 @@
 
 
 
-We now discuss ways to determine a several potential subsets of predictor variables. 
+We now discuss ways to identify several potential subsets of predictor variables.
 
-We start by discussing the criteria that could be used for comparing different models. 
+We start by discussing procedures that use model-comparison criteria to search through candidate models.
 
 
 
@@ -44,16 +44,27 @@ employed to assist in the selection of predictor variables.
 
 
 
-::: {#exm-18_1}
+::: {.callout-note collapse="false" title="Best subsets vs. stepwise search"}
 
-## Surgical Unit data
+Best subsets regression and stepwise regression are both search procedures, but they search differently.
+
+| Procedure | Search strategy | Typical output | Main caution |
+|---|---|---|---|
+| **Best subsets** | Fits all possible subsets, or the best subset for each model size. | Several good candidate models. | Can become computationally expensive when there are many predictors. |
+| **Stepwise** | Adds and/or removes predictors sequentially. | One selected model. | Can miss a better model because it follows a path through the model space. |
+
+Both methods should be treated as model-building tools, not as substitutes for diagnostics, validation, and subject-matter judgment.
+
+:::
+
+::: {#exm-18_1 .example title="Surgical Unit data and best subsets regression"}
 
 The surgical unit data is available from the `olsrr` library. This library also has functions for conducting subsets regression.
 
-This data is originally from Kutner[^1^]. It consists of data about survival of patients undergoing a liver operation. The response variable is number of days the patient survived after the operation. We will actually model the natural log of the survival time. The predictor variables are:
+This data is originally from Kutner[^kutner]. It consists of data about survival of patients undergoing a liver operation. The response variable is number of days the patient survived after the operation. We will actually model the natural log of the survival time. The predictor variables are:
 
 - `bcs`: blood clotting score
-- `pindex`: prognistic index
+- `pindex`: prognostic index
 - `enzyme_test`: enzyme function test score
 - `liver_test`: liver function test score
 - `age`: age, in years
@@ -61,7 +72,7 @@ This data is originally from Kutner[^1^]. It consists of data about survival of 
 - `alc_mod`: indicator variable for history of alcohol use (1=Moderate, 0=otherwise)
 - `alc_heavy`: indicator variable for history of alcohol use (1=Heavy, 0=otherwise)
 
-[^1^]: Kutner, M. H., Nachtsheim, C. J., Neter, J., & Li, W. (2004). Applied Linear Statistical Models McGraw-Hill/lrwin series operations and decision sciences. 
+[^kutner]: Kutner, M. H., Nachtsheim, C. J., Neter, J., & Li, W. (2004). *Applied Linear Statistical Models*. McGraw-Hill/Irwin series operations and decision sciences.
 
 The `tidymodels` library does not have functions to do subsets regression (we will use `olsrr` instead). 
 
@@ -71,26 +82,30 @@ library(tidyverse)
 library(olsrr)
 library(GGally)
 
-dat = surgical |> 
+dat <- surgical |>
   mutate(
     ln_y = log(y)
   )
 
-dat |> ggpairs()
+dat |>
+  ggpairs()
 
 
 ```
 
-No obvious nonlinear relationships seen from the scatterplot matrix.
+No obvious nonlinear relationships are seen from the scatterplot matrix.
 
-Let's first fit all $2^8=258$ models using the `ols_step_all_possible` function. 
+Let's first fit all $2^8=256$ models using the `ols_step_all_possible()` function.
 
 ```{r warning=FALSE, message=FALSE}
 
-fit = lm(ln_y ~ bcs + pindex + enzyme_test + liver_test+
-                      age + gender + alc_mod + alc_heavy, data = dat)
+fit <- lm(
+  ln_y ~ bcs + pindex + enzyme_test + liver_test +
+    age + gender + alc_mod + alc_heavy,
+  data = dat
+)
 
-fits = ols_step_all_possible(fit)
+fits <- ols_step_all_possible(fit)
 
 plot(fits)
 
@@ -100,8 +115,10 @@ plot(fits)
 From these plots, we can determine a few models that may be of interest to us. Suppose that we want the model 93 which appears to be the best model with four predictors by all of the criteria. We can find this model in the subsets with the following code.
 
 ```{r warning=FALSE, message=FALSE}
-fits$result |> 
-  filter(mindex == 93)
+fits$result |>
+  filter(mindex == 93) |>
+  select(mindex, n, predictors, rsquare, adjr, predrsq, cp, aic, sbc) |>
+  knitr::kable(digits = 4)
 ```
 
 
@@ -109,8 +126,11 @@ If we want to just examine the best subset of predictors for each value of $p$, 
 
 
 ```{r warning=FALSE, message=FALSE}
-subset = ols_step_best_subset(fit) 
-subset
+subset <- ols_step_best_subset(fit)
+
+subset$metrics |>
+  select(mindex, n, predictors, rsquare, adjr, predrsq, cp, aic, sbc) |>
+  knitr::kable(digits = 4)
 
 plot(subset)
 ```
@@ -125,7 +145,7 @@ This dataset does not take too long to run with all possible models. However, so
 ### Choosing a Subset of Models
 
 
-The best subsets regressions procedure leads to the identification of a small number of
+The best subsets regression procedure leads to the identification of a small number of
 subsets that are "good" according to a specified criterion. 
 
 
@@ -134,7 +154,7 @@ subsets that are "good" according to a specified criterion.
 
 
 
-Sometimes, one may wish  to consider more
+Sometimes, one may wish to consider more
 than one criterion in evaluating possible subsets of predictor variables.
 
 
@@ -146,8 +166,24 @@ final choice of the model variables must be made.
 
 
 
-This choice is aided by examining outliers, checking model assumptions, and by the investigator's knowledge of the subject under study, and
+This choice is aided by examining outliers, checking model assumptions, by the investigator's knowledge of the subject under study, and
 is finally confirmed through model validation studies.
+
+::: {.callout-tip collapse="false" title="After subset selection, slow down"}
+
+Subset-selection output should narrow the set of candidate models, not make the final decision automatically.
+
+Before choosing a final model, ask:
+
+1. Are the selected predictors meaningful for the research question?
+2. Do several models perform about equally well?
+3. Are any selected predictors difficult, expensive, or unreliable to measure?
+4. Do the residual diagnostics look acceptable?
+5. Does the model still perform well on validation data or under cross-validation?
+
+The selection procedure is the beginning of the final model discussion, not the end of it.
+
+:::
 
 
 ## Stepwise Regression Procedures
@@ -175,7 +211,7 @@ search methods.
 
 
 It was developed to economize on computational efforts as compared with
-the various all-possible-regressions procedures. Essentially, this search method develops a
+the various all-possible regression procedures. Essentially, this search method develops a
 sequence of regression models, at each step *adding* or *deleting* an $X$ variable.
 
 
@@ -197,7 +233,7 @@ that stepwise search procedures end with the identification of a *single* regres
 
 
 
-With the "best" subsets algorithm, on the other hand. several regression models can
+With the "best" subsets algorithm, on the other hand, several regression models can
 be identified as "good" for final consideration. 
 
 
@@ -229,6 +265,121 @@ Finally,
 the "goodness" of a regression model can only be established by a thorough examination
 using a variety of diagnostics.
 
+::: {.callout-warning collapse="false" title="Stepwise methods can be unstable"}
+
+Stepwise methods make a sequence of local decisions. A variable that looks useful early in the search may become less useful after another variable enters, and a variable skipped early may never be reconsidered in some procedures.
+
+Small changes to the data can sometimes lead to a different selected model. This is why stepwise procedures are best used as exploratory tools rather than as proof that a single model is definitively best.
+
+:::
+
+::: {.example title="When stepwise and best subsets disagree"}
+
+The following small simulated example shows why a sequential search can miss a model that looks better when all subsets are considered. The predictors `x1` and `x2` are strongly related to each other. Each one is weak by itself, but together they explain useful variation in the response.
+
+```{r warning=FALSE, message=FALSE}
+library(broom)
+
+set.seed(3)
+
+n <- 60
+
+stepwise_demo <- tibble(
+  x1 = rnorm(n),
+  x3 = rnorm(n),
+  x4 = rnorm(n)
+) |>
+  mutate(
+    x2 = x1 + rnorm(n(), sd = 0.15),
+    y = x1 - x2 + rnorm(n(), sd = 0.25)
+  )
+
+candidate_predictors <- c("x1", "x2", "x3", "x4")
+
+make_formula <- function(vars) {
+  if (length(vars) == 0) {
+    y ~ 1
+  } else {
+    as.formula(paste("y ~", paste(vars, collapse = " + ")))
+  }
+}
+
+model_label <- function(vars) {
+  if (length(vars) == 0) {
+    "Intercept only"
+  } else {
+    paste(vars, collapse = " + ")
+  }
+}
+
+all_subsets <- map(
+  0:length(candidate_predictors),
+  \(k) {
+    if (k == 0) {
+      list(character(0))
+    } else {
+      combn(candidate_predictors, k, simplify = FALSE)
+    }
+  }
+) |>
+  unlist(recursive = FALSE)
+
+best_subset_demo <- tibble(predictors = all_subsets) |>
+  mutate(
+    model = map_chr(predictors, model_label),
+    fit = map(predictors, \(vars) lm(make_formula(vars), data = stepwise_demo)),
+    AIC = map_dbl(fit, AIC),
+    adj_r_squared = map_dbl(
+      fit,
+      \(fit_object) glance(fit_object)$adj.r.squared
+    )
+  ) |>
+  select(model, AIC, adj_r_squared)
+
+best_subset_demo |>
+  arrange(AIC) |>
+  slice_head(n = 6) |>
+  knitr::kable(digits = 4)
+```
+
+The best subset by AIC uses both `x1` and `x2`. Now compare that result to a forward stepwise search that starts from the intercept-only model.
+
+```{r warning=FALSE, message=FALSE}
+null_model <- lm(y ~ 1, data = stepwise_demo)
+full_model <- lm(y ~ x1 + x2 + x3 + x4, data = stepwise_demo)
+
+stepwise_model <- step(
+  null_model,
+  scope = list(lower = null_model, upper = full_model),
+  direction = "both",
+  trace = 0
+)
+
+formula_label <- function(model) {
+  paste(deparse(formula(model)), collapse = " ")
+}
+
+tibble(
+  method = c("Best subsets by AIC", "Forward stepwise by AIC"),
+  selected_model = c(
+    best_subset_demo |>
+      arrange(AIC) |>
+      slice(1) |>
+      pull(model),
+    formula_label(stepwise_model)
+  ),
+  AIC = c(
+    min(best_subset_demo$AIC),
+    AIC(stepwise_model)
+  )
+) |>
+  knitr::kable(digits = 4)
+```
+
+Forward stepwise search gets stuck because neither `x1` nor `x2` looks helpful enough by itself. Best subsets regression can still find the pair because it evaluates combinations of predictors directly.
+
+:::
+
 
 
 
@@ -257,7 +408,7 @@ We shall describe the forward stepwise regression search algorithm in terms of t
     For each simple linear regression model, the AIC statistic is obtained.
 
 
-    The X variable with the smallest AIC is the candidate for first addition. 
+    The $X$ variable with the smallest AIC is the candidate for first addition.
 
 
 - Assume $x_7$ is the variable entered at step 1. The stepwise regression routine now fits all regression models with two $X$ variables, where $x_7$ is one of the pair. 
@@ -268,14 +419,14 @@ We shall describe the forward stepwise regression search algorithm in terms of t
 
     The $X$ variable with the smallest AIC is the candidate for addition at the second stage. 
 
-    If the AIC is smaller than AIC for model in the previous step (in this case, the model with only $x_7$), then that variable is added to the model that already has $x_7$. Otherwise, the program terminates. 
+    If the AIC is smaller than the AIC for the model in the previous step (in this case, the model with only $x_7$), then that variable is added to the model that already has $x_7$. Otherwise, the program terminates.
 
 - Suppose $x_3$ is added at the second stage. Now the stepwise regression routine examines whether any of the other $X$ variables already in the model should be dropped. 
 
-    For our illustration, there is at this stage only one other $X$ variable in the model, $x_7$. At later stages, there would be a number of  variables in the model besides the one last added. 
+    For our illustration, there is at this stage only one other $X$ variable in the model, $x_7$. At later stages, there would be a number of variables in the model besides the one last added.
 
 
-    The variable with the largest AIC is the candidate for deletion. If this AIC exceeds the AIC for when the variable is not in the model, the variable is dropped from the model; otherwise, it is retained.
+    The routine considers reduced models formed by removing each variable already in the model. If removing a variable produces a lower AIC than the current model, the variable whose removal gives the smallest AIC is dropped. Otherwise, the variables already in the model are retained.
 
 - Suppose $x_7$ is retained so that both $x_3$ and $x_7$ are now in the model. 
 
@@ -291,14 +442,14 @@ variables added at later stages.
 ### Other Stepwise Procedures
 
 
-Other stepwise procedures are available to find a ``best" subset of predictor variables. We
+Other stepwise procedures are available to find a "best" subset of predictor variables. We
 mention two of these.
 
 
 #### Forward Selection
 
 
-The *forward* *selection*  search procedure is a simplified version of
+The *forward* *selection* search procedure is a simplified version of
 forward stepwise regression, omitting the test whether a variable once entered into the
 model should be dropped.
 
@@ -309,8 +460,7 @@ The *backward* *elimination* search procedure is the opposite of
 forward selection. 
 
 
-It begins with the model containing all potential $X$ variables and identifies
-the one with the largest AIC. If the maximum AIC is greater than the full model, that $X$ variable is dropped. 
+It begins with the model containing all potential $X$ variables. The routine considers reduced models formed by deleting one predictor at a time. If any reduced model has a lower AIC than the current model, the variable whose deletion gives the smallest AIC is dropped.
 
 
 
@@ -331,56 +481,184 @@ no further $X$ variables can be dropped.
 A stepwise modification can also be adapted that
 allows variables eliminated earlier to be added later: this modification is called the *backward* *stepwise* regression procedure.
 
+::: {.callout-note collapse="false" title="Comparing automatic search procedures"}
+
+| Procedure | Starting model | Can add variables? | Can remove variables? |
+|---|---|---:|---:|
+| **Forward selection** | Intercept-only model | Yes | No |
+| **Forward stepwise** | Intercept-only model | Yes | Yes |
+| **Backward elimination** | Full model | No | Yes |
+| **Backward stepwise** | Full model | Yes | Yes |
+
+The procedures may agree, but they do not have to. The order in which variables enter or leave the model can affect the final result.
+
+:::
 
 
 
 
-::: {#exm-18_2}
 
-## @exm-18_1 revisted
+::: {#exm-18_2 .example title="Stepwise procedures for the Surgical Unit data"}
 
-Let use forward stepwise to find a model.
+We will revisit @exm-18_1 and use automatic stepwise procedures to search for a model.
 
+Let's use forward stepwise regression first.
 
 ```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-library(olsrr)
+forward_step <- ols_step_both_aic(fit, details = FALSE)
 
-dat = surgical |> 
-  mutate(
-    ln_y = log(y)
-  )
-
-forward_step = ols_step_both_aic(fit, details = TRUE)
-
-
+forward_step$metrics |>
+  knitr::kable(digits = 4)
 ```
-
 
 Let's now use forward selection:
 
 ```{r warning=FALSE, message=FALSE}
-library(tidyverse)
-library(olsrr)
+forward_sel <- ols_step_forward_aic(fit, details = FALSE)
 
-forward_sel = ols_step_forward_aic(fit, details = TRUE)
-
-
+forward_sel$metrics |>
+  knitr::kable(digits = 4)
 ```
 
-Notice that forward selection results in the same model as forward stepwise. 
+Notice that forward selection results in the same model as forward stepwise.
 
-Let's now try backward elimnation.
+Let's now try backward elimination.
 
 ```{r warning=FALSE, message=FALSE}
+backward_elim <- ols_step_backward_aic(fit, details = FALSE)
 
-backward_elim = ols_step_backward_aic(fit, details = TRUE)
-
-
+backward_elim$metrics |>
+  knitr::kable(digits = 4)
 ```
 
+For this dataset, the three procedures select the same final set of predictors.
+
+```{r warning=FALSE, message=FALSE}
+formula_text <- function(model) {
+  paste(deparse(formula(model)), collapse = " ")
+}
+
+final_model_summary <- tibble(
+  procedure = c(
+    "Forward stepwise",
+    "Forward selection",
+    "Backward elimination"
+  ),
+  final_model = c(
+    formula_text(forward_step$model),
+    formula_text(forward_sel$model),
+    formula_text(backward_elim$model)
+  ),
+  AIC = c(
+    AIC(forward_step$model),
+    AIC(forward_sel$model),
+    AIC(backward_elim$model)
+  ),
+  BIC = c(
+    BIC(forward_step$model),
+    BIC(forward_sel$model),
+    BIC(backward_elim$model)
+  )
+)
+
+final_model_summary |>
+  knitr::kable(digits = 4)
+```
+
+This agreement is reassuring, but it is not guaranteed in general. Different stepwise procedures can select different final models, especially when predictors are correlated or when several models have similar criteria.
 
 Note that `olsrr` does not provide the ability to do backward stepwise.
+
+:::
+
+::: {.callout-warning collapse="false" title="Post-selection p-values can be too optimistic"}
+
+After an automated selection procedure chooses a model, it is tempting to interpret the p-values in the final model as if that model had been specified before looking at the data. That is not what happened.
+
+The same data were used twice:
+
+1. first to search through many possible models, and
+2. then to estimate coefficients and report p-values for the selected model.
+
+Because the search process favored variables that happened to look useful in this sample, the usual p-values and confidence intervals from the final model can be too optimistic. They often understate the uncertainty introduced by the model-selection process.
+
+This does not mean the selected model is useless. It means that post-selection inference should be treated cautiously. When inference is the main goal, it is better to prespecify important predictors, validate the selected model on new data, or use methods designed for post-selection inference.
+
+:::
+
+## Recap
+
+In this chapter, we compared best subsets regression with stepwise regression procedures for selecting candidate predictor sets.
+
+| Idea | Meaning |
+|---|---|
+| **Best subsets regression** | A procedure that evaluates all possible subsets, or the best subset for each model size, using model-comparison criteria. |
+| **All possible models** | With $p-1$ possible predictors, there are $2^{p-1}$ possible subset models. |
+| **Best subset for each size** | The best model among all models with the same number of predictors. |
+| **Forward selection** | Starts with the intercept-only model and adds predictors one at a time. Once a predictor enters, it is not removed. |
+| **Forward stepwise regression** | Starts small and adds predictors, but also allows predictors already in the model to be removed later. |
+| **Backward elimination** | Starts with the full model and removes predictors one at a time. |
+| **Backward stepwise regression** | Starts with the full model and allows predictors to be removed or added back later. |
+| **Sequential search limitation** | Stepwise methods can miss predictor combinations that are weak one at a time but useful together. |
+| **Automatic search** | A computational procedure for finding a candidate model; it should not be treated as proof that the selected model is best. |
+| **Post-selection inference** | Inference after automated model selection can be too optimistic because the same data were used to choose and estimate the model. |
+| **Post-selection checking** | After a subset is selected, the model still needs diagnostics, validation, and subject-matter evaluation. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why does the number of possible subset models grow quickly as the number of candidate predictors increases?
+
+2. What is the main difference between best subsets regression and stepwise regression?
+
+3. Why might best subsets regression be impractical with many candidate predictors?
+
+4. How does forward selection differ from forward stepwise regression?
+
+5. How does backward elimination differ from forward selection?
+
+6. Why is it a weakness that stepwise procedures usually return a single selected model?
+
+7. Why should a model selected by a stepwise procedure still be checked with residual diagnostics?
+
+8. Why should subject-matter knowledge be used after a subset-selection procedure?
+
+9. If forward selection, forward stepwise regression, and backward elimination choose the same model, does that prove the model is the true best model? Explain.
+
+10. Why might correlated predictors make stepwise selection unstable?
+
+11. How can a forward stepwise search miss a pair of predictors that is useful together?
+
+12. Why can p-values from a final model selected by stepwise regression be too optimistic?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **Each predictor can be included or excluded.** Adding one more candidate predictor doubles the number of possible models. This exponential growth makes the model space large very quickly.
+
+2. **Best subsets searches more broadly.** Best subsets regression evaluates many or all possible predictor combinations. Stepwise regression follows a sequential path, adding and/or removing variables one step at a time.
+
+3. **The number of models can become enormous.** With many predictors, fitting every possible model can take too much computing time and can produce too many candidate models to inspect carefully.
+
+4. **Forward stepwise can remove variables later.** Forward selection only adds predictors. Forward stepwise adds predictors but can also drop a predictor that becomes less useful after other variables enter.
+
+5. **They start from opposite ends.** Forward selection starts with the intercept-only model and adds predictors. Backward elimination starts with the full model and removes predictors.
+
+6. **It can hide other good models.** Several models may have similar performance, but a stepwise procedure typically reports only one. This can make the selected model look more definitive than it really is.
+
+7. **Selection criteria do not check assumptions.** A model can have an attractive AIC, BIC, or adjusted $R^2$ and still have nonlinear residual patterns, nonconstant variance, outliers, or influential observations.
+
+8. **Not all variables are equally meaningful or practical.** A selected predictor may be expensive to collect, hard to interpret, or less theoretically important than a similar competing predictor.
+
+9. **No.** Agreement among procedures is reassuring, but it does not prove that the model is true or best for future data. Validation and diagnostics are still needed.
+
+10. **Correlated predictors can substitute for each other.** If two predictors carry similar information, small changes in the data or in the order of entry can determine which one is selected.
+
+11. **It evaluates predictors sequentially.** If neither predictor improves the criterion enough by itself, forward stepwise may stop before considering the two-predictor model. Best subsets can find the pair because it evaluates predictor combinations directly.
+
+12. **The data were used for both selection and inference.** The model was chosen because it looked good in this sample. Standard p-values usually act as if the selected model had been planned in advance, so they can understate uncertainty and make evidence look stronger than it really is.
 
 :::
 
