@@ -1,254 +1,604 @@
-
-
 # Model Validation
 
 > "The Scientist must set in order. Science is built up with facts, as a house is with stones. But a collection of facts is no more a science than a heap of stones is a house." - Henri Poincare
 
-
-
-Model validation is a crucial step in regression analysis to ensure the reliability and predictive power of a model. Even if a model fits the data well, it might not generalize to new data. This chapter will introduce techniques for assessing how well a model can perform on unseen data.
+Model validation is a crucial step in regression analysis. Even if a model fits the data used to build it, it may not generalize well to new data. This chapter introduces techniques for assessing how well a model is likely to perform on observations it has not seen before.
 
 ## Overview of Model Validation
 
+Model validation provides evidence about a model's reliability and usefulness beyond the sample used to fit it. Fitting a model to one dataset can reveal important patterns, but those patterns are only useful if they represent something more stable than the accidental features of that one dataset.
 
-Model validation is a critical step in regression analysis, providing a clear picture of a model’s reliability and applicability to new data. While fitting a model to a dataset often reveals important insights, it’s essential to confirm that these insights will hold when the model is applied to data outside the sample. This ensures the model isn’t simply learning the peculiarities of one dataset—a phenomenon known as *overfitting*—but rather capturing patterns that generalize well to future observations.
+At its core, model validation asks a different question than model fitting:
 
-At its core, model validation seeks to address several key concerns. 
+::: {.callout-note collapse="false" title="Validation estimates future performance"}
 
-1. First, it tests the predictive accuracy of the model by evaluating its performance on data it hasn’t encountered before. Good predictive performance is an indicator that the model has successfully identified underlying relationships between the variables, not just the idiosyncrasies of the training set. 
+Model fitting asks, "How well does this model describe the data we used?"
 
-2. Another crucial objective of validation is to detect overfitting, where the model becomes overly tailored to the training data, learning not only the signal but also the noise. Overfitting leads to poor performance on new data because the model has essentially memorized the sample rather than learned generalizable patterns. 
+Model validation asks, "How well might this model work on new data?"
 
-3. Conversely, validation can also identify underfitting, where a model is too simple to capture the underlying patterns in the data, resulting in poor performance on both training and validation datasets.
+Those are different questions. A model can fit the training data very well and still perform poorly on new observations.
 
-Model validation typically involves splitting the available data into separate subsets or implementing methods like cross-validation to evaluate the model’s ability to generalize. 
+:::
 
+Model validation helps us address several key concerns.
 
-- The train-test split is a straightforward technique where the data is divided into a training set, used to fit the model, and a testing set, used solely for validation purposes. The testing set simulates how the model would perform on new data, offering a preliminary check on generalization. 
+1. **Predictive accuracy.** Validation evaluates the model's performance on data it has not encountered before. Good validation performance suggests that the model has captured an underlying relationship rather than just the quirks of the training set.
 
-- Cross-validation (first presented in @sec-ridge) extends this concept by dividing the dataset into multiple “folds,” or segments, which the model iteratively trains and validates on. This approach provides a more comprehensive assessment, as it tests the model’s performance across multiple data partitions, ultimately yielding a more robust understanding of its predictive accuracy.
+2. **Overfitting.** An overfit model is too closely tailored to the training data. It may learn not only the signal but also the noise, leading to poor performance on future data.
 
-Furthermore, in model validation, assessing predictive performance goes beyond merely observing the accuracy of predictions. Analysts often evaluate the model using multiple metrics, such as Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and $R^2$, which collectively provide a fuller picture of how well the model captures the variance in the data. This multipronged approach to evaluation helps avoid the pitfalls of relying on a single performance metric, which may not adequately reflect the model’s behavior under different conditions.
+3. **Underfitting.** An underfit model is too simple to capture the main structure in the data. It performs poorly on both the training data and validation data.
 
-Model validation is a comprehensive process that confirms a model’s effectiveness for general use. By assessing predictive accuracy, detecting overfitting and underfitting, and employing robust techniques like cross-validation, model validation helps statisticians and analysts develop models that provide consistent, reliable predictions across varied datasets. A validated model is, ultimately, a model that can be trusted not only within the context of a specific sample but also in real-world applications where it will encounter new, unseen data.
+Model validation typically involves either splitting the available data into training and testing subsets or using a resampling method such as cross-validation.
 
+- A **train-test split** divides the data into a training set, used to fit the model, and a testing set, used only to assess performance.
 
+- **Cross-validation** divides the data into several validation folds so that each observation has a chance to be used for assessment. Cross-validation was first introduced in @sec-ridge.
+
+Analysts usually evaluate predictive performance using more than one metric. Common regression metrics include mean absolute error (MAE), root mean squared error (RMSE), and $R^2$. Looking at multiple metrics helps us avoid overinterpreting one number.
+
+::: {.callout-note collapse="false" title="Different metrics answer different questions"}
+
+| Metric | Interpretation | Direction |
+|---|---|---|
+| **RMSE** | Typical prediction error in response units, with larger errors penalized more strongly. | Smaller is better |
+| **MAE** | Typical absolute prediction error in response units. | Smaller is better |
+| **$R^2$** | Proportion of variation explained in held-out data. | Larger is better |
+
+RMSE and MAE are measured in the units of the response variable, which often makes them easier to explain than $R^2$.
+
+:::
+
+Model validation does not prove that a model will work perfectly in the future. Instead, it gives us disciplined evidence about whether the model seems likely to generalize.
 
 ## Train-Test Split
 
-One of the most fundamental techniques for model validation is the train-test split, which involves dividing the data into two distinct subsets: a **training set** and a **testing set**. This approach allows us to train the model on one portion of the data and test its performance on a separate, unused portion. By doing this, we simulate how the model might perform on new, unseen data, providing an indication of its generalizability.
+One of the most fundamental techniques for model validation is the train-test split. The data are divided into two distinct subsets:
+
+- the **training set**, which is used to estimate the model, and
+- the **testing set**, which is held back and used only to evaluate the fitted model.
+
+This approach simulates what happens when the fitted model is applied to new, unseen data.
 
 ### Why Use a Train-Test Split?
 
-The train-test split method is particularly useful for identifying overfitting. When a model is trained on the entire dataset, it often fits the nuances of the data closely, which may include noise or sample-specific patterns. Testing the model on a separate dataset that it hasn’t seen allows us to measure how well it captures the true underlying relationships rather than just memorizing the data. Typically, a dataset is split into an 80-20 or 70-30 ratio, with the larger portion used for training and the smaller portion reserved for testing. This ratio strikes a balance between providing the model with sufficient data for training while reserving enough data for meaningful validation.
+The train-test split is useful because it separates model fitting from model evaluation. If a model is trained on the entire dataset, we can calculate fitted values and residuals, but we do not have a clean estimate of how well the model will predict future observations.
 
-A common pitfall in model building is adjusting the model parameters until it fits the testing set well; however, this practice can lead to *data leakage*, where information from the testing set inadvertently influences the training process. To prevent this, it is crucial that the testing set remains untouched during model training.
+Testing the model on data it has not seen helps us measure whether the model captures a general relationship rather than simply memorizing the sample. Common splits include 80/20 and 70/30, where the larger portion is used for training and the smaller portion is reserved for testing.
 
+::: {.callout-warning collapse="false" title="Do not tune on the test set"}
 
+The testing set should be used only at the end, after the model-building decisions have been made. If we repeatedly change the model because of test-set performance, the test set becomes part of the modeling process.
 
+When that happens, the test-set performance estimate becomes too optimistic. This problem is a form of **data leakage**.
 
-::: {#exm-22_1}
+:::
 
-## `mtcars` data set
+### Training, Validation, and Testing Sets
 
-Let’s illustrate the train-test split using the `mtcars` dataset in R. Recall in @exm-16_2, we transformed some variables to satisfy the linearity assumption. We also determined the variables `log_hp`, `log_disp`, and `log_wt` were needed in the model and `drat` and `qsec` were determined to be not important. 
+For simple analyses, we often use only a training set and a testing set. For model selection or tuning, however, it is helpful to separate three roles:
 
+| Data role | Main purpose | When it is used |
+|---|---|---|
+| **Training set** | Estimate model parameters. | During model fitting. |
+| **Validation set** | Compare candidate models or tune model settings. | During model selection. |
+| **Testing set** | Estimate final predictive performance. | Once, after the model has been chosen. |
 
-```{r message=FALSE, warning=F}
+The key idea is that the testing set should not guide model-building decisions. If several candidate models are being compared, those comparisons should happen with a validation set or cross-validation. The final testing set is reserved for the model that has already been selected.
+
+::: {.example title="Example: Model selection belongs in validation, not testing"}
+
+Suppose we are choosing between three models:
+
+- a simple model with one predictor,
+- a model with several predictors, and
+- a model with several predictors plus interactions.
+
+The training data are used to fit each model. The validation data, or cross-validation results, are used to decide which model is most promising. Only after that choice is made do we evaluate the selected model on the testing set.
+
+The testing set is like a sealed envelope. We open it at the end to get an honest estimate of performance.
+
+:::
+
+::: {#exm-22_1 .example title="Train-test split for the `mtcars` data"}
+
+Let's illustrate a train-test split using the `mtcars` dataset in R. Recall from @exm-16_2 that transformations of `disp`, `hp`, and `wt` helped address the linearity assumption.
+
+First, we split the data, build a recipe, fit a linear regression workflow on the training set, and inspect the fitted model.
+
+```{r message=FALSE, warning=FALSE}
 library(tidyverse)
 library(tidymodels)
 
-# Set seed for reproducibility
+tidymodels_prefer()
+
 set.seed(34)
 
-# Perform an 80-20 split of the data
-data_split = initial_split(mtcars, prop = 0.8)
-train_data = training(data_split)
-test_data = testing(data_split)
+mtcars_split <- initial_split(mtcars, prop = 0.8)
+mtcars_train <- training(mtcars_split)
+mtcars_test <- testing(mtcars_split)
 
-dat_recipe = recipe(mpg ~ disp + hp + wt, data = train_data) |> 
+mtcars_recipe <- recipe(mpg ~ disp + hp + wt, data = mtcars_train) |>
   step_mutate(
     log_disp = log(disp),
     log_hp = log(hp),
     log_wt = log(wt)
-  ) |> 
+  ) |>
   step_rm(disp, hp, wt)
 
-model = linear_reg() |>
+mtcars_model <- linear_reg() |>
   set_engine("lm")
 
-wf = workflow() |>
-  add_recipe(dat_recipe) |> 
-  add_model(model)
+mtcars_workflow <- workflow() |>
+  add_recipe(mtcars_recipe) |>
+  add_model(mtcars_model)
 
-fitted_model = wf |>
-  fit(data = train_data)
+mtcars_fit <- mtcars_workflow |>
+  fit(data = mtcars_train)
 
-fitted_model |> glance()
-
+mtcars_fit |>
+  glance() |>
+  knitr::kable(digits = 4)
 ```
 
+Once the model is trained, we use it to make predictions on the testing set. We then calculate validation metrics such as RMSE and $R^2$.
 
+```{r message=FALSE, warning=FALSE}
+mtcars_test_predictions <- predict(mtcars_fit, new_data = mtcars_test) |>
+  bind_cols(mtcars_test)
 
-Once the model is trained on the training data, we can assess its performance on the testing set. We make predictions on `test_data` and calculate validation metrics like RMSE and $R^2$ to evaluate how well the model generalizes.
+mtcars_test_metrics <- mtcars_test_predictions |>
+  yardstick::metrics(truth = mpg, estimate = .pred)
 
-```{r message=FALSE, warning=F}
-
-# Make predictions on the testing set
-test_predictions = predict(fitted_model, new_data = test_data) |>
-  bind_cols(test_data)
-
-# Calculate evaluation metrics
-metrics = test_predictions |>
-  metrics(truth = mpg, estimate = .pred)
-
-# Display metrics
-metrics
-
+mtcars_test_metrics |>
+  knitr::kable(digits = 4)
 ```
 
-
-Here, we use `metrics()` from `yardstick` (another `tidymodels` package) to compute metrics such as **Root Mean Squared Error (RMSE)** and **$R^2$**. RMSE indicates the average prediction error in units of the response variable, while $R^2$ represents the proportion of variance explained by the model.
+These metrics describe performance on observations that were not used to estimate the model coefficients.
 
 :::
 
 ### Interpreting the Results
 
-A lower RMSE and higher $R^2$ indicate a better fit. However, we must carefully interpret these results: even a high $R^2$ does not guarantee that the model will perform well on entirely new data. The true test of the model’s performance lies in whether it achieves similar results across multiple test sets or cross-validation folds, which can help confirm its generalizability.
+A lower RMSE and higher $R^2$ generally indicate better predictive performance. However, we should interpret these results carefully. One split of a small dataset can be noisy. A model might look better or worse simply because of which observations happened to fall into the training or testing set.
 
-
+The true test of the model's usefulness is whether it performs reasonably well across different validation splits, cross-validation folds, or genuinely new data.
 
 ### Train-Test Split with Stratification on a Categorical Variable
 
-When working with categorical variables (or very discrete quantitative variables), it’s often beneficial to perform a *stratified split* to ensure that the proportions of each category in the training and testing sets are similar to those in the original dataset. In regression models, especially when a categorical variable has substantial influence on the response variable, stratified sampling helps maintain representative proportions and prevents potential bias.
+When working with categorical variables, it is often useful to perform a **stratified split**. Stratification helps preserve the proportions of important groups in both the training and testing sets.
 
+In regression, stratification can be helpful when a categorical variable is strongly related to the response or when some groups are small. Without stratification, the training or testing set might accidentally contain too many observations from one group and too few from another.
 
-::: {#exm-22_2}
+::: {#exm-22_2 .example title="Stratified train-test split by cylinder"}
 
-Let’s extend the previous example with the `mtcars` dataset by including the `cyl` variable, which categorizes cars based on the number of cylinders. We’ll stratify the train-test split on this variable to maintain consistent proportions of cars with 4, 6, and 8 cylinders in both the training and testing sets.
+Let's extend the previous example by using the `cyl` variable, which records the number of cylinders in each car. We convert `cyl` to a factor and then stratify the split so that the training and testing sets have more similar cylinder distributions.
 
+```{r message=FALSE, warning=FALSE}
+mtcars_stratified <- mtcars |>
+  mutate(cyl = factor(cyl))
 
-Using `initial_split()`, we specify `strata = cyl` to stratify the split according to the cylinder variable.
-
-```{r message=FALSE, warning=F}
-library(tidyverse)
-library(tidymodels)
-
-# Set seed for reproducibility
 set.seed(34)
 
-# Perform an 80-20 split with stratification on 'cyl'
-data_split = initial_split(mtcars, prop = 0.8, strata = cyl)
-train_data = training(data_split)
-test_data = testing(data_split)
+mtcars_stratified_split <- initial_split(
+  mtcars_stratified,
+  prop = 0.8,
+  strata = cyl
+)
+
+mtcars_stratified_train <- training(mtcars_stratified_split)
+mtcars_stratified_test <- testing(mtcars_stratified_split)
+
+bind_rows(
+  mtcars_stratified_train |>
+    count(cyl) |>
+    mutate(split = "Training"),
+  mtcars_stratified_test |>
+    count(cyl) |>
+    mutate(split = "Testing")
+) |>
+  group_by(split) |>
+  mutate(proportion = n / sum(n)) |>
+  ungroup() |>
+  knitr::kable(digits = 3)
 ```
+
+The exact counts may not match perfectly in small samples, but stratification helps preserve the distribution of important groups across the split.
 
 :::
 
-
 ## Cross-Validation
 
-Cross-validation is a robust method to test a model’s stability. We first discussed cross-validation in @sec-ridge but will briefly discuss it again.
+Cross-validation is a more robust method for estimating model performance. Instead of relying on one train-test split, cross-validation divides the data into several subsets called **folds**.
 
-Instead of a single train-test split, cross-validation divides the data into multiple subsets (folds). For each fold:
+For each fold:
 
-1. A model is trained on all other folds.
-2. The model is tested on the held-out fold.
+1. A model is trained on all the other folds.
+2. The model is evaluated on the held-out fold.
+3. The process repeats until every fold has served as the held-out fold once.
 
 The most common form is **k-fold cross-validation**, often with $k = 5$ or $k = 10$.
 
-#### Steps for k-Fold Cross-Validation
+### Steps for k-Fold Cross-Validation
 
-1. Split the data into $k$ subsets or folds.
-2. Train the model on $k-1$ folds and validate on the remaining fold.
-3. Repeat the process $k$ times, each time with a different fold as the validation set.
-4. Calculate the average error across all folds to assess model performance.
+1. Split the data into $k$ subsets, or folds.
+2. Train the model on $k - 1$ folds.
+3. Validate the model on the remaining fold.
+4. Repeat the process $k$ times, each time using a different validation fold.
+5. Average the validation errors across folds to estimate model performance.
 
-#### Example Tidymodels Setup
-```python
-set.seed(123)
-folds = vfold_cv(my_data, v = 10)
+::: {#exm-22_3 .example title="Five-fold cross-validation for the `mtcars` model"}
 
-results = fit_resamples(
-  workflow,
-  resamples = folds,
+Using the workflow from @exm-22_1, we can estimate performance with five-fold cross-validation. Each fold holds out a different part of the data.
+
+```{r message=FALSE, warning=FALSE}
+set.seed(34)
+
+mtcars_folds <- vfold_cv(mtcars, v = 5)
+
+mtcars_cv_results <- fit_resamples(
+  mtcars_workflow,
+  resamples = mtcars_folds,
   metrics = metric_set(rmse, rsq)
 )
-collect_metrics(results)
+
+mtcars_cv_results |>
+  collect_metrics() |>
+  knitr::kable(digits = 4)
 ```
+
+The summarized table gives the average performance across validation folds. We can also inspect the fold-specific results to see how much performance changes from split to split.
+
+```{r message=FALSE, warning=FALSE}
+mtcars_cv_results |>
+  collect_metrics(summarize = FALSE) |>
+  knitr::kable(digits = 4)
+```
+
+If the fold-specific metrics vary a lot, that is a warning that the estimated predictive performance may be sensitive to the particular data split.
+
+:::
+
+### Repeated Cross-Validation
+
+One limitation of ordinary k-fold cross-validation is that the results still depend on one random division of the data into folds. **Repeated cross-validation** repeats the k-fold process several times, using a different random fold assignment each time.
+
+Repeated cross-validation is especially helpful when the dataset is small or when validation metrics vary noticeably from fold to fold.
+
+::: {#exm-22_4 .example title="Repeated cross-validation for the `mtcars` model"}
+
+Using the same workflow, we can repeat five-fold cross-validation five times. This produces 25 validation assessments: five folds in each of five repeats.
+
+```{r message=FALSE, warning=FALSE}
+set.seed(34)
+
+mtcars_repeated_folds <- vfold_cv(mtcars, v = 5, repeats = 5)
+
+mtcars_repeated_cv_results <- fit_resamples(
+  mtcars_workflow,
+  resamples = mtcars_repeated_folds,
+  metrics = metric_set(rmse, rsq)
+)
+
+mtcars_repeated_cv_results |>
+  collect_metrics() |>
+  knitr::kable(digits = 4)
+```
+
+We can also summarize the spread of fold-level performance estimates.
+
+```{r message=FALSE, warning=FALSE}
+mtcars_repeated_cv_results |>
+  collect_metrics(summarize = FALSE) |>
+  group_by(.metric) |>
+  summarize(
+    n_resamples = n(),
+    minimum = min(.estimate, na.rm = TRUE),
+    median = median(.estimate, na.rm = TRUE),
+    maximum = max(.estimate, na.rm = TRUE),
+    .groups = "drop"
+  ) |>
+  knitr::kable(digits = 4)
+```
+
+Repeated cross-validation does not create new information, but it can make the performance estimate less dependent on one particular random split.
+
+:::
 
 ### Leave-One-Out Cross-Validation (LOOCV)
 
-LOOCV is an extreme case of cross-validation where $k$ is the number of observations. Each observation is left out once, and the model is trained on the remaining observations. LOOCV is computationally intensive but useful for small datasets.
+Leave-one-out cross-validation is an extreme case of cross-validation where $k$ is the number of observations. Each observation is left out once, and the model is trained on all remaining observations.
 
+LOOCV can be useful for very small datasets because it uses almost all observations for training on each iteration. However, it can be computationally intensive because the model must be refit once for every observation.
 
 ## Assessing Overfitting and Underfitting
 
+One of the central aims of model validation is to determine whether a model captures the main patterns in the data without being too complex or too simple.
 
-One of the central aims of model validation is to determine whether a model is appropriately capturing the patterns in the data without being too complex (overfitting) or too simplistic (underfitting). Striking this balance is essential for creating a model that generalizes well to unseen data.
+::: {.callout-note collapse="false" title="Training performance versus validation performance"}
 
-#### Understanding Overfitting
+| Pattern | Likely issue |
+|---|---|
+| Good training performance and poor validation performance | Overfitting |
+| Poor training performance and poor validation performance | Underfitting |
+| Similar and acceptable training/validation performance | More likely to generalize |
 
-**Overfitting** occurs when a model is overly complex relative to the actual data structure. An overfit model closely aligns with the training data, capturing not only the underlying patterns but also the noise or random fluctuations. While this might lead to impressive performance on the training dataset, the model’s predictions on new data tend to be poor, as it has essentially memorized the specific details of the training data rather than learning the general trends.
+Validation metrics are most informative when compared to training metrics. The gap between the two often tells us more than either number alone.
 
-Overfitting often manifests when the model has:
+:::
 
-- Too many features or overly complex terms (e.g., higher-order polynomial terms).
-- High sensitivity to specific data points, meaning slight changes in input can lead to large changes in predictions.
+### Understanding Overfitting
 
-A common indicator of overfitting is a significant disparity between the training and testing (or validation) performance: the model performs very well on the training set but poorly on the testing set.
+**Overfitting** occurs when a model is overly complex relative to the actual data structure. An overfit model fits the training data closely, capturing not only the underlying signal but also noise or random fluctuations.
 
-#### Detecting Overfitting
+Overfitting often occurs when the model has:
 
-In practice, we can use validation metrics to detect overfitting:
+- too many predictors,
+- overly complex terms, such as high-degree polynomial terms,
+- high sensitivity to individual observations, or
+- excessive tuning based on validation or testing performance.
 
-- **High $R^2$ on the training set and low $R^2$ on the testing set** suggests that the model fits the training data well but fails to generalize.
-- **High training accuracy and low testing accuracy** are typical signs of an overfit model.
+A common sign of overfitting is a large gap between training and validation performance. The model performs very well on the training set but poorly on new data.
 
-Using cross-validation can also help identify overfitting. If the model consistently performs well across folds (i.e., similar scores on each fold), it is likely generalizing better than a model that performs well on some folds but poorly on others.
+### Detecting Overfitting
 
-#### Addressing Overfitting
+In practice, validation metrics help detect overfitting:
+
+- High training $R^2$ and much lower validation $R^2$ suggest the model fits the training data well but does not generalize.
+- Low training RMSE and much higher validation RMSE suggest that the model's predictions degrade on held-out data.
+- Cross-validation results that vary widely across folds suggest that the model's performance may depend heavily on which observations were used for training.
+
+### Addressing Overfitting
 
 Several techniques can help reduce overfitting:
 
-1. **Feature Selection**: Reducing the number of features (predictors) to those most relevant can simplify the model.
-2. **Regularization**: Techniques such as ridge regression and lasso regression (discussed in @sec-ridge) add penalty terms to the model, discouraging overly complex fits.
-3. **Cross-Validation**: Performing k-fold cross-validation helps ensure that the model’s high performance is not simply due to luck with a particular train-test split.
+1. **Feature selection:** Reduce the number of predictors to those most relevant to the response.
+2. **Regularization:** Use methods such as ridge regression and lasso regression, discussed in @sec-ridge, to penalize overly complex fits.
+3. **Cross-validation:** Use resampling to check whether performance is stable across different data partitions.
+4. **Simpler model structure:** Remove unnecessary interactions, nonlinear terms, or transformations that are not supported by the data.
 
+### Understanding Underfitting
 
-#### Understanding Underfitting
+**Underfitting** occurs when a model is too simple to capture the main patterns in the data. An underfit model may miss important relationships between the predictors and response, resulting in poor performance on both training and testing data.
 
-**Underfitting** occurs when a model is too simplistic to capture the underlying trends in the data. An underfit model may fail to learn important relationships between the predictor and response variables, resulting in poor performance on both training and testing sets.
+Underfitting often occurs when:
 
-Underfitting often happens when:
+- the model is overly constrained,
+- a linear model is used for a strongly nonlinear relationship,
+- key predictors are missing, or
+- important transformations or interactions have not been included.
 
-- The model is overly constrained (e.g., a linear model trying to capture nonlinear relationships).
-- Key predictors are missing, or critical transformations (e.g., logarithmic, polynomial) have not been applied.
-
-#### Detecting Underfitting
+### Detecting Underfitting
 
 The main indicators of underfitting are:
 
-- **Low $R^2$ on both the training and testing sets**, suggesting that the model fails to capture the data’s structure.
-- **High bias** in predictions, where the model consistently deviates from actual values.
+- low $R^2$ on both the training and validation sets,
+- high RMSE on both the training and validation sets, and
+- residual plots that show systematic patterns.
 
-An underfit model often struggles with both training and testing data, unlike an overfit model, which performs well on training data but poorly on testing data.
+Unlike an overfit model, an underfit model struggles with both the data used to fit it and the data used to validate it.
 
-#### Addressing Underfitting
+### Addressing Underfitting
 
-To improve an underfit model, you can consider:
+To improve an underfit model, consider:
 
-1. **Adding Complexity**: Introduce more predictors, polynomial terms, or interaction terms if the data’s structure suggests a more complex relationship.
-2. **Feature Engineering**: Transform variables or create new features that better capture the relationship between predictors and the outcome.
-3. **Switching to a More Flexible Model**: Instead of a simple linear model, consider a model better suited to nonlinear relationships, such as decision trees, random forests, or neural networks.
+1. **Adding relevant predictors:** Include variables that help explain the response.
+2. **Feature engineering:** Transform variables or create new variables that better capture the relationship.
+3. **Adding model flexibility:** Use polynomial terms, interaction terms, or another model type when justified.
+4. **Revisiting diagnostics:** Use residual plots to identify patterns the current model is missing.
 
-#### Bias-Variance Tradeoff
+### Bias-Variance Tradeoff
 
 The balance between overfitting and underfitting is often discussed in terms of the **bias-variance tradeoff**:
 
-- **Bias** refers to errors due to simplifying assumptions in the model. High bias typically leads to underfitting.
-- **Variance** refers to errors due to model complexity. High variance is associated with overfitting.
+- **Bias** refers to error caused by overly simple assumptions. High bias is associated with underfitting.
+- **Variance** refers to error caused by excessive sensitivity to the training data. High variance is associated with overfitting.
 
-The goal is to find a model with low enough bias to capture the data’s structure while maintaining low enough variance to generalize well to new data. Techniques like cross-validation, regularization, and feature selection can help achieve this balance.
+The goal is not to make the model as complicated as possible. The goal is to find a model flexible enough to capture the important structure in the data but stable enough to generalize to future observations.
 
+::: {#exm-22_5 .example title="Visualizing the bias-variance tradeoff"}
 
+The following simulation shows three polynomial models fit to the same noisy data. The dashed curve is the true mean relationship used to generate the data.
+
+```{r message=FALSE, warning=FALSE}
+set.seed(3302)
+
+bias_variance_train <- tibble(
+  x = sort(runif(35)),
+  y = sin(2 * pi * x) + rnorm(35, sd = 0.25)
+)
+
+bias_variance_grid <- tibble(
+  x = seq(0, 1, length.out = 200)
+)
+
+bias_variance_truth <- bias_variance_grid |>
+  mutate(truth = sin(2 * pi * x))
+
+bias_variance_model_levels <- c(
+  "Too simple: degree 1",
+  "Reasonable flexibility: degree 3",
+  "Too flexible: degree 12"
+)
+
+bias_variance_fits <- tibble(
+  degree = c(1, 3, 12),
+  model = factor(
+    bias_variance_model_levels,
+    levels = bias_variance_model_levels
+  )
+) |>
+  mutate(
+    fit = map(
+      degree,
+      \(degree_value) lm(
+        y ~ poly(x, degree_value, raw = TRUE),
+        data = bias_variance_train
+      )
+    ),
+    predictions = map(
+      fit,
+      \(model_fit) bias_variance_grid |>
+        mutate(predicted = predict(model_fit, newdata = bias_variance_grid))
+    )
+  ) |>
+  select(model, predictions) |>
+  unnest(predictions)
+
+ggplot() +
+  geom_point(
+    data = bias_variance_train,
+    aes(x = x, y = y),
+    alpha = 0.7
+  ) +
+  geom_line(
+    data = bias_variance_truth,
+    aes(x = x, y = truth),
+    linetype = "dashed",
+    color = "gray35",
+    linewidth = 1
+  ) +
+  geom_line(
+    data = bias_variance_fits,
+    aes(x = x, y = predicted),
+    color = "#0072B2",
+    linewidth = 1
+  ) +
+  facet_wrap(~ model) +
+  labs(
+    x = "x",
+    y = "y",
+    title = "Underfitting, reasonable flexibility, and overfitting",
+    subtitle = "Dashed line = true mean relationship; blue line = fitted model"
+  ) +
+  theme_minimal()
+```
+
+The degree 1 model has high bias because it is too simple to capture the curve. The degree 12 model has high variance because it bends sharply to chase noise in this particular sample. The middle model is not perfect, but it better balances flexibility and stability.
+
+:::
+
+## Validation Reporting Checklist
+
+When reporting a validation analysis, include enough information for someone else to understand how the performance estimate was obtained.
+
+::: {.callout-tip collapse="false" title="What to report"}
+
+- **Data splitting method:** train-test split, validation set, k-fold cross-validation, repeated cross-validation, or LOOCV.
+- **Random seed:** the seed used before creating random splits or folds.
+- **Training and testing sizes:** the number or percentage of observations in each split.
+- **Stratification variable, if used:** the variable used to preserve group proportions.
+- **Preprocessing steps:** transformations, dummy variables, scaling, filtering, or feature engineering.
+- **Model selection process:** how candidate models were compared and selected.
+- **Final model:** the predictors, transformations, and modeling method used.
+- **Performance metrics:** RMSE, MAE, $R^2$, or other relevant metrics.
+- **Leakage protection:** confirmation that the testing set was not used to choose or tune the model.
+
+:::
+
+## Recap
+
+In this chapter, we introduced validation as a way to estimate how well a model may perform on new data.
+
+| Idea | Meaning |
+|---|---|
+| **Model validation** | The process of evaluating how well a fitted model is likely to perform on unseen data. |
+| **Generalization** | The ability of a model to perform well beyond the data used to fit it. |
+| **Training set** | The portion of the data used to estimate model parameters. |
+| **Validation set** | A held-out set, or resampling process, used to compare candidate models or tune settings. |
+| **Testing set** | The portion of the data held back to estimate predictive performance. |
+| **Data leakage** | A problem that occurs when information from the testing or validation data influences model fitting. |
+| **Train-test split** | A simple validation method that separates the data into training and testing subsets. |
+| **Stratification** | A splitting strategy that preserves the distribution of important groups across data splits. |
+| **Cross-validation** | A resampling method that repeatedly trains and validates a model on different data partitions. |
+| **k-fold cross-validation** | Cross-validation in which the data are divided into $k$ folds and each fold is held out once. |
+| **Repeated cross-validation** | k-fold cross-validation repeated several times with different random fold assignments. |
+| **LOOCV** | Leave-one-out cross-validation, where each observation serves as its own validation set once. |
+| **RMSE** | A prediction-error metric in the response units that penalizes larger errors more strongly. |
+| **MAE** | A prediction-error metric that averages absolute prediction errors. |
+| **Validation $R^2$** | The proportion of held-out response variation explained by the model. |
+| **Overfitting** | A model is too complex and performs much better on training data than validation data. |
+| **Underfitting** | A model is too simple and performs poorly on both training and validation data. |
+| **Bias-variance tradeoff** | The balance between error from overly simple assumptions and error from excessive sensitivity to the sample. |
+| **Validation report** | A transparent summary of the splitting method, seed, preprocessing, model-selection process, and performance metrics. |
+
+## Check your understanding
+
+::: {.callout-note collapse="false" title="Problems"}
+
+1. Why can a model that fits the training data well still perform poorly on new data?
+
+2. What is the purpose of holding out a testing set?
+
+3. Why should the testing set remain untouched during model building?
+
+4. What is data leakage, conceptually?
+
+5. Why might stratification be useful when splitting data?
+
+6. How does k-fold cross-validation differ from a single train-test split?
+
+7. Why can cross-validation give a more stable estimate of predictive performance than one split?
+
+8. What does repeated cross-validation try to reduce?
+
+9. Why might LOOCV be computationally expensive?
+
+10. What does RMSE measure, and why is smaller better?
+
+11. Why might MAE be easier to explain to a nontechnical audience than $R^2$?
+
+12. How does overfitting differ from underfitting?
+
+13. What training-versus-validation pattern suggests overfitting?
+
+14. What training-versus-validation pattern suggests underfitting?
+
+15. How does the bias-variance tradeoff connect to overfitting and underfitting?
+
+16. Why is a separate validation set useful when comparing candidate models?
+
+17. Why should a validation report include preprocessing steps and the random seed?
+
+18. Why should validation be treated as evidence rather than proof?
+
+:::
+
+::: {.callout-tip collapse="true" title="Solutions"}
+
+1. **It may have learned sample-specific noise.** A model can match the training data closely without capturing a relationship that holds for future observations.
+
+2. **The testing set approximates future data.** Because the model was not fit using those observations, test-set performance gives a cleaner estimate of generalization.
+
+3. **It protects the honesty of the performance estimate.** If we use the testing set to choose predictors, transformations, or tuning settings, the testing set is no longer independent of the modeling process.
+
+4. **Data leakage means future or held-out information sneaks into model fitting.** The result is usually an overly optimistic estimate of performance.
+
+5. **It preserves important group proportions.** Stratification helps prevent the training or testing set from accidentally overrepresenting or underrepresenting key categories.
+
+6. **Cross-validation repeats the validation idea across several folds.** A single train-test split uses one held-out set; k-fold cross-validation uses each fold as a held-out set once.
+
+7. **It averages over several splits.** This reduces dependence on one lucky or unlucky split of the data.
+
+8. **It tries to reduce dependence on one random fold assignment.** Repeating cross-validation averages over several ways of splitting the data into folds.
+
+9. **It refits the model many times.** With $n$ observations, LOOCV fits the model $n$ separate times.
+
+10. **RMSE measures typical prediction error in the response units.** Smaller RMSE means predictions are closer to observed values on average, with larger errors penalized more strongly.
+
+11. **MAE is an average absolute error in the original response units.** Saying predictions are off by about a certain number of units is often more concrete than explaining proportion of variation explained.
+
+12. **Overfitting is too complex; underfitting is too simple.** Overfit models memorize training data noise, while underfit models miss important structure.
+
+13. **Strong training performance and weak validation performance.** A large gap between training and validation metrics is a classic sign of overfitting.
+
+14. **Weak performance on both training and validation data.** If the model cannot fit even the training data well, it is probably missing important structure.
+
+15. **Underfitting is linked to high bias; overfitting is linked to high variance.** A useful model balances flexibility and stability.
+
+16. **It keeps model selection separate from final testing.** Candidate models can be compared using validation data or cross-validation, while the testing set remains reserved for the final model.
+
+17. **They make the analysis reproducible and interpretable.** The seed determines the random splits, and preprocessing steps can strongly affect model performance.
+
+18. **Future data may differ from the current sample.** Validation estimates likely performance under similar conditions, but it cannot guarantee performance in every future setting.
+
+:::

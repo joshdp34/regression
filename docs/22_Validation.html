@@ -338,17 +338,34 @@ window.Quarto = {
 <a href="#train-test-split" id="toc-train-test-split" class="nav-link" data-scroll-target="#train-test-split"><span class="header-section-number">22.2</span> Train-Test Split</a>
   <ul class="collapse">
 <li><a href="#why-use-a-train-test-split" id="toc-why-use-a-train-test-split" class="nav-link" data-scroll-target="#why-use-a-train-test-split"><span class="header-section-number">22.2.1</span> Why Use a Train-Test Split?</a></li>
-  <li><a href="#interpreting-the-results" id="toc-interpreting-the-results" class="nav-link" data-scroll-target="#interpreting-the-results"><span class="header-section-number">22.2.2</span> Interpreting the Results</a></li>
-  <li><a href="#train-test-split-with-stratification-on-a-categorical-variable" id="toc-train-test-split-with-stratification-on-a-categorical-variable" class="nav-link" data-scroll-target="#train-test-split-with-stratification-on-a-categorical-variable"><span class="header-section-number">22.2.3</span> Train-Test Split with Stratification on a Categorical Variable</a></li>
+  <li><a href="#training-validation-and-testing-sets" id="toc-training-validation-and-testing-sets" class="nav-link" data-scroll-target="#training-validation-and-testing-sets"><span class="header-section-number">22.2.2</span> Training, Validation, and Testing Sets</a></li>
+  <li><a href="#interpreting-the-results" id="toc-interpreting-the-results" class="nav-link" data-scroll-target="#interpreting-the-results"><span class="header-section-number">22.2.3</span> Interpreting the Results</a></li>
+  <li><a href="#train-test-split-with-stratification-on-a-categorical-variable" id="toc-train-test-split-with-stratification-on-a-categorical-variable" class="nav-link" data-scroll-target="#train-test-split-with-stratification-on-a-categorical-variable"><span class="header-section-number">22.2.4</span> Train-Test Split with Stratification on a Categorical Variable</a></li>
   </ul>
 </li>
   <li>
 <a href="#cross-validation" id="toc-cross-validation" class="nav-link" data-scroll-target="#cross-validation"><span class="header-section-number">22.3</span> Cross-Validation</a>
   <ul class="collapse">
-<li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="header-section-number">22.3.1</span> Leave-One-Out Cross-Validation (LOOCV)</a></li>
+<li><a href="#steps-for-k-fold-cross-validation" id="toc-steps-for-k-fold-cross-validation" class="nav-link" data-scroll-target="#steps-for-k-fold-cross-validation"><span class="header-section-number">22.3.1</span> Steps for k-Fold Cross-Validation</a></li>
+  <li><a href="#repeated-cross-validation" id="toc-repeated-cross-validation" class="nav-link" data-scroll-target="#repeated-cross-validation"><span class="header-section-number">22.3.2</span> Repeated Cross-Validation</a></li>
+  <li><a href="#leave-one-out-cross-validation-loocv" id="toc-leave-one-out-cross-validation-loocv" class="nav-link" data-scroll-target="#leave-one-out-cross-validation-loocv"><span class="header-section-number">22.3.3</span> Leave-One-Out Cross-Validation (LOOCV)</a></li>
   </ul>
 </li>
-  <li><a href="#assessing-overfitting-and-underfitting" id="toc-assessing-overfitting-and-underfitting" class="nav-link" data-scroll-target="#assessing-overfitting-and-underfitting"><span class="header-section-number">22.4</span> Assessing Overfitting and Underfitting</a></li>
+  <li>
+<a href="#assessing-overfitting-and-underfitting" id="toc-assessing-overfitting-and-underfitting" class="nav-link" data-scroll-target="#assessing-overfitting-and-underfitting"><span class="header-section-number">22.4</span> Assessing Overfitting and Underfitting</a>
+  <ul class="collapse">
+<li><a href="#understanding-overfitting" id="toc-understanding-overfitting" class="nav-link" data-scroll-target="#understanding-overfitting"><span class="header-section-number">22.4.1</span> Understanding Overfitting</a></li>
+  <li><a href="#detecting-overfitting" id="toc-detecting-overfitting" class="nav-link" data-scroll-target="#detecting-overfitting"><span class="header-section-number">22.4.2</span> Detecting Overfitting</a></li>
+  <li><a href="#addressing-overfitting" id="toc-addressing-overfitting" class="nav-link" data-scroll-target="#addressing-overfitting"><span class="header-section-number">22.4.3</span> Addressing Overfitting</a></li>
+  <li><a href="#understanding-underfitting" id="toc-understanding-underfitting" class="nav-link" data-scroll-target="#understanding-underfitting"><span class="header-section-number">22.4.4</span> Understanding Underfitting</a></li>
+  <li><a href="#detecting-underfitting" id="toc-detecting-underfitting" class="nav-link" data-scroll-target="#detecting-underfitting"><span class="header-section-number">22.4.5</span> Detecting Underfitting</a></li>
+  <li><a href="#addressing-underfitting" id="toc-addressing-underfitting" class="nav-link" data-scroll-target="#addressing-underfitting"><span class="header-section-number">22.4.6</span> Addressing Underfitting</a></li>
+  <li><a href="#bias-variance-tradeoff" id="toc-bias-variance-tradeoff" class="nav-link" data-scroll-target="#bias-variance-tradeoff"><span class="header-section-number">22.4.7</span> Bias-Variance Tradeoff</a></li>
+  </ul>
+</li>
+  <li><a href="#validation-reporting-checklist" id="toc-validation-reporting-checklist" class="nav-link" data-scroll-target="#validation-reporting-checklist"><span class="header-section-number">22.5</span> Validation Reporting Checklist</a></li>
+  <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">22.6</span> Recap</a></li>
+  <li><a href="#check-your-understanding" id="toc-check-your-understanding" class="nav-link" data-scroll-target="#check-your-understanding"><span class="header-section-number">22.7</span> Check your understanding</a></li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -372,209 +389,1088 @@ window.Quarto = {
 </header><blockquote class="blockquote">
 <p>“The Scientist must set in order. Science is built up with facts, as a house is with stones. But a collection of facts is no more a science than a heap of stones is a house.” - Henri Poincare</p>
 </blockquote>
-<p>Model validation is a crucial step in regression analysis to ensure the reliability and predictive power of a model. Even if a model fits the data well, it might not generalize to new data. This chapter will introduce techniques for assessing how well a model can perform on unseen data.</p>
+<p>Model validation is a crucial step in regression analysis. Even if a model fits the data used to build it, it may not generalize well to new data. This chapter introduces techniques for assessing how well a model is likely to perform on observations it has not seen before.</p>
 <section id="overview-of-model-validation" class="level2" data-number="22.1"><h2 data-number="22.1" class="anchored" data-anchor-id="overview-of-model-validation">
 <span class="header-section-number">22.1</span> Overview of Model Validation</h2>
-<p>Model validation is a critical step in regression analysis, providing a clear picture of a model’s reliability and applicability to new data. While fitting a model to a dataset often reveals important insights, it’s essential to confirm that these insights will hold when the model is applied to data outside the sample. This ensures the model isn’t simply learning the peculiarities of one dataset—a phenomenon known as <em>overfitting</em>—but rather capturing patterns that generalize well to future observations.</p>
-<p>At its core, model validation seeks to address several key concerns.</p>
+<p>Model validation provides evidence about a model’s reliability and usefulness beyond the sample used to fit it. Fitting a model to one dataset can reveal important patterns, but those patterns are only useful if they represent something more stable than the accidental features of that one dataset.</p>
+<p>At its core, model validation asks a different question than model fitting:</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Validation estimates future performance">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Validation estimates future performance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>Model fitting asks, “How well does this model describe the data we used?”</p>
+<p>Model validation asks, “How well might this model work on new data?”</p>
+<p>Those are different questions. A model can fit the training data very well and still perform poorly on new observations.</p>
+</div>
+</div>
+</div>
+<p>Model validation helps us address several key concerns.</p>
 <ol type="1">
-<li><p>First, it tests the predictive accuracy of the model by evaluating its performance on data it hasn’t encountered before. Good predictive performance is an indicator that the model has successfully identified underlying relationships between the variables, not just the idiosyncrasies of the training set.</p></li>
-<li><p>Another crucial objective of validation is to detect overfitting, where the model becomes overly tailored to the training data, learning not only the signal but also the noise. Overfitting leads to poor performance on new data because the model has essentially memorized the sample rather than learned generalizable patterns.</p></li>
-<li><p>Conversely, validation can also identify underfitting, where a model is too simple to capture the underlying patterns in the data, resulting in poor performance on both training and validation datasets.</p></li>
+<li><p><strong>Predictive accuracy.</strong> Validation evaluates the model’s performance on data it has not encountered before. Good validation performance suggests that the model has captured an underlying relationship rather than just the quirks of the training set.</p></li>
+<li><p><strong>Overfitting.</strong> An overfit model is too closely tailored to the training data. It may learn not only the signal but also the noise, leading to poor performance on future data.</p></li>
+<li><p><strong>Underfitting.</strong> An underfit model is too simple to capture the main structure in the data. It performs poorly on both the training data and validation data.</p></li>
 </ol>
-<p>Model validation typically involves splitting the available data into separate subsets or implementing methods like cross-validation to evaluate the model’s ability to generalize.</p>
+<p>Model validation typically involves either splitting the available data into training and testing subsets or using a resampling method such as cross-validation.</p>
 <ul>
-<li><p>The train-test split is a straightforward technique where the data is divided into a training set, used to fit the model, and a testing set, used solely for validation purposes. The testing set simulates how the model would perform on new data, offering a preliminary check on generalization.</p></li>
-<li><p>Cross-validation (first presented in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>) extends this concept by dividing the dataset into multiple “folds,” or segments, which the model iteratively trains and validates on. This approach provides a more comprehensive assessment, as it tests the model’s performance across multiple data partitions, ultimately yielding a more robust understanding of its predictive accuracy.</p></li>
+<li><p>A <strong>train-test split</strong> divides the data into a training set, used to fit the model, and a testing set, used only to assess performance.</p></li>
+<li><p><strong>Cross-validation</strong> divides the data into several validation folds so that each observation has a chance to be used for assessment. Cross-validation was first introduced in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>.</p></li>
 </ul>
-<p>Furthermore, in model validation, assessing predictive performance goes beyond merely observing the accuracy of predictions. Analysts often evaluate the model using multiple metrics, such as Mean Absolute Error (MAE), Root Mean Squared Error (RMSE), and <span class="math inline">\(R^2\)</span>, which collectively provide a fuller picture of how well the model captures the variance in the data. This multipronged approach to evaluation helps avoid the pitfalls of relying on a single performance metric, which may not adequately reflect the model’s behavior under different conditions.</p>
-<p>Model validation is a comprehensive process that confirms a model’s effectiveness for general use. By assessing predictive accuracy, detecting overfitting and underfitting, and employing robust techniques like cross-validation, model validation helps statisticians and analysts develop models that provide consistent, reliable predictions across varied datasets. A validated model is, ultimately, a model that can be trusted not only within the context of a specific sample but also in real-world applications where it will encounter new, unseen data.</p>
+<p>Analysts usually evaluate predictive performance using more than one metric. Common regression metrics include mean absolute error (MAE), root mean squared error (RMSE), and <span class="math inline">\(R^2\)</span>. Looking at multiple metrics helps us avoid overinterpreting one number.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Different metrics answer different questions">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Different metrics answer different questions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Metric</th>
+<th>Interpretation</th>
+<th>Direction</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>RMSE</strong></td>
+<td>Typical prediction error in response units, with larger errors penalized more strongly.</td>
+<td>Smaller is better</td>
+</tr>
+<tr class="even">
+<td><strong>MAE</strong></td>
+<td>Typical absolute prediction error in response units.</td>
+<td>Smaller is better</td>
+</tr>
+<tr class="odd">
+<td><strong><span class="math inline">\(R^2\)</span></strong></td>
+<td>Proportion of variation explained in held-out data.</td>
+<td>Larger is better</td>
+</tr>
+</tbody>
+</table>
+<p>RMSE and MAE are measured in the units of the response variable, which often makes them easier to explain than <span class="math inline">\(R^2\)</span>.</p>
+</div>
+</div>
+</div>
+<p>Model validation does not prove that a model will work perfectly in the future. Instead, it gives us disciplined evidence about whether the model seems likely to generalize.</p>
 </section><section id="train-test-split" class="level2" data-number="22.2"><h2 data-number="22.2" class="anchored" data-anchor-id="train-test-split">
 <span class="header-section-number">22.2</span> Train-Test Split</h2>
-<p>One of the most fundamental techniques for model validation is the train-test split, which involves dividing the data into two distinct subsets: a <strong>training set</strong> and a <strong>testing set</strong>. This approach allows us to train the model on one portion of the data and test its performance on a separate, unused portion. By doing this, we simulate how the model might perform on new, unseen data, providing an indication of its generalizability.</p>
+<p>One of the most fundamental techniques for model validation is the train-test split. The data are divided into two distinct subsets:</p>
+<ul>
+<li>the <strong>training set</strong>, which is used to estimate the model, and</li>
+<li>the <strong>testing set</strong>, which is held back and used only to evaluate the fitted model.</li>
+</ul>
+<p>This approach simulates what happens when the fitted model is applied to new, unseen data.</p>
 <section id="why-use-a-train-test-split" class="level3" data-number="22.2.1"><h3 data-number="22.2.1" class="anchored" data-anchor-id="why-use-a-train-test-split">
 <span class="header-section-number">22.2.1</span> Why Use a Train-Test Split?</h3>
-<p>The train-test split method is particularly useful for identifying overfitting. When a model is trained on the entire dataset, it often fits the nuances of the data closely, which may include noise or sample-specific patterns. Testing the model on a separate dataset that it hasn’t seen allows us to measure how well it captures the true underlying relationships rather than just memorizing the data. Typically, a dataset is split into an 80-20 or 70-30 ratio, with the larger portion used for training and the smaller portion reserved for testing. This ratio strikes a balance between providing the model with sufficient data for training while reserving enough data for meaningful validation.</p>
-<p>A common pitfall in model building is adjusting the model parameters until it fits the testing set well; however, this practice can lead to <em>data leakage</em>, where information from the testing set inadvertently influences the training process. To prevent this, it is crucial that the testing set remains untouched during model training.</p>
-<div id="exm-22_1" class="theorem example">
-<p><span class="theorem-title"><strong>Example 22.1 (<code>mtcars</code> data set)</strong></span> Let’s illustrate the train-test split using the <code>mtcars</code> dataset in R. Recall in <a href="16_Linearity.html#exm-16_2" class="quarto-xref">Example&nbsp;<span>16.2</span></a>, we transformed some variables to satisfy the linearity assumption. We also determined the variables <code>log_hp</code>, <code>log_disp</code>, and <code>log_wt</code> were needed in the model and <code>drat</code> and <code>qsec</code> were determined to be not important.</p>
+<p>The train-test split is useful because it separates model fitting from model evaluation. If a model is trained on the entire dataset, we can calculate fitted values and residuals, but we do not have a clean estimate of how well the model will predict future observations.</p>
+<p>Testing the model on data it has not seen helps us measure whether the model captures a general relationship rather than simply memorizing the sample. Common splits include 80/20 and 70/30, where the larger portion is used for training and the smaller portion is reserved for testing.</p>
+<div class="callout callout-style-default callout-warning callout-titled" title="Do not tune on the test set">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Warning</span>Do not tune on the test set
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<p>The testing set should be used only at the end, after the model-building decisions have been made. If we repeatedly change the model because of test-set performance, the test set becomes part of the modeling process.</p>
+<p>When that happens, the test-set performance estimate becomes too optimistic. This problem is a form of <strong>data leakage</strong>.</p>
+</div>
+</div>
+</div>
+</section><section id="training-validation-and-testing-sets" class="level3" data-number="22.2.2"><h3 data-number="22.2.2" class="anchored" data-anchor-id="training-validation-and-testing-sets">
+<span class="header-section-number">22.2.2</span> Training, Validation, and Testing Sets</h3>
+<p>For simple analyses, we often use only a training set and a testing set. For model selection or tuning, however, it is helpful to separate three roles:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead><tr class="header">
+<th>Data role</th>
+<th>Main purpose</th>
+<th>When it is used</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Training set</strong></td>
+<td>Estimate model parameters.</td>
+<td>During model fitting.</td>
+</tr>
+<tr class="even">
+<td><strong>Validation set</strong></td>
+<td>Compare candidate models or tune model settings.</td>
+<td>During model selection.</td>
+</tr>
+<tr class="odd">
+<td><strong>Testing set</strong></td>
+<td>Estimate final predictive performance.</td>
+<td>Once, after the model has been chosen.</td>
+</tr>
+</tbody>
+</table>
+<p>The key idea is that the testing set should not guide model-building decisions. If several candidate models are being compared, those comparisons should happen with a validation set or cross-validation. The final testing set is reserved for the model that has already been selected.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Example: Model selection belongs in validation, not testing
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Suppose we are choosing between three models:</p>
+<ul>
+<li>a simple model with one predictor,</li>
+<li>a model with several predictors, and</li>
+<li>a model with several predictors plus interactions.</li>
+</ul>
+<p>The training data are used to fit each model. The validation data, or cross-validation results, are used to decide which model is most promising. Only after that choice is made do we evaluate the selected model on the testing set.</p>
+<p>The testing set is like a sealed envelope. We open it at the end to get an honest estimate of performance.</p>
+</div>
+</div>
+<div id="exm-22_1" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 22.1</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Train-test split for the `mtcars` data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s illustrate a train-test split using the <code>mtcars</code> dataset in R. Recall from <a href="16_Linearity.html#exm-16_2" class="quarto-xref">Example&nbsp;<span>16.2</span></a> that transformations of <code>disp</code>, <code>hp</code>, and <code>wt</code> helped address the linearity assumption.</p>
+<p>First, we split the data, build a recipe, fit a linear regression workflow on the training set, and inspect the fitted model.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Set seed for reproducibility</span></span>
+<span><span class="fu"><a href="https://tidymodels.tidymodels.org/reference/tidymodels_prefer.html">tidymodels_prefer</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Perform an 80-20 split of the data</span></span>
-<span><span class="va">data_split</span> <span class="op">=</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">mtcars</span>, prop <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
-<span><span class="va">train_data</span> <span class="op">=</span> <span class="fu">training</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span></span>
-<span><span class="va">test_data</span> <span class="op">=</span> <span class="fu">testing</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span></span>
+<span><span class="va">mtcars_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">mtcars</span>, prop <span class="op">=</span> <span class="fl">0.8</span><span class="op">)</span></span>
+<span><span class="va">mtcars_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">mtcars_split</span><span class="op">)</span></span>
+<span><span class="va">mtcars_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">mtcars_split</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">dat_recipe</span> <span class="op">=</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span><span class="va">mtcars_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">mpg</span> <span class="op">~</span> <span class="va">disp</span> <span class="op">+</span> <span class="va">hp</span> <span class="op">+</span> <span class="va">wt</span>, data <span class="op">=</span> <span class="va">mtcars_train</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_mutate</span><span class="op">(</span></span>
 <span>    log_disp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">disp</span><span class="op">)</span>,</span>
 <span>    log_hp <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">hp</span><span class="op">)</span>,</span>
 <span>    log_wt <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">wt</span><span class="op">)</span></span>
-<span>  <span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_rm</span><span class="op">(</span><span class="va">disp</span>, <span class="va">hp</span>, <span class="va">wt</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">model</span> <span class="op">=</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span><span class="va">mtcars_model</span> <span class="op">&lt;-</span> <span class="fu">linear_reg</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">set_engine</span><span class="op">(</span><span class="st">"lm"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">wf</span> <span class="op">=</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">dat_recipe</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
-<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">model</span><span class="op">)</span></span>
+<span><span class="va">mtcars_workflow</span> <span class="op">&lt;-</span> <span class="fu">workflow</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_recipe</span><span class="op">(</span><span class="va">mtcars_recipe</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">add_model</span><span class="op">(</span><span class="va">mtcars_model</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fitted_model</span> <span class="op">=</span> <span class="va">wf</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">train_data</span><span class="op">)</span></span>
+<span><span class="va">mtcars_fit</span> <span class="op">&lt;-</span> <span class="va">mtcars_workflow</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">mtcars_train</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">fitted_model</span> <span class="op">|&gt;</span> <span class="fu">glance</span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 1 × 12
-  r.squared adj.r.squared sigma statistic  p.value    df logLik   AIC   BIC
-      &lt;dbl&gt;         &lt;dbl&gt; &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1     0.897         0.883  2.22      61.2 1.49e-10     3  -53.3  117.  123.
-# ℹ 3 more variables: deviance &lt;dbl&gt;, df.residual &lt;int&gt;, nobs &lt;int&gt;</code></pre>
+<span><span class="va">mtcars_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">glance</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 9%">
+<col style="width: 13%">
+<col style="width: 6%">
+<col style="width: 9%">
+<col style="width: 7%">
+<col style="width: 2%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 8%">
+<col style="width: 11%">
+<col style="width: 4%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+<th style="text-align: right;">df</th>
+<th style="text-align: right;">logLik</th>
+<th style="text-align: right;">AIC</th>
+<th style="text-align: right;">BIC</th>
+<th style="text-align: right;">deviance</th>
+<th style="text-align: right;">df.residual</th>
+<th style="text-align: right;">nobs</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.8974</td>
+<td style="text-align: right;">0.8827</td>
+<td style="text-align: right;">2.2249</td>
+<td style="text-align: right;">61.225</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">-53.2873</td>
+<td style="text-align: right;">116.5746</td>
+<td style="text-align: right;">122.6689</td>
+<td style="text-align: right;">103.9574</td>
+<td style="text-align: right;">21</td>
+<td style="text-align: right;">25</td>
+</tr></tbody>
+</table>
 </div>
 </div>
-<p>Once the model is trained on the training data, we can assess its performance on the testing set. We make predictions on <code>test_data</code> and calculate validation metrics like RMSE and <span class="math inline">\(R^2\)</span> to evaluate how well the model generalizes.</p>
+<p>Once the model is trained, we use it to make predictions on the testing set. We then calculate validation metrics such as RMSE and <span class="math inline">\(R^2\)</span>.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Make predictions on the testing set</span></span>
-<span><span class="va">test_predictions</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">fitted_model</span>, new_data <span class="op">=</span> <span class="va">test_data</span><span class="op">)</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">test_data</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars_test_predictions</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">mtcars_fit</span>, new_data <span class="op">=</span> <span class="va">mtcars_test</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">mtcars_test</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Calculate evaluation metrics</span></span>
-<span><span class="va">metrics</span> <span class="op">=</span> <span class="va">test_predictions</span> <span class="op">|&gt;</span></span>
-<span>  <span class="fu">metrics</span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
+<span><span class="va">mtcars_test_metrics</span> <span class="op">&lt;-</span> <span class="va">mtcars_test_predictions</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">yardstick</span><span class="fu">::</span><span class="fu"><a href="https://yardstick.tidymodels.org/reference/metrics.html">metrics</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="va">mpg</span>, estimate <span class="op">=</span> <span class="va">.pred</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Display metrics</span></span>
-<span><span class="va">metrics</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 3 × 3
-  .metric .estimator .estimate
-  &lt;chr&gt;   &lt;chr&gt;          &lt;dbl&gt;
-1 rmse    standard       1.89 
-2 rsq     standard       0.858
-3 mae     standard       1.72 </code></pre>
+<span><span class="va">mtcars_test_metrics</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">1.8926</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8579</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">mae</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">1.7171</td>
+</tr>
+</tbody>
+</table>
 </div>
 </div>
-<p>Here, we use <code>metrics()</code> from <code>yardstick</code> (another <code>tidymodels</code> package) to compute metrics such as <strong>Root Mean Squared Error (RMSE)</strong> and <strong><span class="math inline">\(R^2\)</span></strong>. RMSE indicates the average prediction error in units of the response variable, while <span class="math inline">\(R^2\)</span> represents the proportion of variance explained by the model.</p>
+<p>These metrics describe performance on observations that were not used to estimate the model coefficients.</p>
 </div>
-</section><section id="interpreting-the-results" class="level3" data-number="22.2.2"><h3 data-number="22.2.2" class="anchored" data-anchor-id="interpreting-the-results">
-<span class="header-section-number">22.2.2</span> Interpreting the Results</h3>
-<p>A lower RMSE and higher <span class="math inline">\(R^2\)</span> indicate a better fit. However, we must carefully interpret these results: even a high <span class="math inline">\(R^2\)</span> does not guarantee that the model will perform well on entirely new data. The true test of the model’s performance lies in whether it achieves similar results across multiple test sets or cross-validation folds, which can help confirm its generalizability.</p>
-</section><section id="train-test-split-with-stratification-on-a-categorical-variable" class="level3" data-number="22.2.3"><h3 data-number="22.2.3" class="anchored" data-anchor-id="train-test-split-with-stratification-on-a-categorical-variable">
-<span class="header-section-number">22.2.3</span> Train-Test Split with Stratification on a Categorical Variable</h3>
-<p>When working with categorical variables (or very discrete quantitative variables), it’s often beneficial to perform a <em>stratified split</em> to ensure that the proportions of each category in the training and testing sets are similar to those in the original dataset. In regression models, especially when a categorical variable has substantial influence on the response variable, stratified sampling helps maintain representative proportions and prevents potential bias.</p>
-<div id="exm-22_2" class="theorem example">
-<p><span class="theorem-title"><strong>Example 22.2</strong></span> Let’s extend the previous example with the <code>mtcars</code> dataset by including the <code>cyl</code> variable, which categorizes cars based on the number of cylinders. We’ll stratify the train-test split on this variable to maintain consistent proportions of cars with 4, 6, and 8 cylinders in both the training and testing sets.</p>
-<p>Using <code>initial_split()</code>, we specify <code>strata = cyl</code> to stratify the split according to the cylinder variable.</p>
+</div>
+</section><section id="interpreting-the-results" class="level3" data-number="22.2.3"><h3 data-number="22.2.3" class="anchored" data-anchor-id="interpreting-the-results">
+<span class="header-section-number">22.2.3</span> Interpreting the Results</h3>
+<p>A lower RMSE and higher <span class="math inline">\(R^2\)</span> generally indicate better predictive performance. However, we should interpret these results carefully. One split of a small dataset can be noisy. A model might look better or worse simply because of which observations happened to fall into the training or testing set.</p>
+<p>The true test of the model’s usefulness is whether it performs reasonably well across different validation splits, cross-validation folds, or genuinely new data.</p>
+</section><section id="train-test-split-with-stratification-on-a-categorical-variable" class="level3" data-number="22.2.4"><h3 data-number="22.2.4" class="anchored" data-anchor-id="train-test-split-with-stratification-on-a-categorical-variable">
+<span class="header-section-number">22.2.4</span> Train-Test Split with Stratification on a Categorical Variable</h3>
+<p>When working with categorical variables, it is often useful to perform a <strong>stratified split</strong>. Stratification helps preserve the proportions of important groups in both the training and testing sets.</p>
+<p>In regression, stratification can be helpful when a categorical variable is strongly related to the response or when some groups are small. Without stratification, the training or testing set might accidentally contain too many observations from one group and too few from another.</p>
+<div id="exm-22_2" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 22.2</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Stratified train-test split by cylinder
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Let’s extend the previous example by using the <code>cyl</code> variable, which records the number of cylinders in each car. We convert <code>cyl</code> to a factor and then stratify the split so that the training and testing sets have more similar cylinder distributions.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars_stratified</span> <span class="op">&lt;-</span> <span class="va">mtcars</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>cyl <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Set seed for reproducibility</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Perform an 80-20 split with stratification on 'cyl'</span></span>
-<span><span class="va">data_split</span> <span class="op">=</span> <span class="fu">initial_split</span><span class="op">(</span><span class="va">mtcars</span>, prop <span class="op">=</span> <span class="fl">0.8</span>, strata <span class="op">=</span> <span class="va">cyl</span><span class="op">)</span></span>
-<span><span class="va">train_data</span> <span class="op">=</span> <span class="fu">training</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span></span>
-<span><span class="va">test_data</span> <span class="op">=</span> <span class="fu">testing</span><span class="op">(</span><span class="va">data_split</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="va">mtcars_stratified_split</span> <span class="op">&lt;-</span> <span class="fu">initial_split</span><span class="op">(</span></span>
+<span>  <span class="va">mtcars_stratified</span>,</span>
+<span>  prop <span class="op">=</span> <span class="fl">0.8</span>,</span>
+<span>  strata <span class="op">=</span> <span class="va">cyl</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_stratified_train</span> <span class="op">&lt;-</span> <span class="fu">training</span><span class="op">(</span><span class="va">mtcars_stratified_split</span><span class="op">)</span></span>
+<span><span class="va">mtcars_stratified_test</span> <span class="op">&lt;-</span> <span class="fu">testing</span><span class="op">(</span><span class="va">mtcars_stratified_split</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">mtcars_stratified_train</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>split <span class="op">=</span> <span class="st">"Training"</span><span class="op">)</span>,</span>
+<span>  <span class="va">mtcars_stratified_test</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">cyl</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>split <span class="op">=</span> <span class="st">"Testing"</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">split</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>proportion <span class="op">=</span> <span class="va">n</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">ungroup</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">cyl</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: left;">split</th>
+<th style="text-align: right;">proportion</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: left;">Training</td>
+<td style="text-align: right;">0.333</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: left;">Training</td>
+<td style="text-align: right;">0.208</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">8</td>
+<td style="text-align: right;">11</td>
+<td style="text-align: left;">Training</td>
+<td style="text-align: right;">0.458</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">4</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Testing</td>
+<td style="text-align: right;">0.375</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Testing</td>
+<td style="text-align: right;">0.250</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">8</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Testing</td>
+<td style="text-align: right;">0.375</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The exact counts may not match perfectly in small samples, but stratification helps preserve the distribution of important groups across the split.</p>
 </div>
 </div>
 </section></section><section id="cross-validation" class="level2" data-number="22.3"><h2 data-number="22.3" class="anchored" data-anchor-id="cross-validation">
 <span class="header-section-number">22.3</span> Cross-Validation</h2>
-<p>Cross-validation is a robust method to test a model’s stability. We first discussed cross-validation in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a> but will briefly discuss it again.</p>
-<p>Instead of a single train-test split, cross-validation divides the data into multiple subsets (folds). For each fold:</p>
+<p>Cross-validation is a more robust method for estimating model performance. Instead of relying on one train-test split, cross-validation divides the data into several subsets called <strong>folds</strong>.</p>
+<p>For each fold:</p>
 <ol type="1">
-<li>A model is trained on all other folds.</li>
-<li>The model is tested on the held-out fold.</li>
+<li>A model is trained on all the other folds.</li>
+<li>The model is evaluated on the held-out fold.</li>
+<li>The process repeats until every fold has served as the held-out fold once.</li>
 </ol>
 <p>The most common form is <strong>k-fold cross-validation</strong>, often with <span class="math inline">\(k = 5\)</span> or <span class="math inline">\(k = 10\)</span>.</p>
-<section id="steps-for-k-fold-cross-validation" class="level4"><h4 class="anchored" data-anchor-id="steps-for-k-fold-cross-validation">Steps for k-Fold Cross-Validation</h4>
+<section id="steps-for-k-fold-cross-validation" class="level3" data-number="22.3.1"><h3 data-number="22.3.1" class="anchored" data-anchor-id="steps-for-k-fold-cross-validation">
+<span class="header-section-number">22.3.1</span> Steps for k-Fold Cross-Validation</h3>
 <ol type="1">
-<li>Split the data into <span class="math inline">\(k\)</span> subsets or folds.</li>
-<li>Train the model on <span class="math inline">\(k-1\)</span> folds and validate on the remaining fold.</li>
-<li>Repeat the process <span class="math inline">\(k\)</span> times, each time with a different fold as the validation set.</li>
-<li>Calculate the average error across all folds to assess model performance.</li>
-</ol></section><section id="example-tidymodels-setup" class="level4"><h4 class="anchored" data-anchor-id="example-tidymodels-setup">Example Tidymodels Setup</h4>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">set</span>.seed(<span class="dv">123</span>)</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>folds <span class="op">=</span> vfold_cv(my_data, v <span class="op">=</span> <span class="dv">10</span>)</span>
-<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> fit_resamples(</span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  workflow,</span>
-<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  resamples <span class="op">=</span> folds,</span>
-<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  metrics <span class="op">=</span> metric_set(rmse, rsq)</span>
-<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>collect_metrics(results)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</section><section id="leave-one-out-cross-validation-loocv" class="level3" data-number="22.3.1"><h3 data-number="22.3.1" class="anchored" data-anchor-id="leave-one-out-cross-validation-loocv">
-<span class="header-section-number">22.3.1</span> Leave-One-Out Cross-Validation (LOOCV)</h3>
-<p>LOOCV is an extreme case of cross-validation where <span class="math inline">\(k\)</span> is the number of observations. Each observation is left out once, and the model is trained on the remaining observations. LOOCV is computationally intensive but useful for small datasets.</p>
+<li>Split the data into <span class="math inline">\(k\)</span> subsets, or folds.</li>
+<li>Train the model on <span class="math inline">\(k - 1\)</span> folds.</li>
+<li>Validate the model on the remaining fold.</li>
+<li>Repeat the process <span class="math inline">\(k\)</span> times, each time using a different validation fold.</li>
+<li>Average the validation errors across folds to estimate model performance.</li>
+</ol>
+<div id="exm-22_3" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 22.3</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Five-fold cross-validation for the `mtcars` model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the workflow from <a href="#exm-22_1" class="quarto-xref">Example&nbsp;<span>22.1</span></a>, we can estimate performance with five-fold cross-validation. Each fold holds out a different part of the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_cv_results</span> <span class="op">&lt;-</span> <span class="fu">fit_resamples</span><span class="op">(</span></span>
+<span>  <span class="va">mtcars_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">mtcars_folds</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_cv_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.1073</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.1668</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8359</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.0531</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The summarized table gives the average performance across validation folds. We can also inspect the fold-specific results to see how much performance changes from split to split.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars_cv_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span>summarize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">id</th>
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">.estimate</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Fold1</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">1.9538</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold1</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.9221</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold2</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">1.9506</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold2</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8819</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold3</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.2863</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold3</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.6288</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold4</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.6564</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold4</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8982</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Fold5</td>
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">1.6896</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Fold5</td>
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8487</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>If the fold-specific metrics vary a lot, that is a warning that the estimated predictive performance may be sensitive to the particular data split.</p>
+</div>
+</div>
+</section><section id="repeated-cross-validation" class="level3" data-number="22.3.2"><h3 data-number="22.3.2" class="anchored" data-anchor-id="repeated-cross-validation">
+<span class="header-section-number">22.3.2</span> Repeated Cross-Validation</h3>
+<p>One limitation of ordinary k-fold cross-validation is that the results still depend on one random division of the data into folds. <strong>Repeated cross-validation</strong> repeats the k-fold process several times, using a different random fold assignment each time.</p>
+<p>Repeated cross-validation is especially helpful when the dataset is small or when validation metrics vary noticeably from fold to fold.</p>
+<div id="exm-22_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 22.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Repeated cross-validation for the `mtcars` model
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Using the same workflow, we can repeat five-fold cross-validation five times. This produces 25 validation assessments: five folds in each of five repeats.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">34</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_repeated_folds</span> <span class="op">&lt;-</span> <span class="fu">vfold_cv</span><span class="op">(</span><span class="va">mtcars</span>, v <span class="op">=</span> <span class="fl">5</span>, repeats <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_repeated_cv_results</span> <span class="op">&lt;-</span> <span class="fu">fit_resamples</span><span class="op">(</span></span>
+<span>  <span class="va">mtcars_workflow</span>,</span>
+<span>  resamples <span class="op">=</span> <span class="va">mtcars_repeated_folds</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="fu">metric_set</span><span class="op">(</span><span class="va">rmse</span>, <span class="va">rsq</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">mtcars_repeated_cv_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: left;">.estimator</th>
+<th style="text-align: right;">mean</th>
+<th style="text-align: right;">n</th>
+<th style="text-align: right;">std_err</th>
+<th style="text-align: left;">.config</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">2.1494</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.1268</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: left;">standard</td>
+<td style="text-align: right;">0.8685</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.0198</td>
+<td style="text-align: left;">pre0_mod0_post0</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>We can also summarize the spread of fold-level performance estimates.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">mtcars_repeated_cv_results</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">collect_metrics</span><span class="op">(</span>summarize <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">.metric</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span></span>
+<span>    n_resamples <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    minimum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">.estimate</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    median <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">.estimate</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    maximum <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">.estimate</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>    .groups <span class="op">=</span> <span class="st">"drop"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">.metric</th>
+<th style="text-align: right;">n_resamples</th>
+<th style="text-align: right;">minimum</th>
+<th style="text-align: right;">median</th>
+<th style="text-align: right;">maximum</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">rmse</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">1.2121</td>
+<td style="text-align: right;">1.9788</td>
+<td style="text-align: right;">3.7565</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">rsq</td>
+<td style="text-align: right;">25</td>
+<td style="text-align: right;">0.6288</td>
+<td style="text-align: right;">0.8983</td>
+<td style="text-align: right;">0.9684</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Repeated cross-validation does not create new information, but it can make the performance estimate less dependent on one particular random split.</p>
+</div>
+</div>
+</section><section id="leave-one-out-cross-validation-loocv" class="level3" data-number="22.3.3"><h3 data-number="22.3.3" class="anchored" data-anchor-id="leave-one-out-cross-validation-loocv">
+<span class="header-section-number">22.3.3</span> Leave-One-Out Cross-Validation (LOOCV)</h3>
+<p>Leave-one-out cross-validation is an extreme case of cross-validation where <span class="math inline">\(k\)</span> is the number of observations. Each observation is left out once, and the model is trained on all remaining observations.</p>
+<p>LOOCV can be useful for very small datasets because it uses almost all observations for training on each iteration. However, it can be computationally intensive because the model must be refit once for every observation.</p>
 </section></section><section id="assessing-overfitting-and-underfitting" class="level2" data-number="22.4"><h2 data-number="22.4" class="anchored" data-anchor-id="assessing-overfitting-and-underfitting">
 <span class="header-section-number">22.4</span> Assessing Overfitting and Underfitting</h2>
-<p>One of the central aims of model validation is to determine whether a model is appropriately capturing the patterns in the data without being too complex (overfitting) or too simplistic (underfitting). Striking this balance is essential for creating a model that generalizes well to unseen data.</p>
-<section id="understanding-overfitting" class="level4"><h4 class="anchored" data-anchor-id="understanding-overfitting">Understanding Overfitting</h4>
-<p><strong>Overfitting</strong> occurs when a model is overly complex relative to the actual data structure. An overfit model closely aligns with the training data, capturing not only the underlying patterns but also the noise or random fluctuations. While this might lead to impressive performance on the training dataset, the model’s predictions on new data tend to be poor, as it has essentially memorized the specific details of the training data rather than learning the general trends.</p>
-<p>Overfitting often manifests when the model has:</p>
+<p>One of the central aims of model validation is to determine whether a model captures the main patterns in the data without being too complex or too simple.</p>
+<div class="callout callout-style-default callout-note callout-titled" title="Training performance versus validation performance">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-9-contents" aria-controls="callout-9" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Training performance versus validation performance
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-9" class="callout-9-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Pattern</th>
+<th>Likely issue</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>Good training performance and poor validation performance</td>
+<td>Overfitting</td>
+</tr>
+<tr class="even">
+<td>Poor training performance and poor validation performance</td>
+<td>Underfitting</td>
+</tr>
+<tr class="odd">
+<td>Similar and acceptable training/validation performance</td>
+<td>More likely to generalize</td>
+</tr>
+</tbody>
+</table>
+<p>Validation metrics are most informative when compared to training metrics. The gap between the two often tells us more than either number alone.</p>
+</div>
+</div>
+</div>
+<section id="understanding-overfitting" class="level3" data-number="22.4.1"><h3 data-number="22.4.1" class="anchored" data-anchor-id="understanding-overfitting">
+<span class="header-section-number">22.4.1</span> Understanding Overfitting</h3>
+<p><strong>Overfitting</strong> occurs when a model is overly complex relative to the actual data structure. An overfit model fits the training data closely, capturing not only the underlying signal but also noise or random fluctuations.</p>
+<p>Overfitting often occurs when the model has:</p>
 <ul>
-<li>Too many features or overly complex terms (e.g., higher-order polynomial terms).</li>
-<li>High sensitivity to specific data points, meaning slight changes in input can lead to large changes in predictions.</li>
+<li>too many predictors,</li>
+<li>overly complex terms, such as high-degree polynomial terms,</li>
+<li>high sensitivity to individual observations, or</li>
+<li>excessive tuning based on validation or testing performance.</li>
 </ul>
-<p>A common indicator of overfitting is a significant disparity between the training and testing (or validation) performance: the model performs very well on the training set but poorly on the testing set.</p>
-</section><section id="detecting-overfitting" class="level4"><h4 class="anchored" data-anchor-id="detecting-overfitting">Detecting Overfitting</h4>
-<p>In practice, we can use validation metrics to detect overfitting:</p>
+<p>A common sign of overfitting is a large gap between training and validation performance. The model performs very well on the training set but poorly on new data.</p>
+</section><section id="detecting-overfitting" class="level3" data-number="22.4.2"><h3 data-number="22.4.2" class="anchored" data-anchor-id="detecting-overfitting">
+<span class="header-section-number">22.4.2</span> Detecting Overfitting</h3>
+<p>In practice, validation metrics help detect overfitting:</p>
 <ul>
-<li>
-<strong>High <span class="math inline">\(R^2\)</span> on the training set and low <span class="math inline">\(R^2\)</span> on the testing set</strong> suggests that the model fits the training data well but fails to generalize.</li>
-<li>
-<strong>High training accuracy and low testing accuracy</strong> are typical signs of an overfit model.</li>
-</ul>
-<p>Using cross-validation can also help identify overfitting. If the model consistently performs well across folds (i.e., similar scores on each fold), it is likely generalizing better than a model that performs well on some folds but poorly on others.</p>
-</section><section id="addressing-overfitting" class="level4"><h4 class="anchored" data-anchor-id="addressing-overfitting">Addressing Overfitting</h4>
+<li>High training <span class="math inline">\(R^2\)</span> and much lower validation <span class="math inline">\(R^2\)</span> suggest the model fits the training data well but does not generalize.</li>
+<li>Low training RMSE and much higher validation RMSE suggest that the model’s predictions degrade on held-out data.</li>
+<li>Cross-validation results that vary widely across folds suggest that the model’s performance may depend heavily on which observations were used for training.</li>
+</ul></section><section id="addressing-overfitting" class="level3" data-number="22.4.3"><h3 data-number="22.4.3" class="anchored" data-anchor-id="addressing-overfitting">
+<span class="header-section-number">22.4.3</span> Addressing Overfitting</h3>
 <p>Several techniques can help reduce overfitting:</p>
 <ol type="1">
 <li>
-<strong>Feature Selection</strong>: Reducing the number of features (predictors) to those most relevant can simplify the model.</li>
+<strong>Feature selection:</strong> Reduce the number of predictors to those most relevant to the response.</li>
 <li>
-<strong>Regularization</strong>: Techniques such as ridge regression and lasso regression (discussed in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>) add penalty terms to the model, discouraging overly complex fits.</li>
+<strong>Regularization:</strong> Use methods such as ridge regression and lasso regression, discussed in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>, to penalize overly complex fits.</li>
 <li>
-<strong>Cross-Validation</strong>: Performing k-fold cross-validation helps ensure that the model’s high performance is not simply due to luck with a particular train-test split.</li>
-</ol></section><section id="understanding-underfitting" class="level4"><h4 class="anchored" data-anchor-id="understanding-underfitting">Understanding Underfitting</h4>
-<p><strong>Underfitting</strong> occurs when a model is too simplistic to capture the underlying trends in the data. An underfit model may fail to learn important relationships between the predictor and response variables, resulting in poor performance on both training and testing sets.</p>
-<p>Underfitting often happens when:</p>
+<strong>Cross-validation:</strong> Use resampling to check whether performance is stable across different data partitions.</li>
+<li>
+<strong>Simpler model structure:</strong> Remove unnecessary interactions, nonlinear terms, or transformations that are not supported by the data.</li>
+</ol></section><section id="understanding-underfitting" class="level3" data-number="22.4.4"><h3 data-number="22.4.4" class="anchored" data-anchor-id="understanding-underfitting">
+<span class="header-section-number">22.4.4</span> Understanding Underfitting</h3>
+<p><strong>Underfitting</strong> occurs when a model is too simple to capture the main patterns in the data. An underfit model may miss important relationships between the predictors and response, resulting in poor performance on both training and testing data.</p>
+<p>Underfitting often occurs when:</p>
 <ul>
-<li>The model is overly constrained (e.g., a linear model trying to capture nonlinear relationships).</li>
-<li>Key predictors are missing, or critical transformations (e.g., logarithmic, polynomial) have not been applied.</li>
-</ul></section><section id="detecting-underfitting" class="level4"><h4 class="anchored" data-anchor-id="detecting-underfitting">Detecting Underfitting</h4>
+<li>the model is overly constrained,</li>
+<li>a linear model is used for a strongly nonlinear relationship,</li>
+<li>key predictors are missing, or</li>
+<li>important transformations or interactions have not been included.</li>
+</ul></section><section id="detecting-underfitting" class="level3" data-number="22.4.5"><h3 data-number="22.4.5" class="anchored" data-anchor-id="detecting-underfitting">
+<span class="header-section-number">22.4.5</span> Detecting Underfitting</h3>
 <p>The main indicators of underfitting are:</p>
 <ul>
-<li>
-<strong>Low <span class="math inline">\(R^2\)</span> on both the training and testing sets</strong>, suggesting that the model fails to capture the data’s structure.</li>
-<li>
-<strong>High bias</strong> in predictions, where the model consistently deviates from actual values.</li>
+<li>low <span class="math inline">\(R^2\)</span> on both the training and validation sets,</li>
+<li>high RMSE on both the training and validation sets, and</li>
+<li>residual plots that show systematic patterns.</li>
 </ul>
-<p>An underfit model often struggles with both training and testing data, unlike an overfit model, which performs well on training data but poorly on testing data.</p>
-</section><section id="addressing-underfitting" class="level4"><h4 class="anchored" data-anchor-id="addressing-underfitting">Addressing Underfitting</h4>
-<p>To improve an underfit model, you can consider:</p>
+<p>Unlike an overfit model, an underfit model struggles with both the data used to fit it and the data used to validate it.</p>
+</section><section id="addressing-underfitting" class="level3" data-number="22.4.6"><h3 data-number="22.4.6" class="anchored" data-anchor-id="addressing-underfitting">
+<span class="header-section-number">22.4.6</span> Addressing Underfitting</h3>
+<p>To improve an underfit model, consider:</p>
 <ol type="1">
 <li>
-<strong>Adding Complexity</strong>: Introduce more predictors, polynomial terms, or interaction terms if the data’s structure suggests a more complex relationship.</li>
+<strong>Adding relevant predictors:</strong> Include variables that help explain the response.</li>
 <li>
-<strong>Feature Engineering</strong>: Transform variables or create new features that better capture the relationship between predictors and the outcome.</li>
+<strong>Feature engineering:</strong> Transform variables or create new variables that better capture the relationship.</li>
 <li>
-<strong>Switching to a More Flexible Model</strong>: Instead of a simple linear model, consider a model better suited to nonlinear relationships, such as decision trees, random forests, or neural networks.</li>
-</ol></section><section id="bias-variance-tradeoff" class="level4"><h4 class="anchored" data-anchor-id="bias-variance-tradeoff">Bias-Variance Tradeoff</h4>
+<strong>Adding model flexibility:</strong> Use polynomial terms, interaction terms, or another model type when justified.</li>
+<li>
+<strong>Revisiting diagnostics:</strong> Use residual plots to identify patterns the current model is missing.</li>
+</ol></section><section id="bias-variance-tradeoff" class="level3" data-number="22.4.7"><h3 data-number="22.4.7" class="anchored" data-anchor-id="bias-variance-tradeoff">
+<span class="header-section-number">22.4.7</span> Bias-Variance Tradeoff</h3>
 <p>The balance between overfitting and underfitting is often discussed in terms of the <strong>bias-variance tradeoff</strong>:</p>
 <ul>
 <li>
-<strong>Bias</strong> refers to errors due to simplifying assumptions in the model. High bias typically leads to underfitting.</li>
+<strong>Bias</strong> refers to error caused by overly simple assumptions. High bias is associated with underfitting.</li>
 <li>
-<strong>Variance</strong> refers to errors due to model complexity. High variance is associated with overfitting.</li>
+<strong>Variance</strong> refers to error caused by excessive sensitivity to the training data. High variance is associated with overfitting.</li>
 </ul>
-<p>The goal is to find a model with low enough bias to capture the data’s structure while maintaining low enough variance to generalize well to new data. Techniques like cross-validation, regularization, and feature selection can help achieve this balance.</p>
+<p>The goal is not to make the model as complicated as possible. The goal is to find a model flexible enough to capture the important structure in the data but stable enough to generalize to future observations.</p>
+<div id="exm-22_5" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 22.5</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Visualizing the bias-variance tradeoff
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The following simulation shows three polynomial models fit to the same noisy data. The dashed curve is the true mean relationship used to generate the data.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">3302</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bias_variance_train</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span><span class="fl">35</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">35</span>, sd <span class="op">=</span> <span class="fl">0.25</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bias_variance_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">200</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bias_variance_truth</span> <span class="op">&lt;-</span> <span class="va">bias_variance_grid</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Trig.html">sin</a></span><span class="op">(</span><span class="fl">2</span> <span class="op">*</span> <span class="va">pi</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bias_variance_model_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span></span>
+<span>  <span class="st">"Too simple: degree 1"</span>,</span>
+<span>  <span class="st">"Reasonable flexibility: degree 3"</span>,</span>
+<span>  <span class="st">"Too flexible: degree 12"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bias_variance_fits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  degree <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span>, <span class="fl">12</span><span class="op">)</span>,</span>
+<span>  model <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span></span>
+<span>    <span class="va">bias_variance_model_levels</span>,</span>
+<span>    levels <span class="op">=</span> <span class="va">bias_variance_model_levels</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    fit <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span></span>
+<span>      <span class="va">degree</span>,</span>
+<span>      \<span class="op">(</span><span class="va">degree_value</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html">lm</a></span><span class="op">(</span></span>
+<span>        <span class="va">y</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/poly.html">poly</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">degree_value</span>, raw <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>        data <span class="op">=</span> <span class="va">bias_variance_train</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>    predictions <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span></span>
+<span>      <span class="va">fit</span>,</span>
+<span>      \<span class="op">(</span><span class="va">model_fit</span><span class="op">)</span> <span class="va">bias_variance_grid</span> <span class="op">|&gt;</span></span>
+<span>        <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>predicted <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/predict.html">predict</a></span><span class="op">(</span><span class="va">model_fit</span>, newdata <span class="op">=</span> <span class="va">bias_variance_grid</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">model</span>, <span class="va">predictions</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span><span class="va">predictions</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">bias_variance_train</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span>,</span>
+<span>    alpha <span class="op">=</span> <span class="fl">0.7</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">bias_variance_truth</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">truth</span><span class="op">)</span>,</span>
+<span>    linetype <span class="op">=</span> <span class="st">"dashed"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"gray35"</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span></span>
+<span>    data <span class="op">=</span> <span class="va">bias_variance_fits</span>,</span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">predicted</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"#0072B2"</span>,</span>
+<span>    linewidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">model</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"x"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"y"</span>,</span>
+<span>    title <span class="op">=</span> <span class="st">"Underfitting, reasonable flexibility, and overfitting"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Dashed line = true mean relationship; blue line = fitted model"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="22_Validation_files/figure-html/unnamed-chunk-8-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The degree 1 model has high bias because it is too simple to capture the curve. The degree 12 model has high variance because it bends sharply to chase noise in this particular sample. The middle model is not perfect, but it better balances flexibility and stability.</p>
+</div>
+</div>
+</section></section><section id="validation-reporting-checklist" class="level2" data-number="22.5"><h2 data-number="22.5" class="anchored" data-anchor-id="validation-reporting-checklist">
+<span class="header-section-number">22.5</span> Validation Reporting Checklist</h2>
+<p>When reporting a validation analysis, include enough information for someone else to understand how the performance estimate was obtained.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="What to report">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>What to report
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ul>
+<li>
+<strong>Data splitting method:</strong> train-test split, validation set, k-fold cross-validation, repeated cross-validation, or LOOCV.</li>
+<li>
+<strong>Random seed:</strong> the seed used before creating random splits or folds.</li>
+<li>
+<strong>Training and testing sizes:</strong> the number or percentage of observations in each split.</li>
+<li>
+<strong>Stratification variable, if used:</strong> the variable used to preserve group proportions.</li>
+<li>
+<strong>Preprocessing steps:</strong> transformations, dummy variables, scaling, filtering, or feature engineering.</li>
+<li>
+<strong>Model selection process:</strong> how candidate models were compared and selected.</li>
+<li>
+<strong>Final model:</strong> the predictors, transformations, and modeling method used.</li>
+<li>
+<strong>Performance metrics:</strong> RMSE, MAE, <span class="math inline">\(R^2\)</span>, or other relevant metrics.</li>
+<li>
+<strong>Leakage protection:</strong> confirmation that the testing set was not used to choose or tune the model.</li>
+</ul>
+</div>
+</div>
+</div>
+</section><section id="recap" class="level2" data-number="22.6"><h2 data-number="22.6" class="anchored" data-anchor-id="recap">
+<span class="header-section-number">22.6</span> Recap</h2>
+<p>In this chapter, we introduced validation as a way to estimate how well a model may perform on new data.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Idea</th>
+<th>Meaning</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><strong>Model validation</strong></td>
+<td>The process of evaluating how well a fitted model is likely to perform on unseen data.</td>
+</tr>
+<tr class="even">
+<td><strong>Generalization</strong></td>
+<td>The ability of a model to perform well beyond the data used to fit it.</td>
+</tr>
+<tr class="odd">
+<td><strong>Training set</strong></td>
+<td>The portion of the data used to estimate model parameters.</td>
+</tr>
+<tr class="even">
+<td><strong>Validation set</strong></td>
+<td>A held-out set, or resampling process, used to compare candidate models or tune settings.</td>
+</tr>
+<tr class="odd">
+<td><strong>Testing set</strong></td>
+<td>The portion of the data held back to estimate predictive performance.</td>
+</tr>
+<tr class="even">
+<td><strong>Data leakage</strong></td>
+<td>A problem that occurs when information from the testing or validation data influences model fitting.</td>
+</tr>
+<tr class="odd">
+<td><strong>Train-test split</strong></td>
+<td>A simple validation method that separates the data into training and testing subsets.</td>
+</tr>
+<tr class="even">
+<td><strong>Stratification</strong></td>
+<td>A splitting strategy that preserves the distribution of important groups across data splits.</td>
+</tr>
+<tr class="odd">
+<td><strong>Cross-validation</strong></td>
+<td>A resampling method that repeatedly trains and validates a model on different data partitions.</td>
+</tr>
+<tr class="even">
+<td><strong>k-fold cross-validation</strong></td>
+<td>Cross-validation in which the data are divided into <span class="math inline">\(k\)</span> folds and each fold is held out once.</td>
+</tr>
+<tr class="odd">
+<td><strong>Repeated cross-validation</strong></td>
+<td>k-fold cross-validation repeated several times with different random fold assignments.</td>
+</tr>
+<tr class="even">
+<td><strong>LOOCV</strong></td>
+<td>Leave-one-out cross-validation, where each observation serves as its own validation set once.</td>
+</tr>
+<tr class="odd">
+<td><strong>RMSE</strong></td>
+<td>A prediction-error metric in the response units that penalizes larger errors more strongly.</td>
+</tr>
+<tr class="even">
+<td><strong>MAE</strong></td>
+<td>A prediction-error metric that averages absolute prediction errors.</td>
+</tr>
+<tr class="odd">
+<td><strong>Validation <span class="math inline">\(R^2\)</span></strong></td>
+<td>The proportion of held-out response variation explained by the model.</td>
+</tr>
+<tr class="even">
+<td><strong>Overfitting</strong></td>
+<td>A model is too complex and performs much better on training data than validation data.</td>
+</tr>
+<tr class="odd">
+<td><strong>Underfitting</strong></td>
+<td>A model is too simple and performs poorly on both training and validation data.</td>
+</tr>
+<tr class="even">
+<td><strong>Bias-variance tradeoff</strong></td>
+<td>The balance between error from overly simple assumptions and error from excessive sensitivity to the sample.</td>
+</tr>
+<tr class="odd">
+<td><strong>Validation report</strong></td>
+<td>A transparent summary of the splitting method, seed, preprocessing, model-selection process, and performance metrics.</td>
+</tr>
+</tbody>
+</table></section><section id="check-your-understanding" class="level2" data-number="22.7"><h2 data-number="22.7" class="anchored" data-anchor-id="check-your-understanding">
+<span class="header-section-number">22.7</span> Check your understanding</h2>
+<div class="callout callout-style-default callout-note callout-titled" title="Problems">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>Problems
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p>Why can a model that fits the training data well still perform poorly on new data?</p></li>
+<li><p>What is the purpose of holding out a testing set?</p></li>
+<li><p>Why should the testing set remain untouched during model building?</p></li>
+<li><p>What is data leakage, conceptually?</p></li>
+<li><p>Why might stratification be useful when splitting data?</p></li>
+<li><p>How does k-fold cross-validation differ from a single train-test split?</p></li>
+<li><p>Why can cross-validation give a more stable estimate of predictive performance than one split?</p></li>
+<li><p>What does repeated cross-validation try to reduce?</p></li>
+<li><p>Why might LOOCV be computationally expensive?</p></li>
+<li><p>What does RMSE measure, and why is smaller better?</p></li>
+<li><p>Why might MAE be easier to explain to a nontechnical audience than <span class="math inline">\(R^2\)</span>?</p></li>
+<li><p>How does overfitting differ from underfitting?</p></li>
+<li><p>What training-versus-validation pattern suggests overfitting?</p></li>
+<li><p>What training-versus-validation pattern suggests underfitting?</p></li>
+<li><p>How does the bias-variance tradeoff connect to overfitting and underfitting?</p></li>
+<li><p>Why is a separate validation set useful when comparing candidate models?</p></li>
+<li><p>Why should a validation report include preprocessing steps and the random seed?</p></li>
+<li><p>Why should validation be treated as evidence rather than proof?</p></li>
+</ol>
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Tip</span>Solutions
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<ol type="1">
+<li><p><strong>It may have learned sample-specific noise.</strong> A model can match the training data closely without capturing a relationship that holds for future observations.</p></li>
+<li><p><strong>The testing set approximates future data.</strong> Because the model was not fit using those observations, test-set performance gives a cleaner estimate of generalization.</p></li>
+<li><p><strong>It protects the honesty of the performance estimate.</strong> If we use the testing set to choose predictors, transformations, or tuning settings, the testing set is no longer independent of the modeling process.</p></li>
+<li><p><strong>Data leakage means future or held-out information sneaks into model fitting.</strong> The result is usually an overly optimistic estimate of performance.</p></li>
+<li><p><strong>It preserves important group proportions.</strong> Stratification helps prevent the training or testing set from accidentally overrepresenting or underrepresenting key categories.</p></li>
+<li><p><strong>Cross-validation repeats the validation idea across several folds.</strong> A single train-test split uses one held-out set; k-fold cross-validation uses each fold as a held-out set once.</p></li>
+<li><p><strong>It averages over several splits.</strong> This reduces dependence on one lucky or unlucky split of the data.</p></li>
+<li><p><strong>It tries to reduce dependence on one random fold assignment.</strong> Repeating cross-validation averages over several ways of splitting the data into folds.</p></li>
+<li><p><strong>It refits the model many times.</strong> With <span class="math inline">\(n\)</span> observations, LOOCV fits the model <span class="math inline">\(n\)</span> separate times.</p></li>
+<li><p><strong>RMSE measures typical prediction error in the response units.</strong> Smaller RMSE means predictions are closer to observed values on average, with larger errors penalized more strongly.</p></li>
+<li><p><strong>MAE is an average absolute error in the original response units.</strong> Saying predictions are off by about a certain number of units is often more concrete than explaining proportion of variation explained.</p></li>
+<li><p><strong>Overfitting is too complex; underfitting is too simple.</strong> Overfit models memorize training data noise, while underfit models miss important structure.</p></li>
+<li><p><strong>Strong training performance and weak validation performance.</strong> A large gap between training and validation metrics is a classic sign of overfitting.</p></li>
+<li><p><strong>Weak performance on both training and validation data.</strong> If the model cannot fit even the training data well, it is probably missing important structure.</p></li>
+<li><p><strong>Underfitting is linked to high bias; overfitting is linked to high variance.</strong> A useful model balances flexibility and stability.</p></li>
+<li><p><strong>It keeps model selection separate from final testing.</strong> Candidate models can be compared using validation data or cross-validation, while the testing set remains reserved for the final model.</p></li>
+<li><p><strong>They make the analysis reproducible and interpretable.</strong> The seed determines the random splits, and preprocessing steps can strongly affect model performance.</p></li>
+<li><p><strong>Future data may differ from the current sample.</strong> Validation estimates likely performance under similar conditions, but it cannot guarantee performance in every future setting.</p></li>
+</ol>
+</div>
+</div>
+</div>
 
 
-</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
