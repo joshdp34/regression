@@ -616,6 +616,137 @@ Observation 17 is influential on the coefficients of `pindex` and `enzyme_test`.
 
 :::
 
+## Putting Diagnostics into Practice
+
+The diagnostics in this chapter are most useful when they are used together. A single large diagnostic value is a starting point for investigation, not a final decision.
+
+::: {#exm-20_4 .example title="Visualizing outliers, leverage, and influence"}
+
+The following simulated data show why outliers, leverage, and influence should not be treated as the same idea.
+
+```{r message=FALSE, warning=FALSE}
+set.seed(1004)
+
+base_simulation <- tibble(
+  x = seq(0, 5, length.out = 25),
+  y = 2 + 1.2 * x + rnorm(25, sd = 0.6),
+  point_type = "Regular observations"
+)
+
+diagnostic_simulation <- bind_rows(
+  base_simulation |>
+    mutate(panel = "Original pattern"),
+  base_simulation |>
+    mutate(panel = "Outlier with respect to y"),
+  tibble(
+    x = 2.5,
+    y = 8.5,
+    point_type = "Flagged observation",
+    panel = "Outlier with respect to y"
+  ),
+  base_simulation |>
+    mutate(panel = "High leverage, low influence"),
+  tibble(
+    x = 8,
+    y = 2 + 1.2 * 8,
+    point_type = "Flagged observation",
+    panel = "High leverage, low influence"
+  ),
+  base_simulation |>
+    mutate(panel = "High leverage and influential"),
+  tibble(
+    x = 8,
+    y = 4,
+    point_type = "Flagged observation",
+    panel = "High leverage and influential"
+  )
+) |>
+  mutate(
+    panel = factor(
+      panel,
+      levels = c(
+        "Original pattern",
+        "Outlier with respect to y",
+        "High leverage, low influence",
+        "High leverage and influential"
+      )
+    )
+  )
+
+diagnostic_simulation |>
+  ggplot(aes(x = x, y = y, color = point_type)) +
+  geom_point(size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black", linewidth = 0.7) +
+  facet_wrap(~ panel, nrow = 2) +
+  scale_color_manual(
+    values = c(
+      "Flagged observation" = "red",
+      "Regular observations" = "gray35"
+    )
+  ) +
+  labs(
+    x = "Predictor x",
+    y = "Response y",
+    color = NULL
+  ) +
+  theme(legend.position = "bottom")
+```
+
+The vertical outlier has an unusual response value but is near the middle of the predictor values. The high-leverage, low-influence point is far out in the predictor direction but follows the existing linear trend. The most concerning case is the high-leverage and influential point, because it is far from the center of the predictor values and pulls the fitted line toward itself.
+
+:::
+
+::: {#exm-20_5 .example title="Sensitivity analysis for influential surgical observations"}
+
+In @exm-20_3, observations 17 and 38 were flagged as influential. One way to investigate their effect is to refit the model without those observations and compare the estimated coefficients.
+
+```{r message=FALSE, warning=FALSE}
+surgical_flagged <- c(17, 38)
+
+surgical_with_observation <- surgical_dat |>
+  mutate(observation = row_number())
+
+surgical_without_flagged <- surgical_with_observation |>
+  filter(!observation %in% surgical_flagged)
+
+surgical_without_flagged_fit <- lm(
+  ln_y ~ bcs + pindex + enzyme_test + alc_heavy,
+  data = surgical_without_flagged
+)
+
+surgical_sensitivity <- bind_rows(
+  tidy(surgical_engine) |>
+    mutate(analysis = "All observations"),
+  tidy(surgical_without_flagged_fit) |>
+    mutate(analysis = "Without observations 17 and 38")
+) |>
+  select(analysis, term, estimate) |>
+  pivot_wider(names_from = analysis, values_from = estimate) |>
+  mutate(
+    change = `Without observations 17 and 38` - `All observations`
+  )
+
+surgical_sensitivity |>
+  knitr::kable(digits = 4)
+```
+
+This comparison does not automatically tell us which model is "correct." Instead, it tells us how much the fitted coefficients depend on the flagged observations. If the conclusions change substantially after removing observations 17 and 38, then the analysis should report that sensitivity clearly.
+
+:::
+
+::: {.callout-tip collapse="false" title="What to report for influential observations"}
+
+When reporting influential-observation diagnostics in an applied analysis, include:
+
+1. **Which observations were flagged** and which diagnostics flagged them.
+2. **Why the observations are unusual**, such as a large residual, high leverage, or both.
+3. **Whether there is a contextual explanation**, such as a measurement error, data-entry error, or a case from a different population.
+4. **A sensitivity analysis**, comparing the model with and without the flagged observations.
+5. **Your final decision**, including whether the observations were retained or removed and why.
+6. **Whether the substantive conclusions changed**, since that is usually more important than whether one coefficient changed slightly.
+
+:::
+
 ## Recap
 
 In this chapter, we introduced diagnostics for identifying outliers, high-leverage observations, hidden extrapolation, and influential observations in multiple regression.
@@ -633,6 +764,7 @@ In this chapter, we introduced diagnostics for identifying outliers, high-levera
 | **DFBETAS** | Measures how much observation $i$ influences an individual regression coefficient. |
 | **Influential observation** | An observation whose removal noticeably changes fitted values or coefficient estimates. |
 | **Sensitivity analysis** | Refitting the model with and without a flagged observation to see whether conclusions change. |
+| **Reporting influential observations** | State what was flagged, why it was unusual, whether it was investigated, and whether conclusions changed. |
 
 ## Check your understanding
 
@@ -662,6 +794,12 @@ In this chapter, we introduced diagnostics for identifying outliers, high-levera
 
 12. What is the purpose of a sensitivity analysis?
 
+13. In the simulated diagnostic plots, why is the high-leverage and influential point more concerning than the high-leverage, low-influence point?
+
+14. If a sensitivity analysis gives noticeably different coefficient estimates after removing flagged observations, what should be done?
+
+15. What should be included when reporting influential observations in an applied regression analysis?
+
 :::
 
 ::: {.callout-tip collapse="true" title="Solutions"}
@@ -689,6 +827,12 @@ In this chapter, we introduced diagnostics for identifying outliers, high-levera
 11. **Large diagnostics are flags, not verdicts.** The observation might be a measurement error, but it might also be valid and important. Deletion should be based on context and analysis, not diagnostics alone.
 
 12. **It checks whether conclusions depend on a flagged observation.** By comparing models with and without the observation, we can see whether the scientific or practical interpretation changes.
+
+13. **It combines unusual predictor values with a response value that pulls the fitted line.** A high-leverage point that follows the existing pattern may not change the model much. A high-leverage point with a large residual can strongly affect the fitted line.
+
+14. **Report the sensitivity clearly and investigate the observations.** Large changes mean the conclusions depend on those observations. The analyst should explain the issue, consider context, and justify whether the observations are retained or removed.
+
+15. **Report the flags, context, sensitivity analysis, and decision.** A good write-up identifies the observations, explains which diagnostics flagged them, discusses whether there is a practical explanation, compares results with and without them, and states whether the main conclusions changed.
 
 :::
 
