@@ -718,7 +718,7 @@ F_{L}^{-1}\left(\pi_{i}\right) &amp; =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
 <span>    slope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">slope</span>, levels <span class="op">=</span> <span class="va">logistic_slope_levels</span><span class="op">)</span>,</span>
 <span>    beta_0 <span class="op">=</span> <span class="fl">0</span>,</span>
-<span>    beta_1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case_when.html">case_when</a></span><span class="op">(</span></span>
+<span>    beta_1 <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/case-and-replace-when.html">case_when</a></span><span class="op">(</span></span>
 <span>      <span class="va">slope</span> <span class="op">==</span> <span class="st">"Negative slope"</span> <span class="op">~</span> <span class="op">-</span><span class="fl">1</span>,</span>
 <span>      <span class="va">slope</span> <span class="op">==</span> <span class="st">"Small positive slope"</span> <span class="op">~</span> <span class="fl">0.7</span>,</span>
 <span>      <span class="cn">TRUE</span> <span class="op">~</span> <span class="fl">2</span></span>

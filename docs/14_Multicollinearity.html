@@ -342,17 +342,18 @@ window.Quarto = {
   </ul>
 </li>
   <li>
-<a href="#standardizing-predictor-variables" id="toc-standardizing-predictor-variables" class="nav-link" data-scroll-target="#standardizing-predictor-variables"><span class="header-section-number">14.2</span> Standardizing Predictor Variables</a>
+<a href="#standardizing-predictor-variables" id="toc-standardizing-predictor-variables" class="nav-link" data-scroll-target="#standardizing-predictor-variables"><span class="header-section-number">14.2</span> Standardizing predictor variables</a>
   <ul class="collapse">
-<li><a href="#standardization-vs.-normalization" id="toc-standardization-vs.-normalization" class="nav-link" data-scroll-target="#standardization-vs.-normalization"><span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;Normalization</a></li>
-  <li><a href="#why-tidymodels-uses-the-term-normalize" id="toc-why-tidymodels-uses-the-term-normalize" class="nav-link" data-scroll-target="#why-tidymodels-uses-the-term-normalize"><span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> Uses the Term “Normalize”</a></li>
-  <li><a href="#standardization-and-multicollinearity" id="toc-standardization-and-multicollinearity" class="nav-link" data-scroll-target="#standardization-and-multicollinearity"><span class="header-section-number">14.2.3</span> Standardization and Multicollinearity</a></li>
+<li><a href="#standardization-vs.-normalization" id="toc-standardization-vs.-normalization" class="nav-link" data-scroll-target="#standardization-vs.-normalization"><span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;normalization</a></li>
+  <li><a href="#why-tidymodels-uses-the-term-normalize" id="toc-why-tidymodels-uses-the-term-normalize" class="nav-link" data-scroll-target="#why-tidymodels-uses-the-term-normalize"><span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> uses the term “normalize”</a></li>
+  <li><a href="#standardization-and-multicollinearity" id="toc-standardization-and-multicollinearity" class="nav-link" data-scroll-target="#standardization-and-multicollinearity"><span class="header-section-number">14.2.3</span> Standardization and multicollinearity</a></li>
   </ul>
 </li>
   <li>
-<a href="#principal-component-regression" id="toc-principal-component-regression" class="nav-link" data-scroll-target="#principal-component-regression"><span class="header-section-number">14.3</span> Principal Component Regression</a>
+<a href="#principal-component-regression" id="toc-principal-component-regression" class="nav-link" data-scroll-target="#principal-component-regression"><span class="header-section-number">14.3</span> Principal component regression</a>
   <ul class="collapse">
-<li><a href="#introduction-to-principal-component-analysis-pca" id="toc-introduction-to-principal-component-analysis-pca" class="nav-link" data-scroll-target="#introduction-to-principal-component-analysis-pca"><span class="header-section-number">14.3.1</span> Introduction to Principal Component Analysis (PCA)</a></li>
+<li><a href="#introduction-to-principal-component-analysis-pca" id="toc-introduction-to-principal-component-analysis-pca" class="nav-link" data-scroll-target="#introduction-to-principal-component-analysis-pca"><span class="header-section-number">14.3.1</span> Introduction to principal component analysis (PCA)</a></li>
+  <li><a href="#a-picture-of-what-principal-components-do" id="toc-a-picture-of-what-principal-components-do" class="nav-link" data-scroll-target="#a-picture-of-what-principal-components-do"><span class="header-section-number">14.3.2</span> A picture of what principal components do</a></li>
   </ul>
 </li>
   <li><a href="#recap" id="toc-recap" class="nav-link" data-scroll-target="#recap"><span class="header-section-number">14.4</span> Recap</a></li>
@@ -541,7 +542,7 @@ VIF_i=\frac{1}{1-R_i^2},
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo">car</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">vif_table</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">vif_values</span><span class="op">)</span> <span class="op">{</span></span>
@@ -997,7 +998,7 @@ t^{*} &amp; =\frac{b_{j}}{s\left[b_{j}\right]}
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidymodels.tidymodels.org">tidymodels</a></span><span class="op">)</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-forge.r-project.org/projects/car/">car</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/bprice2652/car_repo">car</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggobi.github.io/ggally/">GGally</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_table.html">read_table</a></span><span class="op">(</span><span class="st">"BodyFat.txt"</span><span class="op">)</span></span>
@@ -1240,27 +1241,27 @@ t^{*} &amp; =\frac{b_{j}}{s\left[b_{j}\right]}
 </div>
 </div>
 </section></section><section id="standardizing-predictor-variables" class="level2" data-number="14.2"><h2 data-number="14.2" class="anchored" data-anchor-id="standardizing-predictor-variables">
-<span class="header-section-number">14.2</span> Standardizing Predictor Variables</h2>
-<p>In linear regression, predictor variables are often transformed to ensure that they are on a comparable scale. This is especially important when predictors have vastly different units or magnitudes, as it can influence the stability and interpretability of the model.</p>
-<p>A common technique for transforming predictors is <strong>standardization</strong>, where each predictor variable is rescaled to have a mean of 0 and a standard deviation of 1. This section will explore the concept of <em>standardization</em>, how it differs from <em>normalization</em>, and the implications for model performance, especially in the context of multicollinearity.</p>
+<span class="header-section-number">14.2</span> Standardizing predictor variables</h2>
+<p>Predictors in a regression model are often measured in very different units. One might be a skinfold thickness in millimeters and another a percentage, and their magnitudes can differ by orders of magnitude. Rescaling them to a common scale makes coefficient estimates more stable numerically and makes some methods, PCA among them, behave sensibly.</p>
+<p>The most common rescaling is <strong>standardization</strong>: each predictor is shifted and rescaled so that it has mean 0 and standard deviation 1. In this section we compare standardization with <em>normalization</em> and look at what standardizing does (and does not do) when predictors are correlated.</p>
 <section id="standardization-vs.-normalization" class="level3" data-number="14.2.1"><h3 data-number="14.2.1" class="anchored" data-anchor-id="standardization-vs.-normalization">
-<span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;Normalization</h3>
-<p>While the terms “standardization” and “normalization” are sometimes used interchangeably, they describe distinct mathematical operations. Standardization transforms a variable <span class="math inline">\(X\)</span> to have a mean of 0 and a standard deviation of 1, using the following formula:</p>
+<span class="header-section-number">14.2.1</span> Standardization vs.&nbsp;normalization</h3>
+<p>People sometimes use “standardization” and “normalization” as if they meant the same thing, but they are different operations. Standardization transforms a variable <span class="math inline">\(X\)</span> with</p>
 <p><span class="math display">\[
 z_i = \frac{x_i - \bar{x}}{s_x}
 \]</span></p>
-<p>where <span class="math inline">\(z_i\)</span> is the standardized value, <span class="math inline">\(x_i\)</span> is the original value, <span class="math inline">\(\bar{x}\)</span> is the mean of the variable, and <span class="math inline">\(s_x\)</span> is its standard deviation. This process ensures that the transformed variable has mean 0 and standard deviation 1. It does <strong>not</strong> guarantee that the transformed variable follows a normal distribution.</p>
-<p>Normalization, on the other hand, typically refers to scaling the data to a specific range, such as [0, 1]. This is done using the formula:</p>
+<p>where <span class="math inline">\(z_i\)</span> is the standardized value, <span class="math inline">\(x_i\)</span> is the original value, <span class="math inline">\(\bar{x}\)</span> is the sample mean, and <span class="math inline">\(s_x\)</span> is the sample standard deviation. The transformed variable has mean 0 and standard deviation 1. It does <strong>not</strong> follow a normal distribution unless the original variable did; standardizing changes the location and scale, not the shape.</p>
+<p>Normalization usually means rescaling a variable to a fixed range, often <span class="math inline">\([0, 1]\)</span>:</p>
 <p><span class="math display">\[
 x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 \]</span></p>
-<p>Normalization is most useful when the range of the variables needs to be constrained for certain algorithms, such as in neural networks. In contrast, standardization is generally preferred in linear models, where the focus is on centering and rescaling predictors to ensure interpretability of coefficients.</p>
+<p>Normalization is used when an algorithm needs its inputs in a bounded range, as many neural networks do. In linear models we usually standardize instead, since centering and scaling by the standard deviation gives coefficients a “per standard deviation” interpretation.</p>
 </section><section id="why-tidymodels-uses-the-term-normalize" class="level3" data-number="14.2.2"><h3 data-number="14.2.2" class="anchored" data-anchor-id="why-tidymodels-uses-the-term-normalize">
-<span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> Uses the Term “Normalize”</h3>
-<p>In the <code>tidymodels</code> framework in R, the term “normalize” is used to describe what is technically a standardization process. For example, when creating a preprocessing recipe with the <code>recipe()</code> function, the step called <code>step_normalize()</code> computes the mean and standard deviation of each predictor and scales it accordingly. Although the terminology might be confusing, this usage reflects a common convention in some statistical software where both standardization and normalization are loosely referred to as normalization.</p>
+<span class="header-section-number">14.2.2</span> Why <code>tidymodels</code> uses the term “normalize”</h3>
+<p>In <code>tidymodels</code>, the recipe step that standardizes is called <code>step_normalize()</code>. It computes the mean and standard deviation of each predictor and then subtracts the mean and divides by the standard deviation, which is standardization in the sense above. The name follows a convention in some software, where both operations are loosely called normalization. In this book, when you see <code>step_normalize()</code>, read it as “standardize.”</p>
 </section><section id="standardization-and-multicollinearity" class="level3" data-number="14.2.3"><h3 data-number="14.2.3" class="anchored" data-anchor-id="standardization-and-multicollinearity">
-<span class="header-section-number">14.2.3</span> Standardization and Multicollinearity</h3>
-<p>By scaling all predictors to a common variance, the impact of large magnitude differences between variables is reduced, leading to more stable coefficient estimates. Standardization alone does not reduce correlations between variables. However, it provides numerical stability when using methods other than least squares, making it easier to detect and address multicollinearity issues. When multicollinearity is severe, other techniques, such as principal component regression, may be necessary.</p>
+<span class="header-section-number">14.2.3</span> Standardization and multicollinearity</h3>
+<p>Putting every predictor on the same scale removes large differences in magnitude between variables, and this helps numerically, particularly for methods other than least squares. Standardizing does not change the correlations among the predictors, though, so it does nothing to the multicollinearity itself. When multicollinearity is severe, we need a method that changes the predictors, such as principal component regression.</p>
 <div class="callout callout-style-simple callout-example callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -1271,7 +1272,7 @@ x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Standardization changes the scale of the predictors, but it does not change the correlation between them.</p>
+<p>Standardization changes the scale of the predictors. The correlations between them stay the same.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bodyfat_predictors</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">tri</span>, <span class="va">thigh</span>, <span class="va">midarm</span><span class="op">)</span></span>
@@ -1321,16 +1322,16 @@ x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 </table>
 </div>
 </div>
-<p>The correlations are unchanged after standardization. This is why standardization is helpful for scale and numerical stability, but it is not a cure for multicollinearity.</p>
+<p>The correlations are identical before and after standardizing. Standardization helps with scale and numerical stability, but it does not cure multicollinearity.</p>
 </div>
 </div>
 </section></section><section id="principal-component-regression" class="level2" data-number="14.3"><h2 data-number="14.3" class="anchored" data-anchor-id="principal-component-regression">
-<span class="header-section-number">14.3</span> Principal Component Regression</h2>
-<p>One effective method for addressing multicollinearity is <em>Principal Component Regression (PCR)</em>, which combines <em>Principal Component Analysis (PCA)</em> and linear regression. The key idea behind PCR is to transform the original predictor variables into a smaller set of uncorrelated variables, called <strong>principal components (PCs)</strong>, which capture the most variance in the data.</p>
+<span class="header-section-number">14.3</span> Principal component regression</h2>
+<p>One way to deal with multicollinearity is <em>principal component regression (PCR)</em>, which combines <em>principal component analysis (PCA)</em> with linear regression. PCR replaces the original predictors with a new set of uncorrelated variables, called <strong>principal components (PCs)</strong>, and then uses some or all of those components as the predictors in the regression.</p>
 <section id="introduction-to-principal-component-analysis-pca" class="level3" data-number="14.3.1"><h3 data-number="14.3.1" class="anchored" data-anchor-id="introduction-to-principal-component-analysis-pca">
-<span class="header-section-number">14.3.1</span> Introduction to Principal Component Analysis (PCA)</h3>
-<p>PCA is a <em>dimensionality reduction</em> technique that identifies the directions (called <em>principal components</em>) along which the variation in the data is maximized. These directions are orthogonal to each other and ranked by the amount of variance they capture. The first principal component explains the largest amount of variance in the data, followed by the second principal component, and so on. Each principal component is a linear combination of the original predictor variables.</p>
-<p>In practical terms, PCA helps to reduce the dimensionality of the data, making it more manageable without losing too much information. This is particularly useful in cases where the number of predictors is large, and some of them are highly correlated.</p>
+<span class="header-section-number">14.3.1</span> Introduction to principal component analysis (PCA)</h3>
+<p>PCA looks for the directions in the predictor space along which the data vary the most. The first principal component is the direction with the largest variance. The second is the direction with the largest remaining variance among all directions perpendicular to the first, and so on. Each principal component is a linear combination of the original predictors, and the components are uncorrelated with one another.</p>
+<p>Because the last few components often carry very little of the variation, PCA can also reduce the number of variables we work with. This is most useful when there are many predictors and several of them are highly correlated.</p>
 <div class="callout callout-style-default callout-important callout-titled" title="PCA does not know about the response variable">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -1343,8 +1344,8 @@ x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>PCA is performed using only the predictor variables. It finds directions that explain variation in the predictors, not directions that necessarily predict the response well.</p>
-<p>This means the first few principal components may explain most of the variation in the predictors but may not be the most useful components for predicting <span class="math inline">\(y\)</span>. In practice, the number of components should be chosen using model performance, subject-matter judgment, or a validation procedure, not only by looking at predictor variance.</p>
+<p>PCA uses only the predictor variables. It finds directions that explain variation in the predictors, and those are not necessarily the directions that predict the response well.</p>
+<p>So the first few principal components can explain most of the variation in the predictors and still not be the most useful components for predicting <span class="math inline">\(y\)</span>. Choose the number of components with model performance, subject-matter judgment, or a validation procedure, not with predictor variance alone.</p>
 </div>
 </div>
 </div>
@@ -1354,70 +1355,222 @@ x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Tip</span>For those who want to see the math:
+<span class="screen-reader-only">Tip</span>For those who want to see the math
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
 <div id="callout-8" class="callout-8-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>Principal components (PCs) are linear transformations of the original predictor variables that aim to capture the maximum variance in the data. Here is a mathematical summary of how these components are computed:</p>
+<p>Principal components are linear transformations of the original predictors chosen to capture as much variance as possible. They are computed in five steps.</p>
 <ol type="1">
-<li>
-<strong>Standardizing the Data</strong> Given a dataset with <span class="math inline">\(p\)</span> predictors <span class="math inline">\(x_1, x_2, \dots, x_p\)</span> and <span class="math inline">\(n\)</span> observations, we first standardize each predictor variable to have mean 0 and standard deviation 1:</li>
+<li>Standardize the data. Given <span class="math inline">\(p\)</span> predictors <span class="math inline">\(x_1, x_2, \dots, x_p\)</span> measured on <span class="math inline">\(n\)</span> observations, standardize each predictor to have mean 0 and standard deviation 1:</li>
 </ol>
 <p><span class="math display">\[
 z_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j}
 \]</span></p>
-<p>where: - <span class="math inline">\(z_{ij}\)</span> is the standardized value of the <span class="math inline">\(j\)</span>-th predictor for the <span class="math inline">\(i\)</span>-th observation. - <span class="math inline">\(\bar{x}_j\)</span> is the mean of the <span class="math inline">\(j\)</span>-th predictor. - <span class="math inline">\(s_j\)</span> is the standard deviation of the <span class="math inline">\(j\)</span>-th predictor.</p>
-<p>This step ensures that all variables are on the same scale, which is necessary for PCA.</p>
+<p>where <span class="math inline">\(z_{ij}\)</span> is the standardized value of the <span class="math inline">\(j\)</span>th predictor for the <span class="math inline">\(i\)</span>th observation, <span class="math inline">\(\bar{x}_j\)</span> is the mean of the <span class="math inline">\(j\)</span>th predictor, and <span class="math inline">\(s_j\)</span> is its standard deviation. Without this step, the predictor with the largest units would dominate the first component.</p>
 <ol start="2" type="1">
-<li>
-<strong>Computing the Covariance Matrix</strong> Once the data is standardized, we compute the covariance matrix <span class="math inline">\(\mathbf{S}\)</span> of the standardized predictors:</li>
+<li>Compute the covariance matrix. For the standardized predictors, the covariance matrix is</li>
 </ol>
 <p><span class="math display">\[
 \mathbf{S} = \frac{1}{n-1} \mathbf{Z}^T \mathbf{Z}
 \]</span></p>
-<p>where <span class="math inline">\(\mathbf{Z}\)</span> is the matrix of standardized data with <span class="math inline">\(n\)</span> rows (observations) and <span class="math inline">\(p\)</span> columns (predictors).</p>
+<p>where <span class="math inline">\(\mathbf{Z}\)</span> is the <span class="math inline">\(n \times p\)</span> matrix of standardized data. Since the columns are standardized, <span class="math inline">\(\mathbf{S}\)</span> is also the correlation matrix of the original predictors.</p>
 <ol start="3" type="1">
-<li>
-<strong>Finding Eigenvalues and Eigenvectors</strong> We solve the following eigenvalue problem for the covariance matrix <span class="math inline">\(\mathbf{S}\)</span>:</li>
+<li>Find the eigenvalues and eigenvectors. Solve the eigenvalue problem</li>
 </ol>
 <p><span class="math display">\[
 \mathbf{S} \mathbf{v}_j = \lambda_j \mathbf{v}_j
 \]</span></p>
-<p>where: - <span class="math inline">\(\lambda_j\)</span> is the <span class="math inline">\(j\)</span>-th eigenvalue of the covariance matrix. - <span class="math inline">\(\mathbf{v}_j\)</span> is the corresponding eigenvector (also called the loading vector) associated with <span class="math inline">\(\lambda_j\)</span>.</p>
-<p>The eigenvalues <span class="math inline">\(\lambda_1, \lambda_2, \dots, \lambda_p\)</span> represent the amount of variance explained by each principal component. The eigenvectors define the direction of the new coordinate axes (principal components).</p>
+<p>where <span class="math inline">\(\lambda_j\)</span> is the <span class="math inline">\(j\)</span>th eigenvalue and <span class="math inline">\(\mathbf{v}_j\)</span> is its eigenvector, also called the loading vector. The eigenvalue <span class="math inline">\(\lambda_j\)</span> is the variance of the <span class="math inline">\(j\)</span>th principal component, and the eigenvector gives the direction of the <span class="math inline">\(j\)</span>th new axis.</p>
 <ol start="4" type="1">
-<li>
-<strong>Constructing the Principal Components</strong> The <span class="math inline">\(j\)</span>-th principal component <span class="math inline">\(PC_j\)</span> is a linear combination of the original standardized variables:</li>
+<li>Construct the principal components. The <span class="math inline">\(j\)</span>th principal component is a linear combination of the standardized predictors:</li>
 </ol>
 <p><span class="math display">\[
 PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 \]</span></p>
-<p>where <span class="math inline">\(v_{jk}\)</span> is the <span class="math inline">\(k\)</span>-th element of the eigenvector <span class="math inline">\(\mathbf{v}_j\)</span>.</p>
-<p>Each principal component is uncorrelated with the others and explains a decreasing amount of variance. Specifically:</p>
-<ul>
-<li>
-<strong>PC1</strong> (the first principal component) explains the largest possible variance.</li>
-<li>
-<strong>PC2</strong> explains the largest remaining variance subject to being orthogonal to <strong>PC1</strong>.</li>
-<li>This process continues for all <span class="math inline">\(p\)</span> components.</li>
-</ul>
+<p>where <span class="math inline">\(v_{jk}\)</span> is the <span class="math inline">\(k\)</span>th element of <span class="math inline">\(\mathbf{v}_j\)</span>. The first component, PC1, has the largest possible variance. PC2 has the largest remaining variance subject to being uncorrelated with PC1, and the pattern continues through all <span class="math inline">\(p\)</span> components.</p>
 <ol start="5" type="1">
-<li>
-<strong>Explained Variance</strong> The proportion of the total variance explained by the <span class="math inline">\(j\)</span>-th principal component is:</li>
+<li>Compute the explained variance. The proportion of the total variance explained by the <span class="math inline">\(j\)</span>th component is</li>
 </ol>
 <p><span class="math display">\[
 \text{Explained Variance of } PC_j = \frac{\lambda_j}{\sum_{k=1}^p \lambda_k}
 \]</span></p>
-<p>The cumulative variance explained by the first <span class="math inline">\(m\)</span> components is:</p>
+<p>and the cumulative proportion explained by the first <span class="math inline">\(m\)</span> components is</p>
 <p><span class="math display">\[
-\text{Cumulative Explained Variance} = \frac{\sum_{j=1}^m \lambda_j}{\sum_{k=1}^p \lambda_k}
+\text{Cumulative Explained Variance} = \frac{\sum_{j=1}^m \lambda_j}{\sum_{k=1}^p \lambda_k}.
 \]</span></p>
 </div>
 </div>
 </div>
-<p>In the context of regression, instead of regressing the response variable on the original set of predictors, we use the principal components as the new predictors. By selecting a subset of the principal components, we can retain most of the variability in the predictors while reducing multicollinearity.</p>
+</section><section id="a-picture-of-what-principal-components-do" class="level3" data-number="14.3.2"><h3 data-number="14.3.2" class="anchored" data-anchor-id="a-picture-of-what-principal-components-do">
+<span class="header-section-number">14.3.2</span> A picture of what principal components do</h3>
+<p>With two predictors we can draw the whole process. The example below uses only <code>tri</code> and <code>thigh</code> from the <code>bodyfat</code> data, since these two have the strongest correlation.</p>
+<div class="callout callout-style-simple callout-example callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>Worked example: Principal components as a rotation of the axes
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>We first find the two principal components of the standardized <code>tri</code> and <code>thigh</code> values.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_pc_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">tri</span> <span class="op">+</span> <span class="va">thigh</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">two_pc_prep</span> <span class="op">&lt;-</span> <span class="va">two_pc_recipe</span> <span class="op">|&gt;</span> <span class="fu">prep</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Loadings: each row of this table is one direction (one PC)</span></span>
+<span><span class="va">two_pc_loadings</span> <span class="op">&lt;-</span> <span class="va">two_pc_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"coef"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">component</span>, <span class="va">terms</span>, <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">terms</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">two_pc_loadings</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">component</th>
+<th style="text-align: right;">tri</th>
+<th style="text-align: right;">thigh</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PC1</td>
+<td style="text-align: right;">0.7071</td>
+<td style="text-align: right;">0.7071</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PC2</td>
+<td style="text-align: right;">-0.7071</td>
+<td style="text-align: right;">0.7071</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_pc_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"variance"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">terms</span> <span class="op">==</span> <span class="st">"percent variance"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">component</span>, percent_variance <span class="op">=</span> <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">component</th>
+<th style="text-align: right;">percent_variance</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">96.19</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3.81</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>The loadings for PC1 put equal weight on <code>tri</code> and <code>thigh</code>, so PC1 is (up to sign) the average of the two standardized measurements. PC2 is their difference. Because the two variables are so strongly correlated, PC1 accounts for about 96% of their combined variance and PC2 for only about 4%.</p>
+<p>The plot below shows the standardized data with the two principal component directions drawn through the center. The gray segments connect each observation to its projection onto the PC1 line. A point’s PC1 score is its position along that line, and the length of its gray segment is the size of its PC2 score.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">two_pc_scores</span> <span class="op">&lt;-</span> <span class="va">two_pc_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">bake</span><span class="op">(</span>new_data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pc1_dir</span> <span class="op">&lt;-</span> <span class="va">two_pc_loadings</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">component</span> <span class="op">==</span> <span class="st">"PC1"</span><span class="op">)</span></span>
+<span><span class="va">pc2_dir</span> <span class="op">&lt;-</span> <span class="va">two_pc_loadings</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">component</span> <span class="op">==</span> <span class="st">"PC2"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">projection_data</span> <span class="op">&lt;-</span> <span class="va">dat</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>    tri <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">tri</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    thigh <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/scale.html">scale</a></span><span class="op">(</span><span class="va">thigh</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html">bind_cols</a></span><span class="op">(</span><span class="va">two_pc_scores</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">PC1</span>, <span class="va">PC2</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    proj_tri <span class="op">=</span> <span class="va">PC1</span> <span class="op">*</span> <span class="va">pc1_dir</span><span class="op">$</span><span class="va">tri</span>,</span>
+<span>    proj_thigh <span class="op">=</span> <span class="va">PC1</span> <span class="op">*</span> <span class="va">pc1_dir</span><span class="op">$</span><span class="va">thigh</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">projection_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">tri</span>, y <span class="op">=</span> <span class="va">thigh</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span></span>
+<span>    slope <span class="op">=</span> <span class="va">pc1_dir</span><span class="op">$</span><span class="va">thigh</span> <span class="op">/</span> <span class="va">pc1_dir</span><span class="op">$</span><span class="va">tri</span>, intercept <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"steelblue"</span>, linewidth <span class="op">=</span> <span class="fl">1</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span></span>
+<span>    slope <span class="op">=</span> <span class="va">pc2_dir</span><span class="op">$</span><span class="va">thigh</span> <span class="op">/</span> <span class="va">pc2_dir</span><span class="op">$</span><span class="va">tri</span>, intercept <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"darkorange"</span>, linewidth <span class="op">=</span> <span class="fl">1</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_segment.html">geom_segment</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>xend <span class="op">=</span> <span class="va">proj_tri</span>, yend <span class="op">=</span> <span class="va">proj_thigh</span><span class="op">)</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"gray60"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="fl">1.9</span>, y <span class="op">=</span> <span class="fl">2.3</span>, label <span class="op">=</span> <span class="st">"PC1"</span>,</span>
+<span>           color <span class="op">=</span> <span class="st">"steelblue"</span>, fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/annotate.html">annotate</a></span><span class="op">(</span><span class="st">"text"</span>, x <span class="op">=</span> <span class="op">-</span><span class="fl">1.9</span>, y <span class="op">=</span> <span class="fl">2.3</span>, label <span class="op">=</span> <span class="st">"PC2"</span>,</span>
+<span>           color <span class="op">=</span> <span class="st">"darkorange"</span>, fontface <span class="op">=</span> <span class="st">"bold"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span>xlim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span><span class="op">)</span>, ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="op">-</span><span class="fl">2.5</span>, <span class="fl">2.5</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Principal component directions for tri and thigh"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Standardized tri"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Standardized thigh"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Most of the spread in the cloud of points runs along the PC1 line. The gray segments are short, and they are the only information PC2 carries.</p>
+<p>PCA does not move the points. It rotates the axes so that the first axis lies along the direction of greatest spread. If we plot the same 20 people using their PC scores as coordinates, the cloud is turned so that PC1 runs horizontally, and the correlation between the two new variables is 0.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">r_original</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">projection_data</span><span class="op">$</span><span class="va">tri</span>, <span class="va">projection_data</span><span class="op">$</span><span class="va">thigh</span><span class="op">)</span></span>
+<span><span class="va">r_rotated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">projection_data</span><span class="op">$</span><span class="va">PC1</span>, <span class="va">projection_data</span><span class="op">$</span><span class="va">PC2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">rotation_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  <span class="va">projection_data</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>      panel <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html">str_glue</a></span><span class="op">(</span><span class="st">"Original axes: tri and thigh (r = {round(r_original, 2)})"</span><span class="op">)</span>,</span>
+<span>      horizontal <span class="op">=</span> <span class="va">tri</span>, vertical <span class="op">=</span> <span class="va">thigh</span></span>
+<span>    <span class="op">)</span>,</span>
+<span>  <span class="va">projection_data</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>      panel <span class="op">=</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_glue.html">str_glue</a></span><span class="op">(</span><span class="st">"Rotated axes: PC1 and PC2 (r = {round(r_rotated, 2)})"</span><span class="op">)</span>,</span>
+<span>      horizontal <span class="op">=</span> <span class="va">PC1</span>, vertical <span class="op">=</span> <span class="va">PC2</span></span>
+<span>    <span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>panel <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_inorder.html">fct_inorder</a></span><span class="op">(</span><span class="va">panel</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">rotation_data</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">horizontal</span>, y <span class="op">=</span> <span class="va">vertical</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">panel</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_fixed.html">coord_equal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"First axis (standardized tri, or PC1)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Second axis (standardized thigh, or PC2)"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The right panel shows why PCR removes multicollinearity. The new axes are uncorrelated by construction, and almost all of the variation is in the horizontal direction. If we dropped PC2 we would keep about 96% of the variation in the two predictors with a single variable.</p>
+</div>
+</div>
+<p>With three or more predictors the idea is the same, although we can no longer draw it: PCA rotates the axes of the <span class="math inline">\(p\)</span>-dimensional predictor space so that PC1 points along the longest direction of the cloud, PC2 along the longest direction perpendicular to PC1, and so on.</p>
+<p>The loadings are the recipe for each component. A person’s PC score is a weighted sum of their standardized measurements, and the loadings are the weights. For <code>tri</code> and <code>thigh</code>, PC1 is <span class="math inline">\(0.71\,z_{tri} + 0.71\,z_{thigh}\)</span> and PC2 is <span class="math inline">\(-0.71\,z_{tri} + 0.71\,z_{thigh}\)</span>. Someone who is one standard deviation above average on both measurements has a PC1 score of about 1.41 and a PC2 score of 0. Someone who is one standard deviation above average on <code>thigh</code> but exactly average on <code>tri</code> has scores of about 0.71 on both. So PC1 measures overall size: how much skinfold a person has at the triceps and thigh combined. PC2 measures shape: whether a person carries relatively more at the thigh than at the triceps. Since the two measurements rise and fall together for almost everyone, people differ mostly in size, and PC2 has very little variance. Three things help when reading any table of loadings. A loading near 0 means that variable plays almost no part in the component. Variables whose loadings have the same sign move the score in the same direction. And the sign of a whole component is arbitrary, since flipping every loading in a component gives the same axis pointing the other way; only the signs relative to each other mean anything.</p>
+<p>In regression, instead of regressing the response on the original predictors, we use the principal components as the predictors. Using only the first few components keeps most of the variation in the predictors while removing the multicollinearity.</p>
 <div id="exm-14_3" class="callout callout-style-simple callout-example callout-titled theorem example">
 <p><span class="theorem-title"><strong>Example 14.3</strong></span> &nbsp;</p>
 <div class="callout-header d-flex align-content-center">
@@ -1429,10 +1582,9 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>This example uses the <code>bodyfat</code> data again.</p>
-<p>The following steps will illustrate how to apply PCA to the predictors and then use the principal components in a regression model.</p>
+<p>We return to the <code>bodyfat</code> data, now with all three predictors. The code below applies PCA to the predictors and then uses the principal components in a regression model.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pca_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pca_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span>
 <span></span>
@@ -1497,10 +1649,29 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </table>
 </div>
 </div>
-<p>The following code provides the principal components derived from the predictors in the <code>BodyFat</code> dataset. Each principal component is a linear combination of the original predictors (<code>tri</code>, <code>thigh</code>, <code>midarm</code>), and they explain the maximum variance in the data.</p>
-<p>To visualize how PCA works and to understand the contribution of each principal component, let’s examine the explained variance.</p>
+<p>Each column <code>PC1</code>, <code>PC2</code>, and <code>PC3</code> is a linear combination of the standardized <code>tri</code>, <code>thigh</code>, and <code>midarm</code> values. The loadings tell us which combination each component is.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Extract the PCA results</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">prepped</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"coef"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="va">terms</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">component</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Loadings for the bodyfat principal components"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Loading"</span>,</span>
+<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-15-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Next we look at how much of the variance each component explains.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Extract the PCA results</span></span>
 <span><span class="va">pca_results</span> <span class="op">&lt;-</span> <span class="va">prepped</span> <span class="op">|&gt;</span> <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"variance"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">pca_results</span> <span class="op">|&gt;</span></span>
@@ -1518,106 +1689,106 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <td style="text-align: left;">variance</td>
 <td style="text-align: right;">2.0665</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">variance</td>
 <td style="text-align: right;">0.9328</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">variance</td>
 <td style="text-align: right;">0.0007</td>
 <td style="text-align: right;">3</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cumulative variance</td>
 <td style="text-align: right;">2.0665</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">cumulative variance</td>
 <td style="text-align: right;">2.9993</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cumulative variance</td>
 <td style="text-align: right;">3.0000</td>
 <td style="text-align: right;">3</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">percent variance</td>
 <td style="text-align: right;">68.8824</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">percent variance</td>
 <td style="text-align: right;">31.0934</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">percent variance</td>
 <td style="text-align: right;">0.0242</td>
 <td style="text-align: right;">3</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cumulative percent variance</td>
 <td style="text-align: right;">68.8824</td>
 <td style="text-align: right;">1</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">cumulative percent variance</td>
 <td style="text-align: right;">99.9758</td>
 <td style="text-align: right;">2</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">cumulative percent variance</td>
 <td style="text-align: right;">100.0000</td>
 <td style="text-align: right;">3</td>
-<td style="text-align: left;">pca_aaKni</td>
+<td style="text-align: left;">pca_sLtu3</td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Visualize the explained variance</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Visualize the explained variance</span></span>
 <span><span class="va">pca_results</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">terms</span> <span class="op">==</span> <span class="st">"percent variance"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">component</span>, y <span class="op">=</span> <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Explained Variance by Principal Component"</span>, </span>
-<span>       x <span class="op">=</span> <span class="st">"Principal Components"</span>, </span>
-<span>       y <span class="op">=</span> <span class="st">"Proportion of Variance Explained"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Explained Variance by Principal Component"</span>,</span>
+<span>       x <span class="op">=</span> <span class="st">"Principal Components"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"Percent of Variance Explained"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-12-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-16-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In this plot, we observe the proportion of variance explained by each principal component. The first principal component typically explains the most variance, followed by the second, and so on. Depending on the cumulative proportion of variance explained, we can select an appropriate number of components for our regression model.</p>
-<p>Let’s now look at the scatterplot matrix of the PCA data. Note how the correlations between the PCs are zero.</p>
+<p>The bars show the percent of the predictor variance explained by each component. The first component always explains the most, the second the next most, and so on. We can use the cumulative percent to decide how many components to keep in the regression model.</p>
+<p>The scatterplot matrix of the PCA data shows that the correlations between the PCs are zero.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">pca_data</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggobi.github.io/ggally/reference/ggpairs.html">ggpairs</a></span><span class="op">(</span><span class="va">pca_data</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="576"></p>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-17-1.png" class="img-fluid figure-img" width="576"></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Principal Component Regression is just using these PCs as the predictor variables. We see from above that the third PC does not explain much variability. Thus, we can just use the first two PCs and save a degree of freedom since we will be using one less coefficient in the model.</p>
+<p>Principal component regression uses these PCs as the predictor variables. The third PC explains very little of the variability, so we use only the first two and save a degree of freedom, since the model has one fewer coefficient.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">bfat</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span></span>
@@ -1669,9 +1840,9 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </table>
 </div>
 </div>
-<p>Note how small the standard errors are for the coefficients now that we no longer have multicollinearity. Let’s verify that there is no multicollinearity by examining the VIFs.</p>
+<p>The standard errors are now small, because the predictors in this model are uncorrelated. We can confirm that there is no multicollinearity by looking at the VIFs.</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb19"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_engine</span> <span class="op">&lt;-</span> <span class="va">pcr_fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_engine</span> <span class="op">&lt;-</span> <span class="va">pcr_fit</span> <span class="op">|&gt;</span> <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="va">pcr_engine</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">vif_table</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -1695,12 +1866,513 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </table>
 </div>
 </div>
-<p>Both VIFs are exactly one indicating no multicollinearity.</p>
+<p>Both VIFs are exactly 1, so there is no multicollinearity.</p>
 </div>
 </div>
-<p>PCR gives us the ability to still fit the regression model even in the presence of extreme multicollinearity. Another benefit of PCR is that you can also reduce dimensionality by only using the PCs that explain most of the variability. Note that you still need all the original predictor variables since the PCs are linear combinations of these variables. Thus, this is not a method for removing predictor variables. So if our goal is to determine if a variable (that may be difficult or expensive to obtain) can be dropped, then PCR is not the tool we want to use. In addition, in PCR we lose interpretability of the coefficients.</p>
+<div id="exm-14_4" class="callout callout-style-simple callout-example callout-titled theorem example">
+<p><span class="theorem-title"><strong>Example 14.4</strong></span> &nbsp;</p>
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Example</span>PCA and principal component regression with the UN98 data
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The <code>bodyfat</code> data have only three predictors. The <code>UN98</code> data from <a href="#exm-14_1" class="quarto-xref">Example&nbsp;<span>14.1</span></a> have ten, and several of them had large VIFs, so they give a fuller picture of PCA and PCR. As before, we leave out <code>region</code> and <code>GDPperCapita</code> as predictors. We keep <code>region</code> and the country names as identifiers so we can label the plots.</p>
+<p>Many countries are missing at least one variable. The model in <a href="#exm-14_1" class="quarto-xref">Example&nbsp;<span>14.1</span></a> dropped those countries automatically; here we drop them before the PCA so that every step uses the same 39 countries.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_dat</span> <span class="op">&lt;-</span> <span class="va">UN98</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/rownames.html">rownames_to_column</a></span><span class="op">(</span><span class="st">"country"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="op">-</span><span class="va">GDPperCapita</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/drop_na.html">drop_na</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">un_dat</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 39</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_pca_recipe</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">infantMortality</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">un_dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">update_role</span><span class="op">(</span><span class="va">country</span>, <span class="va">region</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="fl">10</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">un_pca_prep</span> <span class="op">&lt;-</span> <span class="va">un_pca_recipe</span> <span class="op">|&gt;</span> <span class="fu">prep</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">un_variance</span> <span class="op">&lt;-</span> <span class="va">un_pca_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"variance"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">terms</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"percent variance"</span>, <span class="st">"cumulative percent variance"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">component</span>, <span class="va">terms</span>, <span class="va">value</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">terms</span>, values_from <span class="op">=</span> <span class="va">value</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">un_variance</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">component</th>
+<th style="text-align: right;">percent variance</th>
+<th style="text-align: right;">cumulative percent variance</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">64.74</td>
+<td style="text-align: right;">64.74</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">11.03</td>
+<td style="text-align: right;">75.77</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">10.41</td>
+<td style="text-align: right;">86.18</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5.32</td>
+<td style="text-align: right;">91.50</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4.61</td>
+<td style="text-align: right;">96.11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2.26</td>
+<td style="text-align: right;">98.37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.91</td>
+<td style="text-align: right;">99.28</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.48</td>
+<td style="text-align: right;">99.76</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.16</td>
+<td style="text-align: right;">99.92</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.08</td>
+<td style="text-align: right;">100.00</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Giving <code>country</code> and <code>region</code> the role <code>"id"</code> keeps them in the data but out of the PCA. With ten predictors there are ten components. The first explains about 65% of the variation in the predictors, and the first four together explain over 90%.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_variance</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">component</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">`percent variance`</span><span class="op">)</span>, fill <span class="op">=</span> <span class="st">"gray60"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">`cumulative percent variance`</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>y <span class="op">=</span> <span class="va">`cumulative percent variance`</span><span class="op">)</span>, color <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Variance explained by the UN98 principal components"</span>,</span>
+<span>    subtitle <span class="op">=</span> <span class="st">"Bars: each component. Line: cumulative."</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Principal component"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Percent of predictor variance"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-21-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>To interpret the components, we look at the loadings for the first three.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_pca_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"coef"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">component</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"PC1"</span>, <span class="st">"PC2"</span>, <span class="st">"PC3"</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">value</span>, y <span class="op">=</span> <span class="va">terms</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html">geom_col</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray50"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">component</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"Loadings for the first three UN98 principal components"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"Loading"</span>,</span>
+<span>    y <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="864"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We read these loadings the same way as the ones for <code>tri</code> and <code>thigh</code>. PC1 has loadings between about 0.32 and 0.36 for both life expectancies, both education variables, and contraception use, and loadings of about -0.36 for fertility (<code>tfr</code>) and both illiteracy rates. A country with a high PC1 score has long life expectancy, more schooling, more contraception use, fewer births per woman, and low illiteracy, all at once. In other words, PC1 is a development scale, and one number summarizes eight correlated measurements. This shared direction is also why these variables had such large VIFs in <a href="#exm-14_1" class="quarto-xref">Example&nbsp;<span>14.1</span></a>: much of what each of them measures is the same thing.</p>
+<p>The two economic activity variables have loadings of only -0.16 and -0.10 on PC1, so they contribute little to it. They were not strongly related to the other variables, and each gets a component mostly of its own: PC2 is dominated by <code>economicActivityFemale</code>, and PC3 by <code>economicActivityMale</code>. When we regress infant mortality on these components, the PC1 coefficient describes how infant mortality changes as a country moves along the development scale. It does not tell us the effect of education separately from life expectancy, which is exactly the question the large VIFs told us these data could not answer.</p>
+<p>Plotting the countries by their first two PC scores shows the development axis. (The sign of a principal component is arbitrary, so in your output the plot may be flipped left to right.)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># With ten components, bake() names the scores PC01, ..., PC10.</span></span>
+<span><span class="co"># Remove the leading 0 so the names match the loadings (PC1, ..., PC10).</span></span>
+<span><span class="va">un_scores</span> <span class="op">&lt;-</span> <span class="va">un_pca_prep</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">bake</span><span class="op">(</span>new_data <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/rename.html">rename_with</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://stringr.tidyverse.org/reference/str_replace.html">str_replace</a></span><span class="op">(</span><span class="va">.x</span>, <span class="st">"^PC0"</span>, <span class="st">"PC"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">un_scores</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">PC2</span>, color <span class="op">=</span> <span class="va">region</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fl">0</span>, color <span class="op">=</span> <span class="st">"gray80"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_text.html">geom_text</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>label <span class="op">=</span> <span class="va">country</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2.5</span>, vjust <span class="op">=</span> <span class="op">-</span><span class="fl">0.8</span>,</span>
+<span>            check_overlap <span class="op">=</span> <span class="cn">TRUE</span>, show.legend <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    title <span class="op">=</span> <span class="st">"UN98 countries on the first two principal components"</span>,</span>
+<span>    x <span class="op">=</span> <span class="st">"PC1 (development)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"PC2 (mostly female economic activity)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Region"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-23-1.png" class="img-fluid figure-img" width="768"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>One end of PC1 is made up mostly of African countries, such as Burkina Faso and Burundi. The other end has Spain, the United States, South Korea, Hong Kong, and several other European countries. Infant mortality follows the same ordering, as the next plot shows.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_scores</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">PC1</span>, y <span class="op">=</span> <span class="va">infantMortality</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>color <span class="op">=</span> <span class="va">region</span><span class="op">)</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_smooth.html">geom_smooth</a></span><span class="op">(</span>method <span class="op">=</span> <span class="st">"lm"</span>, se <span class="op">=</span> <span class="cn">FALSE</span>, color <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"PC1 (development)"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Infant mortality (per 1000 live births)"</span>,</span>
+<span>    color <span class="op">=</span> <span class="st">"Region"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-24-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now for the regression. We fit a PCR model for each possible number of components, from 1 to 10, and compare the fits. With all ten components, PCR is the same model as the ordinary least squares fit on the original ten predictors, since the ten components carry exactly the same information.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_pcr</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">k</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="fu">recipe</span><span class="op">(</span><span class="va">infantMortality</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">un_dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">update_role</span><span class="op">(</span><span class="va">country</span>, <span class="va">region</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">step_pca</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span>, num_comp <span class="op">=</span> <span class="va">k</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">workflow</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">un_dat</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">pcr_comparison</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>num_comp <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    fit <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">num_comp</span>, <span class="va">fit_pcr</span><span class="op">)</span>,</span>
+<span>    fit_stats <span class="op">=</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="va">fit</span>, <span class="op">~</span> <span class="fu">glance</span><span class="op">(</span><span class="fu">extract_fit_engine</span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/unnest.html">unnest</a></span><span class="op">(</span><span class="va">fit_stats</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">num_comp</span>, <span class="va">r.squared</span>, <span class="va">adj.r.squared</span>, <span class="va">sigma</span>, <span class="va">AIC</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pcr_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: right;">num_comp</th>
+<th style="text-align: right;">r.squared</th>
+<th style="text-align: right;">adj.r.squared</th>
+<th style="text-align: right;">sigma</th>
+<th style="text-align: right;">AIC</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.797</td>
+<td style="text-align: right;">0.792</td>
+<td style="text-align: right;">15.608</td>
+<td style="text-align: right;">328.950</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">0.811</td>
+<td style="text-align: right;">0.800</td>
+<td style="text-align: right;">15.281</td>
+<td style="text-align: right;">328.233</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.880</td>
+<td style="text-align: right;">0.869</td>
+<td style="text-align: right;">12.360</td>
+<td style="text-align: right;">312.585</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">0.906</td>
+<td style="text-align: right;">0.895</td>
+<td style="text-align: right;">11.090</td>
+<td style="text-align: right;">304.997</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">0.906</td>
+<td style="text-align: right;">0.892</td>
+<td style="text-align: right;">11.257</td>
+<td style="text-align: right;">306.996</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.913</td>
+<td style="text-align: right;">0.897</td>
+<td style="text-align: right;">10.975</td>
+<td style="text-align: right;">305.822</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">0.921</td>
+<td style="text-align: right;">0.903</td>
+<td style="text-align: right;">10.656</td>
+<td style="text-align: right;">304.281</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">0.942</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">9.244</td>
+<td style="text-align: right;">293.913</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">0.944</td>
+<td style="text-align: right;">0.927</td>
+<td style="text-align: right;">9.233</td>
+<td style="text-align: right;">294.503</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">0.944</td>
+<td style="text-align: right;">0.924</td>
+<td style="text-align: right;">9.396</td>
+<td style="text-align: right;">296.498</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_comparison</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">num_comp</span>, y <span class="op">=</span> <span class="va">adj.r.squared</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_continuous</a></span><span class="op">(</span>breaks <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span></span>
+<span>    x <span class="op">=</span> <span class="st">"Number of principal components"</span>,</span>
+<span>    y <span class="op">=</span> <span class="st">"Adjusted R-squared"</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="14_Multicollinearity_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid figure-img" width="576"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>PC1 alone gives an adjusted <span class="math inline">\(R^2\)</span> of about 0.79. Adding components 3 and 4 helps, and then the fit hardly changes until the eighth component, which raises the adjusted <span class="math inline">\(R^2\)</span> again. PC8 explains less than half of 1% of the variation in the predictors, yet it is useful for predicting infant mortality. This is the warning from earlier in action: PCA ranks components by how much predictor variance they carry, without looking at <span class="math inline">\(y\)</span>. The comparison above uses the same data to fit and to judge the models; a better way to choose the number of components is cross-validation, which we cover in the chapter on model validation.</p>
+<p>For this example we keep four components. They explain over 90% of the predictor variance, and the adjusted <span class="math inline">\(R^2\)</span> is close to that of the full model.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb34"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_pcr_fit</span> <span class="op">&lt;-</span> <span class="fu">fit_pcr</span><span class="op">(</span><span class="fl">4</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">un_pcr_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std.error</th>
+<th style="text-align: right;">statistic</th>
+<th style="text-align: right;">p.value</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">38.7179</td>
+<td style="text-align: right;">1.7758</td>
+<td style="text-align: right;">21.8031</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PC1</td>
+<td style="text-align: right;">-11.9976</td>
+<td style="text-align: right;">0.7071</td>
+<td style="text-align: right;">-16.9684</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PC2</td>
+<td style="text-align: right;">-3.8037</td>
+<td style="text-align: right;">1.7127</td>
+<td style="text-align: right;">-2.2208</td>
+<td style="text-align: right;">0.0331</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PC3</td>
+<td style="text-align: right;">-8.7957</td>
+<td style="text-align: right;">1.7634</td>
+<td style="text-align: right;">-4.9879</td>
+<td style="text-align: right;">0.0000</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PC4</td>
+<td style="text-align: right;">-7.5918</td>
+<td style="text-align: right;">2.4662</td>
+<td style="text-align: right;">-3.0783</td>
+<td style="text-align: right;">0.0041</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">un_pcr_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_fit_engine</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/car/man/vif.html">vif</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">vif_table</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">4</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">variable</th>
+<th style="text-align: right;">VIF</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">PC1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PC2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">PC3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">PC4</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>All four VIFs are 1, compared with VIFs well above 10 for several of the original predictors in <a href="#exm-14_1" class="quarto-xref">Example&nbsp;<span>14.1</span></a>. PC1 has a very small p-value, which fits the plot of infant mortality against PC1.</p>
+<p>The PCR coefficients are for components, but we can translate them back to the standardized predictors. Each PC is a weighted sum of the standardized predictors, so the slope PCR implies for a predictor is the sum, over the four components, of its loading times the component’s coefficient. The table compares these implied slopes with the least squares slopes from a model on the standardized predictors.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb36"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">pcr_gamma</span> <span class="op">&lt;-</span> <span class="va">un_pcr_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">"(Intercept)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>component <span class="op">=</span> <span class="va">term</span>, gamma <span class="op">=</span> <span class="va">estimate</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pcr_implied</span> <span class="op">&lt;-</span> <span class="va">un_pcr_fit</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">extract_recipe</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span>number <span class="op">=</span> <span class="fl">2</span>, type <span class="op">=</span> <span class="st">"coef"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">inner_join</a></span><span class="op">(</span><span class="va">pcr_gamma</span>, by <span class="op">=</span> <span class="st">"component"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span>term <span class="op">=</span> <span class="va">terms</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarize</a></span><span class="op">(</span>pcr_slope <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">value</span> <span class="op">*</span> <span class="va">gamma</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ols_standardized</span> <span class="op">&lt;-</span> <span class="fu">recipe</span><span class="op">(</span><span class="va">infantMortality</span> <span class="op">~</span> <span class="va">.</span>, data <span class="op">=</span> <span class="va">un_dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">update_role</span><span class="op">(</span><span class="va">country</span>, <span class="va">region</span>, new_role <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">step_normalize</span><span class="op">(</span><span class="fu">all_predictors</span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">workflow</span><span class="op">(</span><span class="va">lm_model</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">fit</span><span class="op">(</span>data <span class="op">=</span> <span class="va">un_dat</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">tidy</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">term</span> <span class="op">!=</span> <span class="st">"(Intercept)"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">term</span>, ols_slope <span class="op">=</span> <span class="va">estimate</span>, ols_std_error <span class="op">=</span> <span class="va">std.error</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">ols_standardized</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">pcr_implied</span>, by <span class="op">=</span> <span class="st">"term"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">ols_slope</th>
+<th style="text-align: right;">ols_std_error</th>
+<th style="text-align: right;">pcr_slope</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">tfr</td>
+<td style="text-align: right;">17.964</td>
+<td style="text-align: right;">5.768</td>
+<td style="text-align: right;">7.757</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">contraception</td>
+<td style="text-align: right;">-1.439</td>
+<td style="text-align: right;">2.782</td>
+<td style="text-align: right;">-5.343</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">educationMale</td>
+<td style="text-align: right;">14.311</td>
+<td style="text-align: right;">7.441</td>
+<td style="text-align: right;">2.469</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">educationFemale</td>
+<td style="text-align: right;">-18.570</td>
+<td style="text-align: right;">8.002</td>
+<td style="text-align: right;">0.404</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">lifeMale</td>
+<td style="text-align: right;">-3.614</td>
+<td style="text-align: right;">9.911</td>
+<td style="text-align: right;">-8.854</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">lifeFemale</td>
+<td style="text-align: right;">-7.572</td>
+<td style="text-align: right;">13.175</td>
+<td style="text-align: right;">-8.934</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">economicActivityMale</td>
+<td style="text-align: right;">-3.176</td>
+<td style="text-align: right;">2.187</td>
+<td style="text-align: right;">-2.629</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">economicActivityFemale</td>
+<td style="text-align: right;">2.934</td>
+<td style="text-align: right;">2.182</td>
+<td style="text-align: right;">-0.523</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">illiteracyMale</td>
+<td style="text-align: right;">-8.841</td>
+<td style="text-align: right;">6.372</td>
+<td style="text-align: right;">2.941</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">illiteracyFemale</td>
+<td style="text-align: right;">7.712</td>
+<td style="text-align: right;">7.522</td>
+<td style="text-align: right;">4.939</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Look at the pairs of variables that measure nearly the same thing. Least squares gives <code>educationMale</code> and <code>educationFemale</code> large slopes of opposite sign (about 14.3 and -18.6), and it does the same with <code>illiteracyMale</code> and <code>illiteracyFemale</code>; the two slopes in each pair mostly cancel. Several of the least squares standard errors are as large as the estimates, as the large VIFs predicted. PCR gives the two variables in each pair slopes with the same sign and similar size, because they load almost identically on the components it kept. The PCR slopes are biased, since we discarded six components, but they are much more stable. They still describe a change in one standardized predictor with the others held fixed, so they should be read with the same care as in <a href="#exm-14_1" class="quarto-xref">Example&nbsp;<span>14.1</span></a>.</p>
+</div>
+</div>
+<p>PCR lets us fit a regression model even when the multicollinearity is extreme, and using only the first few PCs also reduces the dimension of the problem. It does not reduce the number of measurements we need. Every PC is a linear combination of all the original predictors, so we still have to collect every one of them. If the question is whether a variable that is hard or expensive to measure can be dropped, PCR will not answer it. We also lose the direct interpretation of the coefficients.</p>
 <div class="callout callout-style-default callout-warning callout-titled" title="PCR trades interpretation for stability">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-10-contents" aria-controls="callout-10" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1709,15 +2381,15 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-10" class="callout-10-contents callout-collapse collapse show">
+<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>PCR can reduce multicollinearity because the principal components are uncorrelated. The tradeoff is that the coefficients are no longer slopes for the original predictors. A coefficient for <code>PC1</code>, for example, describes the change in the expected response for a one-unit increase in the first principal component, not a one-unit increase in <code>tri</code>, <code>thigh</code>, or <code>midarm</code>.</p>
-<p>This is why PCR is most appealing when prediction or numerical stability matters more than explaining the effect of each original predictor.</p>
+<p>PCR reduces multicollinearity because the principal components are uncorrelated. The cost is that the coefficients are no longer slopes for the original predictors. The coefficient for <code>PC1</code>, for example, is the change in the expected response for a one-unit increase in the first principal component, not for a one-unit increase in <code>tri</code>, <code>thigh</code>, or <code>midarm</code>.</p>
+<p>For this reason PCR is most appealing when prediction or numerical stability is the goal, rather than explaining the effect of each original predictor.</p>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="Bridge to ridge regression">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-11-contents" aria-controls="callout-11" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1726,45 +2398,16 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-11" class="callout-11-contents callout-collapse collapse show">
+<div id="callout-13" class="callout-13-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
-<p>PCR is one way to respond to multicollinearity: it changes the predictors by replacing them with principal components. Ridge regression, discussed in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>, takes a different approach. It keeps the original predictors in the model but adds a penalty that shrinks coefficient estimates toward 0.</p>
-<p>The two approaches answer slightly different needs:</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-<col style="width: 25%">
-</colgroup>
-<thead><tr class="header">
-<th>Method</th>
-<th>Basic idea</th>
-<th>Main advantage</th>
-<th>Main tradeoff</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><strong>PCR</strong></td>
-<td>Replace correlated predictors with uncorrelated components.</td>
-<td>Reduces dimension and removes multicollinearity among the components.</td>
-<td>Coefficients are for components, not original variables.</td>
-</tr>
-<tr class="even">
-<td><strong>Ridge regression</strong></td>
-<td>Keep the original predictors but shrink their coefficients.</td>
-<td>Often improves stability and prediction when predictors are correlated.</td>
-<td>Coefficients are biased because shrinkage is intentional.</td>
-</tr>
-</tbody>
-</table>
-<p>Both methods are useful when ordinary least squares becomes unstable, but neither magically answers which original variable is “the one true cause.” That question still requires study design, context, and careful interpretation.</p>
+<p>PCR handles multicollinearity by changing the predictors: it replaces them with principal components, which reduces the dimension and removes the correlation, at the price of coefficients that describe components instead of the original variables. Ridge regression, discussed in <a href="19_Ridge.html" class="quarto-xref"><span>Chapter 19</span></a>, keeps the original predictors in the model and adds a penalty that shrinks their coefficient estimates toward 0. That often makes the estimates more stable and improves prediction when predictors are correlated, but the estimates are biased on purpose.</p>
+<p>Both methods are useful when ordinary least squares becomes unstable. Neither one tells us which original variable is “the one true cause”; that question still requires study design, context, and careful interpretation.</p>
 </div>
 </div>
 </div>
 </section></section><section id="recap" class="level2" data-number="14.4"><h2 data-number="14.4" class="anchored" data-anchor-id="recap">
 <span class="header-section-number">14.4</span> Recap</h2>
-<p>In this chapter, we examined what happens when predictors overlap with each other and how principal component regression can address that overlap.</p>
+<p>In this chapter we looked at what happens when predictors overlap with each other and how principal component regression can deal with that overlap.</p>
 <table class="caption-top table">
 <colgroup>
 <col style="width: 50%">
@@ -1776,46 +2419,46 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td><strong>Multicollinearity</strong></td>
+<td>Multicollinearity</td>
 <td>Two or more predictors contain redundant information because they are correlated with each other.</td>
 </tr>
 <tr class="even">
-<td><strong>Partial slope interpretation</strong></td>
-<td>A regression coefficient describes the effect of changing one predictor while holding the others fixed. This interpretation becomes awkward when predictors naturally move together.</td>
+<td>Partial slope interpretation</td>
+<td>A regression coefficient describes the effect of changing one predictor while holding the others fixed. This is awkward when the predictors naturally move together.</td>
 </tr>
 <tr class="odd">
-<td><strong>VIF</strong></td>
-<td>The variance inflation factor measures how strongly one predictor can be explained by the other predictors.</td>
+<td>VIF</td>
+<td>The variance inflation factor measures how well one predictor can be explained by the other predictors.</td>
 </tr>
 <tr class="even">
-<td><strong>Large VIF</strong></td>
-<td>A large VIF indicates that the standard error for that coefficient is inflated because of multicollinearity.</td>
+<td>Large VIF</td>
+<td>The standard error for that coefficient is inflated because of multicollinearity.</td>
 </tr>
 <tr class="odd">
-<td><strong>Prediction vs.&nbsp;coefficient inference</strong></td>
-<td>Multicollinearity may leave prediction performance largely unchanged while making individual coefficient tests unstable.</td>
+<td>Prediction vs.&nbsp;coefficient inference</td>
+<td>Multicollinearity can leave predictions largely unchanged while making individual coefficient tests unstable.</td>
 </tr>
 <tr class="even">
-<td><strong>Standardization</strong></td>
-<td>Rescaling a predictor to have mean 0 and standard deviation 1. Standardization changes scale, but it does not remove correlation among predictors.</td>
+<td>Standardization</td>
+<td>Rescaling a predictor to have mean 0 and standard deviation 1. It changes the scale but not the correlations among predictors.</td>
 </tr>
 <tr class="odd">
-<td><strong>PCA</strong></td>
-<td>A method that replaces correlated predictors with uncorrelated principal components. PCA focuses on variation in the predictors, not directly on prediction of <span class="math inline">\(y\)</span>.</td>
+<td>PCA</td>
+<td>A rotation of the predictor axes that replaces correlated predictors with uncorrelated principal components, ordered by how much predictor variance they explain. PCA ignores <span class="math inline">\(y\)</span>.</td>
 </tr>
 <tr class="even">
-<td><strong>PCR</strong></td>
-<td>Principal component regression uses principal components as predictors in a regression model. It can improve stability but reduces direct interpretability.</td>
+<td>PCR</td>
+<td>Regression on principal components. It can make the fit more stable, but the coefficients are harder to interpret.</td>
 </tr>
 <tr class="odd">
-<td><strong>Ridge regression</strong></td>
-<td>A regularization method that keeps the original predictors but shrinks coefficients to improve stability.</td>
+<td>Ridge regression</td>
+<td>A regularization method that keeps the original predictors and shrinks their coefficients to make the fit more stable.</td>
 </tr>
 </tbody>
 </table></section><section id="check-your-understanding" class="level2" data-number="14.5"><h2 data-number="14.5" class="anchored" data-anchor-id="check-your-understanding">
 <span class="header-section-number">14.5</span> Check your understanding</h2>
 <div class="callout callout-style-default callout-note callout-titled" title="Problems">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-12-contents" aria-controls="callout-12" aria-expanded="true" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-14-contents" aria-controls="callout-14" aria-expanded="true" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1824,7 +2467,7 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-12" class="callout-12-contents callout-collapse collapse show">
+<div id="callout-14" class="callout-14-contents callout-collapse collapse show">
 <div class="callout-body-container callout-body">
 <ol type="1">
 <li><p>Why can a model with severe multicollinearity still make useful predictions?</p></li>
@@ -1837,12 +2480,13 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 <li><p>Why might PCR be a poor choice if the main research goal is to explain the unique effect of each original predictor?</p></li>
 <li><p>Why might the first principal component not be the best single predictor of the response?</p></li>
 <li><p>How does ridge regression respond to multicollinearity differently than PCR?</p></li>
+<li><p>In <a href="#exm-14_4" class="quarto-xref">Example&nbsp;<span>14.4</span></a>, the eighth principal component explained less than 1% of the variation in the predictors but raised the adjusted <span class="math inline">\(R^2\)</span> noticeably. How can that happen?</p></li>
 </ol>
 </div>
 </div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Solutions">
-<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-13-contents" aria-controls="callout-13" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-15-contents" aria-controls="callout-15" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
@@ -1851,19 +2495,20 @@ PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-13" class="callout-13-contents callout-collapse collapse">
+<div id="callout-15" class="callout-15-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <ol type="1">
-<li><p><strong>Prediction uses the combined information in the predictors.</strong> If two predictors overlap, the model may still use their shared information to predict the response well. The difficulty is not necessarily prediction; it is separating the unique contribution of each predictor.</p></li>
-<li><p><strong>The predictor is predictable from the other predictors.</strong> A high VIF means that when the predictor is used as a response and regressed on the remaining predictors, the resulting <span class="math inline">\(R_i^2\)</span> is large. In plain language, the predictor is carrying information that is already present elsewhere in the model.</p></li>
-<li><p><strong>Inflated standard errors shrink the test statistic.</strong> The test statistic for a coefficient divides the estimate by its standard error. Multicollinearity inflates the standard error, which can make the test statistic smaller and the p-value larger, even when the predictor is genuinely related to the response.</p></li>
-<li><p><strong>Holding correlated predictors constant may be unrealistic.</strong> If two predictors usually move together, it may be hard to imagine increasing one while the other stays fixed. That makes the partial slope harder to interpret as a practical effect.</p></li>
-<li><p><strong>No.</strong> Standardizing predictors changes their units so they have mean 0 and standard deviation 1, but it does not change their correlations. Since multicollinearity is about relationships among predictors, standardization alone does not remove it.</p></li>
-<li><p><strong>It performs standardization.</strong> In this chapter’s terminology, standardization means subtracting the mean and dividing by the standard deviation. <code>step_normalize()</code> does exactly that, even though some courses reserve the word normalization for scaling values to a range such as 0 to 1.</p></li>
-<li><p><strong>Principal components are constructed to be uncorrelated.</strong> PCA rotates the original predictor space into new axes that are orthogonal to one another. Since the resulting components do not overlap linearly, their VIFs are 1 when used together in a linear model.</p></li>
-<li><p><strong>PCR changes the predictors.</strong> The model coefficients describe principal components, not the original variables. Because each component is a combination of the original predictors, PCR can improve stability but makes direct statements like “holding <code>thigh</code> and <code>midarm</code> fixed, a one-unit increase in <code>tri</code>…” much harder to make.</p></li>
-<li><p><strong>PCA focuses on the predictors, not the response.</strong> The first principal component explains the most variation among the predictors. But the direction with the most predictor variation is not guaranteed to be the direction most related to <span class="math inline">\(y\)</span>.</p></li>
-<li><p><strong>Ridge keeps the predictors; PCR replaces them.</strong> PCR creates uncorrelated principal components and uses those components in the regression model. Ridge regression keeps the original predictors but shrinks the coefficient estimates to make the model more stable when predictors are correlated.</p></li>
+<li><p>Prediction uses the combined information in the predictors. If two predictors overlap, the model can still use their shared information to predict the response well. The difficulty is in separating the unique contribution of each predictor, not in prediction.</p></li>
+<li><p>The predictor can be predicted from the other predictors. A high VIF means that when we regress this predictor on the remaining predictors, <span class="math inline">\(R_i^2\)</span> is large. In plain language, the predictor carries information that is already in the model.</p></li>
+<li><p>The test statistic for a coefficient is the estimate divided by its standard error. Multicollinearity inflates the standard error, so the test statistic shrinks and the p-value grows, even when the predictor is related to the response.</p></li>
+<li><p>If two predictors usually move together, it may be hard to imagine increasing one while the other stays fixed. That makes the partial slope hard to interpret as a real-world effect.</p></li>
+<li><p>No.&nbsp;Standardizing changes each predictor’s units so it has mean 0 and standard deviation 1, but the correlations stay the same. Multicollinearity is about the relationships among predictors, so standardizing alone does not remove it.</p></li>
+<li><p>It performs standardization. In this chapter, standardization means subtracting the mean and dividing by the standard deviation, and <code>step_normalize()</code> does exactly that, even though some courses use the word normalization only for rescaling values to a range such as 0 to 1.</p></li>
+<li><p>The components are constructed to be uncorrelated. PCA rotates the predictor axes to new axes that are perpendicular to one another, as in the rotation plot for <code>tri</code> and <code>thigh</code>. Since the components have no linear overlap, their VIFs are 1 when they are used together in a linear model.</p></li>
+<li><p>PCR changes the predictors. The coefficients describe principal components, not the original variables. Each component combines all of the original predictors, so statements like “holding <code>thigh</code> and <code>midarm</code> fixed, a one-unit increase in <code>tri</code>…” are much harder to make.</p></li>
+<li><p>PCA looks only at the predictors. The first principal component is the direction with the most variation among the predictors, but nothing guarantees that this is the direction most related to <span class="math inline">\(y\)</span>.</p></li>
+<li><p>PCR replaces the predictors with uncorrelated principal components and regresses on those. Ridge regression keeps the original predictors and shrinks their coefficient estimates to make the model more stable when the predictors are correlated.</p></li>
+<li><p>PCA orders the components by how much of the predictors’ variance they carry and never looks at the response. A component with very little spread in the predictors can still be the direction that infant mortality depends on, so leaving it out costs some fit even though it carries little predictor variance.</p></li>
 </ol>
 </div>
 </div>

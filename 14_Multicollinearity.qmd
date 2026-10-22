@@ -481,43 +481,41 @@ Note that RMSE is not much different between the two models. It is not affected 
 
 
 
-## Standardizing Predictor Variables
+## Standardizing predictor variables
 
-In linear regression, predictor variables are often transformed to ensure that they are on a comparable scale. This is especially important when predictors have vastly different units or magnitudes, as it can influence the stability and interpretability of the model. 
+Predictors in a regression model are often measured in very different units. One might be a skinfold thickness in millimeters and another a percentage, and their magnitudes can differ by orders of magnitude. Rescaling them to a common scale makes coefficient estimates more stable numerically and makes some methods, PCA among them, behave sensibly.
 
-A common technique for transforming predictors is **standardization**, where each predictor variable is rescaled to have a mean of 0 and a standard deviation of 1. This section will explore the concept of *standardization*, how it differs from *normalization*, and the implications for model performance, especially in the context of multicollinearity. 
+The most common rescaling is **standardization**: each predictor is shifted and rescaled so that it has mean 0 and standard deviation 1. In this section we compare standardization with *normalization* and look at what standardizing does (and does not do) when predictors are correlated.
 
-### Standardization vs. Normalization
+### Standardization vs. normalization
 
-While the terms "standardization" and "normalization" are sometimes used interchangeably, they describe distinct mathematical operations. Standardization transforms a variable $X$ to have a mean of 0 and a standard deviation of 1, using the following formula:
+People sometimes use "standardization" and "normalization" as if they meant the same thing, but they are different operations. Standardization transforms a variable $X$ with
 
 $$
 z_i = \frac{x_i - \bar{x}}{s_x}
 $$
 
-where $z_i$ is the standardized value, $x_i$ is the original value, $\bar{x}$ is the mean of the variable, and $s_x$ is its standard deviation. This process ensures that the transformed variable has mean 0 and standard deviation 1. It does **not** guarantee that the transformed variable follows a normal distribution.
+where $z_i$ is the standardized value, $x_i$ is the original value, $\bar{x}$ is the sample mean, and $s_x$ is the sample standard deviation. The transformed variable has mean 0 and standard deviation 1. It does **not** follow a normal distribution unless the original variable did; standardizing changes the location and scale, not the shape.
 
-Normalization, on the other hand, typically refers to scaling the data to a specific range, such as [0, 1]. This is done using the formula:
+Normalization usually means rescaling a variable to a fixed range, often $[0, 1]$:
 
 $$
 x' = \frac{x_i - \text{min}(x)}{\text{max}(x) - \text{min}(x)}
 $$
 
-Normalization is most useful when the range of the variables needs to be constrained for certain algorithms, such as in neural networks. In contrast, standardization is generally preferred in linear models, where the focus is on centering and rescaling predictors to ensure interpretability of coefficients.
+Normalization is used when an algorithm needs its inputs in a bounded range, as many neural networks do. In linear models we usually standardize instead, since centering and scaling by the standard deviation gives coefficients a "per standard deviation" interpretation.
 
-### Why `tidymodels` Uses the Term "Normalize"
+### Why `tidymodels` uses the term "normalize"
 
-In the `tidymodels` framework in R, the term "normalize" is used to describe what is technically a standardization process. For example, when creating a preprocessing recipe with the `recipe()` function, the step called `step_normalize()` computes the mean and standard deviation of each predictor and scales it accordingly. Although the terminology might be confusing, this usage reflects a common convention in some statistical software where both standardization and normalization are loosely referred to as normalization.
+In `tidymodels`, the recipe step that standardizes is called `step_normalize()`. It computes the mean and standard deviation of each predictor and then subtracts the mean and divides by the standard deviation, which is standardization in the sense above. The name follows a convention in some software, where both operations are loosely called normalization. In this book, when you see `step_normalize()`, read it as "standardize."
 
+### Standardization and multicollinearity
 
-
-### Standardization and Multicollinearity
-
-By scaling all predictors to a common variance, the impact of large magnitude differences between variables is reduced, leading to more stable coefficient estimates. Standardization alone does not reduce correlations between variables. However, it provides numerical stability when using methods other than least squares, making it easier to detect and address multicollinearity issues. When multicollinearity is severe, other techniques, such as principal component regression, may be necessary.
+Putting every predictor on the same scale removes large differences in magnitude between variables, and this helps numerically, particularly for methods other than least squares. Standardizing does not change the correlations among the predictors, though, so it does nothing to the multicollinearity itself. When multicollinearity is severe, we need a method that changes the predictors, such as principal component regression.
 
 ::: {.example title="Worked example: Standardizing does not remove correlation"}
 
-Standardization changes the scale of the predictors, but it does not change the correlation between them.
+Standardization changes the scale of the predictors. The correlations between them stay the same.
 
 ```{r warning=FALSE, message=FALSE}
 bodyfat_predictors <- dat |>
@@ -543,113 +541,211 @@ correlation_compare <- tibble(
 knitr::kable(correlation_compare, digits = 4)
 ```
 
-The correlations are unchanged after standardization. This is why standardization is helpful for scale and numerical stability, but it is not a cure for multicollinearity.
+The correlations are identical before and after standardizing. Standardization helps with scale and numerical stability, but it does not cure multicollinearity.
 
 :::
 
 
 
 
-## Principal Component Regression
+## Principal component regression
 
-One effective method for addressing multicollinearity is *Principal Component Regression (PCR)*, which combines *Principal Component Analysis (PCA)* and linear regression. The key idea behind PCR is to transform the original predictor variables into a smaller set of uncorrelated variables, called **principal components (PCs)**, which capture the most variance in the data.
+One way to deal with multicollinearity is *principal component regression (PCR)*, which combines *principal component analysis (PCA)* with linear regression. PCR replaces the original predictors with a new set of uncorrelated variables, called **principal components (PCs)**, and then uses some or all of those components as the predictors in the regression.
 
-### Introduction to Principal Component Analysis (PCA)
+### Introduction to principal component analysis (PCA)
 
-PCA is a *dimensionality reduction* technique that identifies the directions (called *principal components*) along which the variation in the data is maximized. These directions are orthogonal to each other and ranked by the amount of variance they capture. The first principal component explains the largest amount of variance in the data, followed by the second principal component, and so on. Each principal component is a linear combination of the original predictor variables.
+PCA looks for the directions in the predictor space along which the data vary the most. The first principal component is the direction with the largest variance. The second is the direction with the largest remaining variance among all directions perpendicular to the first, and so on. Each principal component is a linear combination of the original predictors, and the components are uncorrelated with one another.
 
-In practical terms, PCA helps to reduce the dimensionality of the data, making it more manageable without losing too much information. This is particularly useful in cases where the number of predictors is large, and some of them are highly correlated.
+Because the last few components often carry very little of the variation, PCA can also reduce the number of variables we work with. This is most useful when there are many predictors and several of them are highly correlated.
 
 ::: {.callout-important collapse="false" title="PCA does not know about the response variable"}
 
-PCA is performed using only the predictor variables. It finds directions that explain variation in the predictors, not directions that necessarily predict the response well.
+PCA uses only the predictor variables. It finds directions that explain variation in the predictors, and those are not necessarily the directions that predict the response well.
 
-This means the first few principal components may explain most of the variation in the predictors but may not be the most useful components for predicting $y$. In practice, the number of components should be chosen using model performance, subject-matter judgment, or a validation procedure, not only by looking at predictor variance.
+So the first few principal components can explain most of the variation in the predictors and still not be the most useful components for predicting $y$. Choose the number of components with model performance, subject-matter judgment, or a validation procedure, not with predictor variance alone.
 
 :::
 
 ::: {.callout-tip collapse="true"}
-## For those who want to see the math:
+## For those who want to see the math
 
-Principal components (PCs) are linear transformations of the original predictor variables that aim to capture the maximum variance in the data. Here is a mathematical summary of how these components are computed:
+Principal components are linear transformations of the original predictors chosen to capture as much variance as possible. They are computed in five steps.
 
-1. **Standardizing the Data**
-Given a dataset with $p$ predictors $x_1, x_2, \dots, x_p$ and $n$ observations, we first standardize each predictor variable to have mean 0 and standard deviation 1:
+1. Standardize the data. Given $p$ predictors $x_1, x_2, \dots, x_p$ measured on $n$ observations, standardize each predictor to have mean 0 and standard deviation 1:
 
 $$
 z_{ij} = \frac{x_{ij} - \bar{x}_j}{s_j}
 $$
 
-where:
-- $z_{ij}$ is the standardized value of the $j$-th predictor for the $i$-th observation.
-- $\bar{x}_j$ is the mean of the $j$-th predictor.
-- $s_j$ is the standard deviation of the $j$-th predictor.
+where $z_{ij}$ is the standardized value of the $j$th predictor for the $i$th observation, $\bar{x}_j$ is the mean of the $j$th predictor, and $s_j$ is its standard deviation. Without this step, the predictor with the largest units would dominate the first component.
 
-This step ensures that all variables are on the same scale, which is necessary for PCA.
-
-2. **Computing the Covariance Matrix**
-Once the data is standardized, we compute the covariance matrix $\mathbf{S}$ of the standardized predictors:
+2. Compute the covariance matrix. For the standardized predictors, the covariance matrix is
 
 $$
 \mathbf{S} = \frac{1}{n-1} \mathbf{Z}^T \mathbf{Z}
 $$
 
-where $\mathbf{Z}$ is the matrix of standardized data with $n$ rows (observations) and $p$ columns (predictors).
+where $\mathbf{Z}$ is the $n \times p$ matrix of standardized data. Since the columns are standardized, $\mathbf{S}$ is also the correlation matrix of the original predictors.
 
-3. **Finding Eigenvalues and Eigenvectors**
-We solve the following eigenvalue problem for the covariance matrix $\mathbf{S}$:
+3. Find the eigenvalues and eigenvectors. Solve the eigenvalue problem
 
 $$
 \mathbf{S} \mathbf{v}_j = \lambda_j \mathbf{v}_j
 $$
 
-where:
-- $\lambda_j$ is the $j$-th eigenvalue of the covariance matrix.
-- $\mathbf{v}_j$ is the corresponding eigenvector (also called the loading vector) associated with $\lambda_j$.
+where $\lambda_j$ is the $j$th eigenvalue and $\mathbf{v}_j$ is its eigenvector, also called the loading vector. The eigenvalue $\lambda_j$ is the variance of the $j$th principal component, and the eigenvector gives the direction of the $j$th new axis.
 
-The eigenvalues $\lambda_1, \lambda_2, \dots, \lambda_p$ represent the amount of variance explained by each principal component. The eigenvectors define the direction of the new coordinate axes (principal components).
-
-4. **Constructing the Principal Components**
-The $j$-th principal component $PC_j$ is a linear combination of the original standardized variables:
+4. Construct the principal components. The $j$th principal component is a linear combination of the standardized predictors:
 
 $$
 PC_j = v_{j1} z_1 + v_{j2} z_2 + \cdots + v_{jp} z_p
 $$
 
-where $v_{jk}$ is the $k$-th element of the eigenvector $\mathbf{v}_j$.
+where $v_{jk}$ is the $k$th element of $\mathbf{v}_j$. The first component, PC1, has the largest possible variance. PC2 has the largest remaining variance subject to being uncorrelated with PC1, and the pattern continues through all $p$ components.
 
-Each principal component is uncorrelated with the others and explains a decreasing amount of variance. Specifically:
-
-- **PC1** (the first principal component) explains the largest possible variance.
-- **PC2** explains the largest remaining variance subject to being orthogonal to **PC1**.
-- This process continues for all $p$ components.
-
-5. **Explained Variance**
-The proportion of the total variance explained by the $j$-th principal component is:
+5. Compute the explained variance. The proportion of the total variance explained by the $j$th component is
 
 $$
 \text{Explained Variance of } PC_j = \frac{\lambda_j}{\sum_{k=1}^p \lambda_k}
 $$
 
-The cumulative variance explained by the first $m$ components is:
+and the cumulative proportion explained by the first $m$ components is
 
 $$
-\text{Cumulative Explained Variance} = \frac{\sum_{j=1}^m \lambda_j}{\sum_{k=1}^p \lambda_k}
+\text{Cumulative Explained Variance} = \frac{\sum_{j=1}^m \lambda_j}{\sum_{k=1}^p \lambda_k}.
 $$
 
 :::
 
+### A picture of what principal components do
 
-In the context of regression, instead of regressing the response variable on the original set of predictors, we use the principal components as the new predictors. By selecting a subset of the principal components, we can retain most of the variability in the predictors while reducing multicollinearity.
+With two predictors we can draw the whole process. The example below uses only `tri` and `thigh` from the `bodyfat` data, since these two have the strongest correlation.
+
+::: {.example title="Worked example: Principal components as a rotation of the axes"}
+
+We first find the two principal components of the standardized `tri` and `thigh` values.
+
+```{r message=FALSE, warning=FALSE}
+two_pc_recipe <- recipe(bfat ~ tri + thigh, data = dat) |>
+  step_normalize(all_predictors()) |>
+  step_pca(all_predictors(), num_comp = 2)
+
+two_pc_prep <- two_pc_recipe |> prep()
+
+# Loadings: each row of this table is one direction (one PC)
+two_pc_loadings <- two_pc_prep |>
+  tidy(number = 2, type = "coef") |>
+  select(component, terms, value) |>
+  pivot_wider(names_from = terms, values_from = value)
+
+two_pc_loadings |>
+  knitr::kable(digits = 4)
+
+two_pc_prep |>
+  tidy(number = 2, type = "variance") |>
+  filter(terms == "percent variance") |>
+  select(component, percent_variance = value) |>
+  knitr::kable(digits = 2)
+```
+
+The loadings for PC1 put equal weight on `tri` and `thigh`, so PC1 is (up to sign) the average of the two standardized measurements. PC2 is their difference. Because the two variables are so strongly correlated, PC1 accounts for about 96% of their combined variance and PC2 for only about 4%.
+
+The plot below shows the standardized data with the two principal component directions drawn through the center. The gray segments connect each observation to its projection onto the PC1 line. A point's PC1 score is its position along that line, and the length of its gray segment is the size of its PC2 score.
+
+```{r message=FALSE, warning=FALSE, fig.width=6, fig.height=6}
+two_pc_scores <- two_pc_prep |>
+  bake(new_data = dat)
+
+pc1_dir <- two_pc_loadings |> filter(component == "PC1")
+pc2_dir <- two_pc_loadings |> filter(component == "PC2")
+
+projection_data <- dat |>
+  transmute(
+    tri = as.numeric(scale(tri)),
+    thigh = as.numeric(scale(thigh))
+  ) |>
+  bind_cols(two_pc_scores |> select(PC1, PC2)) |>
+  mutate(
+    proj_tri = PC1 * pc1_dir$tri,
+    proj_thigh = PC1 * pc1_dir$thigh
+  )
+
+ggplot(projection_data, aes(x = tri, y = thigh)) +
+  geom_abline(
+    slope = pc1_dir$thigh / pc1_dir$tri, intercept = 0,
+    color = "steelblue", linewidth = 1
+  ) +
+  geom_abline(
+    slope = pc2_dir$thigh / pc2_dir$tri, intercept = 0,
+    color = "darkorange", linewidth = 1, linetype = "dashed"
+  ) +
+  geom_segment(
+    aes(xend = proj_tri, yend = proj_thigh),
+    color = "gray60"
+  ) +
+  geom_point(size = 2) +
+  annotate("text", x = 1.9, y = 2.3, label = "PC1",
+           color = "steelblue", fontface = "bold") +
+  annotate("text", x = -1.9, y = 2.3, label = "PC2",
+           color = "darkorange", fontface = "bold") +
+  coord_equal(xlim = c(-2.5, 2.5), ylim = c(-2.5, 2.5)) +
+  labs(
+    title = "Principal component directions for tri and thigh",
+    x = "Standardized tri",
+    y = "Standardized thigh"
+  )
+```
+
+Most of the spread in the cloud of points runs along the PC1 line. The gray segments are short, and they are the only information PC2 carries.
+
+PCA does not move the points. It rotates the axes so that the first axis lies along the direction of greatest spread. If we plot the same 20 people using their PC scores as coordinates, the cloud is turned so that PC1 runs horizontally, and the correlation between the two new variables is 0.
+
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=4.5}
+r_original <- cor(projection_data$tri, projection_data$thigh)
+r_rotated <- cor(projection_data$PC1, projection_data$PC2)
+
+rotation_data <- bind_rows(
+  projection_data |>
+    transmute(
+      panel = str_glue("Original axes: tri and thigh (r = {round(r_original, 2)})"),
+      horizontal = tri, vertical = thigh
+    ),
+  projection_data |>
+    transmute(
+      panel = str_glue("Rotated axes: PC1 and PC2 (r = {round(r_rotated, 2)})"),
+      horizontal = PC1, vertical = PC2
+    )
+) |>
+  mutate(panel = fct_inorder(panel))
+
+ggplot(rotation_data, aes(x = horizontal, y = vertical)) +
+  geom_hline(yintercept = 0, color = "gray70") +
+  geom_vline(xintercept = 0, color = "gray70") +
+  geom_point(size = 2) +
+  facet_wrap(~ panel) +
+  coord_equal() +
+  labs(
+    x = "First axis (standardized tri, or PC1)",
+    y = "Second axis (standardized thigh, or PC2)"
+  )
+```
+
+The right panel shows why PCR removes multicollinearity. The new axes are uncorrelated by construction, and almost all of the variation is in the horizontal direction. If we dropped PC2 we would keep about 96% of the variation in the two predictors with a single variable.
+
+:::
+
+With three or more predictors the idea is the same, although we can no longer draw it: PCA rotates the axes of the $p$-dimensional predictor space so that PC1 points along the longest direction of the cloud, PC2 along the longest direction perpendicular to PC1, and so on.
+
+The loadings are the recipe for each component. A person's PC score is a weighted sum of their standardized measurements, and the loadings are the weights. For `tri` and `thigh`, PC1 is $0.71\,z_{tri} + 0.71\,z_{thigh}$ and PC2 is $-0.71\,z_{tri} + 0.71\,z_{thigh}$. Someone who is one standard deviation above average on both measurements has a PC1 score of about 1.41 and a PC2 score of 0. Someone who is one standard deviation above average on `thigh` but exactly average on `tri` has scores of about 0.71 on both. So PC1 measures overall size: how much skinfold a person has at the triceps and thigh combined. PC2 measures shape: whether a person carries relatively more at the thigh than at the triceps. Since the two measurements rise and fall together for almost everyone, people differ mostly in size, and PC2 has very little variance. Three things help when reading any table of loadings. A loading near 0 means that variable plays almost no part in the component. Variables whose loadings have the same sign move the score in the same direction. And the sign of a whole component is arbitrary, since flipping every loading in a component gives the same axis pointing the other way; only the signs relative to each other mean anything.
+
+In regression, instead of regressing the response on the original predictors, we use the principal components as the predictors. Using only the first few components keeps most of the variation in the predictors while removing the multicollinearity.
 
 
 
 
 ::: {#exm-14_3 .example title="Principal component regression with the bodyfat data"}
 
-This example uses the `bodyfat` data again.
-
-The following steps will illustrate how to apply PCA to the predictors and then use the principal components in a regression model.
+We return to the `bodyfat` data, now with all three predictors. The code below applies PCA to the predictors and then uses the principal components in a regression model.
 
 ```{r message=FALSE, warning=FALSE}
 
@@ -671,9 +767,24 @@ pca_data |>
   knitr::kable(digits = 4)
 ```
 
-The following code provides the principal components derived from the predictors in the `BodyFat` dataset. Each principal component is a linear combination of the original predictors (`tri`, `thigh`, `midarm`), and they explain the maximum variance in the data.
+Each column `PC1`, `PC2`, and `PC3` is a linear combination of the standardized `tri`, `thigh`, and `midarm` values. The loadings tell us which combination each component is.
 
-To visualize how PCA works and to understand the contribution of each principal component, let's examine the explained variance.
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=3.5}
+
+prepped |>
+  tidy(number = 2, type = "coef") |>
+  ggplot(aes(x = value, y = terms)) +
+  geom_col() +
+  geom_vline(xintercept = 0, color = "gray50") +
+  facet_wrap(~ component) +
+  labs(
+    title = "Loadings for the bodyfat principal components",
+    x = "Loading",
+    y = NULL
+  )
+```
+
+Next we look at how much of the variance each component explains.
 
 ```{r message=FALSE, warning=FALSE}
 
@@ -688,14 +799,14 @@ pca_results |>
   filter(terms == "percent variance") |>
   ggplot(aes(x = component, y = value)) +
   geom_col() +
-  labs(title = "Explained Variance by Principal Component", 
-       x = "Principal Components", 
-       y = "Proportion of Variance Explained")
+  labs(title = "Explained Variance by Principal Component",
+       x = "Principal Components",
+       y = "Percent of Variance Explained")
 ```
 
-In this plot, we observe the proportion of variance explained by each principal component. The first principal component typically explains the most variance, followed by the second, and so on. Depending on the cumulative proportion of variance explained, we can select an appropriate number of components for our regression model.
+The bars show the percent of the predictor variance explained by each component. The first component always explains the most, the second the next most, and so on. We can use the cumulative percent to decide how many components to keep in the regression model.
 
-Let's now look at the scatterplot matrix of the PCA data. Note how the correlations between the PCs are zero. 
+The scatterplot matrix of the PCA data shows that the correlations between the PCs are zero.
 
 ```{r warning=FALSE, message=FALSE}
 
@@ -703,7 +814,7 @@ ggpairs(pca_data)
 
 ```
 
-Principal Component Regression is just using these PCs as the predictor variables. We see from above that the third PC does not explain much variability. Thus, we can just use the first two PCs and save a degree of freedom since we will be using one less coefficient in the model. 
+Principal component regression uses these PCs as the predictor variables. The third PC explains very little of the variability, so we use only the first two and save a degree of freedom, since the model has one fewer coefficient.
 
 
 ```{r warning=FALSE, message=FALSE}
@@ -728,7 +839,7 @@ pcr_fit |>
 
 ```
 
-Note how small the standard errors are for the coefficients now that we no longer have multicollinearity. Let's verify that there is no multicollinearity by examining the VIFs.
+The standard errors are now small, because the predictors in this model are uncorrelated. We can confirm that there is no multicollinearity by looking at the VIFs.
 
 
 ```{r warning=FALSE, message=FALSE}
@@ -741,50 +852,238 @@ vif(pcr_engine) |>
 
 ```
 
-Both VIFs are exactly one indicating no multicollinearity. 
+Both VIFs are exactly 1, so there is no multicollinearity.
 
 :::
 
-PCR gives us the ability to still fit the regression model even in the presence of extreme multicollinearity. Another benefit of PCR is that you can also reduce dimensionality by only using the PCs that explain most of the variability. Note that you still need all the original predictor variables since the PCs are linear combinations of these variables. Thus, this is not a method for removing predictor variables. So if our goal is to determine if a variable (that may be difficult or expensive to obtain) can be dropped, then PCR is not the tool we want to use. In addition, in PCR we lose interpretability of the coefficients.
+
+::: {#exm-14_4 .example title="PCA and principal component regression with the UN98 data"}
+
+The `bodyfat` data have only three predictors. The `UN98` data from @exm-14_1 have ten, and several of them had large VIFs, so they give a fuller picture of PCA and PCR. As before, we leave out `region` and `GDPperCapita` as predictors. We keep `region` and the country names as identifiers so we can label the plots.
+
+Many countries are missing at least one variable. The model in @exm-14_1 dropped those countries automatically; here we drop them before the PCA so that every step uses the same 39 countries.
+
+```{r message=FALSE, warning=FALSE}
+un_dat <- UN98 |>
+  rownames_to_column("country") |>
+  select(-GDPperCapita) |>
+  drop_na()
+
+nrow(un_dat)
+
+un_pca_recipe <- recipe(infantMortality ~ ., data = un_dat) |>
+  update_role(country, region, new_role = "id") |>
+  step_normalize(all_predictors()) |>
+  step_pca(all_predictors(), num_comp = 10)
+
+un_pca_prep <- un_pca_recipe |> prep()
+
+un_variance <- un_pca_prep |>
+  tidy(number = 2, type = "variance") |>
+  filter(terms %in% c("percent variance", "cumulative percent variance")) |>
+  select(component, terms, value) |>
+  pivot_wider(names_from = terms, values_from = value)
+
+un_variance |>
+  knitr::kable(digits = 2)
+```
+
+Giving `country` and `region` the role `"id"` keeps them in the data but out of the PCA. With ten predictors there are ten components. The first explains about 65% of the variation in the predictors, and the first four together explain over 90%.
+
+```{r message=FALSE, warning=FALSE, fig.width=7, fig.height=4}
+un_variance |>
+  ggplot(aes(x = component)) +
+  geom_col(aes(y = `percent variance`), fill = "gray60") +
+  geom_line(aes(y = `cumulative percent variance`), color = "steelblue") +
+  geom_point(aes(y = `cumulative percent variance`), color = "steelblue") +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    title = "Variance explained by the UN98 principal components",
+    subtitle = "Bars: each component. Line: cumulative.",
+    x = "Principal component",
+    y = "Percent of predictor variance"
+  )
+```
+
+To interpret the components, we look at the loadings for the first three.
+
+```{r message=FALSE, warning=FALSE, fig.width=9, fig.height=4.5}
+un_pca_prep |>
+  tidy(number = 2, type = "coef") |>
+  filter(component %in% c("PC1", "PC2", "PC3")) |>
+  ggplot(aes(x = value, y = terms)) +
+  geom_col() +
+  geom_vline(xintercept = 0, color = "gray50") +
+  facet_wrap(~ component) +
+  labs(
+    title = "Loadings for the first three UN98 principal components",
+    x = "Loading",
+    y = NULL
+  )
+```
+
+We read these loadings the same way as the ones for `tri` and `thigh`. PC1 has loadings between about 0.32 and 0.36 for both life expectancies, both education variables, and contraception use, and loadings of about -0.36 for fertility (`tfr`) and both illiteracy rates. A country with a high PC1 score has long life expectancy, more schooling, more contraception use, fewer births per woman, and low illiteracy, all at once. In other words, PC1 is a development scale, and one number summarizes eight correlated measurements. This shared direction is also why these variables had such large VIFs in @exm-14_1: much of what each of them measures is the same thing.
+
+The two economic activity variables have loadings of only -0.16 and -0.10 on PC1, so they contribute little to it. They were not strongly related to the other variables, and each gets a component mostly of its own: PC2 is dominated by `economicActivityFemale`, and PC3 by `economicActivityMale`. When we regress infant mortality on these components, the PC1 coefficient describes how infant mortality changes as a country moves along the development scale. It does not tell us the effect of education separately from life expectancy, which is exactly the question the large VIFs told us these data could not answer.
+
+Plotting the countries by their first two PC scores shows the development axis. (The sign of a principal component is arbitrary, so in your output the plot may be flipped left to right.)
+
+```{r message=FALSE, warning=FALSE, fig.width=8, fig.height=6}
+# With ten components, bake() names the scores PC01, ..., PC10.
+# Remove the leading 0 so the names match the loadings (PC1, ..., PC10).
+un_scores <- un_pca_prep |>
+  bake(new_data = NULL) |>
+  rename_with(~ str_replace(.x, "^PC0", "PC"))
+
+un_scores |>
+  ggplot(aes(x = PC1, y = PC2, color = region)) +
+  geom_hline(yintercept = 0, color = "gray80") +
+  geom_vline(xintercept = 0, color = "gray80") +
+  geom_point(size = 2) +
+  geom_text(aes(label = country), size = 2.5, vjust = -0.8,
+            check_overlap = TRUE, show.legend = FALSE) +
+  labs(
+    title = "UN98 countries on the first two principal components",
+    x = "PC1 (development)",
+    y = "PC2 (mostly female economic activity)",
+    color = "Region"
+  )
+```
+
+One end of PC1 is made up mostly of African countries, such as Burkina Faso and Burundi. The other end has Spain, the United States, South Korea, Hong Kong, and several other European countries. Infant mortality follows the same ordering, as the next plot shows.
+
+```{r message=FALSE, warning=FALSE, fig.width=7, fig.height=4.5}
+un_scores |>
+  ggplot(aes(x = PC1, y = infantMortality)) +
+  geom_point(aes(color = region), size = 2) +
+  geom_smooth(method = "lm", se = FALSE, color = "black") +
+  labs(
+    x = "PC1 (development)",
+    y = "Infant mortality (per 1000 live births)",
+    color = "Region"
+  )
+```
+
+Now for the regression. We fit a PCR model for each possible number of components, from 1 to 10, and compare the fits. With all ten components, PCR is the same model as the ordinary least squares fit on the original ten predictors, since the ten components carry exactly the same information.
+
+```{r message=FALSE, warning=FALSE}
+fit_pcr <- function(k) {
+  recipe(infantMortality ~ ., data = un_dat) |>
+    update_role(country, region, new_role = "id") |>
+    step_normalize(all_predictors()) |>
+    step_pca(all_predictors(), num_comp = k) |>
+    workflow(lm_model) |>
+    fit(data = un_dat)
+}
+
+pcr_comparison <- tibble(num_comp = 1:10) |>
+  mutate(
+    fit = map(num_comp, fit_pcr),
+    fit_stats = map(fit, ~ glance(extract_fit_engine(.x)))
+  ) |>
+  unnest(fit_stats) |>
+  select(num_comp, r.squared, adj.r.squared, sigma, AIC)
+
+pcr_comparison |>
+  knitr::kable(digits = 3)
+
+pcr_comparison |>
+  ggplot(aes(x = num_comp, y = adj.r.squared)) +
+  geom_line() +
+  geom_point() +
+  scale_x_continuous(breaks = 1:10) +
+  labs(
+    x = "Number of principal components",
+    y = "Adjusted R-squared"
+  )
+```
+
+PC1 alone gives an adjusted $R^2$ of about 0.79. Adding components 3 and 4 helps, and then the fit hardly changes until the eighth component, which raises the adjusted $R^2$ again. PC8 explains less than half of 1% of the variation in the predictors, yet it is useful for predicting infant mortality. This is the warning from earlier in action: PCA ranks components by how much predictor variance they carry, without looking at $y$. The comparison above uses the same data to fit and to judge the models; a better way to choose the number of components is cross-validation, which we cover in the chapter on model validation.
+
+For this example we keep four components. They explain over 90% of the predictor variance, and the adjusted $R^2$ is close to that of the full model.
+
+```{r message=FALSE, warning=FALSE}
+un_pcr_fit <- fit_pcr(4)
+
+un_pcr_fit |>
+  tidy() |>
+  knitr::kable(digits = 4)
+
+un_pcr_fit |>
+  extract_fit_engine() |>
+  vif() |>
+  vif_table() |>
+  knitr::kable(digits = 4)
+```
+
+All four VIFs are 1, compared with VIFs well above 10 for several of the original predictors in @exm-14_1. PC1 has a very small p-value, which fits the plot of infant mortality against PC1.
+
+The PCR coefficients are for components, but we can translate them back to the standardized predictors. Each PC is a weighted sum of the standardized predictors, so the slope PCR implies for a predictor is the sum, over the four components, of its loading times the component's coefficient. The table compares these implied slopes with the least squares slopes from a model on the standardized predictors.
+
+```{r message=FALSE, warning=FALSE}
+pcr_gamma <- un_pcr_fit |>
+  tidy() |>
+  filter(term != "(Intercept)") |>
+  select(component = term, gamma = estimate)
+
+pcr_implied <- un_pcr_fit |>
+  extract_recipe() |>
+  tidy(number = 2, type = "coef") |>
+  inner_join(pcr_gamma, by = "component") |>
+  group_by(term = terms) |>
+  summarize(pcr_slope = sum(value * gamma))
+
+ols_standardized <- recipe(infantMortality ~ ., data = un_dat) |>
+  update_role(country, region, new_role = "id") |>
+  step_normalize(all_predictors()) |>
+  workflow(lm_model) |>
+  fit(data = un_dat) |>
+  tidy() |>
+  filter(term != "(Intercept)") |>
+  select(term, ols_slope = estimate, ols_std_error = std.error)
+
+ols_standardized |>
+  left_join(pcr_implied, by = "term") |>
+  knitr::kable(digits = 3)
+```
+
+Look at the pairs of variables that measure nearly the same thing. Least squares gives `educationMale` and `educationFemale` large slopes of opposite sign (about 14.3 and -18.6), and it does the same with `illiteracyMale` and `illiteracyFemale`; the two slopes in each pair mostly cancel. Several of the least squares standard errors are as large as the estimates, as the large VIFs predicted. PCR gives the two variables in each pair slopes with the same sign and similar size, because they load almost identically on the components it kept. The PCR slopes are biased, since we discarded six components, but they are much more stable. They still describe a change in one standardized predictor with the others held fixed, so they should be read with the same care as in @exm-14_1.
+
+:::
+
+PCR lets us fit a regression model even when the multicollinearity is extreme, and using only the first few PCs also reduces the dimension of the problem. It does not reduce the number of measurements we need. Every PC is a linear combination of all the original predictors, so we still have to collect every one of them. If the question is whether a variable that is hard or expensive to measure can be dropped, PCR will not answer it. We also lose the direct interpretation of the coefficients.
 
 ::: {.callout-warning collapse="false" title="PCR trades interpretation for stability"}
 
-PCR can reduce multicollinearity because the principal components are uncorrelated. The tradeoff is that the coefficients are no longer slopes for the original predictors. A coefficient for `PC1`, for example, describes the change in the expected response for a one-unit increase in the first principal component, not a one-unit increase in `tri`, `thigh`, or `midarm`.
+PCR reduces multicollinearity because the principal components are uncorrelated. The cost is that the coefficients are no longer slopes for the original predictors. The coefficient for `PC1`, for example, is the change in the expected response for a one-unit increase in the first principal component, not for a one-unit increase in `tri`, `thigh`, or `midarm`.
 
-This is why PCR is most appealing when prediction or numerical stability matters more than explaining the effect of each original predictor.
+For this reason PCR is most appealing when prediction or numerical stability is the goal, rather than explaining the effect of each original predictor.
 
 :::
 
 ::: {.callout-note collapse="false" title="Bridge to ridge regression"}
 
-PCR is one way to respond to multicollinearity: it changes the predictors by replacing them with principal components. Ridge regression, discussed in @sec-ridge, takes a different approach. It keeps the original predictors in the model but adds a penalty that shrinks coefficient estimates toward 0.
+PCR handles multicollinearity by changing the predictors: it replaces them with principal components, which reduces the dimension and removes the correlation, at the price of coefficients that describe components instead of the original variables. Ridge regression, discussed in @sec-ridge, keeps the original predictors in the model and adds a penalty that shrinks their coefficient estimates toward 0. That often makes the estimates more stable and improves prediction when predictors are correlated, but the estimates are biased on purpose.
 
-The two approaches answer slightly different needs:
-
-| Method | Basic idea | Main advantage | Main tradeoff |
-|---|---|---|---|
-| **PCR** | Replace correlated predictors with uncorrelated components. | Reduces dimension and removes multicollinearity among the components. | Coefficients are for components, not original variables. |
-| **Ridge regression** | Keep the original predictors but shrink their coefficients. | Often improves stability and prediction when predictors are correlated. | Coefficients are biased because shrinkage is intentional. |
-
-Both methods are useful when ordinary least squares becomes unstable, but neither magically answers which original variable is "the one true cause." That question still requires study design, context, and careful interpretation.
+Both methods are useful when ordinary least squares becomes unstable. Neither one tells us which original variable is "the one true cause"; that question still requires study design, context, and careful interpretation.
 
 :::
 
 ## Recap
 
-In this chapter, we examined what happens when predictors overlap with each other and how principal component regression can address that overlap.
+In this chapter we looked at what happens when predictors overlap with each other and how principal component regression can deal with that overlap.
 
 | Idea | Meaning |
 |---|---|
-| **Multicollinearity** | Two or more predictors contain redundant information because they are correlated with each other. |
-| **Partial slope interpretation** | A regression coefficient describes the effect of changing one predictor while holding the others fixed. This interpretation becomes awkward when predictors naturally move together. |
-| **VIF** | The variance inflation factor measures how strongly one predictor can be explained by the other predictors. |
-| **Large VIF** | A large VIF indicates that the standard error for that coefficient is inflated because of multicollinearity. |
-| **Prediction vs. coefficient inference** | Multicollinearity may leave prediction performance largely unchanged while making individual coefficient tests unstable. |
-| **Standardization** | Rescaling a predictor to have mean 0 and standard deviation 1. Standardization changes scale, but it does not remove correlation among predictors. |
-| **PCA** | A method that replaces correlated predictors with uncorrelated principal components. PCA focuses on variation in the predictors, not directly on prediction of $y$. |
-| **PCR** | Principal component regression uses principal components as predictors in a regression model. It can improve stability but reduces direct interpretability. |
-| **Ridge regression** | A regularization method that keeps the original predictors but shrinks coefficients to improve stability. |
+| Multicollinearity | Two or more predictors contain redundant information because they are correlated with each other. |
+| Partial slope interpretation | A regression coefficient describes the effect of changing one predictor while holding the others fixed. This is awkward when the predictors naturally move together. |
+| VIF | The variance inflation factor measures how well one predictor can be explained by the other predictors. |
+| Large VIF | The standard error for that coefficient is inflated because of multicollinearity. |
+| Prediction vs. coefficient inference | Multicollinearity can leave predictions largely unchanged while making individual coefficient tests unstable. |
+| Standardization | Rescaling a predictor to have mean 0 and standard deviation 1. It changes the scale but not the correlations among predictors. |
+| PCA | A rotation of the predictor axes that replaces correlated predictors with uncorrelated principal components, ordered by how much predictor variance they explain. PCA ignores $y$. |
+| PCR | Regression on principal components. It can make the fit more stable, but the coefficients are harder to interpret. |
+| Ridge regression | A regularization method that keeps the original predictors and shrinks their coefficients to make the fit more stable. |
 
 ## Check your understanding
 
@@ -810,40 +1109,32 @@ In this chapter, we examined what happens when predictors overlap with each othe
 
 10. How does ridge regression respond to multicollinearity differently than PCR?
 
+11. In @exm-14_4, the eighth principal component explained less than 1% of the variation in the predictors but raised the adjusted $R^2$ noticeably. How can that happen?
+
 :::
 
 ::: {.callout-tip collapse="true" title="Solutions"}
 
-1. **Prediction uses the combined information in the predictors.** If two predictors overlap, the model may still use their shared information to predict the response well. The difficulty is not necessarily prediction; it is separating the unique contribution of each predictor.
+1. Prediction uses the combined information in the predictors. If two predictors overlap, the model can still use their shared information to predict the response well. The difficulty is in separating the unique contribution of each predictor, not in prediction.
 
-2. **The predictor is predictable from the other predictors.** A high VIF means that when the predictor is used as a response and regressed on the remaining predictors, the resulting $R_i^2$ is large. In plain language, the predictor is carrying information that is already present elsewhere in the model.
+2. The predictor can be predicted from the other predictors. A high VIF means that when we regress this predictor on the remaining predictors, $R_i^2$ is large. In plain language, the predictor carries information that is already in the model.
 
-3. **Inflated standard errors shrink the test statistic.** The test statistic for a coefficient divides the estimate by its standard error. Multicollinearity inflates the standard error, which can make the test statistic smaller and the p-value larger, even when the predictor is genuinely related to the response.
+3. The test statistic for a coefficient is the estimate divided by its standard error. Multicollinearity inflates the standard error, so the test statistic shrinks and the p-value grows, even when the predictor is related to the response.
 
-4. **Holding correlated predictors constant may be unrealistic.** If two predictors usually move together, it may be hard to imagine increasing one while the other stays fixed. That makes the partial slope harder to interpret as a practical effect.
+4. If two predictors usually move together, it may be hard to imagine increasing one while the other stays fixed. That makes the partial slope hard to interpret as a real-world effect.
 
-5. **No.** Standardizing predictors changes their units so they have mean 0 and standard deviation 1, but it does not change their correlations. Since multicollinearity is about relationships among predictors, standardization alone does not remove it.
+5. No. Standardizing changes each predictor's units so it has mean 0 and standard deviation 1, but the correlations stay the same. Multicollinearity is about the relationships among predictors, so standardizing alone does not remove it.
 
-6. **It performs standardization.** In this chapter's terminology, standardization means subtracting the mean and dividing by the standard deviation. `step_normalize()` does exactly that, even though some courses reserve the word normalization for scaling values to a range such as 0 to 1.
+6. It performs standardization. In this chapter, standardization means subtracting the mean and dividing by the standard deviation, and `step_normalize()` does exactly that, even though some courses use the word normalization only for rescaling values to a range such as 0 to 1.
 
-7. **Principal components are constructed to be uncorrelated.** PCA rotates the original predictor space into new axes that are orthogonal to one another. Since the resulting components do not overlap linearly, their VIFs are 1 when used together in a linear model.
+7. The components are constructed to be uncorrelated. PCA rotates the predictor axes to new axes that are perpendicular to one another, as in the rotation plot for `tri` and `thigh`. Since the components have no linear overlap, their VIFs are 1 when they are used together in a linear model.
 
-8. **PCR changes the predictors.** The model coefficients describe principal components, not the original variables. Because each component is a combination of the original predictors, PCR can improve stability but makes direct statements like "holding `thigh` and `midarm` fixed, a one-unit increase in `tri`..." much harder to make.
+8. PCR changes the predictors. The coefficients describe principal components, not the original variables. Each component combines all of the original predictors, so statements like "holding `thigh` and `midarm` fixed, a one-unit increase in `tri`..." are much harder to make.
 
-9. **PCA focuses on the predictors, not the response.** The first principal component explains the most variation among the predictors. But the direction with the most predictor variation is not guaranteed to be the direction most related to $y$.
+9. PCA looks only at the predictors. The first principal component is the direction with the most variation among the predictors, but nothing guarantees that this is the direction most related to $y$.
 
-10. **Ridge keeps the predictors; PCR replaces them.** PCR creates uncorrelated principal components and uses those components in the regression model. Ridge regression keeps the original predictors but shrinks the coefficient estimates to make the model more stable when predictors are correlated.
+10. PCR replaces the predictors with uncorrelated principal components and regresses on those. Ridge regression keeps the original predictors and shrinks their coefficient estimates to make the model more stable when the predictors are correlated.
+
+11. PCA orders the components by how much of the predictors' variance they carry and never looks at the response. A component with very little spread in the predictors can still be the direction that infant mortality depends on, so leaving it out costs some fit even though it carries little predictor variance.
 
 :::
-
-
-
-
-
-
-
-
-
-
-
-
