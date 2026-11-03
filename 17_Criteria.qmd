@@ -4,17 +4,15 @@
 
 > "When a measure becomes a target, it ceases to be a good measure." - Marilyn Strathern
 
-So far, we have discussed using the coefficient of determination, $R^2$ and adjusted coefficient of determination, $R^2_a$, as a means of determining how well the model fit the data and also for comparing different models. We will now discuss other ways to measure fit and compare models. These criteria can be used to help in the model building process.
+So far we have used the coefficient of determination, $R^2$, and the adjusted coefficient of determination, $R^2_a$, to judge how well a model fits the data and to compare models. This chapter covers other ways to measure fit and compare models. These criteria help when building a model.
 
 ## Possible Models
 
 
-From any set of $p - 1$ predictors, $2^{p-1}$ 
-alternative models can be constructed. 
+From a set of $p - 1$ predictors, we can build $2^{p-1}$ different models.
 
 
-This calculation is based on the fact that each predictor can be either included or excluded from the
-model. 
+The count comes from the fact that each predictor is either in the model or out of it.
 
 ::: {.example title="Counting possible subset models"}
 
@@ -29,13 +27,13 @@ $$
 2^4 = 16
 $$
 
-possible subset models. If there are 10 possible predictors, there are
+possible subset models. With 10 possible predictors, there are
 
 $$
 2^{10}=1024
 $$
 
-possible subset models. The number of possible models grows quickly, which is why model-selection criteria are useful.
+possible subset models. The number of models grows quickly, which is why we need model-selection criteria.
 
 :::
 
@@ -43,8 +41,8 @@ For example, the
 $$
 2^4 = 16
 $$
-different possible subset models that can be formed from
-the pool of four $X$ variables are
+subset models that can be formed from
+a pool of four $X$ variables are
 $$
 \begin{align*}
 & \text{None}\\
@@ -66,19 +64,19 @@ $$
 \end{align*}
 $$
 
-Model selection procedures, also known as *subset* *selection* or *variable* *selection* *procedures*,
-have been developed to identify a small group of regression models that are "good"
-according to a specified *criterion*. 
+Model selection procedures (also called *subset* *selection* or *variable* *selection* *procedures*)
+are designed to find a small group of regression models that are "good"
+by some *criterion*.
 
 
 
-This limited number might consist of three to six "good"
-subsets according to the criteria specified, so the investigator can then carefully study these
-regression models for choosing the final model.
+That group might hold three to six "good"
+subsets, and the investigator can then study these
+models closely before choosing the final one.
 
 
-While many criteria for comparing the regression models have been developed, we will
-focus on six:
+Many criteria for comparing regression models have been proposed. We will
+look at six:
 $$
 \begin{align*}
 & R_{p}^{2}\\
@@ -92,7 +90,7 @@ $$
 
 ::: {.callout-note collapse="false" title="Which direction is better?"}
 
-The criteria do not all move in the same direction.
+For some of these criteria larger is better; for others, smaller is better.
 
 | Criterion | Preferred direction | Main idea |
 |---|---:|---|
@@ -103,15 +101,15 @@ The criteria do not all move in the same direction.
 | $PRESS_p$ | Smaller | Measures leave-one-out prediction error. |
 | pred $R_p^2$ | Larger | Converts PRESS into an $R^2$-style prediction measure. |
 
-No single criterion should replace judgment. The best model is usually one that fits the scientific question, predicts well, and is not more complicated than it needs to be.
+No criterion should replace judgment. The best model usually answers the scientific question, predicts well, and is no more complicated than it needs to be.
 
 :::
 
 ::: {.example title="Exhaustive subset selection with four predictors"}
 
-When the number of possible predictors is small, we can fit every possible subset model and compare the criteria. This is called *exhaustive subset selection*.
+When there are only a few possible predictors, we can fit every subset model and compare the criteria. This is called *exhaustive subset selection*.
 
-The following example uses four possible predictors from `mtcars`: `disp`, `hp`, `wt`, and `qsec`. Since there are 4 possible predictors, there are $2^4=16$ subset models.
+This example uses four possible predictors from `mtcars`: `disp`, `hp`, `wt`, and `qsec`. With 4 predictors there are $2^4=16$ subset models.
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -181,32 +179,32 @@ exhaustive_results <- tibble(predictors = all_subsets) |>
 
 exhaustive_results |>
   arrange(BIC) |>
-  knitr::kable(digits = 4)
+  print(width = Inf)
 ```
 
-Sorting by BIC places the simpler models with strong fit near the top. If we sorted by a different criterion, the order might change.
+Sorted by BIC, the simpler models that still fit well come out on top. Sorting by a different criterion could change the order.
 
 :::
 
 ## Notation
 
 
-Before discussing the criteria, we will need to
-develop some notation. We will denote the number of potential $X$ variables in the pool by
-$P-1$. 
+Before we look at the criteria, we need
+some notation. The number of potential $X$ variables in the pool is
+$P-1$.
 
 
-We assume that all regression models contain an intercept
-term $\beta_0$. 
+We assume every regression model contains an intercept
+term $\beta_0$.
 
 
 
-Hence, the regression function containing all potential $X$ variables contains $P$
-parameters, and the function with no $X$ variables contains one parameter ($\beta_0$).
+So the regression function with all potential $X$ variables has $P$
+parameters, and the function with no $X$ variables has one parameter ($\beta_0$).
 
 
-The number of $X$ variables in a subset will be denoted by $p-1$, as always, so that there
-are $p$ parameters in the regression function for this subset of $X$ variables. Thus, we have:
+As always, the number of $X$ variables in a subset is $p-1$, so there
+are $p$ parameters in the regression function for that subset. This gives
 $$
 1\le p \le P < n
 $$
@@ -214,43 +212,43 @@ $$
 ## Coefficient of Determination and SSE
 
 
-Clearly, we would like models that fit the data well. Thus we would like a coefficient of *multiple determination*, $R^2$, to be high.
+We want models that fit the data well, so we want the coefficient of *multiple determination*, $R^2$, to be high.
 
 
-We will denote the number of parameters in the potential model as a subscript and write the coefficient of determination as $R^2_p$. 
-
-
-
-
-
-The $R^2_p$ criterion is equivalent to using the error sum of squares $SSE_p$ as the criterion. The $R^2_p$ criterion is not intended to identify the subsets that maximize this criterion.
-
-
-We know that $R^2_p$ can never decrease as additional $X$ variables are included in the model. Hence, $R^2_p$ will be a maximum when all $P - 1$ potential X variables are included in the
-regression model. 
+We write the number of parameters in the model as a subscript, so the coefficient of determination becomes $R^2_p$.
 
 
 
 
-The intent in using the $R^2_p$ criterion is to find the point where adding more
-$X$ variables is not worthwhile because it leads to a very small increase in $R^2_p$. 
+
+Using $R^2_p$ as the criterion is equivalent to using the error sum of squares $SSE_p$. The $R^2_p$ criterion is not meant to pick out the subsets that maximize it.
 
 
-Often, this
-point is reached when only a limited number of $X$ variables are included in the regression
+$R^2_p$ can never decrease when more $X$ variables are added to the model, so it is largest when all $P - 1$ potential X variables are in the
+model.
+
+
+
+
+The idea behind the $R^2_p$ criterion is to find the point where adding more
+$X$ variables is not worth it, because $R^2_p$ goes up only a little.
+
+
+This
+point is often reached with only a few $X$ variables in the
 model.
 
 ::: {.callout-warning collapse="false" title="Do not choose a model using R-squared alone"}
 
-Because $R_p^2$ cannot decrease when a predictor is added, the model with the most predictors will always look at least as good by this criterion. This makes $R_p^2$ useful for describing fit, but risky as the only model-selection tool.
+Because $R_p^2$ cannot decrease when a predictor is added, the model with the most predictors always looks at least as good by this criterion. $R_p^2$ is useful for describing fit, but it is risky as the only tool for choosing a model.
 
-When comparing candidate models, look for whether the added variables produce a meaningful improvement, not merely any improvement.
+When comparing candidate models, ask whether the added variables give a meaningful improvement, not just any improvement.
 
 :::
 
 ::: {.example title="Overfitting by adding noise predictors"}
 
-The following example adds randomly generated noise predictors to a useful model. These noise variables are not meaningful predictors of `mpg`, but ordinary least squares can still use them to reduce in-sample error slightly.
+This example adds randomly generated noise predictors to a useful model. The noise variables have nothing to do with `mpg`, but ordinary least squares can still use them to lower the in-sample error a little.
 
 ```{r warning=FALSE, message=FALSE}
 set.seed(3386)
@@ -309,31 +307,31 @@ noise_comparison <- purrr::imap_dfr(
   )
 
 noise_comparison |>
-  knitr::kable(digits = 4)
+  print(width = Inf)
 ```
 
-Notice that $R^2$ increases as the noise predictors are added. That does not mean the model is better. The other criteria warn us that the extra predictors are adding complexity without useful predictive value.
+$R^2$ goes up as the noise predictors are added. That does not make the model better. The other criteria show that the extra predictors add complexity and do nothing for prediction.
 
 :::
 
 ## Adjusted Coefficient of Determination and MSE
 
 
-Since $R^2_{p}$ does not take account of the number of parameters in the regression model
-and since max($R^2_{p}$) can never decrease as $p$ increases, the *adjusted* coefficient of multiple
+$R^2_{p}$ ignores the number of parameters in the regression model,
+and max($R^2_{p}$) can never decrease as $p$ increases. For these reasons the *adjusted* coefficient of multiple
 determination $R^2_{a,p}$ has been suggested as an alternative criterion.
 
 
-This coefficient takes the number of parameters in the regression model into account through
+It accounts for the number of parameters in the model through
 the degrees of freedom.
 
 
-Users of the $R^2_{a,p}$  criterion
-seek to find a few subsets for which $R^2_{a,p}$  is at the maximum or so close to the maximum
-that adding more variables is not worthwhile.
+With the $R^2_{a,p}$ criterion, we
+look for a few subsets where $R^2_{a,p}$ is at its maximum, or so close to it
+that adding more variables is not worth it.
 
 
-The $R^2_{a,p}$ criterion is equivalent to using the mean square error $MSE_p$ as the criterion. This comes from the relationship
+Using $R^2_{a,p}$ as the criterion is equivalent to using the mean square error $MSE_p$. This follows from
 $$
 \begin{align*}
 R_{a}^{2} & =1-\frac{\frac{SSE}{n-p}}{\frac{SSTO}{n-1}}\\
@@ -345,25 +343,24 @@ $$
 ## AIC and BIC
 
 
-We have seen that $R_{a,p}^2$ is a criterion that penalizes models
-having large numbers of predictors. 
+We have seen that $R_{a,p}^2$ penalizes models
+with many predictors.
 
 
-Two popular alternatives that also provide penalties
-for adding predictors are *Akaike's information criterion* ($AIC_p$) and *Schwarz's Bayesian criterion* ($SBC_p$).
-
-
-
-
-
-A more popular name for $SBC_p$ is *Bayesian information criterion* ($BIC_p$).
+Two popular alternatives that also penalize
+added predictors are *Akaike's information criterion* ($AIC_p$) and *Schwarz's Bayesian criterion* ($SBC_p$).
 
 
 
 
 
-We search for models that have small values of $AIC_p$, or $BIC_p$, where
-these criteria are given by:
+$SBC_p$ is more often called the *Bayesian information criterion* ($BIC_p$).
+
+
+
+
+
+We look for models with small values of $AIC_p$ or $BIC_p$, where
 $$
 \begin{align}
 AIC_{p} & =n\ln SSE_{p}-n\ln n+2p\\
@@ -373,7 +370,7 @@ $${#eq-w7_2}
 
 
 
-Notice that for both of these measures, the first term is 
+In both measures the first term is
 $$
 n\ln SSE_{p}
 $$
@@ -381,43 +378,43 @@ which decreases as $p$
 increases.
 
 
-The second term is fixed (for a given sample size $n$), and the third term increases
-with the number of parameters, $p$. 
+The second term is fixed for a given sample size $n$, and the third term grows
+with the number of parameters, $p$.
 
 
-Models with small $SSE_p$ will do well by these criteria
+Models with small $SSE_p$ do well on these criteria
 as long as the penalties
 $$
 \begin{align*}
 2p & \text{ for }AIC_p \\
-(\ln n)p & \text{ for }BIC_p 
+(\ln n)p & \text{ for }BIC_p
 \end{align*}
 $$
-are not too large. 
+are not too large.
 
 
 
 
 
-If $n \ge 8$
-the penalty for $BIC_p$ is larger than that for $AIC_p$; hence the $BIC_p$ criterion tends to favor
-more *parsimonious* models. 
+If $n \ge 8$,
+the penalty for $BIC_p$ is larger than the penalty for $AIC_p$, so $BIC_p$ tends to favor
+more *parsimonious* models.
 
 
 
 
 
-A parsimonious model is a model that accomplishes a desired level of explanation or prediction with as few predictor variables as possible.
+A parsimonious model reaches the level of explanation or prediction you want with as few predictor variables as possible.
 
 
 
-We consider the "best" models to be the ones with the lowest $AIC_p$ or $BIC_p$.
+We treat the models with the lowest $AIC_p$ or $BIC_p$ as the "best" ones.
 
 ::: {.callout-important collapse="false" title="Compare AIC and BIC only for models fit to the same response"}
 
-AIC and BIC are useful for comparing candidate models, but the models should be fit to the same response variable using the same set of observations. They are not meant to compare, for example, a model for `mpg` against a model for `log(mpg)`.
+AIC and BIC are for comparing candidate models fit to the same response variable on the same set of observations. They should not be used to compare, for example, a model for `mpg` with a model for `log(mpg)`.
 
-Software may report versions of AIC and BIC that differ by constants from textbook formulas. This is usually not a problem because model selection depends on differences among models fit to the same data.
+Software may report versions of AIC and BIC that differ from the textbook formulas by a constant. This is usually not a problem, because model selection depends on the differences between models fit to the same data.
 
 :::
 
@@ -425,33 +422,33 @@ Software may report versions of AIC and BIC that differ by constants from textbo
 ## Criteria for Prediction
 
 
-The $PRESS_p$ (*prediction sum of squares*) criterion is a measure of how well the use of the
-fitted values for a subset model can predict the observed responses $y_i$. 
+The $PRESS_p$ (*prediction sum of squares*) criterion measures how well the
+fitted values from a subset model predict the observed responses $y_i$.
 
 
 
 
-The PRESS measure differs from SSE
-in that each fitted value $\hat{y}_i$ for the PRESS criterion is obtained by 
+PRESS differs from SSE
+in how each fitted value $\hat{y}_i$ is obtained. For PRESS, we
 
 
-1. deleting the $i$th case from the data set
+1. delete the $i$th case from the data set,
 
-2. estimating the regression function for the subset model from the remaining $n - 1$ cases, and 
+2. estimate the regression function for the subset model from the remaining $n - 1$ cases, and
 
-3. then using the fitted regression function to obtain the predicted value $\hat{y}_{i(i)}$ for the $i$th case.
-
-
-
-We use the notation $\hat{y}_{i(i)}$ now for the fitted value to indicate, by the first
-subscript $i$, that it is a predicted value for the $i$th case and, by the second subscript $(i)$, that
-the $i$th case was omitted when the regression function was fitted.
+3. use that fitted regression function to get the predicted value $\hat{y}_{i(i)}$ for the $i$th case.
 
 
 
-The PRESS prediction error for the $i$th case then is:
+In the notation $\hat{y}_{i(i)}$, the first
+subscript $i$ says this is a predicted value for the $i$th case, and the second subscript $(i)$ says
+the $i$th case was left out when the regression function was fit.
+
+
+
+The PRESS prediction error for the $i$th case is
 $$
-y_i - \hat{y}_{i(i)} 
+y_i - \hat{y}_{i(i)}
 $$
 and the $PRESS_p$ criterion is the sum of the squared prediction errors over all $n$ cases:
 $$
@@ -462,31 +459,30 @@ $${#eq-w7_7}
 
 
 
-Models with small $PRESS_p$ values are considered good candidate models. The reason is
-that when the prediction errors $y_i - \hat{y}_{i(i)}$ are small, so are the squared prediction errors and
-the sum of the squared prediction errors. 
+Models with small $PRESS_p$ values are good candidates. When the prediction errors $y_i - \hat{y}_{i(i)}$ are small, so are their squares and
+the sum of their squares.
 
 
 
-Thus, models with small $PRESS_p$ values fit well
-in the sense of having small prediction errors.
+So models with small $PRESS_p$ values fit well
+in the sense that their prediction errors are small.
 
 
-Another measure of prediction is the *predicted* $R^{2}$. It is related
+Another measure of prediction is the *predicted* $R^{2}$, which is related
 to PRESS by
 $$
 \begin{align}
 \text{pred }R_{p}^{2} & =1-\frac{PRESS_{p}}{SSTO}
 \end{align}
 $${#eq-w7_8}
-Large values of pred $R_{p}^{2}$ indicate a model that is "good"
+A large value of pred $R_{p}^{2}$ means the model is "good"
 at prediction.
 
 ### PRESS and Leave-One-Out Cross-Validation
 
-PRESS is closely connected to *leave-one-out cross-validation* (LOOCV). In LOOCV, we repeatedly fit the model after leaving out one observation, then predict the observation that was left out. PRESS is the sum of the squared prediction errors from that process.
+PRESS is closely tied to *leave-one-out cross-validation* (LOOCV). In LOOCV, we leave out one observation, fit the model to the rest, and predict the one we left out, repeating this for every observation. PRESS is the sum of the squared prediction errors from that process.
 
-For ordinary least squares models, PRESS can be computed without refitting the model $n$ separate times. If $e_i$ is the ordinary residual from the full model and $h_{ii}$ is the leverage value for observation $i$, then
+For ordinary least squares, PRESS can be computed without refitting the model $n$ times. If $e_i$ is the ordinary residual from the full model and $h_{ii}$ is the leverage of observation $i$, then
 
 $$
 \begin{align*}
@@ -502,13 +498,13 @@ PRESS = \sum_{i=1}^n \left(\frac{e_i}{1-h_{ii}}\right)^2.
 \end{align*}
 $$
 
-This explains why PRESS is a prediction-focused criterion. Each observation is judged by how well the model predicts it when that observation was not used to fit the model.
+This is why PRESS measures prediction: each observation is judged by how well the model predicts it when that observation was not used to fit the model.
 
 ::: {#exm-17_1 .example title="Comparing candidate models with several criteria"}
 
-We can obtain $R^2$, $R^2_a$, AIC, and BIC using the `glance()` function after fitting a model. We can also calculate PRESS from the residuals and leverage values of an ordinary least squares model.
+`glance()` gives $R^2$, $R^2_a$, AIC, and BIC for a fitted model. For an ordinary least squares model, we can also compute PRESS from the residuals and leverage values.
 
-Let's compare several candidate models for `mtcars`. These models are not meant to be the final answer; they are a small set of candidate models used to illustrate how the criteria work.
+Let's compare several candidate models for `mtcars`. None of them is meant as the final answer; they are a small set of models used to show how the criteria work.
 
 ```{r warning=FALSE, message=FALSE}
 library(tidyverse)
@@ -562,48 +558,48 @@ model_comparison <- purrr::imap_dfr(
 
 model_comparison |>
   arrange(AIC) |>
-  knitr::kable(digits = 4)
+  print(width = Inf)
 ```
 
-The table shows that different criteria may prefer different models. A model with more predictors may have a larger $R^2$, while AIC, BIC, PRESS, or predicted $R^2$ may favor a simpler model if the extra predictors do not improve the model enough.
+The output shows that the criteria do not always prefer the same model. A model with more predictors may have a larger $R^2$, while AIC, BIC, PRESS, or predicted $R^2$ may favor a simpler model when the extra predictors do not improve it enough.
 
 :::
 
 ::: {.callout-tip collapse="false" title="What if the criteria disagree?"}
 
-Model-selection criteria often disagree because they value different things. When that happens, use the disagreement as a prompt for deeper comparison.
+The criteria often disagree because they value different things. When they do, compare the models more closely.
 
-1. **Start with the goal.** If prediction is the main goal, give more weight to PRESS, predicted $R^2$, validation error, or cross-validation. If explanation is the main goal, give more weight to interpretability and subject-matter justification.
+1. Start with the goal. If prediction is the main goal, give more weight to PRESS, predicted $R^2$, validation error, or cross-validation. If explanation is the main goal, give more weight to interpretability and subject-matter reasons.
 
-2. **Prefer simpler models when performance is similar.** If two models have nearly identical performance, the more parsimonious model is usually easier to explain, teach, and defend.
+2. Prefer the simpler model when performance is about the same. If two models perform almost identically, the more parsimonious one is usually easier to explain, teach, and defend.
 
-3. **Look for unstable variables.** If a predictor only appears in the model favored by one criterion, ask whether it has a meaningful interpretation or whether it is mostly taking advantage of this sample.
+3. Look for unstable variables. If a predictor appears only in the model one criterion favors, ask whether it has a meaningful interpretation or is mostly taking advantage of this sample.
 
-4. **Check diagnostics.** A model with attractive criteria can still violate assumptions. Residual plots, influential observations, and multicollinearity still matter.
+4. Check diagnostics. A model with good criteria values can still violate the assumptions. Residual plots, influential observations, and multicollinearity still need to be checked.
 
-5. **Avoid automatic selection.** Criteria help narrow the search. They should not replace thinking about the research question, data quality, and consequences of model complexity.
+5. Avoid automatic selection. The criteria narrow the search. They do not replace thinking about the research question, the quality of the data, and the cost of a more complex model.
 
 :::
 
 ## Recap
 
-In this chapter, we introduced several criteria for comparing candidate regression models.
+This chapter introduced several criteria for comparing candidate regression models.
 
 | Idea | Meaning |
 |---|---|
-| **Subset model** | A model formed by including only some of the available predictors. |
-| **Number of possible models** | With $p-1$ possible predictors, there are $2^{p-1}$ possible subset models. |
-| **Exhaustive subset selection** | Fitting every possible subset model from a chosen predictor pool. This is feasible only when the number of candidate predictors is small. |
-| **$R_p^2$** | Measures in-sample fit for a model with $p$ parameters; larger is better, but it never decreases when predictors are added. |
-| **$R_{a,p}^2$** | Adjusted $R^2$; penalizes unnecessary predictors through the degrees of freedom. |
-| **AIC** | A model-selection criterion that balances fit and complexity; smaller is better. |
-| **BIC/SBC** | Similar to AIC but usually applies a stronger penalty for complexity; smaller is better. |
-| **Parsimonious model** | A model that achieves the goal with relatively few predictors. |
-| **PRESS** | A leave-one-out prediction error criterion; smaller values indicate better predictive performance. |
-| **LOOCV** | Leave-one-out cross-validation; fit the model leaving out one observation, then predict the omitted observation. |
-| **Predicted $R^2$** | An $R^2$-style measure based on PRESS; larger values indicate better prediction. |
-| **Overfitting** | A model fitting random or sample-specific noise rather than useful signal. |
-| **Criterion disagreement** | Different criteria may select different models because they reward fit and penalize complexity differently. |
+| Subset model | A model that includes only some of the available predictors. |
+| Number of possible models | With $p-1$ possible predictors, there are $2^{p-1}$ possible subset models. |
+| Exhaustive subset selection | Fitting every possible subset model from a chosen pool of predictors. This is feasible only when there are few candidate predictors. |
+| $R_p^2$ | Measures in-sample fit for a model with $p$ parameters; larger is better, but it never decreases when predictors are added. |
+| $R_{a,p}^2$ | Adjusted $R^2$; penalizes unnecessary predictors through the degrees of freedom. |
+| AIC | A model-selection criterion that balances fit and complexity; smaller is better. |
+| BIC/SBC | Similar to AIC but usually with a stronger penalty for complexity; smaller is better. |
+| Parsimonious model | A model that meets the goal with relatively few predictors. |
+| PRESS | A leave-one-out prediction error criterion; smaller values mean better prediction. |
+| LOOCV | Leave-one-out cross-validation; fit the model without one observation, then predict that observation. |
+| Predicted $R^2$ | An $R^2$-style measure based on PRESS; larger values mean better prediction. |
+| Overfitting | A model fitting random or sample-specific noise instead of real signal. |
+| Criterion disagreement | Different criteria may select different models because they reward fit and penalize complexity differently. |
 
 ## Check your understanding
 
@@ -641,32 +637,32 @@ In this chapter, we introduced several criteria for comparing candidate regressi
 
 ::: {.callout-tip collapse="true" title="Solutions"}
 
-1. **Each predictor has two choices.** Every candidate predictor can either be included or excluded. With $p-1$ predictors, this gives $2^{p-1}$ possible combinations.
+1. Each predictor has two choices: it is either included or excluded. With $p-1$ predictors, that gives $2^{p-1}$ possible combinations.
 
-2. **It always rewards adding predictors.** $R^2$ cannot decrease when predictors are added, even if the new predictors add little useful information. This can push us toward models that are unnecessarily complex.
+2. It always rewards adding predictors. $R^2$ cannot decrease when predictors are added, even if they add little information, so it can push us toward models that are more complex than necessary.
 
-3. **It accounts for model size.** Adjusted $R^2$ penalizes models for using more parameters. It tries to distinguish meaningful improvement from improvement that happens merely because more predictors were added.
+3. It accounts for model size. Adjusted $R^2$ penalizes a model for using more parameters, to separate real improvement from improvement that comes only from adding predictors.
 
-4. **Smaller values are preferred.** AIC and BIC both combine a measure of lack of fit with a penalty for complexity. A smaller value indicates a better tradeoff between fit and model size.
+4. Smaller values are better. AIC and BIC both combine a measure of lack of fit with a penalty for complexity, and a smaller value means a better tradeoff between fit and model size.
 
-5. **BIC has a stronger penalty when $n \ge 8$.** AIC uses a penalty of $2p$, while BIC uses $(\ln n)p$. Since $\ln n$ is larger than 2 for sample sizes of at least 8, BIC more strongly discourages extra predictors.
+5. BIC has a larger penalty when $n \ge 8$. AIC uses a penalty of $2p$, and BIC uses $(\ln n)p$. Since $\ln n$ is larger than 2 for sample sizes of 8 or more, BIC discourages extra predictors more.
 
-6. **It is simple but effective.** A parsimonious model accomplishes the modeling goal with as few predictors as reasonably possible.
+6. It does the job with few predictors. A parsimonious model reaches the modeling goal with as few predictors as reasonably possible.
 
-7. **PRESS measures leave-one-out prediction error.** SSE uses residuals from a model fit to all observations. PRESS predicts each observation from a model fit without that observation, so it more directly reflects prediction performance.
+7. PRESS measures leave-one-out prediction error. SSE uses residuals from a model fit to all the observations. PRESS predicts each observation from a model fit without it, so it reflects prediction performance more directly.
 
-8. **It puts prediction performance on an $R^2$-like scale.** Predicted $R^2$ uses PRESS to summarize how well the model predicts omitted observations. Larger values suggest better predictive performance.
+8. It puts prediction performance on an $R^2$-like scale. Predicted $R^2$ uses PRESS to summarize how well the model predicts observations that were left out. Larger values suggest better prediction.
 
-9. **No.** Different criteria emphasize different tradeoffs. AIC may prefer a somewhat larger model, while BIC may prefer a simpler one. This disagreement is a reason to examine the models carefully, not a sign that one criterion is invalid.
+9. No. The criteria weigh the tradeoffs differently. AIC may prefer a somewhat larger model and BIC a simpler one. The disagreement is a reason to look at both models carefully; it does not mean one criterion is invalid.
 
-10. **The criteria are relative comparisons.** AIC and BIC are designed to compare candidate models fit to the same data and response. If the response or observations change, the numerical values are no longer directly comparable.
+10. The criteria are relative comparisons. AIC and BIC are built to compare candidate models fit to the same data and response. If the response or the observations change, the values can no longer be compared directly.
 
-11. **The number of models grows exponentially.** Each predictor can be included or excluded, so adding one more candidate predictor doubles the number of possible subset models.
+11. The number of models grows exponentially. Each predictor can be in or out, so each extra candidate predictor doubles the number of possible subset models.
 
-12. **PRESS sums leave-one-out squared prediction errors.** Each observation is predicted by a model that was fit without that observation. The squared errors from those omitted-observation predictions are added to form PRESS.
+12. PRESS sums the leave-one-out squared prediction errors. Each observation is predicted by a model fit without that observation, and the squared errors from those predictions are added up to get PRESS.
 
-13. **Ordinary least squares can chase sample noise.** Adding predictors gives the model more flexibility, so in-sample SSE can decrease and $R^2$ can increase even when the new predictors have no real meaning. Prediction-focused criteria may reveal that the added complexity does not generalize.
+13. Ordinary least squares can chase noise in the sample. More predictors give the model more flexibility, so the in-sample SSE can go down and $R^2$ can go up even when the new predictors mean nothing. Prediction criteria can show that the extra complexity does not carry over to new data.
 
-14. **Criteria are tools, not commandments.** AIC, BIC, adjusted $R^2$, and PRESS emphasize different tradeoffs. Comparing a small set of candidate models lets us consider prediction, interpretation, diagnostics, and subject-matter relevance together.
+14. The criteria are tools, not rules. AIC, BIC, adjusted $R^2$, and PRESS weigh different tradeoffs. Comparing a small set of candidate models lets us weigh prediction, interpretation, diagnostics, and subject-matter relevance together.
 
 :::

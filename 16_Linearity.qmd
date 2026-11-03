@@ -1,6 +1,6 @@
 ---
-editor: 
-  markdown: 
+editor:
+  markdown:
     wrap: 72
 ---
 
@@ -11,9 +11,9 @@ editor:
 
 ## Scatterplot Matrix
 
-The first step in assessing the linearity assumption in a multiple regression model is to examine the relationships between the predictor variables and the response variable using a scatterplot matrix. This matrix provides a grid of pairwise scatterplots, allowing you to visualize potential relationships between all pairs of variables, especially the relationship between each predictor and the response variable. 
+To check the linearity assumption in a multiple regression model, start by looking at how the predictors relate to the response with a scatterplot matrix. The matrix is a grid of scatterplots, one for each pair of variables. The plots we care about most are the ones that pair each predictor with the response.
 
-In the context of multiple regression, we expect that the relationship between each predictor and the response is approximately linear. If the scatterplot for a given predictor and the response shows a straight-line trend, this suggests a linear relationship, which aligns with the assumption. However, if the plot exhibits a *clear* curved or nonlinear pattern, it may indicate that the linearity assumption is violated for that predictor, and you may need to transform the variable to better capture the relationship.
+In multiple regression, we expect the relationship between each predictor and the response to be roughly linear. If the scatterplot of a predictor against the response shows a straight-line trend, that fits the assumption. If the plot shows a *clear* curve, the linearity assumption may not hold for that predictor, and a transformation of the variable may describe the relationship better.
 
 ::: {.callout-note collapse="false" title="What does linearity mean here?"}
 
@@ -37,11 +37,11 @@ $$
 E(y)=\beta_0+\beta_1x+\beta_2x^2.
 $$
 
-The second and third models can represent curved relationships while still being linear regression models because the $\beta$ coefficients enter the model linearly.
+The second and third models can describe curved relationships and are still linear regression models, because the $\beta$ coefficients enter the model linearly.
 
 :::
 
-A scatterplot matrix is a convenient way to quickly scan for any nonlinearity before fitting the model. You can create this matrix using the `GGally` package in R, which extends `ggplot2` to allow for a grid of scatterplots. Each scatterplot shows how one variable changes in response to another, and from this, you can judge whether a linear transformation is needed for any predictor variables before fitting the regression model.
+A scatterplot matrix lets you scan for nonlinearity quickly before you fit the model. The `GGally` package in R, which extends `ggplot2`, will draw one for you. Each panel shows how one variable changes with another, and from these panels you can decide whether any predictor needs a transformation before the regression model is fit.
 
 ::: {.example title="Scatterplot matrix for checking linearity"}
 
@@ -52,29 +52,29 @@ library(tidyverse)
 ggpairs(mtcars)
 ```
 
-In this example, the `ggpairs` function creates a scatterplot matrix for the `mtcars` dataset. Each plot in the matrix shows the relationship between two variables. By focusing on the plots that involve the response variable (`mpg` in this case), you can assess whether the relationships between the response and each predictor (like `wt` or `hp`) appear linear. If any plot shows a nonlinear trend, it suggests that a transformation might be necessary to achieve a linear relationship.
+Here `ggpairs` draws a scatterplot matrix for the `mtcars` dataset, with one panel for each pair of variables. Look at the panels that involve the response (`mpg` in this case) to see whether its relationship with each predictor, such as `wt` or `hp`, looks linear. A curved trend in any of them suggests the predictor may need a transformation.
 
-This initial diagnostic step is crucial because it allows you to anticipate issues with linearity before fitting the regression model, ensuring a better fit and more reliable interpretation of the results.
+Doing this before fitting lets you catch problems with linearity early, which leads to a better fit and results that are easier to trust.
 
 :::
 
 ### Discrete Predictors
 
-When a predictor variable has only a few discrete values, such as in the case of `gear` or `cyl` in the `mtcars` dataset, the scatterplot matrix will show points aligned vertically or horizontally at specific values. These discrete predictors can make it harder to judge linearity directly because the relationships are less continuous. Instead of a smooth trend, look for general patterns in how the response variable changes across the levels of the predictor. If the response values vary systematically across the predictor levels (e.g., a noticeable upward or downward shift), it may still indicate a linear trend. However, if the response varies non-linearly (e.g., higher values in the middle category and lower values on the ends), it may suggest that a transformation, such as using polynomial terms, or treating the predictor as a categorical variable, could improve the model.
+Some predictors take only a few values, such as `gear` or `cyl` in the `mtcars` dataset. In the scatterplot matrix their points line up in vertical or horizontal stripes at those values, so linearity is harder to judge. There is no smooth trend to follow; instead, look at how the response changes from one level of the predictor to the next. A steady shift up or down across the levels can still point to a linear trend. If the pattern bends (for example, high values for the middle category and low values at both ends), a polynomial term or treating the predictor as categorical may improve the model.
 
-For example, the `cyl` predictor in the `mtcars` dataset has only three distinct values (4, 6, and 8). If the corresponding `mpg` values show a clear linear decrease as `cyl` increases, this supports linearity. However, if the trend is irregular, a transformation or alternative approach may be necessary.
+For example, `cyl` in `mtcars` has only three values (4, 6, and 8). If `mpg` drops in a straight line as `cyl` goes up, that supports linearity. If the trend is irregular, a transformation or a different approach may be needed.
 
 
 
 ## Identifying Transformations
 
-When the scatterplot matrix suggests nonlinearity between a predictor and the response, it may be necessary to transform the predictor variable to improve the linear relationship. Common transformations include logarithmic, square root, and polynomial transformations. These transformations help capture nonlinear patterns and make relationships more linear, ensuring the regression model provides accurate estimates.
+When the scatterplot matrix shows a curved relationship between a predictor and the response, transforming the predictor can make the relationship closer to linear. Log, square root, and polynomial transformations are the usual choices. A good transformation captures the curve so the regression model gives accurate estimates.
 
-In the **tidyverse**, transformations can be easily applied using `mutate()` from the **dplyr** package. You can then incorporate these transformed variables into your regression model within the Tidymodels framework.
+In the **tidyverse**, you can apply a transformation with `mutate()` from the **dplyr** package and then use the new variable in a regression model in the Tidymodels framework.
 
 ::: {.callout-tip collapse="false" title="Choosing a transformation"}
 
-Transformations should be chosen to match the pattern in the data, not merely to improve $R^2$.
+Pick a transformation that matches the pattern in the data. Do not pick one only because it raises $R^2$.
 
 | Pattern in scatterplot | Possible next step | Interpretation caution |
 |---|---|---|
@@ -83,13 +83,13 @@ Transformations should be chosen to match the pattern in the data, not merely to
 | U-shaped or inverted U-shaped pattern | Try a polynomial term such as $x^2$. | Polynomial terms can behave strangely outside the observed range of the data. |
 | Few distinct predictor values | Consider treating the predictor as categorical. | A numeric code may not represent equal spacing between levels. |
 
-After transforming, always refit the model and check residual plots again.
+After transforming, always refit the model and check the residual plots again.
 
 :::
 
 ::: {#exm-16_1 .example title="Log transformation in mtcars"}
 
-The scatterplot matrix showed a nonlinear trend for `disp` versus `mpg`. Let's transform this variable using a `log` transformation.
+In the scatterplot matrix, `mpg` versus `disp` looked curved. Let's try a `log` transformation of `disp`.
 
 ```{r warning=FALSE, message=FALSE}
 
@@ -101,33 +101,32 @@ mtcars |>
 
 ```
 
-We see the scatterplot between `mpg` and `log_disp` appears more linear than with the untransformed `disp`.
+The scatterplot of `mpg` against `log_disp` looks more linear than the one against `disp`.
 
 :::
 
 ::: {.example title="Polynomial terms are still linear regression"}
 
-A model with a squared predictor can represent a curved relationship while still being a linear regression model.
+A model with a squared predictor can describe a curved relationship and still be a linear regression model.
 
 ```{r warning=FALSE, message=FALSE}
 quadratic_fit <- lm(mpg ~ wt + I(wt^2), data = mtcars)
 
-broom::tidy(quadratic_fit) |>
-  knitr::kable(digits = 4)
+broom::tidy(quadratic_fit)
 ```
 
-The term `I(wt^2)` creates a new predictor by squaring `wt`. The model is curved as a function of `wt`, but it is still linear in the coefficients.
+The term `I(wt^2)` makes a new predictor by squaring `wt`. As a function of `wt` the model is curved, but it is still linear in the coefficients.
 
 :::
 
 
 ## Fitting the Model with Transformed Variables
 
-After identifying and applying transformations, the next step is to fit a multiple regression model using the transformed predictors. This ensures that the model aligns with the linearity assumption, yielding more reliable predictions and inferences. Below is an example of how to fit such a model.
+Once you have chosen and applied the transformations, fit the multiple regression model with the transformed predictors. A model that meets the linearity assumption gives more reliable predictions and inferences. Here is an example.
 
 ::: {#exm-16_2 .example title="Comparing models with and without transformed predictors"}
 
-We will set up two models: one with transformed variables and one without transformed variables. We will then compare the results using $R^2$. We will transform `disp`, `hp`, and `wt` since these three variables appear to be nonlinear in the scatterplot matrix. We will not include the discrete variables in this example.
+We will fit two models, one with transformed variables and one without, and compare them using $R^2$. We transform `disp`, `hp`, and `wt`, since these three looked nonlinear in the scatterplot matrix. The discrete variables are left out of this example.
 
 ```{r warning=FALSE, message=FALSE}
 library(tidymodels)
@@ -153,12 +152,11 @@ untransformed_metrics <- fit_untransformed |>
   mutate(model = "Untransformed predictors")
 
 untransformed_metrics |>
-  select(model, r.squared, adj.r.squared, sigma, statistic, p.value) |>
-  knitr::kable(digits = 4)
+  select(model, r.squared, adj.r.squared, sigma, statistic, p.value)
 
 ```
 
-Now we will fit the model with the transformed variables.
+Now we fit the model with the transformed variables.
 
 ```{r warning=FALSE, message=FALSE}
 # Transformed variables
@@ -185,18 +183,17 @@ transformed_metrics <- fit_transformed |>
   mutate(model = "Transformed predictors")
 
 bind_rows(untransformed_metrics, transformed_metrics) |>
-  select(model, r.squared, adj.r.squared, sigma, statistic, p.value) |>
-  knitr::kable(digits = 4)
+  select(model, r.squared, adj.r.squared, sigma, statistic, p.value)
 
 ```
 
-Note the improvement in the coefficient of determination. It has increased with the transformed variables. The residual standard error, `sigma`, also decreases, which suggests that the transformed model has smaller typical residuals.
+The coefficient of determination is higher with the transformed variables. The residual standard error, `sigma`, is also lower, so the typical residual in the transformed model is smaller.
 
 :::
 
 ::: {.callout-warning collapse="false" title="Interpreting coefficients after log transformations"}
 
-Once a predictor is log-transformed, its coefficient is no longer the change in $y$ for a one-unit increase in the original predictor.
+After a predictor is log-transformed, its coefficient is no longer the change in $y$ for a one-unit increase in the original predictor.
 
 For example, in a model with
 
@@ -204,32 +201,32 @@ $$
 E(y)=\beta_0+\beta_1\log(x),
 $$
 
-$\beta_1$ is the expected change in $y$ for a one-unit increase in $\log(x)$, not a one-unit increase in $x$. A more useful interpretation is often based on percentage changes:
+$\beta_1$ is the expected change in $y$ for a one-unit increase in $\log(x)$, not in $x$. It is often more useful to interpret it in terms of percentage changes:
 
 - A 1% increase in $x$ is associated with an approximate change of $0.01\beta_1$ units in the mean response.
 - Doubling $x$ is associated with a change of $\beta_1\log(2)$ units in the mean response.
 
-So transformed predictors may improve model fit, but they also change the way coefficients must be explained.
+So a transformed predictor may improve the fit, but it also changes how you explain its coefficient.
 
 :::
 
 ::: {.callout-warning collapse="false" title="Do not rely on R-squared alone"}
 
-A larger $R^2$ can suggest that a transformed model fits better, but it does not prove that the linearity assumption has been fixed. A model can have a larger $R^2$ and still show a curved residual pattern.
+A larger $R^2$ can suggest that a transformed model fits better, but it does not prove the linearity problem is fixed. A model can have a larger $R^2$ and still show a curved residual pattern.
 
-Use numerical summaries to compare fit, but use residual plots to check whether the linearity assumption looks reasonable.
+Use numerical summaries to compare fit, and use residual plots to check whether the linearity assumption looks reasonable.
 
 :::
 
 ## Transforming the Response Variable
 
-So far, we have transformed predictor variables. Sometimes it may also be useful to transform the response variable. This is most common when the response is positive and the relationship appears multiplicative rather than additive, or when the spread of the residuals increases as the fitted values increase.
+So far we have transformed only predictors. Sometimes it helps to transform the response as well. This is most common when the response is positive and the relationship looks multiplicative, or when the residuals spread out more as the fitted values increase.
 
-For example, instead of modeling `mpg` directly, we could model `log(mpg)`. This changes the response scale, so the residuals, fitted values, and coefficient interpretations are all on the log scale.
+For example, we could model `log(mpg)` in place of `mpg`. That puts the response on a new scale, so the residuals, the fitted values, and the coefficient interpretations are all on the log scale.
 
 ::: {.example title="Transforming the response variable"}
 
-The following model uses the same predictors as before, but transforms the response variable.
+This model uses the same predictors as before, with the response transformed.
 
 ```{r warning=FALSE, message=FALSE}
 log_response_fit <- lm(
@@ -237,15 +234,13 @@ log_response_fit <- lm(
   data = mtcars
 )
 
-broom::tidy(log_response_fit) |>
-  knitr::kable(digits = 4)
+broom::tidy(log_response_fit)
 
 broom::glance(log_response_fit) |>
-  select(r.squared, adj.r.squared, sigma, statistic, p.value) |>
-  knitr::kable(digits = 4)
+  select(r.squared, adj.r.squared, sigma, statistic, p.value)
 ```
 
-The fitted values from this model estimate $\log(mpg)$, not `mpg`. If we want predictions on the original `mpg` scale, we need to back-transform.
+The fitted values from this model estimate $\log(mpg)$, not `mpg`. To get predictions on the original `mpg` scale, we have to back-transform.
 
 ```{r warning=FALSE, message=FALSE}
 log_response_predictions <- tibble(
@@ -256,17 +251,16 @@ log_response_predictions <- tibble(
 )
 
 log_response_predictions |>
-  head() |>
-  knitr::kable(digits = 4)
+  head()
 ```
 
-Back-transforming with `exp()` gives predictions in the original units, but inference is still being performed on the log scale. This is one reason response transformations should be used thoughtfully and explained carefully.
+Back-transforming with `exp()` gives predictions in the original units, but the inference is still done on the log scale. That is one reason to use response transformations with care and to explain them carefully.
 
 :::
 
 ::: {.callout-warning collapse="false" title="Interpreting coefficients after transforming the response"}
 
-When the response is log-transformed, coefficient interpretations change again. In a model such as
+When the response is log-transformed, the coefficient interpretations change again. In a model such as
 
 $$
 \log(y)=\beta_0+\beta_1x,
@@ -274,20 +268,20 @@ $$
 
 a one-unit increase in $x$ is associated with multiplying the typical value of $y$ by $e^{\beta_1}$. For small values of $\beta_1$, this is approximately a $100\beta_1\%$ change in $y$.
 
-The phrase "typical value" is doing some work here. Because the model is fit on the log scale, simply exponentiating fitted values does not automatically give the arithmetic mean of $y$ on the original scale.
+The phrase "typical value" is doing some work here. Because the model is fit on the log scale, exponentiating the fitted values does not automatically give the arithmetic mean of $y$ on the original scale.
 
 :::
 
 
 ## Checking Linearity After Fitting the Model
 
-After fitting the model, it is essential to validate that the transformations improved the linear relationship between the predictors and the response. This can be achieved by examining the residuals.
+After fitting the model, check that the transformations actually made the relationship between the predictors and the response more linear. We do this by looking at the residuals.
 
-If the linearity assumption holds, the residuals should appear randomly scattered around zero in the residual plot, with no obvious patterns. Systematic patterns, such as curves, indicate remaining nonlinearity, suggesting that further transformations or a different model might be necessary.
+If the linearity assumption holds, the residuals in a residual plot should be scattered randomly around zero with no obvious pattern. A systematic pattern, such as a curve, means some nonlinearity remains, and more transformations or a different model may be needed.
 
 ::: {#exm-16_3 .example title="Checking residual plots after transforming predictors"}
 
-Next, let's examine the residuals against each predictor in the untransformed model.
+First, let's look at the residuals versus the fitted values for the untransformed model.
 
 ```{r warning=FALSE, message=FALSE}
 # Obtain the residuals and fitted values from the fit
@@ -299,17 +293,17 @@ predictions_untransformed |>
   geom_point() +
   geom_smooth(se = FALSE, color = "blue") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  labs(x = "Fitted Values", 
-       y = "Residuals", 
+  labs(x = "Fitted Values",
+       y = "Residuals",
        title = "Residuals vs. Fitted Values") +
   theme_minimal()
 
 
 ```
 
-We see from this residual plot that there is a nonlinear pattern. That is, the residuals tend to be above 0 at the low end, then they tend to be below 0 in the middle, then they tend to be back above 0 at the high end. If there are not that many predictors, you can plot the residuals against each predictor and determine which one needs to be transformed.
+This residual plot has a nonlinear pattern: the residuals tend to be above 0 at the low end, below 0 in the middle, and above 0 again at the high end. When there are only a few predictors, you can plot the residuals against each one to find which needs a transformation.
 
-Let's first examine the fit with the untransformed variables.
+Here are those plots for the untransformed model.
 
 ```{r warning=FALSE, message=FALSE}
 library(gridExtra)
@@ -355,9 +349,9 @@ grid.arrange(p1, p2, p3, p4, p5, nrow = 3)
 ```
 
 
-Combining these residual plots with the scatterplot matrix, it appears that `disp`, `hp`, and `wt` are clearly nonlinear.
+Taken together with the scatterplot matrix, these plots show that `disp`, `hp`, and `wt` are clearly nonlinear.
 
-Let's now see the residual plot for the transformed variables.
+Now let's look at the residual plot for the model with transformed variables.
 
 ```{r warning=FALSE, message=FALSE}
 # Obtain the residuals and fitted values from the fit
@@ -369,17 +363,17 @@ predictions_transformed |>
   geom_point() +
   geom_smooth(se = FALSE, color = "blue") +
   geom_hline(yintercept = 0, linetype = "dashed", color = "red") +
-  labs(x = "Fitted Values", 
-       y = "Residuals", 
+  labs(x = "Fitted Values",
+       y = "Residuals",
        title = "Residuals vs. Fitted Values") +
   theme_minimal()
 
 
 ```
 
-This residual plot shows no obvious nonlinear pattern. Thus, the transformations helped.
+This residual plot has no obvious nonlinear pattern, so the transformations helped.
 
-The two residual plots can also be shown side by side. This makes it easier to see whether the transformation reduced the curved pattern.
+We can also put the two residual plots side by side, which makes it easier to see whether the transformation reduced the curve.
 
 ```{r warning=FALSE, message=FALSE}
 residual_comparison <- bind_rows(
@@ -411,29 +405,29 @@ residual_comparison |>
   theme_minimal()
 ```
 
-The side-by-side display emphasizes the purpose of transforming variables: we want residuals that look more like random scatter around 0 and less like a systematic curve.
+Seen side by side, the point of the transformation is plain: we want residuals that look like random scatter around 0, not a systematic curve.
 
 
 :::
 
 ## Recap
 
-In this chapter, we focused on how to assess and improve the linearity assumption in multiple regression.
+This chapter covered how to check the linearity assumption in multiple regression and what to do when it does not hold.
 
 | Idea | Meaning |
 |---|---|
-| **Linearity assumption** | The expected response should be approximately linear in the predictors included in the model. |
-| **Linear in the coefficients** | A regression model can include transformed predictors such as $\log(x)$ or $x^2$ and still be a linear regression model. |
-| **Scatterplot matrix** | A grid of pairwise plots used to look for curved relationships before fitting the model. |
-| **Discrete predictor** | A predictor with only a few possible values; it may need to be treated as categorical rather than quantitative. |
-| **Transformation** | A change to a predictor, such as using $\log(x)$, $\sqrt{x}$, or $x^2$, to better capture a nonlinear relationship. |
-| **Log-transformed predictor** | A predictor entered as $\log(x)$; the coefficient is interpreted in terms of changes in $\log(x)$ or approximate percentage changes in $x$. |
-| **Transformed response** | A model that uses a response such as $\log(y)$; fitted values and residuals are on the transformed scale. |
-| **Residual plot** | A plot used after fitting the model to check whether nonlinear patterns remain. |
-| **Residuals vs. fitted values** | A general diagnostic plot for checking whether residuals are randomly scattered around 0. |
-| **Residuals vs. predictors** | Diagnostic plots that can help identify which predictor may need a transformation. |
-| **Side-by-side residual plots** | A useful way to compare model diagnostics before and after transforming variables. |
-| **$R^2$ caution** | A larger $R^2$ may indicate better fit, but residual plots are needed to assess whether the linearity assumption is reasonable. |
+| Linearity assumption | The expected response should be approximately linear in the predictors included in the model. |
+| Linear in the coefficients | A regression model can include transformed predictors such as $\log(x)$ or $x^2$ and still be a linear regression model. |
+| Scatterplot matrix | A grid of pairwise plots used to look for curved relationships before fitting the model. |
+| Discrete predictor | A predictor with only a few possible values; it may need to be treated as categorical instead of quantitative. |
+| Transformation | A change to a predictor, such as using $\log(x)$, $\sqrt{x}$, or $x^2$, to capture a nonlinear relationship. |
+| Log-transformed predictor | A predictor entered as $\log(x)$; the coefficient is interpreted in terms of changes in $\log(x)$ or approximate percentage changes in $x$. |
+| Transformed response | A model that uses a response such as $\log(y)$; fitted values and residuals are on the transformed scale. |
+| Residual plot | A plot used after fitting the model to check whether nonlinear patterns remain. |
+| Residuals vs. fitted values | A general diagnostic plot for checking whether residuals are randomly scattered around 0. |
+| Residuals vs. predictors | Diagnostic plots that can help identify which predictor may need a transformation. |
+| Side-by-side residual plots | A way to compare model diagnostics before and after transforming variables. |
+| $R^2$ caution | A larger $R^2$ may indicate better fit, but residual plots are needed to judge whether the linearity assumption is reasonable. |
 
 ## Check your understanding
 
@@ -465,27 +459,27 @@ In this chapter, we focused on how to assess and improve the linearity assumptio
 
 ::: {.callout-tip collapse="true" title="Solutions"}
 
-1. **The mean response should follow the form specified by the model.** In a model using untransformed predictors, this means the relationship between each predictor and the expected response should be approximately straight-line, after accounting for the other predictors.
+1. The mean response should follow the form the model specifies. In a model with untransformed predictors, this means the relationship between each predictor and the expected response should be close to a straight line after accounting for the other predictors.
 
-2. **Linearity refers to the coefficients.** A model such as $E(y)=\beta_0+\beta_1\log(x)$ or $E(y)=\beta_0+\beta_1x+\beta_2x^2$ is still linear in the $\beta$ coefficients, even though it may be curved as a function of $x$.
+2. Linearity refers to the coefficients. A model such as $E(y)=\beta_0+\beta_1\log(x)$ or $E(y)=\beta_0+\beta_1x+\beta_2x^2$ is linear in the $\beta$ coefficients, even though it may be curved as a function of $x$.
 
-3. **It helps identify potential nonlinear relationships early.** Before fitting the model, a scatterplot matrix lets us scan the relationship between the response and each predictor and decide whether transformations may be needed.
+3. It shows possible nonlinear relationships early. Before fitting the model, we can scan the relationship between the response and each predictor and decide whether any transformations are needed.
 
-4. **There are too few x-values to see a smooth pattern.** With only a few distinct predictor values, points stack vertically. It may be better to think about group differences or treat the predictor as categorical.
+4. There are too few x-values to see a smooth pattern. With only a few distinct values, the points stack in vertical columns. It may be better to think about differences between groups or to treat the predictor as categorical.
 
-5. **When the relationship bends and flattens out.** A log transformation is often useful when increases in a positive predictor have a large effect at first but a smaller effect at larger values.
+5. When the relationship bends and flattens out. A log transformation is often useful when increases in a positive predictor have a large effect at first and a smaller effect at larger values.
 
-6. **Transformations do not guarantee success.** After refitting the model, residual plots show whether the curved pattern has actually been reduced.
+6. A transformation is not guaranteed to work. After refitting the model, the residual plots show whether the curved pattern has really been reduced.
 
-7. **A systematic curve.** If residuals tend to be positive in one region, negative in another, and positive again elsewhere, the model is missing curvature.
+7. A systematic curve. If the residuals tend to be positive in one region, negative in another, and positive again elsewhere, the model is missing curvature.
 
-8. **$R^2$ measures fit, not assumptions.** A transformed model may have a larger $R^2$ but still show a nonlinear residual pattern. Residual diagnostics are needed to assess the model form.
+8. $R^2$ measures fit; it does not check assumptions. A transformed model may have a larger $R^2$ and still show a nonlinear residual pattern. Residual diagnostics are needed to judge the form of the model.
 
-9. **The predictor scale has changed.** The coefficient $\beta_1$ describes a one-unit increase in $\log(x)$, not a one-unit increase in $x$. It is often more useful to describe the effect using percentage changes in $x$.
+9. The predictor scale has changed. The coefficient $\beta_1$ describes a one-unit increase in $\log(x)$, not in $x$. It is often more useful to describe the effect with percentage changes in $x$.
 
-10. **The model is now on the log-response scale.** The fitted values, residuals, and coefficient interpretations refer to $\log(y)$. To discuss predictions in the original units of $y$, we need to back-transform carefully.
+10. The model is now on the log scale of the response. The fitted values, residuals, and coefficient interpretations all refer to $\log(y)$. To talk about predictions in the original units of $y$, we have to back-transform carefully.
 
-11. **It makes improvement easier to see.** A side-by-side plot lets us compare whether the transformed model has less systematic curvature in its residuals than the untransformed model.
+11. It makes the improvement easier to see. Putting the plots next to each other lets us check whether the transformed model has less systematic curvature in its residuals than the untransformed model.
 
 :::
 
