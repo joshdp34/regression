@@ -4,26 +4,18 @@
 
 > "If all you have is a hammer, everything looks like a nail." - Bernard Baruch
 
-In previous chapters, the response variable was quantitative. Logistic regression is used when the response is categorical, especially when the response has two possible outcomes such as yes/no, success/failure, or present/absent.
+Up to now the response variable has been quantitative. Logistic regression is for a categorical response, most often one with two possible outcomes: yes or no, success or failure, present or absent.
 
-The main idea is simple but important: when $Y$ is binary, the mean response is a probability. Logistic regression models that probability while keeping fitted values between 0 and 1.
+When $Y$ is binary, the mean response is a probability. Logistic regression models that probability in a way that keeps the fitted values between 0 and 1. This chapter covers why a straight line is a poor model for a probability, where the S-shaped logistic curve comes from, how the model is fit, and how to read its coefficients. It ends with some problems that come up only with binary data. The next chapter extends the model to several predictors and uses it for classification.
 
 
 ## Binary Response Variable
 
+In many regression problems the response has only two possible *qualitative* outcomes, so it can be represented by an indicator variable that takes the values 0 and 1. Such a response is called a binary or dichotomous response.
 
-In a variety of regression applications, the response variable of interest has only two possible *qualitative* outcomes, and therefore can be represented by a binary indicator variable taking on values 0 and 1.
-
-
-A binary response variable
-is said to involve binary responses or dichotomous responses.
-
-
-We consider first the meaning of the response function when the outcome variable is binary,
-and then we take up some special problems that arise with this type of response variable.
+We first look at what the response function means when the response is binary, and then at the problems a binary response causes for ordinary least squares.
 
 ### Response Function Meaning
-
 
 Consider the simple linear regression model
 $$
@@ -31,25 +23,16 @@ $$
 y_{i} & =\beta_{0}+\beta_{1}x_{i}+\varepsilon_{i}\qquad y_{i}=0,1
 \end{align*}
 $$
-where the outcome $y_{i}$ is binary taking on the value of either
-0 or 1. 
+where the outcome $y_{i}$ is either 0 or 1.
 
-
-The expected response $E\left[ y_{i}\right] $ has a special meaning
-in this case.
-
-
-
-
-Since $E\left[ \varepsilon_{i}\right] =0$, we have
+The expected response $E\left[ y_{i}\right]$ has a special meaning here. Since $E\left[ \varepsilon_{i}\right] =0$, we have
 $$
 \begin{align*}
 E\left[ y_{i}\right]  & =\beta_{0}+\beta_{1}x_{i}
 \end{align*}
 $$
 
-Consider $y_{i}$ to be a Bernoulli random variable for which we can
-state the probability distribution as follows
+Now think of $y_{i}$ as a Bernoulli random variable with probability distribution
 $$
 \begin{align*}
 y_{i} & \quad\textbf{ Probability}\\
@@ -58,15 +41,7 @@ y_{i} & \quad\textbf{ Probability}\\
 \end{align*}
 $$
 
-
-Thus, $\pi_{i}$ is the probability that $y_{i}=1$ and $1-\pi_{i}$
-is the probability that $y_{i}=0$
-
-
-
-
-
-By the definition of a discrete random variable, we have
+So $\pi_{i}$ is the probability that $y_{i}=1$, and $1-\pi_{i}$ is the probability that $y_{i}=0$. By the definition of the expected value of a discrete random variable,
 $$
 {\begin{align*}
 E\left[ y_{i}\right]  & =1\left(\pi_{i}\right)+0\left(1-\pi_{i}\right)\\
@@ -75,7 +50,7 @@ E\left[ y_{i}\right]  & =1\left(\pi_{i}\right)+0\left(1-\pi_{i}\right)\\
 \end{align*}}
 $$
 
-Thus, 
+Putting the two together,
 $$
 {\begin{align*}
 E\left[ y_{i}\right]  & =\beta_{0}+\beta_{1}x_{i}\\
@@ -83,25 +58,7 @@ E\left[ y_{i}\right]  & =\beta_{0}+\beta_{1}x_{i}\\
 \end{align*}}
 $$
 
-
-The mean response $E\{y_i\}$ as given by the response function is therefore simply
-the probability that $y_i = 1$ when the level of the predictor variable is $x_i$.
-
-
-
-
-
-This interpretation
-of the mean response applies whether the response function is a simple linear one, as here,
-or a complex multiple regression one. 
-
-
-
-
-
-The mean response, when the outcome variable is
-a 0, 1 indicator variable, always represents the probability that $Y = 1$ for the given levels
-of the predictor variables.
+The mean response given by the response function is the probability that $y_i = 1$ when the predictor is at the level $x_i$. This holds whatever the form of the response function, whether it is a simple linear one, as here, or a complicated multiple regression one. When the response is a 0/1 indicator, the mean response is always the probability that $Y = 1$ at the given levels of the predictors.
 
 ::: {#exm-23_1 .example title="The mean of a binary response is a probability"}
 
@@ -116,126 +73,174 @@ $$
 E(Y) = 1(0.80) + 0(0.20) = 0.80.
 $$
 
-For a binary response, the expected value is not an average outcome such as "0.80 students." It is the probability that the outcome equals 1.
+For a binary response, the expected value is the probability that the outcome equals 1. It is not an average outcome in the usual sense; no student scores "0.80 of a pass."
+
+The sample mean works the same way. If 18 of 25 students in a class pass, the sample mean of the 0/1 responses is $18/25 = 0.72$, which is the proportion who passed.
 
 :::
 
-### Problems when response is binary
+### Problems When the Response Is Binary
 
+A binary response causes three problems for the linear model. We look at each using simple linear regression.
 
-Special problems arise, unfortunately, when the response variable is an indicator variable.
-We consider three of these now, using a simple linear regression model as an illustration.
-
-
-
-
-1. *Nonnormal error terms*: For a binary 0, 1 response variable, each error term can take on only two values:
+1. *Nonnormal error terms.* When the response is 0 or 1, each error term can take only two values:
     $$
     \begin{align*}
     \text{When }y_{i}=1: & \quad\varepsilon_{i}=1-\beta_{0}-\beta_{1}x_{i}\\
     \text{When }y_{i}=0: & \quad\varepsilon_{i}=0-\beta_{0}-\beta_{1}x_{i}
     \end{align*}
     $$
+    A variable with two possible values cannot be normally distributed, so the normal error regression model does not apply.
 
-
-    Clearly, the normal error regression model, which assumes that the $\varepsilon_i$ are normally distributed, is not appropriate.
-
-2. *Nonconstant error variance*: Another problem with the error terms is that they do
-not have equal variances when the response variable is an indicator variable.
-
-
-    To see this, note that
+2. *Nonconstant error variance.* The error terms do not have equal variances. Since $y_i$ is Bernoulli,
     $$
     \begin{align*}
-    Var[\varepsilon_i] = \pi_i(1-\pi_i)
+    Var[\varepsilon_i] = Var[y_i] = \pi_i(1-\pi_i)
     \end{align*}
     $$
-    
-    Note that $Var\{\varepsilon_i\}$ depends on $\pi_i$, which usually depends on $x_i$. Hence, the error variances will differ at
-    different levels of $X$, and ordinary least squares will no longer be optimal.
+    which depends on $\pi_i$, and $\pi_i$ usually depends on $x_i$. The error variances therefore differ at different levels of $X$, and ordinary least squares is no longer the best linear unbiased method.
 
-3. *Constraints on the response function*: Since the response function represents probabilities when the outcome variable is a 0, 1 indicator variable, the mean responses should be constrained as follows:
+3. *Constraints on the response function.* Since the response function gives probabilities, the mean responses have to satisfy
     $$
     0\le E\{Y\}=\pi \le 1
     $$
 
-    The difficulties created by the need for the restriction  on the response function are the most serious. 
+    This third problem is the most serious one. Weighted least squares can handle unequal variances, and with large samples the least squares estimators are approximately normal under fairly general conditions even when the errors are far from normal. A straight line, though, will eventually go below 0 or above 1 if $x$ ranges far enough, and that often rules out a linear response function altogether.
 
+The variance $\pi(1-\pi)$ is largest at $\pi = 0.5$ and shrinks toward zero as $\pi$ approaches 0 or 1.
 
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Curve of the Bernoulli variance pi times one minus pi, peaking at 0.25 when pi equals 0.5."
+#| fig-height: 3
 
+library(tidyverse)
+library(broom)
 
+tibble(probability = seq(0, 1, length.out = 200)) |>
+  mutate(variance = probability * (1 - probability)) |>
+  ggplot(aes(x = probability, y = variance)) +
+  geom_line(linewidth = 1, color = "#0072B2") +
+  labs(
+    x = expression(pi),
+    y = expression(pi(1 - pi)),
+    title = "The variance of a binary response depends on its mean"
+  ) +
+  theme_minimal()
+```
 
-    One could use weighted least squares to handle the problem of unequal error variances. 
+An observation with $\pi = 0.5$ has variance 0.25, and one with $\pi = 0.05$ has variance 0.0475, about one fifth as much. Ordinary least squares weights them equally.
 
+::: {#exm-23_lpm .example title="A straight line fit to a binary response"}
 
+In the `mtcars` data, `am` equals 1 for a manual transmission and 0 for an automatic. We fit a straight line to `am` using weight, `wt`, in thousands of pounds. A linear model fit to a binary response is called a linear probability model. For comparison we also fit the logistic regression model that this chapter builds up to.
 
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Jittered transmission type versus car weight with a fitted straight line that goes below zero and a logistic curve that stays between zero and one."
 
+mtcars_lpm <- lm(am ~ wt, data = mtcars)
+mtcars_logit <- glm(am ~ wt, data = mtcars, family = binomial)
 
-    In addition, with large sample sizes the method of least squares provides estimators that are asymptotically normal under quite general conditions, even if the distribution of the error terms is far from normal.
+mtcars |>
+  mutate(lpm_fitted = fitted(mtcars_lpm)) |>
+  summarize(
+    min_fitted = min(lpm_fitted),
+    max_fitted = max(lpm_fitted),
+    n_below_0 = sum(lpm_fitted < 0),
+    n_above_1 = sum(lpm_fitted > 1)
+  )
 
+wt_grid <- tibble(wt = seq(1, 6, length.out = 300))
 
+lpm_curves <- bind_rows(
+  wt_grid |>
+    mutate(
+      fitted = predict(mtcars_lpm, newdata = wt_grid),
+      model = "Straight line (least squares)"
+    ),
+  wt_grid |>
+    mutate(
+      fitted = predict(mtcars_logit, newdata = wt_grid, type = "response"),
+      model = "Logistic curve"
+    )
+)
 
-    However, the constraint on the mean responses to fall between 0 and 1 frequently will rule out a linear response function.  
+set.seed(23)
 
-::: {.callout-note collapse="false" title="The biggest problem is the probability scale"}
+ggplot() +
+  annotate("rect", xmin = 1, xmax = 6, ymin = -0.6, ymax = 0,
+           fill = "#D55E00", alpha = 0.12) +
+  annotate("rect", xmin = 1, xmax = 6, ymin = 1, ymax = 1.2,
+           fill = "#D55E00", alpha = 0.12) +
+  geom_jitter(data = mtcars, aes(x = wt, y = am),
+              width = 0, height = 0.03, alpha = 0.7) +
+  geom_line(data = lpm_curves,
+            aes(x = wt, y = fitted, color = model), linewidth = 1) +
+  geom_hline(yintercept = c(0, 1), linetype = "dashed", color = "gray50") +
+  scale_color_manual(values = c("Logistic curve" = "#0072B2",
+                                "Straight line (least squares)" = "#D55E00")) +
+  labs(
+    x = "Weight (1000 lbs)",
+    y = "Manual transmission (1 = yes)",
+    color = NULL,
+    title = "Two models for P(manual) as a function of weight",
+    subtitle = "Shaded regions are impossible values for a probability"
+  ) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
+```
 
-For binary responses, nonnormality and nonconstant variance matter. But the most visible problem is that a straight-line model can predict values below 0 or above 1.
+The straight line gives negative fitted probabilities for the three heaviest cars, as low as `r round(min(fitted(mtcars_lpm)), 2)`, and a fitted probability slightly above 1 for the lightest car. The logistic curve flattens out near 0 and 1 and stays inside the possible range for every weight.
 
-Logistic regression solves this by modeling a transformed probability with a linear predictor while keeping the fitted probability itself between 0 and 1.
+The residuals from the linear probability model show the first two problems directly.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Residuals versus fitted values for the linear probability model, forming two parallel diagonal bands."
+#| fig-height: 3
+
+augment(mtcars_lpm) |>
+  ggplot(aes(x = .fitted, y = .resid, color = factor(am))) +
+  geom_point(size = 2) +
+  geom_hline(yintercept = 0, linetype = "dashed") +
+  scale_color_manual(values = c("0" = "#D55E00", "1" = "#0072B2")) +
+  labs(
+    x = "Fitted value",
+    y = "Residual",
+    color = "am",
+    title = "Residuals from a straight line fit to a 0/1 response"
+  ) +
+  theme_minimal()
+```
+
+Every residual falls on one of two parallel lines, $1 - \hat{y}$ for the manual cars and $0 - \hat{y}$ for the automatic cars. No transformation or outlier removal will make that look like a normal distribution with constant variance. A residual plot with two diagonal bands like this is the signature of a binary response.
 
 :::
 
+::: {.callout-note collapse="false" title="The biggest problem is the probability scale"}
+
+For binary responses, nonnormality and nonconstant variance matter. The most visible problem, though, is that a straight-line model can predict values below 0 or above 1.
+
+Logistic regression handles this by modeling a transformed probability as a linear function of the predictors, which keeps the fitted probability itself between 0 and 1.
+
+:::
+
+The linear probability model is not useless. When all the fitted probabilities stay between about 0.2 and 0.8, the logistic curve is close to a straight line, and the two models give similar answers. Some fields, economics in particular, use it often for that reason, because its coefficients are changes in probability and are easy to explain. The trouble comes near 0 and 1, and whenever the model is used to predict outside the range of the data.
 
 
 ## Sigmoidal Response Functions
 
+This section looks at two response functions for binary responses. Both are bounded between 0 and 1, have a sigmoidal (S) shape, and approach 0 and 1 asymptotically.
 
-In this section, we will examine two response functions for modeling binary responses. 
-
-
-These
-functions are bounded between 0 and 1, have a characteristic *sigmoidal*- or S-shape, and
-approach 0 and 1 asymptotically. 
-
-
-
-
-
-These functions arise naturally when the binary response
-variable results from a zero-one recoding (or dichotomization) of an underlying continuous
-response variable, and they are often appropriate for discrete binary responses as well.
+These functions come up naturally when the binary response is a 0/1 recoding (a dichotomization) of an underlying continuous variable. They often work well for binary responses that have no underlying continuous variable, too.
 
 ### Probit Mean Response Function
 
-
-Consider a health researcher studying the effect of a mother's use of alcohol ($x$ -an index
-of degree of alcohol use during pregnancy) on the duration of her pregnancy ($y^C$). 
-
-
-
-
-
-Here
-we use the superscript $c$ to emphasize that the response variable, pregnancy duration, is a
-*continuous* response. 
-
-
-
-
-
-This can be represented by a simple linear regression model:
+Consider a health researcher studying the effect of a mother's alcohol use during pregnancy ($x$, an index of the degree of use) on the length of the pregnancy ($y^C$). The superscript $c$ is a reminder that pregnancy length is a *continuous* response. It can be represented by a simple linear regression model
 $$
 y^C_i = \beta_0^c+\beta_1^c x_i +\varepsilon_i^c
 $$
-and we will assume that $\varepsilon^c_i$ is normally distributed with mean zero and variance $\sigma^2_c$.
+where $\varepsilon^c_i$ is normally distributed with mean zero and variance $\sigma^2_c$.
 
-
-
-
-
-If the continuous response variable, pregnancy duration, were available, we might proceed
-with the usual simple linear regression analysis. However, in this instance, researchers
-coded each pregnancy duration as preterm or full term using the following rule:
+If pregnancy length were available, we could proceed with simple linear regression. Suppose instead that the researchers recorded each pregnancy only as preterm or full term, using the rule
 $$
 \begin{align*}
 y_{i} & =\begin{cases}
@@ -245,7 +250,7 @@ y_{i} & =\begin{cases}
 \end{align*}
 $$
 
-It follows then that
+Then
 $$
 \begin{align*}
 P\left(y_{i}=1\right)=\pi_{i} & =P\left(y_{i}^{c}\le38\right)\\
@@ -255,7 +260,7 @@ P\left(y_{i}=1\right)=\pi_{i} & =P\left(y_{i}^{c}\le38\right)\\
 & =P\left(Z\le\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
 \end{align*}
 $$
-where 
+where
 $$
 \begin{align*}
 \beta_{0}^{*} & =\frac{38-\beta_{0}^{c}}{\sigma_{c}}\\
@@ -264,46 +269,30 @@ Z & =\frac{\varepsilon_{i}^{c}}{\sigma_{c}}.
 \end{align*}
 $$
 
-Note that $Z$ follows a standard normal distribution.
-
-
-
-
-If we let $P\left(Z\le z\right)=\Phi\left(z\right)$, we have
+$Z$ has a standard normal distribution. Writing $P\left(Z\le z\right)=\Phi\left(z\right)$,
 $$
 \begin{align*}
 P\left(y_{i}=1\right) & =\Phi\left(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
 \end{align*}
 $$
 
-From this we have what is known as the probit mean response function
+This gives the probit mean response function
 $$
 \begin{align*}
 E\left[ y_{i}\right]  & =\pi_{i}=\Phi\left(\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
 \end{align*}
 $$
 
-
-
-The inverse function $\Phi^{-1}$ of the standard normal cumulative distribution function is sometimes called the *probit transformation*.
-
-
-
-
-
-We solve for the linear predictor $\beta_{0}^{*}+\beta_{1}^{*}x_{i}$ by applying the probit transformation to both sides of the expression:
+The inverse $\Phi^{-1}$ of the standard normal CDF is called the *probit transformation*. Applying it to both sides gives
 $$
 \begin{align*}
 \Phi^{-1}\left(\pi_{i}\right) & =\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}
 \end{align*}
 $$
 
+The expression $\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}$ is called the probit response function or, more generally, the linear predictor.
 
-
-
-The resulting expression $\pi_{i}^{\prime}=\beta_{0}^{*}+\beta_{1}^{*}x_{i}$
-is called the probit response function, or more generally, the linear
-predictor.
+The derivation shows two more things. First, we can only estimate $\beta_0^c$ and $\beta_1^c$ divided by $\sigma_c$. Dichotomizing throws away the scale of the continuous response, so the binary data cannot tell us how many weeks of pregnancy a unit of $x$ is worth, only how much it shifts the probability of a preterm birth. Second, the sign flips: alcohol use that shortens pregnancy ($\beta_1^c < 0$) raises the probability of a preterm birth ($\beta_1^* > 0$), because $y = 1$ was defined as the short outcome.
 
 ::: {#exm-23_2 .example title="How probit coefficients affect the S-shaped curve"}
 
@@ -317,8 +306,6 @@ The intercept shifts the curve left or right, while the slope controls how quick
 
 ```{r message=FALSE, warning=FALSE}
 #| fig-alt: "Probit response curves showing how the intercept shifts the curve and how the slope changes its steepness."
-
-library(tidyverse)
 
 probit_scenario_levels <- c(
   "Same intercept, steeper slope",
@@ -336,41 +323,30 @@ probit_grid <- expand_grid(
     probability = pnorm(beta_0 + beta_1 * x)
   )
 
+baseline_probit <- tibble(x = seq(-4, 4, length.out = 200)) |>
+  mutate(probability = pnorm(x))
+
 ggplot(probit_grid, aes(x = x, y = probability)) +
+  geom_line(data = baseline_probit, linetype = "dashed", color = "gray50") +
   geom_line(linewidth = 1, color = "#0072B2") +
   facet_wrap(~ scenario) +
   labs(
     x = "x",
     y = expression(pi),
-    title = "Probit response curves"
+    title = "Probit response curves",
+    subtitle = "Dashed curve = baseline with intercept 0 and slope 1"
   ) +
   ylim(0, 1) +
   theme_minimal()
 ```
 
-Both panels keep the fitted probability between 0 and 1. The curve changes on the probability scale, but the probit transformation changes linearly with $x$.
+Both curves stay between 0 and 1. On the probability scale they are S-shaped; on the probit scale, $\Phi^{-1}(\pi)$, they are straight lines in $x$.
 
 :::
 
 ## Logistic Mean Response Function
 
-
-We have seen that the assumption of normally distributed errors for the underlying continuous
-response variable led to the use of the standard normal cumulative distribution
-function, $\Phi$  to model $\pi_i$.
-
-
-
-
-
-An alternative error distribution that is very similar to the normal
-distribution is the *logistic* distribution. 
-
-
-
-
-
-Plots of the standard normal density function and the logistic density function, each with mean zero and variance one, are very similar. The logistic distribution has slightly heavier tails.
+Assuming normal errors for the underlying continuous response led to the standard normal CDF, $\Phi$, as the model for $\pi_i$. Another error distribution, very similar to the normal, is the *logistic* distribution. The standard normal density and the logistic density with mean zero and variance one look much alike. The logistic has slightly heavier tails.
 
 ::: {#exm-23_3 .example title="Normal and logistic densities are similar"}
 
@@ -392,46 +368,35 @@ density_grid <- tibble(x = seq(-4, 4, length.out = 400)) |>
 
 ggplot(density_grid, aes(x = x, y = density, color = distribution)) +
   geom_line(linewidth = 1) +
+  scale_color_manual(values = c(logistic = "#0072B2", normal = "#D55E00")) +
   labs(
     x = "value",
     y = "density",
     color = "Distribution",
-    title = "Normal and logistic densities"
+    title = "Normal and logistic densities, both with variance 1"
   ) +
   theme_minimal()
 ```
 
-This similarity is one reason probit and logistic regression often produce similar fitted probabilities.
+The logistic density is a little taller in the middle and a little heavier in the tails. Because the two are so close, probit and logistic regression usually give very similar fitted probabilities.
 
 :::
 
-
-Note the cumulative distribution function of a logistic random variable
-$\varepsilon_{L}$ having mean 0 and standard deviation $\sigma=\pi/\sqrt{3}$
-is:
+The cumulative distribution function of a logistic random variable $\varepsilon_{L}$ with mean 0 and standard deviation $\sigma=\pi/\sqrt{3}$ is
 $$
 \begin{align*}
 F_{L}\left(\varepsilon_{L}\right) & =\frac{\exp\left(\varepsilon_{L}\right)}{1+\exp\left(\varepsilon_{L}\right)}
 \end{align*}
 $$
+(Here $\pi$ is the number 3.14159..., not a probability. The notation is unfortunate but standard.)
 
-
-Suppose now that $\varepsilon_{i}^{c}$ has a logistic distribution
-with mean 0 and standard deviation $\sigma_{c}$. Then we have
+Suppose now that $\varepsilon_{i}^{c}$ has a logistic distribution with mean 0 and standard deviation $\sigma_{c}$. Then
 $$
 \begin{align*}
 P\left(y_{i}=1\right) & =P\left(\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\beta_{0}^{*}+\beta_{1}^{*}x_{i}\right)
 \end{align*}
 $$
-where $\varepsilon_{i}^{c}/\sigma_{c}$ follows a logistic distribution
-with mean zero and standard deviation one. 
-
-
-
-
-
-Multiplying both sides of the inequality inside the probability statement
-on the right by $\pi/\sqrt{3}$ gives us
+where $\varepsilon_{i}^{c}/\sigma_{c}$ has a logistic distribution with mean zero and standard deviation one. Multiplying both sides of the inequality by $\pi/\sqrt{3}$ gives
 $$
 \begin{align*}
 P\left(y_{i}=1\right)=\pi_{i} & =P\left(\frac{\pi}{\sqrt{3}}\frac{\varepsilon_{i}^{c}}{\sigma_{c}}\le\frac{\pi}{\sqrt{3}}\beta_{0}^{*}+\frac{\pi}{\sqrt{3}}\beta_{1}^{*}x_{i}\right)\\
@@ -447,8 +412,7 @@ $$
 \beta_{1} & =\frac{\pi}{\sqrt{3}}\beta_{1}^{*}
 \end{align*}
 $$
-denote the logistic regression parameters. 
-
+are the logistic regression parameters.
 
 To summarize, the logistic mean response function is
 $$
@@ -460,24 +424,22 @@ E\left[ y_{i}\right]  & =\pi_{i}\\
 \end{align*}
 $$
 
-
-Applying the inverse of the cumulative distribution function $F_{L}$
-gives
+Applying the inverse of $F_{L}$ gives
 $$
 \begin{align*}
 F_{L}^{-1}\left(\pi_{i}\right) & =\beta_{0}+\beta_{1}x_{i}=\pi_{i}^{\prime}
 \end{align*}
 $$
 
-
-$F_{L}^{-1}\left(\pi_{i}\right)$ is called the *logit transformation*
-and is given by
+$F_{L}^{-1}\left(\pi_{i}\right)$ is called the *logit transformation*:
 $$
 \begin{align*}
 F_{L}^{-1}\left(\pi_{i}\right) & =\log\left(\frac{\pi_{i}}{1-\pi_{i}}\right)
 \end{align*}
 $$
-where the ratio $\pi_{i}/\left(1-\pi_{i}\right)$ is called the **odds**.
+where the ratio $\pi_{i}/\left(1-\pi_{i}\right)$ is called the *odds*.
+
+The relationship $\beta = (\pi/\sqrt{3})\,\beta^* \approx 1.81\,\beta^*$ also tells us roughly how logistic and probit coefficients compare when both models are fit to the same data. The logistic coefficients come out about 1.6 to 1.8 times as large. The fitted probabilities are nearly the same; only the scale of the coefficients differs. Never compare a logistic coefficient from one study directly with a probit coefficient from another.
 
 ::: {#exm-23_4 .example title="How logistic coefficients affect the probability curve"}
 
@@ -487,7 +449,7 @@ $$
 \pi_i = \frac{1}{1+\exp(-\beta_0-\beta_1x_i)}.
 $$
 
-The slope $\beta_1$ determines whether the probability increases or decreases as $x$ increases. Its magnitude controls how steeply the transition occurs.
+The sign of $\beta_1$ determines whether the probability increases or decreases as $x$ increases. Its magnitude controls how steep the transition is.
 
 ```{r message=FALSE, warning=FALSE}
 #| fig-alt: "Logistic response curves for negative, small positive, and large positive slopes."
@@ -525,7 +487,7 @@ ggplot(logistic_grid, aes(x = x, y = probability)) +
   theme_minimal()
 ```
 
-The fitted relationship is linear on the logit scale, but it is S-shaped on the probability scale.
+The relationship is linear on the logit scale and S-shaped on the probability scale. With $\beta_0 = 0$, every curve passes through $\pi = 0.5$ at $x = 0$. In general the curve crosses $0.5$ where the linear predictor is zero, at $x = -\beta_0/\beta_1$.
 
 :::
 
@@ -541,68 +503,182 @@ The table below shows how probabilities, odds, and logits are connected.
 
 ```{r message=FALSE, warning=FALSE}
 tibble(
-  probability = c(0.10, 0.25, 0.50, 0.75, 0.90)
+  probability = c(0.01, 0.10, 0.25, 0.50, 0.75, 0.90, 0.99)
 ) |>
   mutate(
     odds = probability / (1 - probability),
     logit = log(odds)
-  ) |>
-  knitr::kable(digits = 3)
+  )
 ```
 
-When $\pi = 0.50$, the odds are 1 and the logit is 0. Probabilities below 0.50 have negative logits, and probabilities above 0.50 have positive logits.
+When $\pi = 0.50$, the odds are 1 and the logit is 0. Probabilities below 0.50 have negative logits, and probabilities above 0.50 have positive logits. The logit is symmetric: $\pi$ and $1 - \pi$ have logits of the same size and opposite sign.
+
+The odds are not symmetric. A probability of 0.99 has odds of 99, while a probability of 0.01 has odds of about 0.0101. Odds run from 0 to infinity, so they stretch out a great deal near $\pi = 1$ and are squashed near $\pi = 0$. The plot shows the three scales side by side.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Three panels showing probability, odds, and logit as functions of the linear predictor."
+#| fig-height: 3
+
+scale_levels <- c("Probability", "Odds", "Logit (log-odds)")
+
+tibble(eta = seq(-4, 4, length.out = 200)) |>
+  mutate(
+    Probability = plogis(eta),
+    Odds = exp(eta),
+    `Logit (log-odds)` = eta
+  ) |>
+  pivot_longer(-eta, names_to = "scale", values_to = "value") |>
+  mutate(scale = factor(scale, levels = scale_levels)) |>
+  ggplot(aes(x = eta, y = value)) +
+  geom_line(linewidth = 1, color = "#0072B2") +
+  facet_wrap(~ scale, scales = "free_y") +
+  labs(
+    x = expression(eta == beta[0] + beta[1] * x),
+    y = NULL,
+    title = "The same model on three scales"
+  ) +
+  theme_minimal()
+```
+
+A logistic model is a straight line on the logit scale, an exponential curve on the odds scale, and an S-curve on the probability scale.
 
 :::
 
+### Other Links
+
+The function that connects the mean to the linear predictor, the logit $\log(\pi/(1-\pi))$ or the probit $\Phi^{-1}(\pi)$, is called the *link function*. A third link sometimes used for binary data is the complementary log-log,
+$$
+\log\left(-\log(1-\pi)\right) = \beta_0 + \beta_1 x.
+$$
+The logit and probit curves are symmetric about $\pi = 0.5$: they approach 0 and 1 at the same rate. The complementary log-log curve is not. It rises slowly from 0 and approaches 1 quickly, which can fit better when the event of interest is rare at one end of the predictor range. In R the link is set with `family = binomial(link = "logit")`, `"probit"`, or `"cloglog"`.
+
+::: {#exm-23_links .example title="Logit and probit fits to the same data"}
+
+We fit the transmission-by-weight model with all three links and compare the coefficients and fitted curves.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Fitted probability of a manual transmission versus weight for logit, probit, and complementary log-log links, with the three curves nearly overlapping."
+
+link_fits <- tibble(link = c("logit", "probit", "cloglog")) |>
+  mutate(
+    fit = map(link, \(l) glm(am ~ wt, data = mtcars,
+                             family = binomial(link = l)))
+  )
+
+link_fits |>
+  mutate(coefs = map(fit, tidy)) |>
+  select(link, coefs) |>
+  unnest(coefs) |>
+  select(link, term, estimate, std.error)
+
+link_fits |>
+  mutate(
+    curve = map(fit, \(f) wt_grid |>
+      mutate(probability = predict(f, newdata = wt_grid, type = "response")))
+  ) |>
+  select(link, curve) |>
+  unnest(curve) |>
+  ggplot(aes(x = wt, y = probability, color = link)) +
+  geom_line(linewidth = 1) +
+  geom_jitter(data = mtcars, aes(x = wt, y = am), inherit.aes = FALSE,
+              width = 0, height = 0.03, alpha = 0.5) +
+  scale_color_manual(values = c(cloglog = "#009E73", logit = "#0072B2",
+                                probit = "#D55E00")) +
+  labs(
+    x = "Weight (1000 lbs)",
+    y = "P(manual)",
+    color = "Link",
+    title = "Three links, nearly the same fitted probabilities"
+  ) +
+  theme_minimal()
+```
+
+The logit slope is about `r round(coef(link_fits$fit[[1]])[2] / coef(link_fits$fit[[2]])[2], 2)` times the probit slope, in the range we expected. The fitted curves are hard to tell apart where there are data. With 32 cars there is no hope of distinguishing the links from the data alone. In practice the logit is the default because of the odds interpretation in the next section.
+
+:::
+
+## Fitting the Model: Maximum Likelihood
+
+Least squares is not used to fit a logistic regression. Instead the coefficients are chosen by *maximum likelihood*: we choose the values of $\beta_0$ and $\beta_1$ that make the observed 0s and 1s as probable as possible.
+
+Each $y_i$ is Bernoulli with probability $\pi_i$, so the probability of observing $y_i$ can be written $\pi_i^{y_i}(1-\pi_i)^{1-y_i}$. This equals $\pi_i$ when $y_i = 1$ and $1 - \pi_i$ when $y_i = 0$. If the observations are independent, the probability of the whole sample is the product, and its logarithm is the log-likelihood
+$$
+\ell(\beta_0, \beta_1) = \sum_{i=1}^n \left[ y_i \log \pi_i + (1 - y_i)\log(1 - \pi_i) \right],
+\qquad \pi_i = \frac{1}{1 + \exp(-\beta_0 - \beta_1 x_i)}.
+$$
+
+Unlike least squares for the linear model, there is no closed-form solution for the maximum. `glm()` finds it numerically with an algorithm called iteratively reweighted least squares (IRLS). Each step is a weighted least squares fit, with weights $\pi_i(1-\pi_i)$ from the current estimates, so the observations with the largest variance get the least weight. The "Number of Fisher Scoring iterations" line in `summary()` reports how many steps it took.
+
+::: {#exm-23_mle .example title="The log-likelihood surface for the transmission model"}
+
+We evaluate the log-likelihood for the `mtcars` model over a grid of $(\beta_0, \beta_1)$ values and mark the estimates from `glm()`.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Contour plot of the log-likelihood over intercept and slope values, with a long narrow ridge and the maximum likelihood estimate marked at its peak."
+
+log_likelihood <- function(b0, b1, x = mtcars$wt, y = mtcars$am) {
+  p <- plogis(b0 + b1 * x)
+  sum(y * log(p) + (1 - y) * log(1 - p))
+}
+
+mle <- coef(mtcars_logit)
+mle
+
+loglik_grid <- expand_grid(
+  b0 = seq(2, 24, length.out = 150),
+  b1 = seq(-8, -0.5, length.out = 150)
+) |>
+  mutate(loglik = map2_dbl(b0, b1, log_likelihood))
+
+loglik_grid |>
+  filter(loglik > -40) |>
+  ggplot(aes(x = b0, y = b1, z = loglik)) +
+  geom_contour_filled(breaks = c(-40, -30, -25, -20, -15, -12, -10, -9.6)) +
+  annotate("point", x = mle[1], y = mle[2], color = "white", size = 3) +
+  labs(
+    x = expression(beta[0]),
+    y = expression(beta[1]),
+    fill = "Log-likelihood",
+    title = "Log-likelihood for am ~ wt",
+    subtitle = "White point = maximum likelihood estimate from glm()"
+  ) +
+  theme_minimal()
+
+c(
+  maximum_from_grid = max(loglik_grid$loglik),
+  at_glm_estimate = log_likelihood(mle[1], mle[2]),
+  logLik_from_glm = as.numeric(logLik(mtcars_logit))
+)
+```
+
+The maximum of the surface is at the `glm()` estimates, and `logLik()` reports the same value we computed by hand. The surface is a long, narrow ridge running diagonally. Along the ridge, raising the intercept and making the slope more negative leaves the fit nearly unchanged, because all the cars weigh between 1.5 and 5.4 thousand pounds and $\beta_0$ is the log-odds at a weight of zero, far from any data. This is the same correlation between intercept and slope estimates that we saw in linear regression when $x$ is far from 0. Centering `wt` would turn the ridge into a rounder hill without changing the fitted probabilities.
+
+:::
+
+The deviance reported by `glm()` is $-2$ times the log-likelihood (plus a constant that is 0 for 0/1 data). It plays the role the residual sum of squares plays in linear regression: smaller is better, and the drop in deviance when a predictor is added is the basis for likelihood ratio tests, covered in the next chapter.
+
 ## Interpretation of the Coefficients
 
+The estimated coefficient $\hat{\beta}_1$ in a fitted logistic model is not interpreted the way a slope in linear regression is. The effect of a unit increase in $x$ on the probability depends on where on the $x$ scale you start.
 
-The interpretation of the estimated regression coefficient $\hat{\beta}_1$ in the fitted logistic response
-function  is not the straightforward interpretation of the slope in a linear regression
-model. 
-
-
-
-
-
-The reason is that the effect of a unit increase in $x$ varies for the logistic regression
-model according to the location of the starting point on the $x$ scale. 
-
-
-
-
-An interpretation of $\hat{\beta}_1$
-is found in the property of the fitted logistic function that the estimated odds 
+What does stay constant is the effect on the odds. For any unit increase in $x$, the estimated odds
 $$
 \frac{\hat{\pi}}{1-\hat{\pi}}
 $$
-are
-multiplied by 
+are multiplied by
 $$
-\exp(\hat{\beta}_1)
+\exp(\hat{\beta}_1).
 $$
-for any unit increase in $x$.
 
-
-
-
-
-To see this, we consider the value of the fitted logit response function at $X = x_j$;
+To see this, take the value of the fitted logit response function at $X = x_j$:
 $$
 \hat{\pi}^\prime (x_j)={\hat{\beta}_0+\hat{\beta}_1 x_j}
 $$
-
-The notation $\hat{\pi}^\prime (x_j)$ indicates specifically the $x$ level   associated with the fitted value. 
-
-
-
-
-We
-also consider the value of the fitted logit response function at $X = x_j + 1$;
+The notation $\hat{\pi}^\prime (x_j)$ indicates the $x$ level associated with the fitted value. At $X = x_j + 1$,
 $$
 \hat{\pi}^\prime (x_j+1)={\hat{\beta}_0+\hat{\beta}_1( x_j+1)}
 $$
-The difference between the two fitted values is simply
+The difference between the two is
 $$
 {\begin{align*}
 \hat{\pi}^\prime (x_j+1)-\hat{\pi}^\prime (x_j)& = \hat{\beta}_0+\hat{\beta}_1( x_j+1) - \hat{\beta}_0-\hat{\beta}_1 x_j \\
@@ -610,41 +686,31 @@ $$
 \end{align*}}
 $$
 
-
-Now  $\hat{\pi}^\prime (x_j)$ is the logarithm of the estimated odds when $X=x_j$;
-we shall denote it by $\ln(\text{odds}_1)$. 
-
-
-
-Similarly, $\hat{\pi}^\prime (x_j+1)$ is the logarithm of the estimated
-odds when $X=x_j+1$; we shall denote it by $\ln(\text{odds}_2)$. 
-
-
-
-Hence, the difference between
-the two fitted logit response values can be expressed as follows:
+$\hat{\pi}^\prime (x_j)$ is the log of the estimated odds when $X=x_j$; call it $\ln(\text{odds}_1)$. Likewise $\hat{\pi}^\prime (x_j+1)$ is the log of the estimated odds when $X=x_j+1$; call it $\ln(\text{odds}_2)$. Then
 $$
 \begin{align*}
 \ln(\text{odds}_2)-\ln(\text{odds}_1) = \ln\left(\frac{\text{odds}_2}{\text{odds}_1}\right) = \hat{\beta}_1
 \end{align*}
 $$
 
-Taking antilogs (exponentials) of each side, we see that the estimated ratio of the odds, called the odds ratio, $\hat{OR}$, is
+Exponentiating both sides, the estimated ratio of the odds, called the odds ratio $\hat{OR}$, is
 $$
 \hat{OR} = \frac{\text{odds}_2}{\text{odds}_1}=\exp(\hat{\beta}_1)
 $$
 
+For an increase of $c$ units instead of 1, the same argument gives an odds ratio of $\exp(c\hat{\beta}_1)$.
+
 ::: {.callout-note collapse="false" title="A logistic slope is not a probability slope"}
 
-In simple linear regression, a slope describes an additive change in the mean response. In logistic regression, $\beta_1$ describes an additive change in **log-odds**.
+In simple linear regression, a slope is an additive change in the mean response. In logistic regression, $\beta_1$ is an additive change in log-odds.
 
-After exponentiating, $\exp(\beta_1)$ describes a multiplicative change in **odds**, not a direct additive change in probability.
+After exponentiating, $\exp(\beta_1)$ is a multiplicative change in odds. It is not an additive change in probability.
 
 :::
 
 ::: {#exm-23_6 .example title="Fitting a logistic regression model in R"}
 
-In the `mtcars` data, the variable `am` equals 1 for manual transmission and 0 for automatic transmission. Suppose we model the probability that a car has manual transmission using weight, `wt`, measured in thousands of pounds.
+We return to the transmission model. We want the probability that a car has a manual transmission as a function of weight, `wt`, in thousands of pounds.
 
 ```{r message=FALSE, warning=FALSE}
 mtcars_logistic_fit <- glm(
@@ -653,16 +719,23 @@ mtcars_logistic_fit <- glm(
   family = binomial(link = "logit")
 )
 
-coef(summary(mtcars_logistic_fit)) |>
-  as.data.frame() |>
-  rownames_to_column("term") |>
-  mutate(odds_ratio = exp(Estimate)) |>
-  knitr::kable(digits = 4)
+summary(mtcars_logistic_fit)
+
+tidy(mtcars_logistic_fit) |>
+  mutate(odds_ratio = exp(estimate))
 ```
 
-The coefficient of `wt` is negative, so heavier cars are estimated to have lower odds of manual transmission. The odds ratio $\exp(\hat{\beta}_1)$ gives the multiplicative change in the odds for each additional 1000 pounds.
+The coefficient of `wt` is negative, so heavier cars have lower estimated odds of a manual transmission. Each additional 1,000 pounds multiplies the odds by $\exp(\hat\beta_1) \approx$ `r round(exp(coef(mtcars_logistic_fit)[2]), 4)`, a decrease of about `r round(100 * (1 - exp(coef(mtcars_logistic_fit)[2])))`%.
 
-We can also compute fitted probabilities for two car weights.
+A ton is a big change for a car, so a smaller unit may be easier to talk about. For 100 pounds, $c = 0.1$:
+
+```{r message=FALSE, warning=FALSE}
+exp(0.1 * coef(mtcars_logistic_fit)["wt"])
+```
+
+Each additional 100 pounds multiplies the odds of a manual transmission by about `r round(exp(0.1 * coef(mtcars_logistic_fit)[2]), 2)`, a decrease of about `r round(100 * (1 - exp(0.1 * coef(mtcars_logistic_fit)[2])))`%.
+
+We can also compute fitted probabilities for particular weights.
 
 ```{r message=FALSE, warning=FALSE}
 tibble(wt = c(2.5, 3.5)) |>
@@ -672,34 +745,471 @@ tibble(wt = c(2.5, 3.5)) |>
       newdata = tibble(wt = wt),
       type = "response"
     )
-  ) |>
-  knitr::kable(digits = 3)
+  )
 ```
 
-The probability decreases as weight increases, but the size of the probability change depends on where we are on the S-shaped curve.
+The probability decreases as weight increases. How much it decreases for a given change in weight depends on where we are on the S-shaped curve.
 
 :::
 
+### Confidence Intervals for Odds Ratios
+
+A confidence interval for an odds ratio is found by building the interval for $\beta_1$ and then exponentiating both ends. The simplest interval is the Wald interval, $\hat\beta_1 \pm z_{\alpha/2}\,SE(\hat\beta_1)$. R's `confint()` for a `glm` instead computes a profile likelihood interval, which is based on the shape of the log-likelihood and usually behaves better in small samples. Setting `conf.int = TRUE` and `exponentiate = TRUE` in `tidy()` gives the profile interval on the odds ratio scale.
+
+::: {#exm-23_ci .example title="Wald and profile intervals for the weight odds ratio"}
+
+```{r message=FALSE, warning=FALSE}
+tidy(mtcars_logistic_fit, conf.int = TRUE, exponentiate = TRUE)
+
+wt_row <- tidy(mtcars_logistic_fit) |>
+  filter(term == "wt")
+
+tibble(
+  method = c("Wald", "Profile likelihood"),
+  lower = c(
+    exp(wt_row$estimate - qnorm(0.975) * wt_row$std.error),
+    exp(confint(mtcars_logistic_fit)["wt", 1])
+  ),
+  upper = c(
+    exp(wt_row$estimate + qnorm(0.975) * wt_row$std.error),
+    exp(confint(mtcars_logistic_fit)["wt", 2])
+  )
+)
+```
+
+Two things stand out. The intervals are not symmetric about the estimated odds ratio, because they were symmetric on the log-odds scale before exponentiating. Do not report an odds ratio as "estimate plus or minus something." And the two methods give noticeably different intervals with only 32 cars. Both exclude 1, so both say heavier cars have lower odds of a manual transmission, but the profile interval is the one to trust here. With large samples the two agree closely.
+
+:::
+
+### Effects on the Probability Scale
+
+People usually think in probabilities, not odds. The change in probability for a one-unit change in $x$ is not constant, but there is a simple way to see how big it can be. The slope of the logistic curve at a point is
+$$
+\frac{d\pi}{dx} = \beta_1\,\pi(1-\pi).
+$$
+The factor $\pi(1-\pi)$ is largest, 0.25, at $\pi = 0.5$. So the steepest the curve ever gets is $\beta_1/4$. This is sometimes called the *divide-by-4 rule*: $\beta_1/4$ is an upper bound on the change in probability per unit of $x$, and it is close to the actual change near the middle of the curve.
+
+::: {#exm-23_prob .example title="The same change in weight, different changes in probability"}
+
+For the transmission model, $\hat\beta_1/4 \approx$ `r round(coef(mtcars_logistic_fit)[2] / 4, 2)` per 1,000 pounds. That number is a slope, so it describes small changes: near the middle of the curve, 100 more pounds lowers the probability of a manual transmission by about `r abs(round(coef(mtcars_logistic_fit)[2] / 40, 2))`. It cannot be applied to a full 1,000-pound step here, since a probability cannot drop by more than 1. When $|\beta_1|$ is large relative to the unit of $x$, the curve bends a lot within one unit, and the rule only works for a fraction of a unit. We compute the actual changes for several 1,000-pound steps.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Fitted logistic curve for manual transmission versus weight with vertical arrows showing the probability change for each 1000-pound step; the change is largest near the middle of the curve."
+
+steps <- tibble(wt_start = c(1.5, 2.5, 3.5, 4.5)) |>
+  mutate(
+    wt_end = wt_start + 1,
+    p_start = predict(mtcars_logistic_fit, newdata = tibble(wt = wt_start),
+                      type = "response"),
+    p_end = predict(mtcars_logistic_fit, newdata = tibble(wt = wt_end),
+                    type = "response"),
+    change = p_end - p_start,
+    odds_ratio = (p_end / (1 - p_end)) / (p_start / (1 - p_start))
+  )
+
+steps
+
+wt_grid |>
+  mutate(probability = predict(mtcars_logistic_fit, newdata = wt_grid,
+                               type = "response")) |>
+  ggplot(aes(x = wt, y = probability)) +
+  geom_line(linewidth = 1, color = "#0072B2") +
+  geom_segment(data = steps,
+               aes(x = wt_start, xend = wt_end, y = p_start, yend = p_start),
+               linetype = "dotted") +
+  geom_segment(data = steps,
+               aes(x = wt_end, xend = wt_end, y = p_start, yend = p_end),
+               color = "#D55E00", linewidth = 1,
+               arrow = arrow(length = unit(0.15, "cm"))) +
+  geom_text(data = steps,
+            aes(x = wt_end + 0.08, y = (p_start + p_end) / 2,
+                label = sprintf("%.2f", change)),
+            hjust = 0, size = 3.5, color = "#D55E00") +
+  labs(
+    x = "Weight (1000 lbs)",
+    y = "P(manual)",
+    title = "Each step is 1,000 lbs; the odds ratio is the same for all of them"
+  ) +
+  theme_minimal()
+```
+
+Every step has the same odds ratio, `r round(steps$odds_ratio[1], 4)`. The change in probability ranges from almost nothing at the ends of the weight range to `r round(min(steps$change), 2)` in the middle, where the curve is steepest. A sentence like "each additional 1,000 pounds lowers the probability of a manual transmission by 0.2" would be wrong for most cars. If you want to report an effect on the probability scale, report it at specific values of $x$, as in the table.
+
+:::
+
+### The Intercept
+
+$\beta_0$ is the log-odds that $Y = 1$ when $x = 0$, so $\exp(\beta_0)$ is the odds and $1/(1 + \exp(-\beta_0))$ is the probability at $x = 0$. For the transmission model, that is the probability that a weightless car has a manual transmission, which means nothing. As in linear regression, the intercept has a useful interpretation only when $x = 0$ is a meaningful value inside the range of the data. Centering the predictor (using $x - \bar{x}$) makes $\beta_0$ the log-odds at the average $x$ and does not change $\beta_1$ or the fitted probabilities.
+
+### Odds Ratios Are Not Relative Risks
+
+An odds ratio of 2 means the odds are doubled. It does not mean the probability is doubled. The ratio of two probabilities, $\pi_2/\pi_1$, is called the *relative risk*, and it is a different quantity from the odds ratio. The two are close only when both probabilities are small, since then $1 - \pi \approx 1$ and the odds are about the same as the probability.
+
+::: {#exm-23_or_rr .example title="The same odds ratio at different baseline probabilities"}
+
+Suppose an exposure multiplies the odds of an event by 3. We compute the relative risk this implies for different baseline probabilities.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Relative risk implied by an odds ratio of 3, plotted against the baseline probability; the relative risk is near 3 for small baseline probabilities and falls toward 1 as the baseline probability grows."
+#| fig-height: 3.5
+
+odds_ratio <- 3
+
+or_rr <- tibble(p_baseline = seq(0.005, 0.95, length.out = 300)) |>
+  mutate(
+    odds_exposed = odds_ratio * p_baseline / (1 - p_baseline),
+    p_exposed = odds_exposed / (1 + odds_exposed),
+    relative_risk = p_exposed / p_baseline
+  )
+
+or_rr |>
+  filter(p_baseline %in% range(p_baseline) |
+           abs(p_baseline - 0.1) < 0.002 |
+           abs(p_baseline - 0.5) < 0.002) |>
+  select(p_baseline, p_exposed, relative_risk)
+
+or_rr |>
+  ggplot(aes(x = p_baseline, y = relative_risk)) +
+  geom_hline(yintercept = odds_ratio, linetype = "dashed") +
+  geom_line(linewidth = 1, color = "#0072B2") +
+  annotate("text", x = 0.75, y = 2.85, label = "odds ratio = 3") +
+  labs(
+    x = "Probability without the exposure",
+    y = "Relative risk",
+    title = "An odds ratio of 3 is a relative risk of 3 only for rare events"
+  ) +
+  theme_minimal()
+```
+
+When the event is rare without the exposure (a baseline probability near 1%), an odds ratio of 3 means the probability roughly triples. When the baseline probability is 50%, the same odds ratio raises the probability to 75%, a relative risk of only 1.5. News reports of "three times as likely," based on an odds ratio from a study of a common outcome, often overstate the effect in exactly this way.
+
+:::
+
+### A Binary Predictor
+
+When the predictor is itself a 0/1 indicator, the logistic model reproduces the odds ratio from the $2 \times 2$ table of the two variables.
+
+::: {#exm-23_binary_x .example title="Logistic regression on an indicator reproduces the 2 x 2 table"}
+
+In `mtcars`, `vs` is 1 for a straight engine and 0 for a V-shaped engine. We model `am` on `vs`.
+
+```{r message=FALSE, warning=FALSE}
+vs_table <- mtcars |>
+  count(vs, am) |>
+  pivot_wider(names_from = am, values_from = n, names_prefix = "am_")
+
+vs_table
+
+odds_v_shaped <- vs_table$am_1[vs_table$vs == 0] / vs_table$am_0[vs_table$vs == 0]
+odds_straight <- vs_table$am_1[vs_table$vs == 1] / vs_table$am_0[vs_table$vs == 1]
+
+c(
+  odds_v_shaped = odds_v_shaped,
+  odds_straight = odds_straight,
+  table_odds_ratio = odds_straight / odds_v_shaped
+)
+
+vs_fit <- glm(am ~ vs, data = mtcars, family = binomial)
+
+exp(coef(vs_fit))
+```
+
+$\exp(\hat\beta_0)$ is the odds of a manual transmission for V-shaped engines (the group with `vs = 0`), and $\exp(\hat\beta_1)$ is the odds ratio comparing straight engines with V-shaped ones, both exactly as computed from the table. With a single binary predictor, logistic regression is a $2 \times 2$ table analysis. Its advantage shows up when there are other predictors to adjust for, in the next chapter.
+
+:::
+
+## Grouped Binomial Data
+
+Sometimes the data come already grouped: at each value of $x$ we know how many trials there were and how many were successes. A dose-response experiment might give 50 insects each of six doses and record how many died at each dose. There is no need to expand this into one row per insect. If $y_j$ is the number of successes out of $n_j$ trials at $x_j$, then $y_j$ is binomial with probability $\pi_j$, and the same logistic model applies.
+
+In R, give `glm()` a two-column response of successes and failures with `cbind()`.
+
+::: {#exm-23_menarche .example title="Age at menarche"}
+
+The `menarche` data in the `MASS` package come from a 1965 study of 3,918 girls in Warsaw. For each of 25 age groups, it gives the mean age (`Age`), the number of girls (`Total`), and the number who had reached menarche (`Menarche`).
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Observed proportion of girls who had reached menarche by age, with point size showing group size, and a fitted logistic curve passing through the points."
+
+menarche <- MASS::menarche
+
+head(menarche)
+
+menarche_fit <- glm(
+  cbind(Menarche, Total - Menarche) ~ Age,
+  data = menarche,
+  family = binomial
+)
+
+tidy(menarche_fit)
+
+median_age <- -coef(menarche_fit)[1] / coef(menarche_fit)[2]
+median_age
+
+age_grid <- tibble(Age = seq(9, 18, length.out = 200))
+
+menarche |>
+  mutate(proportion = Menarche / Total) |>
+  ggplot(aes(x = Age, y = proportion)) +
+  geom_line(
+    data = age_grid |>
+      mutate(proportion = predict(menarche_fit, newdata = age_grid,
+                                  type = "response")),
+    color = "#0072B2", linewidth = 1
+  ) +
+  geom_point(aes(size = Total), alpha = 0.6) +
+  geom_vline(xintercept = median_age, linetype = "dashed") +
+  annotate("text", x = median_age + 0.15, y = 0.1, hjust = 0,
+           label = sprintf("50%% at age %.1f", median_age)) +
+  labs(
+    x = "Age (years)",
+    y = "Proportion who had reached menarche",
+    size = "Girls in group",
+    title = "Logistic regression fit to grouped binomial data"
+  ) +
+  theme_minimal()
+```
+
+With grouped data we can plot observed proportions against $x$, which is not possible with 0/1 data, and the plot shows the logistic curve fitting these data very well. The age at which the fitted probability is 0.5 is $-\hat\beta_0/\hat\beta_1 \approx$ `r round(median_age, 2)` years. In dose-response studies the corresponding quantity, the dose at which half the subjects respond, is called the median effective dose, or LD50 when the response is death.
+
+:::
+
+The same model can be fit three ways: with `cbind(successes, failures)`, with the observed proportion as the response and `weights = Total`, or by expanding the data to one 0/1 row per individual. The coefficient estimates and standard errors are identical. The deviance and its degrees of freedom are not, because the deviance compares the model with a saturated model, and the saturated model is different for 25 groups than for 3,918 individuals.
+
+```{r message=FALSE, warning=FALSE}
+menarche_weighted <- glm(
+  Menarche / Total ~ Age,
+  data = menarche,
+  family = binomial,
+  weights = Total
+)
+
+menarche_individual <- menarche |>
+  mutate(failures = Total - Menarche) |>
+  select(Age, `1` = Menarche, `0` = failures) |>
+  pivot_longer(-Age, names_to = "y", values_to = "count") |>
+  uncount(count) |>
+  mutate(y = as.integer(y))
+
+menarche_long_fit <- glm(y ~ Age, data = menarche_individual, family = binomial)
+
+list(
+  cbind = menarche_fit,
+  weights = menarche_weighted,
+  one_row_per_girl = menarche_long_fit
+) |>
+  map(\(f) tibble(
+    intercept = coef(f)[1],
+    slope = coef(f)[2],
+    se_slope = sqrt(diag(vcov(f)))[2],
+    deviance = deviance(f),
+    df_residual = df.residual(f)
+  )) |>
+  list_rbind(names_to = "data_form")
+```
+
+So compare deviances only between models fit to data in the same form.
+
+## Things to Watch Out For
+
+Logistic regression has some ways of going wrong that do not come up in linear regression. Here are the common ones.
+
+### Which Outcome Is Being Modeled?
+
+With a 0/1 numeric response, `glm()` models $P(Y = 1)$. With a factor response, it models the probability of the *second* level, treating the first level as failure. Factor levels are in alphabetical order unless you set them, so a response with levels "no" and "yes" models $P(\text{yes})$, but one with levels "automatic" and "manual" models $P(\text{manual})$ only because of the alphabet. If you relevel, the probability being modeled changes and every coefficient changes sign.
+
+::: {#exm-23_levels .example title="Changing the reference level flips the coefficients"}
+
+```{r message=FALSE, warning=FALSE}
+mtcars_trans <- mtcars |>
+  mutate(transmission = factor(am, levels = c(0, 1),
+                               labels = c("automatic", "manual")))
+
+levels(mtcars_trans$transmission)
+
+glm(transmission ~ wt, data = mtcars_trans, family = binomial) |>
+  tidy()
+
+glm(fct_relevel(transmission, "manual") ~ wt,
+    data = mtcars_trans, family = binomial) |>
+  tidy()
+```
+
+The first model gives the log-odds of manual, the second the log-odds of automatic. The estimates have the same size and opposite signs, and the odds ratios are reciprocals. Neither is wrong, but if you do not check which level is the event, you can report an effect backward.
+
+A character response is not converted automatically, and `glm()` stops with an error:
+
+```{r message=FALSE, warning=FALSE}
+tryCatch(
+  glm(as.character(transmission) ~ wt, data = mtcars_trans, family = binomial),
+  error = \(e) conditionMessage(e)
+)
+```
+
+:::
+
+Be careful when moving between `glm()` and the `tidymodels` tools in the next chapter. The `yardstick` metrics treat the *first* factor level as the event by default (this can be changed with `event_level = "second"`), which is the opposite of `glm()`.
+
+### Complete Separation
+
+If some value of the predictor splits the data perfectly, with every $y = 0$ on one side and every $y = 1$ on the other, the maximum likelihood estimate does not exist. The likelihood keeps increasing as the curve gets steeper, so the estimated slope runs off toward infinity. This is called *complete separation*. If the split is perfect except for ties at the boundary, it is called *quasi-complete separation*, and some of the estimates still run off to infinity.
+
+R does not stop with an error. `glm()` returns huge coefficients with even larger standard errors, usually with the warning "fitted probabilities numerically 0 or 1 occurred" and sometimes "algorithm did not converge." Neither warning appears every time, so do not rely on them.
+
+::: {#exm-23_separation .example title="Separation in simulated data and in `mtcars`"}
+
+We simulate 30 observations where every $x$ below 5 has $y = 0$ and every $x$ above 5 has $y = 1$.
+
+```{r message=FALSE}
+#| warning: true
+#| fig-alt: "Simulated binary data perfectly separated at x equals 5, with a fitted logistic curve that is nearly a step function."
+#| fig-height: 3.5
+
+set.seed(2301)
+
+separated <- tibble(
+  x = c(runif(15, 0, 4.8), runif(15, 5.2, 10)),
+  y = rep(c(0, 1), each = 15)
+)
+
+separated_fit <- glm(y ~ x, data = separated, family = binomial)
+
+tidy(separated_fit)
+
+separated_fit$iter
+
+x_grid <- tibble(x = seq(0, 10, length.out = 400))
+
+separated |>
+  ggplot(aes(x = x, y = y)) +
+  geom_line(
+    data = x_grid |>
+      mutate(y = predict(separated_fit, newdata = x_grid, type = "response")),
+    color = "#0072B2", linewidth = 1
+  ) +
+  geom_point(size = 2, alpha = 0.7) +
+  labs(
+    x = "x",
+    y = "y",
+    title = "Perfectly separated data give a step function, not an S-curve"
+  ) +
+  theme_minimal()
+```
+
+The slope estimate is enormous, its standard error is larger still, and the $z$ test reports a $p$-value near 1, even though $x$ predicts $y$ perfectly. The numbers in the table are wherever the algorithm stopped after `r separated_fit$iter` iterations, not estimates of anything. This is a case where the Wald test is badly misleading.
+
+Separation also happens with categorical predictors when some category has only 0s or only 1s. In `mtcars`, every car with 3 gears is an automatic and every car with 5 gears is a manual.
+
+```{r message=FALSE}
+#| warning: true
+
+mtcars |>
+  count(gear, am)
+
+glm(am ~ factor(gear), data = mtcars, family = binomial) |>
+  tidy()
+```
+
+The coefficients for the 4- and 5-gear categories are compared with 3 gears, where the estimated probability of a manual transmission is 0. Those estimates and their standard errors are meaningless for the same reason. This time `glm()` gave no warning at all.
+
+:::
+
+Separation is most likely with small samples, many predictors, rare outcomes, or a predictor that is nearly a stand-in for the response. Signs to look for are coefficients larger than about 10 in absolute value, standard errors many times larger than the coefficients, fitted probabilities of exactly 0 or 1, and many more iterations than usual. What to do depends on the situation:
+
+- If the separation is real and the predictor determines the outcome, that is a finding. Report it directly ("every car with 3 gears was automatic") rather than as an odds ratio.
+- Combining sparse categories can remove separation caused by a factor level.
+- Penalized methods give finite estimates. Firth's bias-reduced logistic regression (the `logistf` package) is the usual choice, and the ridge and lasso penalties from @sec-ridge also work for logistic regression.
+- Likelihood ratio tests and profile likelihood intervals behave much better than Wald tests when an estimate is large.
+
+### Small Samples and Few Events
+
+Maximum likelihood estimates are only approximately unbiased and normal, and the approximation needs more data for logistic regression than for linear regression. What matters is not $n$ alone but the number of observations in the less common outcome. With few of those, the estimates tend to be too large in absolute value, and separation becomes likely.
+
+::: {#exm-23_small_n .example title="Sampling distribution of the slope at three sample sizes"}
+
+We simulate data from the model $\text{logit}(\pi) = -1 + 1 \cdot x$ with $x$ standard normal, fit the logistic regression, and repeat 1,000 times for each of $n = 20$, $50$, and $200$. We count fits with separation (an estimated slope over 10 in absolute value is a reliable sign here) and plot the slope estimates from the rest.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Histograms of estimated slopes from 1000 simulated logistic regressions at sample sizes 20, 50, and 200; the n equals 20 histogram is wide and shifted right of the true value 1, while the n equals 200 histogram is narrow and centered at 1."
+
+set.seed(2302)
+
+simulate_slope <- function(n) {
+  x <- rnorm(n)
+  y <- rbinom(n, 1, plogis(-1 + x))
+  if (length(unique(y)) < 2) return(NA_real_)
+  coef(suppressWarnings(glm(y ~ x, family = binomial)))[2]
+}
+
+slope_sims <- expand_grid(n = c(20, 50, 200), rep = 1:1000) |>
+  mutate(slope = map_dbl(n, simulate_slope))
+
+slope_sims |>
+  group_by(n) |>
+  summarize(
+    separated_or_all_one_class = mean(is.na(slope) | abs(slope) > 10),
+    mean_slope = mean(slope[abs(slope) <= 10], na.rm = TRUE),
+    median_slope = median(slope[abs(slope) <= 10], na.rm = TRUE),
+    sd_slope = sd(slope[abs(slope) <= 10], na.rm = TRUE)
+  )
+
+slope_sims |>
+  filter(!is.na(slope), abs(slope) <= 10) |>
+  mutate(n = factor(paste("n =", n), levels = paste("n =", c(20, 50, 200)))) |>
+  ggplot(aes(x = slope)) +
+  geom_histogram(binwidth = 0.2, fill = "gray70", color = "white") +
+  geom_vline(xintercept = 1, color = "#D55E00", linewidth = 1) +
+  facet_wrap(~ n, ncol = 1, scales = "free_y") +
+  coord_cartesian(xlim = c(-1, 5)) +
+  labs(
+    x = expression(hat(beta)[1]),
+    y = "Count",
+    title = "Estimated slopes from 1,000 samples at each size",
+    subtitle = "Orange line = true slope of 1; separated fits removed"
+  ) +
+  theme_minimal()
+```
+
+With $n = 20$ the estimates are spread widely, a few samples are separated, and even with those removed the average estimate is noticeably larger than 1. With $n = 200$ the estimates center on the true value with a much smaller spread. A common rule of thumb is to have at least 10 to 20 observations in the less frequent outcome for each coefficient in the model. Like all such rules it is rough, but a model with 15 events and 6 predictors deserves suspicion.
+
+:::
+
+### Fitted Probabilities Are Never Exactly 0 or 1
+
+The logistic curve approaches 0 and 1 but never reaches them. A fitted probability of 0.9999 is still a probability, and with the S-curve, very small or very large fitted probabilities come from extrapolating the curve into its tails, where it is controlled by the assumed logistic shape more than by data. In the transmission model, the fitted probability for a 6,000-pound car is tiny, but no car in the data weighs more than 5,424 pounds. The cautions about extrapolation in earlier chapters apply here too.
+
+### Residuals and $R^2$
+
+The diagnostic tools from linear regression do not carry over directly. Raw residuals $y_i - \hat\pi_i$ always fall in two bands, as in @exm-23_lpm, so the usual residual plot is hard to read. There is no single $R^2$; the several "pseudo-$R^2$" measures that exist do not agree with each other and do not mean "proportion of variance explained." The next chapter takes up how to assess a logistic model, mainly through predictions: confusion matrices, thresholds, and ROC curves.
+
 ## Recap
 
-In this chapter, we introduced logistic regression as a model for binary response variables.
+This chapter introduced logistic regression as a model for a binary response.
 
 | Idea | Meaning |
 |---|---|
-| **Binary response** | A response variable with two possible outcomes, often coded 0 and 1. |
-| **Bernoulli response** | A random variable that equals 1 with probability $\pi$ and 0 with probability $1-\pi$. |
-| **Mean of a binary response** | For $Y \in \{0,1\}$, $E(Y)=P(Y=1)=\pi$. |
-| **Linear probability model** | A linear model applied directly to a binary response; it can produce fitted values outside $[0,1]$. |
-| **Nonconstant variance** | For a Bernoulli response, $Var(Y)=\pi(1-\pi)$, so the variance depends on the probability. |
-| **Sigmoidal response function** | An S-shaped function that stays between 0 and 1. |
-| **Probit model** | A binary-response model using the standard normal cumulative distribution function, $\Phi$. |
-| **Logistic model** | A binary-response model using the logistic cumulative distribution function. |
-| **Linear predictor** | The quantity $\eta_i=\beta_0+\beta_1x_i$, which is linear in the model parameters. |
-| **Logit transformation** | The transformation $\log\left(\frac{\pi}{1-\pi}\right)$. |
-| **Odds** | The ratio $\frac{\pi}{1-\pi}$, comparing the probability of success to the probability of failure. |
-| **Odds ratio** | A ratio of two odds; in simple logistic regression, $\exp(\beta_1)$ is the odds ratio for a one-unit increase in $x$. |
-| **Coefficient interpretation** | Logistic coefficients are additive on the log-odds scale and multiplicative on the odds scale. |
-| **Fitted probability** | A model-based estimate of $P(Y=1)$ for given predictor values. |
+| Binary response | A response variable with two possible outcomes, usually coded 0 and 1. |
+| Bernoulli response | A random variable that equals 1 with probability $\pi$ and 0 with probability $1-\pi$. |
+| Mean of a binary response | For $Y \in \{0,1\}$, $E(Y)=P(Y=1)=\pi$. |
+| Linear probability model | A linear model fit directly to a binary response; it can give fitted values outside $[0,1]$. |
+| Nonconstant variance | For a Bernoulli response, $Var(Y)=\pi(1-\pi)$, so the variance depends on the mean. |
+| Sigmoidal response function | An S-shaped function that stays between 0 and 1. |
+| Probit model | A binary-response model using the standard normal CDF, $\Phi$. |
+| Logistic model | A binary-response model using the logistic CDF. |
+| Link function | The function connecting the mean to the linear predictor: logit, probit, or complementary log-log. |
+| Linear predictor | $\eta_i=\beta_0+\beta_1x_i$, linear in the parameters. |
+| Logit transformation | $\log\left(\frac{\pi}{1-\pi}\right)$, the log-odds. |
+| Odds | $\frac{\pi}{1-\pi}$, the probability of success divided by the probability of failure. |
+| Maximum likelihood | Choosing the coefficients that make the observed data most probable; `glm()` does it by IRLS. |
+| Deviance | $-2$ times the log-likelihood, up to a constant; the logistic counterpart of SSE. |
+| Odds ratio | A ratio of two odds; $\exp(\beta_1)$ for a one-unit increase in $x$, $\exp(c\beta_1)$ for $c$ units. |
+| Coefficient interpretation | Additive on the log-odds scale, multiplicative on the odds scale, and not constant on the probability scale. |
+| Divide-by-4 rule | $\beta_1/4$ is the largest possible change in probability per unit of $x$. |
+| Relative risk | A ratio of two probabilities; close to the odds ratio only when the probabilities are small. |
+| Grouped binomial data | Successes out of $n_j$ trials at each $x_j$; fit with `cbind(successes, failures)`. |
+| Event level | `glm()` models the probability of the second factor level; `yardstick` treats the first as the event by default. |
+| Complete separation | A predictor that splits the outcomes perfectly; the MLE does not exist and the reported estimates are meaningless. |
+| Fitted probability | A model-based estimate of $P(Y=1)$ for given predictor values. |
 
 ## Check your understanding
 
@@ -713,65 +1223,105 @@ In this chapter, we introduced logistic regression as a model for binary respons
 
 4. What is the most serious limitation of using a straight-line response function for probabilities?
 
-5. What does it mean for a response function to be sigmoidal?
+5. What pattern does a residual-versus-fitted plot show when a straight line is fit to a 0/1 response, and why?
 
-6. How are the probit and logistic mean response functions similar?
+6. When does a linear probability model give answers close to logistic regression?
 
-7. What is the linear predictor in simple logistic regression?
+7. What does it mean for a response function to be sigmoidal?
 
-8. What is the logit transformation?
+8. How are the probit and logistic mean response functions similar? About how do their coefficients compare when both are fit to the same data?
 
-9. What are odds, in words?
+9. In the probit derivation, why can we estimate only $\beta_1^c/\sigma_c$ and not $\beta_1^c$ itself?
 
-10. If a probability is 0.50, what are the odds and logit?
+10. What is the linear predictor in simple logistic regression?
 
-11. Why is a logistic regression slope not interpreted like a linear regression slope?
+11. What is the logit transformation?
 
-12. What does $\exp(\beta_1)$ represent in simple logistic regression?
+12. What are odds, in words? If a probability is 0.50, what are the odds and the logit? If it is 0.90?
 
-13. If $\exp(\beta_1)>1$, what does that imply about the odds as $x$ increases?
+13. Why does `glm()` use maximum likelihood rather than least squares for logistic regression?
 
-14. If $\exp(\beta_1)<1$, what does that imply about the odds as $x$ increases?
+14. In @exm-23_mle, why is the log-likelihood surface a long diagonal ridge, and what would change it?
 
-15. Why can the effect of $x$ on probability depend on the starting value of $x$?
+15. Why is a logistic regression slope not interpreted like a linear regression slope?
 
-16. What does `type = "response"` return when using `predict()` with a logistic regression model in R?
+16. What does $\exp(\beta_1)$ represent in simple logistic regression? What represents the odds ratio for a 10-unit increase?
+
+17. If $\exp(\beta_1)>1$, what does that imply about the odds as $x$ increases? If $\exp(\beta_1)<1$?
+
+18. A 95% confidence interval for $\beta_1$ is $(0.2, 0.8)$. What is the interval for the odds ratio, and why is it not symmetric about $\exp(\hat\beta_1)$?
+
+19. Why can the effect of $x$ on probability depend on the starting value of $x$? What is the largest possible change in probability per unit of $x$?
+
+20. A study of a common outcome reports an odds ratio of 3, and a headline says the exposure makes the outcome "three times as likely." What is wrong?
+
+21. For a logistic regression on a single 0/1 predictor, what do $\exp(\hat\beta_0)$ and $\exp(\hat\beta_1)$ equal?
+
+22. How do you fit a logistic regression when the data give the number of successes out of $n_j$ trials at each $x_j$? Why do the deviances differ between the grouped and individual forms when the coefficients are the same?
+
+23. A response factor has levels "survived" and "died". Which probability does `glm()` model?
+
+24. A logistic regression reports a slope of 24.7 with a standard error of 3,100 and a $p$-value of 0.99. What is the likely problem, and what can you do?
+
+25. Why are logistic regression estimates unreliable when the less common outcome has few observations?
+
+26. What does `type = "response"` return when using `predict()` with a logistic regression model in R? What does the default, `type = "link"`, return?
 
 :::
 
 ::: {.callout-tip collapse="true" title="Solutions"}
 
-1. **A binary response can only be 0 or 1.** Its expected value is $1\cdot P(Y=1)+0\cdot P(Y=0)=P(Y=1)$.
+1. A binary response can only be 0 or 1, so its expected value is $1\cdot P(Y=1)+0\cdot P(Y=0)=P(Y=1)$.
 
-2. **The response equals either 0 or 1.** Usually 1 represents the event or success of interest, and 0 represents its absence.
+2. The response equals 0 or 1. Usually 1 represents the event of interest and 0 its absence.
 
-3. **Binary data violate several usual linear-model assumptions.** The errors are not normally distributed, the variance is not constant, and fitted values may fall outside the probability range.
+3. Binary data violate several assumptions of the linear model. The errors take only two values and are not normal, the variance $\pi(1-\pi)$ is not constant, and fitted values can fall outside the range of a probability.
 
-4. **Probabilities must stay between 0 and 1.** A straight line can go below 0 or above 1, which produces impossible fitted probabilities.
+4. Probabilities must stay between 0 and 1, and a straight line will go below 0 or above 1 if $x$ ranges far enough.
 
-5. **It is S-shaped and bounded.** A sigmoidal function approaches 0 and 1 gradually and never leaves the probability range.
+5. The points fall on two parallel diagonal lines. For each fitted value $\hat y$, the residual is either $1 - \hat y$ or $0 - \hat y$, so the residuals for the 1s lie on one line and those for the 0s on another.
 
-6. **Both map a linear predictor to a probability.** Probit uses the standard normal cumulative distribution function, while logistic regression uses the logistic cumulative distribution function.
+6. When all the fitted probabilities are in the middle range, roughly 0.2 to 0.8, where the logistic curve is close to a straight line.
 
-7. **The linear predictor is $\eta_i=\beta_0+\beta_1x_i$.** It is the part of the model that is linear in the coefficients.
+7. It is S-shaped and bounded, approaching 0 and 1 gradually without ever leaving the probability range.
 
-8. **The logit is the log of the odds.** It is $\log\left(\frac{\pi}{1-\pi}\right)$.
+8. Both map a linear predictor to a probability with a symmetric S-shaped curve, and their fitted probabilities are usually very close. Probit uses the normal CDF and logistic regression the logistic CDF. Logistic coefficients are typically about 1.6 to 1.8 times the probit coefficients.
 
-9. **Odds compare success to failure.** If the probability of success is $\pi$, then the odds are $\pi/(1-\pi)$.
+9. Dichotomizing the continuous response throws away its scale. The binary outcome depends only on whether $y^c$ is above or below the cutoff, which is unchanged if $y^c$, its coefficients, and $\sigma_c$ are all multiplied by the same constant.
 
-10. **The odds are 1 and the logit is 0.** A probability of 0.50 means success and failure are equally likely.
+10. $\eta_i=\beta_0+\beta_1x_i$, the part of the model that is linear in the coefficients.
 
-11. **The slope is on the log-odds scale.** It describes the additive change in log-odds for a one-unit increase in $x$, not an additive change in probability.
+11. The log of the odds, $\log\left(\frac{\pi}{1-\pi}\right)$.
 
-12. **It is an odds ratio.** It gives the multiplicative change in the odds for a one-unit increase in $x$.
+12. The odds are the probability of success divided by the probability of failure. At $\pi = 0.50$ the odds are 1 and the logit is 0. At $\pi = 0.90$ the odds are 9 (nine successes for every failure) and the logit is $\log 9 \approx 2.20$.
 
-13. **The odds increase.** An odds ratio greater than 1 means the odds of $Y=1$ are multiplied upward as $x$ increases.
+13. The response is Bernoulli, not normal, and its variance depends on the mean. Maximum likelihood uses the Bernoulli distribution directly, and the fitted curve is nonlinear in the parameters on the probability scale, so least squares has no special justification.
 
-14. **The odds decrease.** An odds ratio less than 1 means the odds of $Y=1$ are multiplied downward as $x$ increases.
+14. The intercept is the log-odds at a weight of 0, far outside the data. Many combinations of a larger intercept and a steeper negative slope give nearly the same curve over the observed weights. Centering `wt` would make the intercept the log-odds at the average weight and turn the ridge into a rounder peak.
 
-15. **The logistic curve is not a straight line on the probability scale.** The same change in $x$ can produce a small probability change near 0 or 1 and a larger change near the middle of the curve.
+15. The slope is on the log-odds scale. It is the additive change in log-odds for a one-unit increase in $x$, not an additive change in probability.
 
-16. **It returns fitted probabilities.** With `family = binomial(link = "logit")`, `type = "response"` converts predictions back to the probability scale.
+16. $\exp(\beta_1)$ is the odds ratio for a one-unit increase in $x$: the factor by which the odds are multiplied. For a 10-unit increase it is $\exp(10\beta_1)$.
+
+17. If $\exp(\beta_1)>1$, the odds increase as $x$ increases. If $\exp(\beta_1)<1$, the odds decrease.
+
+18. $(\exp(0.2), \exp(0.8)) = (1.22, 2.23)$. The interval is symmetric on the log-odds scale, and exponentiating stretches the upper end more than the lower end.
+
+19. The probability curve is S-shaped, so its slope, $\beta_1\pi(1-\pi)$, is steepest at $\pi = 0.5$ and flattens near 0 and 1. The largest possible change per unit of $x$ is about $\beta_1/4$.
+
+20. An odds ratio of 3 is a relative risk of 3 only when the outcome is rare. For a common outcome the probability goes up by much less than a factor of 3. With a baseline probability of 0.5, for example, an odds ratio of 3 raises the probability to 0.75, a relative risk of 1.5.
+
+21. $\exp(\hat\beta_0)$ is the sample odds of $Y = 1$ in the group with $x = 0$, and $\exp(\hat\beta_1)$ is the sample odds ratio from the $2 \times 2$ table, exactly.
+
+22. Use `cbind(successes, trials - successes)` as the response in `glm()`, or use the proportion as the response with `weights` equal to the number of trials. The deviance compares the model with a saturated model, which has one parameter per row, so its value depends on whether the rows are groups or individuals. Compare deviances only between models fit to data in the same form.
+
+23. Factor levels are in alphabetical order unless set otherwise, so the levels are "died" then "survived," and `glm()` models the probability of the second level, $P(\text{survived})$.
+
+24. Probably complete or quasi-complete separation: the predictor splits the outcomes perfectly, so the estimate is running off to infinity and the Wald test is meaningless. Check a table or plot of the outcome against the predictor. Report the separation directly if it is real, combine sparse categories if a factor level is the cause, or use a penalized method such as Firth's logistic regression. Use likelihood ratio tests rather than Wald tests.
+
+25. The normal approximation for maximum likelihood estimates needs enough information about both outcomes. With few events, the estimates are biased away from zero, highly variable, and prone to separation. A rough guideline is 10 to 20 events per coefficient.
+
+26. `type = "response"` returns fitted probabilities. The default, `type = "link"`, returns values of the linear predictor on the log-odds scale.
 
 :::
 
