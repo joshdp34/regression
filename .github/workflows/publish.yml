@@ -1,0 +1,73 @@
+name: Render and publish book
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      # Unchanged chapters reuse the committed _freeze/ results; R only runs
+      # for a chapter whose source changed since it was last rendered.
+      - name: Set up R
+        uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+
+      - name: Install R packages
+        uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          packages: |
+            any::rmarkdown
+            any::knitr
+            any::tidyverse
+            any::tidymodels
+            any::broom
+            any::lmtest
+            any::GGally
+            any::MASS
+            any::olsrr
+            any::car
+            any::nnet
+            any::poissonreg
+            any::gridExtra
+            any::boot
+            any::applicable
+
+      - name: Render book
+        uses: quarto-dev/quarto-actions/render@v2
+        with:
+          to: html
+
+      - name: Upload site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _book
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

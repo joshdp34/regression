@@ -2,9 +2,11 @@
 /.quarto/
 /_book/
 
-# Keep these committed for GitHub Pages / Quarto freeze:
-# /docs/
-# /_freeze/
+# Old locally rendered Pages output (GitHub Actions renders the book now)
+/docs/
+
+# Keep _freeze/ (computed R results) committed so unchanged chapters
+# are not re-run on GitHub.
 
 # Root-level PDF/LaTeX artifacts from local book builds
 /index.aux
@@ -50,3 +52,9 @@ desktop.ini
 *.bak
 
 **/*.quarto_ipynb
+
+# Course admin / assignment material kept out of this public repo
+/assignments/
+/canvas_quiz_01_06/
+/cv/
+/15_Indicator_PCR_examples.R
