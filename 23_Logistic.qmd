@@ -43,19 +43,19 @@ $$
 
 So $\pi_{i}$ is the probability that $y_{i}=1$, and $1-\pi_{i}$ is the probability that $y_{i}=0$. By the definition of the expected value of a discrete random variable,
 $$
-{\begin{align*}
+\begin{align*}
 E\left[ y_{i}\right]  & =1\left(\pi_{i}\right)+0\left(1-\pi_{i}\right)\\
 & =\pi_{i}\\
 & =P\left(y_{i}=1\right)
-\end{align*}}
+\end{align*}
 $$
 
 Putting the two together,
 $$
-{\begin{align*}
+\begin{align*}
 E\left[ y_{i}\right]  & =\beta_{0}+\beta_{1}x_{i}\\
 & =\pi_{i}
-\end{align*}}
+\end{align*}
 $$
 
 The mean response given by the response function is the probability that $y_i = 1$ when the predictor is at the level $x_i$. This holds whatever the form of the response function, whether it is a simple linear one, as here, or a complicated multiple regression one. When the response is a 0/1 indicator, the mean response is always the probability that $Y = 1$ at the given levels of the predictors.
@@ -680,10 +680,10 @@ $$
 $$
 The difference between the two is
 $$
-{\begin{align*}
+\begin{align*}
 \hat{\pi}^\prime (x_j+1)-\hat{\pi}^\prime (x_j)& = \hat{\beta}_0+\hat{\beta}_1( x_j+1) - \hat{\beta}_0-\hat{\beta}_1 x_j \\
 & = \hat{\beta}_1
-\end{align*}}
+\end{align*}
 $$
 
 $\hat{\pi}^\prime (x_j)$ is the log of the estimated odds when $X=x_j$; call it $\ln(\text{odds}_1)$. Likewise $\hat{\pi}^\prime (x_j+1)$ is the log of the estimated odds when $X=x_j+1$; call it $\ln(\text{odds}_2)$. Then
