@@ -4,19 +4,19 @@
 
 > "In God we trust, all others bring data." - W. Edwards Deming
 
-In the previous chapter, we introduced logistic regression as a model for a binary response. This chapter shows how to fit, interpret, predict from, and evaluate a multiple logistic regression model using `tidymodels`.
+The previous chapter introduced logistic regression with a single predictor. This chapter adds more predictors and uses `tidymodels` to fit, interpret, and test the model, make predictions from it, and evaluate those predictions. Most of the second half is about evaluation, because turning probabilities into decisions raises questions that do not come up with a quantitative response: which mistakes cost more, what threshold to use, and whether the predicted probabilities can be taken at face value.
 
 ## Multiple Logistic Regression
 
-Simple logistic regression uses one predictor. Multiple logistic regression extends the same idea to several predictors.
+Simple logistic regression has one predictor. Multiple logistic regression has several, combined in the linear predictor just as in multiple linear regression.
 
-For observation $i$, the model can be written as
+For observation $i$, the model is
 
 $$
 \log\left(\frac{\pi_i}{1-\pi_i}\right)=\eta_i=\mathbf{x}_i^\prime\boldsymbol{\beta},
 $$
 
-where $\pi_i=P(Y_i=1)$ and $\eta_i$ is the **linear predictor**. Equivalently,
+where $\pi_i=P(Y_i=1)$ and $\eta_i$ is the linear predictor. Equivalently,
 
 $$
 E(Y_i)=\pi_i=
@@ -24,15 +24,15 @@ E(Y_i)=\pi_i=
 {1+\exp(\mathbf{x}_i^\prime\boldsymbol{\beta})}.
 $$
 
-Like the simple logistic response function, the multiple logistic response function is bounded between 0 and 1. The predictors may be quantitative variables, categorical variables represented by indicators, transformations, or interaction terms.
+As with one predictor, the response function is bounded between 0 and 1. The predictors can be quantitative variables, indicators for categorical variables, transformations, or interaction terms, exactly as in multiple linear regression. The coefficients are estimated by maximum likelihood.
 
 ::: {.callout-note collapse="false" title="What changes in multiple logistic regression?"}
 
-The interpretation changes from a simple odds ratio to a **partial odds ratio**.
+The interpretation changes from a simple odds ratio to a *partial* odds ratio.
 
-For a quantitative predictor, $\exp(\beta_j)$ is the multiplicative change in the odds of $Y=1$ for a one-unit increase in $x_j$, holding the other predictors fixed.
+For a quantitative predictor, $\exp(\beta_j)$ is the factor by which the odds of $Y=1$ are multiplied for a one-unit increase in $x_j$, holding the other predictors fixed.
 
-For an indicator predictor, $\exp(\beta_j)$ compares the odds for the group coded 1 to the odds for the reference group coded 0, holding the other predictors fixed.
+For an indicator predictor, $\exp(\beta_j)$ compares the odds for the group coded 1 with the odds for the reference group coded 0, holding the other predictors fixed.
 
 :::
 
@@ -40,7 +40,7 @@ For an indicator predictor, $\exp(\beta_j)$ compares the odds for the group code
 
 :::: {#exm-24_1 .example title="Disease outbreak data and predictors"}
 
-In a health study of an epidemic outbreak spread by mosquitoes, individuals were randomly sampled within two sectors of a city. The response variable was coded as
+In a health study of an epidemic outbreak of a disease spread by mosquitoes, individuals were randomly sampled within two sectors of a city. The response was coded
 
 - $Y = 1$: disease present,
 - $Y = 0$: disease not present.
@@ -62,13 +62,13 @@ Socioeconomic class is represented by two indicators:
 | Middle | 1 | 0 |
 | Lower | 0 | 1 |
 
-Thus, upper class is the reference group. City sector is also represented by an indicator, where $X_4=0$ represents sector 1 and $X_4=1$ represents sector 2.
+Upper class is the reference group. City sector is represented by one indicator, with $X_4=0$ for sector 1 and $X_4=1$ for sector 2.
 
 ::::
 
 :::: {#exm-24_2 .example title="Loading and exploring the disease outbreak data"}
 
-We first load the data, name the variables, and code the response as a factor. The factor levels are ordered as `0`, then `1`, so that the fitted logit corresponds to the disease-present event, $Y=1$.
+We load the data, name the variables, and code the response as a factor. The levels are in the order `0`, `1`, so `glm()` models the probability of the second level, disease present. (The previous chapter discussed why the order matters.)
 
 ```{r message=FALSE, warning=FALSE}
 library(tidyverse)
@@ -86,10 +86,12 @@ disease_data <- disease_data |>
 
 disease_data |>
   count(Y) |>
-  knitr::kable()
+  mutate(proportion = n / sum(n))
 ```
 
-A scatterplot matrix gives a quick exploratory look at the response and predictors.
+Of the 98 people, 31 (about 32%) had the disease. Keep that number in mind. A "model" that predicts no disease for everyone would be right about 68% of the time, and any real model has to do better than that.
+
+A scatterplot matrix gives a quick look at the response and predictors.
 
 ```{r message=FALSE, warning=FALSE}
 #| fig-alt: "Scatterplot matrix of the disease outbreak response and predictors."
@@ -97,7 +99,7 @@ A scatterplot matrix gives a quick exploratory look at the response and predicto
 ggpairs(disease_data |> select(-id))
 ```
 
-The scatterplot matrix is useful as a broad scan, but targeted plots are often easier to interpret. The next two plots focus on age and the indicator variables.
+The scatterplot matrix is good for a broad scan, but with a binary response and three indicator predictors, most of its panels are hard to read. Targeted plots work better. The next two focus on age and on the indicator variables.
 
 ```{r message=FALSE, warning=FALSE}
 #| fig-alt: "Boxplot and jittered points showing age by disease status."
@@ -106,6 +108,7 @@ disease_data |>
   ggplot(aes(x = Y, y = X1, color = Y)) +
   geom_boxplot(outlier.shape = NA, alpha = 0.15) +
   geom_jitter(width = 0.12, height = 0, alpha = 0.75) +
+  scale_color_manual(values = c("0" = "#D55E00", "1" = "#0072B2")) +
   labs(
     x = "Disease status",
     y = "Age",
@@ -150,13 +153,67 @@ disease_indicator_rates |>
   theme_minimal()
 ```
 
-The targeted plots do not replace the model. They simply help us see how the observed disease rate relates to individual predictors before fitting the multiple logistic regression model.
+The diseased group is older on average, and the disease rate is much higher in sector 2 than in sector 1. The differences by class are smaller. These plots describe one predictor at a time; the model will describe each predictor's association after accounting for the others.
 
 ::::
 
+### Is the Logit Linear in Age?
+
+The model assumes the log-odds change linearly with age. With a quantitative response we would check linearity with a scatterplot, but a scatterplot of 0s and 1s against age shows very little. Instead, we group the observations by age, compute the proportion with the disease in each group, convert it to a logit, and plot that against the average age of the group. This is called an *empirical logit* plot. If the points fall near a straight line, a linear term in age is reasonable.
+
+::: {#exm-24_emplogit .example title="Empirical logits by age group"}
+
+We cut age into six groups of about equal size. The empirical logit adds 0.5 to the counts, $\log\left((y + 0.5)/(n - y + 0.5)\right)$, so that a group with no cases (or all cases) does not give an infinite logit.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Empirical logits of disease for six age groups plotted against mean age, with a fitted straight line from a logistic regression on age."
+
+age_groups <- disease_data |>
+  mutate(
+    event = as.integer(as.character(Y)),
+    age_group = ntile(X1, 6)
+  ) |>
+  group_by(age_group) |>
+  summarize(
+    mean_age = mean(X1),
+    n = n(),
+    cases = sum(event),
+    .groups = "drop"
+  ) |>
+  mutate(empirical_logit = log((cases + 0.5) / (n - cases + 0.5)))
+
+age_groups
+
+age_only_fit <- glm(Y ~ X1, data = disease_data, family = binomial)
+
+age_groups |>
+  ggplot(aes(x = mean_age, y = empirical_logit)) +
+  geom_abline(
+    intercept = coef(age_only_fit)[1],
+    slope = coef(age_only_fit)[2],
+    color = "#0072B2",
+    linewidth = 1
+  ) +
+  geom_point(aes(size = n)) +
+  labs(
+    x = "Mean age in group",
+    y = "Empirical logit of disease",
+    size = "n",
+    title = "Empirical logits by age group",
+    subtitle = "Blue line = fitted logit from a logistic regression on age alone"
+  ) +
+  theme_minimal()
+```
+
+With only about 16 people per group, each empirical logit is noisy, so we are looking for a clear curve rather than small wiggles. The third group (8 cases out of 16) sits well above the line, but two or three cases fewer would put it on the line. The points rise with age without an obvious bend, so a linear term in age looks adequate. If the points had curved, we would try a transformation of age or a quadratic term, just as in linear regression.
+
+:::
+
+## Fitting and Interpreting the Model
+
 :::: {#exm-24_3 .example title="Fitting a multiple logistic regression workflow"}
 
-We can now set up the recipe, model, and workflow.
+We set up the recipe, model, and workflow and fit them.
 
 ```{r message=FALSE, warning=FALSE}
 disease_recipe <- recipe(Y ~ X1 + X2 + X3 + X4, data = disease_data)
@@ -172,11 +229,10 @@ disease_fit <- disease_workflow |>
   fit(data = disease_data)
 
 disease_fit |>
-  tidy() |>
-  knitr::kable(digits = 4)
+  tidy()
 ```
 
-The `tidy()` function returns the estimated coefficients on the log-odds scale. Exponentiating the coefficients gives estimated odds ratios. We can also request confidence intervals for the odds ratios.
+`tidy()` returns the estimated coefficients on the log-odds scale. Exponentiating them gives estimated odds ratios, and we can ask for confidence intervals on that scale too.
 
 ```{r message=FALSE, warning=FALSE}
 disease_fit |>
@@ -186,30 +242,219 @@ disease_fit |>
     odds_ratio = estimate,
     lower_95 = conf.low,
     upper_95 = conf.high
-  ) |>
-  knitr::kable(digits = 4)
+  )
 ```
 
-Based on the fitted model:
+From the fitted model:
 
-- For each one-unit increase in $X_1$ age, the estimated odds of disease presence are multiplied by about 1.03, holding the other predictors fixed.
-- For middle socioeconomic class compared to upper class, the estimated odds are multiplied by about 1.50, holding the other predictors fixed.
-- For lower socioeconomic class compared to upper class, the estimated odds are multiplied by about 0.74, holding the other predictors fixed.
-- For sector 2 compared to sector 1, the estimated odds are multiplied by about 4.83, holding the other predictors fixed.
+- Each additional year of age multiplies the estimated odds of disease by about 1.03, holding class and sector fixed.
+- Compared with upper class, middle class multiplies the estimated odds by about 1.50, holding age and sector fixed.
+- Compared with upper class, lower class multiplies the estimated odds by about 0.74, holding age and sector fixed.
+- Compared with sector 1, sector 2 multiplies the estimated odds by about 4.83, holding age and class fixed.
 
-The confidence interval gives a range of plausible odds ratios. If an interval contains 1, then the data are compatible with both lower and higher odds after adjusting for the other predictors.
+A year of age is a small unit. The odds ratio for 10 years is $\exp(10\hat\beta_1)$:
 
-These are model-based associations, not automatic causal effects.
+```{r message=FALSE, warning=FALSE}
+disease_fit |>
+  tidy() |>
+  filter(term == "X1") |>
+  mutate(odds_ratio_10_years = exp(10 * estimate))
+```
+
+Ten more years of age multiplies the estimated odds by about 1.35, holding the other predictors fixed.
+
+The confidence intervals for both class odds ratios contain 1, and they are wide: the data are consistent with middle class having anywhere from about half to about five times the odds of upper class. The intervals for age and sector do not contain 1.
+
+These are associations estimated from an observational study, not causal effects. People in sector 2 may differ from people in sector 1 in ways the model does not include.
 
 ::::
 
+### Testing Several Coefficients at Once
+
+The $z$ statistics and $p$-values from `tidy()` are Wald tests of one coefficient at a time. Socioeconomic class is a single variable represented by two indicators, though, and the question "does class matter, after adjusting for age and sector?" is a test that both of its coefficients are zero.
+
+In logistic regression the counterpart of the partial $F$ test is the *likelihood ratio test*, also called the drop-in-deviance test. We fit the full model and a reduced model without the terms being tested. If the reduced model is correct, the increase in deviance,
+$$
+G^2 = \text{Deviance}_{\text{reduced}} - \text{Deviance}_{\text{full}},
+$$
+has approximately a $\chi^2$ distribution with degrees of freedom equal to the number of coefficients dropped.
+
+::: {#exm-24_lrt .example title="Likelihood ratio test for socioeconomic class"}
+
+`anova()` compares two nested `glm` fits. We fit both models directly with `glm()`; the full model has exactly the same coefficients as the workflow fit.
+
+```{r message=FALSE, warning=FALSE}
+full_glm <- glm(Y ~ X1 + X2 + X3 + X4, data = disease_data, family = binomial)
+
+all.equal(coef(full_glm), coef(extract_fit_engine(disease_fit)))
+
+reduced_glm <- glm(Y ~ X1 + X4, data = disease_data, family = binomial)
+
+anova(reduced_glm, full_glm, test = "LRT")
+```
+
+It might seem simpler to use `extract_fit_engine(disease_fit)`, which pulls the `glm` object out of the workflow, as the full model. Don't. Inside a workflow, the response is renamed `..y`, and when `anova()` is given models with different response names, it silently drops all but the first and prints a sequential table for that one model alone. There is no error, only a warning that is easy to miss, and the output looks like a valid deviance table.
+
+Removing the two class indicators increases the deviance by only about 1.2 on 2 degrees of freedom, with a $p$-value around 0.55. After adjusting for age and sector, the data give no evidence that disease odds differ by socioeconomic class.
+
+The same idea tests one term at a time. `drop1()` compares the full model with each single-term deletion.
+
+```{r message=FALSE, warning=FALSE}
+drop1(full_glm, test = "LRT")
+```
+
+For each term, the likelihood ratio $p$-value is close to the Wald $p$-value from `tidy()`. They are not identical, and with small samples or large coefficients they can be quite different. When they disagree, the likelihood ratio test is generally the one to trust, for the reasons covered in the previous chapter.
+
+:::
+
+### Seeing the Model on the Probability Scale
+
+Odds ratios are constant, but the model's consequences on the probability scale are easier to understand. A plot of fitted probabilities against one quantitative predictor, with separate curves for groups, shows them directly. These are sometimes called effect plots.
+
+::: {#exm-24_effects .example title="Fitted probability of disease by age, class, and sector"}
+
+We predict the probability of disease over a grid of ages for every combination of class and sector.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Fitted probability of disease versus age, with one curve per socioeconomic class, in separate panels for sector 1 and sector 2; the sector 2 curves are much higher."
+
+class_lookup <- tibble(
+  class = factor(c("Upper", "Middle", "Lower"),
+                 levels = c("Upper", "Middle", "Lower")),
+  X2 = c(0, 1, 0),
+  X3 = c(0, 0, 1)
+)
+
+effect_grid <- expand_grid(
+  X1 = seq(1, 75, by = 1),
+  class_lookup,
+  X4 = c(0, 1)
+)
+
+effect_grid <- effect_grid |>
+  bind_cols(predict(disease_fit, new_data = effect_grid, type = "prob")) |>
+  mutate(sector = if_else(X4 == 0, "Sector 1", "Sector 2"))
+
+effect_grid |>
+  ggplot(aes(x = X1, y = .pred_1, color = class)) +
+  geom_line(linewidth = 1) +
+  facet_wrap(~ sector) +
+  scale_color_manual(values = c(Upper = "#0072B2", Middle = "#D55E00",
+                                Lower = "#009E73")) +
+  scale_y_continuous(limits = c(0, 1), labels = scales::label_percent()) +
+  labs(
+    x = "Age",
+    y = "Fitted P(disease)",
+    color = "Class",
+    title = "Fitted probability of disease"
+  ) +
+  theme_minimal()
+```
+
+Sector has the largest effect: at every age and class, the sector 2 curve is far above the sector 1 curve. The class curves are close together, consistent with the likelihood ratio test.
+
+The plot also shows something the odds ratios hide. The sector odds ratio is the same, 4.83, at every age, but the *difference in probability* between the sectors is not. For a young upper-class person, the probability goes from about `r scales::percent(effect_grid$.pred_1[effect_grid$X1 == 5 & effect_grid$class == "Upper" & effect_grid$X4 == 0], 1)` in sector 1 to about `r scales::percent(effect_grid$.pred_1[effect_grid$X1 == 5 & effect_grid$class == "Upper" & effect_grid$X4 == 1], 1)` in sector 2; for a 60-year-old, from about `r scales::percent(effect_grid$.pred_1[effect_grid$X1 == 60 & effect_grid$class == "Upper" & effect_grid$X4 == 0], 1)` to `r scales::percent(effect_grid$.pred_1[effect_grid$X1 == 60 & effect_grid$class == "Upper" & effect_grid$X4 == 1], 1)`. In logistic regression, a model with no interaction terms still produces different probability differences in different groups.
+
+The curves extend over the full age range for every group, but some combinations, such as older lower-class people in sector 1, may have few or no observations. Predictions for combinations that are rare in the data are extrapolations even when each predictor is within its own range.
+
+:::
+
+### Interactions
+
+An interaction term lets the effect of one predictor depend on another. In logistic regression, the interaction is on the log-odds scale: with an age-by-sector interaction, the age odds ratio is different in the two sectors.
+
+::: {#exm-24_interaction .example title="Does the age effect differ by sector?"}
+
+```{r message=FALSE, warning=FALSE}
+interaction_glm <- glm(Y ~ X1 * X4 + X2 + X3,
+                       data = disease_data, family = binomial)
+
+tidy(interaction_glm)
+
+anova(full_glm, interaction_glm, test = "LRT")
+```
+
+The likelihood ratio test for the interaction has a $p$-value of about 0.27, so the data do not show that the age effect differs by sector, and we keep the model without the interaction. If we did keep it, $\exp(\hat\beta_{X1})$ would be the age odds ratio in sector 1 only, and the sector 2 age odds ratio would be $\exp(\hat\beta_{X1} + \hat\beta_{X1:X4})$. With an interaction in the model, a coefficient by itself no longer describes "the" effect of its predictor.
+
+:::
+
+### Adjusted and Unadjusted Odds Ratios
+
+The sector odds ratio from a model with sector alone is not the same as the sector odds ratio adjusted for age and class.
+
+```{r message=FALSE, warning=FALSE}
+bind_rows(
+  glm(Y ~ X4, data = disease_data, family = binomial) |>
+    tidy(exponentiate = TRUE) |>
+    mutate(model = "Sector only"),
+  full_glm |>
+    tidy(exponentiate = TRUE) |>
+    mutate(model = "Adjusted for age and class")
+) |>
+  filter(term == "X4") |>
+  select(model, odds_ratio = estimate, std.error, p.value)
+```
+
+Part of the difference comes from confounding: if the two sectors have different age distributions, some of the unadjusted sector difference is really an age difference. In linear regression, that is the whole story, and if a predictor is unrelated to the others, adding it does not change their coefficients. Logistic regression has an extra wrinkle: odds ratios change when a predictor is added even if it is completely unrelated to the other predictors, as long as it is related to the response. This property is called *non-collapsibility*.
+
+::: {#exm-24_noncollapse .example title="Adding an independent predictor changes the odds ratio"}
+
+We simulate 100,000 observations with a binary predictor $x$ and a standard normal predictor $z$, generated independently, so $z$ is not a confounder of $x$. The true model is $\text{logit}(\pi) = -1 + 1\cdot x + \gamma z$, so the conditional odds ratio for $x$ is $e^1 \approx 2.72$ for every $\gamma$. We fit models with and without $z$ for several values of $\gamma$.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Estimated odds ratio for x with and without z in the model, plotted against the strength of z; the adjusted odds ratio stays at 2.72 while the unadjusted odds ratio falls as z gets stronger."
+#| fig-height: 3.5
+
+set.seed(2401)
+
+noncollapse <- tibble(gamma = c(0, 0.5, 1, 1.5, 2, 3)) |>
+  mutate(
+    estimates = map(gamma, \(g) {
+      sim <- tibble(
+        x = rbinom(1e5, 1, 0.5),
+        z = rnorm(1e5),
+        y = rbinom(1e5, 1, plogis(-1 + x + g * z))
+      )
+      tibble(
+        `Without z` = exp(coef(glm(y ~ x, data = sim, family = binomial))["x"]),
+        `With z` = exp(coef(glm(y ~ x + z, data = sim, family = binomial))["x"]),
+        cor_xz = cor(sim$x, sim$z)
+      )
+    })
+  ) |>
+  unnest(estimates)
+
+noncollapse
+
+noncollapse |>
+  pivot_longer(c(`Without z`, `With z`), names_to = "model",
+               values_to = "odds_ratio") |>
+  ggplot(aes(x = gamma, y = odds_ratio, color = model)) +
+  geom_hline(yintercept = exp(1), linetype = "dashed") +
+  geom_line(linewidth = 1) +
+  geom_point(size = 2) +
+  scale_color_manual(values = c("With z" = "#0072B2", "Without z" = "#D55E00")) +
+  labs(
+    x = expression(paste("Coefficient of z, ", gamma)),
+    y = "Estimated odds ratio for x",
+    color = NULL,
+    title = "Odds ratio for x, with and without an independent predictor z",
+    subtitle = "Dashed line = true conditional odds ratio, e = 2.72"
+  ) +
+  theme_minimal()
+```
+
+The correlation between $x$ and $z$ is essentially zero, yet leaving $z$ out of the model pulls the odds ratio for $x$ toward 1, and the stronger $z$ is, the more it is pulled. Neither number is wrong. They answer different questions: the odds ratio with $z$ compares people with the same $z$, and the one without $z$ compares groups averaged over $z$. Two lessons follow: an odds ratio always has to be reported along with what it was adjusted for, and odds ratios from studies that adjusted for different variables cannot be compared directly, even when the adjustment variables are unrelated to the predictor of interest.
+
+:::
+
 ## Predictions
 
-After fitting the model, we can obtain predictions on three useful scales:
+After fitting the model, `predict()` gives three kinds of predictions:
 
-- `type = "raw"` gives the fitted value on the logit scale,
-- `type = "prob"` gives predicted class probabilities,
-- `type = "class"` gives the predicted class using the default 0.5 probability threshold.
+- `type = "raw"` gives the fitted value on the logit scale (the linear predictor),
+- `type = "prob"` gives the predicted probability of each class,
+- `type = "class"` gives the predicted class, using a 0.5 probability threshold.
 
 :::: {#exm-24_4 .example title="Predicted logits, probabilities, and classes"}
 
@@ -227,19 +472,19 @@ disease_predictions <- disease_data |>
   )
 
 disease_predictions |>
-  slice_head(n = 10) |>
-  knitr::kable(digits = 3)
+  slice_head(n = 10)
 ```
 
-The `.pred_1` column is the fitted probability of disease presence. The `.pred_class` column converts those probabilities into predicted classes.
+`.pred_1` is the fitted probability of disease, and `.pred_0` is $1 -$ `.pred_1`. `.pred_class` is 1 when `.pred_1` is at least 0.5.
 
 ```{r message=FALSE, warning=FALSE}
-#| fig-alt: "Predicted probability of disease presence plotted against the fitted logit, with points colored by the true disease status."
+#| fig-alt: "Predicted probability of disease plotted against the fitted logit, with points colored by the true disease status."
 
 disease_predictions |>
   ggplot(aes(x = .pred_logit, y = .pred_1, color = Y)) +
   geom_point(alpha = 0.8) +
   geom_hline(yintercept = 0.5, linetype = "dashed") +
+  scale_color_manual(values = c("0" = "#D55E00", "1" = "#0072B2")) +
   labs(
     x = "Fitted logit",
     y = "Predicted P(Y = 1)",
@@ -248,17 +493,45 @@ disease_predictions |>
   theme_minimal()
 ```
 
-The dashed line marks the default 0.5 threshold. Points above the line are classified as disease present, and points below the line are classified as disease not present. Misclassification occurs when the predicted class does not match the observed class.
+All the points lie on one logistic curve, because the probability is a function of the logit alone. The dashed line is the 0.5 threshold, which corresponds to a logit of 0. Points above it are classified as disease present and points below as disease absent. A blue point below the line or an orange point above it is a misclassification.
+
+Notice how few points are above the line. Most of the fitted probabilities are below 0.5, including for many of the people who had the disease.
 
 ::::
 
+The distributions of the fitted probabilities in the two groups show how well the model separates them.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Overlapping histograms of predicted disease probability for people with and without the disease; the two distributions overlap heavily."
+#| fig-height: 3.5
+
+disease_predictions |>
+  ggplot(aes(x = .pred_1, fill = Y)) +
+  geom_histogram(binwidth = 0.05, boundary = 0, alpha = 0.6,
+                 position = "identity", color = "white") +
+  geom_vline(xintercept = 0.5, linetype = "dashed") +
+  scale_fill_manual(values = c("0" = "#D55E00", "1" = "#0072B2")) +
+  labs(
+    x = "Predicted P(disease)",
+    y = "Count",
+    fill = "Observed Y",
+    title = "Predicted probabilities for people with and without the disease"
+  ) +
+  theme_minimal()
+```
+
+The people with the disease tend to have higher predicted probabilities, but the two histograms overlap a great deal. No threshold will separate them cleanly. Everything in the rest of this chapter, from the confusion matrix to the ROC curve, is a way of summarizing this overlap.
+
 ## Confusion Matrix
 
-A confusion matrix compares the predicted classes to the observed classes.
+A confusion matrix cross-tabulates the predicted classes against the observed classes.
 
 :::: {#exm-24_5 .example title="Confusion matrix and classification metrics"}
 
 ```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Heat map of the confusion matrix for the disease model at a 0.5 threshold."
+#| fig-height: 3
+
 disease_confusion <- conf_mat(
   disease_predictions,
   truth = Y,
@@ -266,127 +539,206 @@ disease_confusion <- conf_mat(
 )
 
 disease_confusion
+
+autoplot(disease_confusion, type = "heatmap")
 ```
 
-In this table, disease present is the event class, $Y=1$. There are 9 false positives and 19 false negatives.
+Disease present, $Y=1$, is the event class. There are 9 false positives (predicted 1, observed 0) and 19 false negatives (predicted 0, observed 1).
 
-We can summarize the confusion matrix with several classification metrics. Because the event class is the second factor level, we use `event_level = "second"`.
+Several metrics summarize the confusion matrix. Because the event class is the second factor level, we set `event_level = "second"`.
 
 ```{r message=FALSE, warning=FALSE}
 summary(disease_confusion, event_level = "second") |>
-  filter(.metric %in% c("accuracy", "sens", "spec", "ppv", "npv")) |>
-  knitr::kable(digits = 3)
+  filter(.metric %in% c("accuracy", "sens", "spec", "ppv", "npv"))
 ```
 
-Here:
+The definitions, with TP, FP, TN, and FN for true and false positives and negatives:
 
-- **Sensitivity** is the proportion of disease-present cases correctly predicted as disease present.
-- **Specificity** is the proportion of disease-absent cases correctly predicted as disease absent.
-- **Positive predictive value** is the proportion of predicted disease-present cases that truly had the disease.
-- **Negative predictive value** is the proportion of predicted disease-absent cases that truly did not have the disease.
+| Metric | Formula | Question it answers |
+|---|---|---|
+| Accuracy | $(TP + TN)/n$ | What fraction of all predictions are correct? |
+| Sensitivity | $TP/(TP + FN)$ | Of the people with the disease, what fraction are predicted to have it? |
+| Specificity | $TN/(TN + FP)$ | Of the people without the disease, what fraction are predicted not to have it? |
+| Positive predictive value (PPV) | $TP/(TP + FP)$ | Of the people predicted to have the disease, what fraction do? |
+| Negative predictive value (NPV) | $TN/(TN + FN)$ | Of the people predicted not to have it, what fraction do not? |
+
+With a 0.5 threshold, the model catches only 12 of the 31 cases, a sensitivity of about 0.39. It is much better at identifying people without the disease, with a specificity of about 0.87.
 
 ::::
 
 ::: {.callout-note collapse="false" title="Sensitivity and specificity depend on the event class"}
 
-Before computing classification metrics, decide which class is the event of interest. In this example, the event is disease present, $Y=1$.
+Before computing classification metrics, decide which class is the event of interest. Here it is disease present, $Y=1$.
 
-In `yardstick`, we make that explicit with `event_level = "second"` because the factor levels are ordered as `0`, then `1`.
+`yardstick` treats the first factor level as the event unless told otherwise. Since the levels here are `0` then `1`, we set `event_level = "second"`. If we forgot, sensitivity and specificity would swap, and so would PPV and NPV, with no error or warning. Accuracy would not change, which makes the mistake easy to miss.
+
+:::
+
+### Accuracy Can Be Misleading
+
+The model's accuracy at the 0.5 threshold is about 0.71. That sounds respectable until we compare it with a model that ignores every predictor and predicts "no disease" for everyone.
+
+::: {#exm-24_null .example title="Comparing with a model that always predicts the majority class"}
+
+```{r message=FALSE, warning=FALSE}
+majority_predictions <- disease_predictions |>
+  mutate(.pred_majority = factor("0", levels = levels(Y)))
+
+bind_rows(
+  disease_predictions |>
+    metrics(truth = Y, estimate = .pred_class) |>
+    filter(.metric == "accuracy") |>
+    mutate(model = "Logistic regression"),
+  majority_predictions |>
+    metrics(truth = Y, estimate = .pred_majority) |>
+    filter(.metric == "accuracy") |>
+    mutate(model = "Always predict 0")
+) |>
+  select(model, .metric, .estimate)
+```
+
+Predicting "no disease" for everyone is right 68% of the time. The logistic model, even evaluated on the data it was fit to, beats that by only a few percentage points. The trivial model has sensitivity 0, so it is useless for finding cases, but on accuracy alone it looks nearly as good.
+
+The more unbalanced the classes, the worse this gets. If a disease affects 1% of a population, predicting "healthy" for everyone has 99% accuracy. Always compare accuracy with the proportion in the larger class (the *no-information rate*), and report sensitivity and specificity alongside it.
 
 :::
 
 ## Thresholds
 
-The default classification threshold is 0.5, but this is not always the best threshold. If false negatives are costly, we might lower the threshold so more observations are classified as disease present. If false positives are costly, we might raise the threshold.
+The default threshold of 0.5 is not always the best one. If false negatives are costly, we can lower the threshold so that more people are classified as having the disease. If false positives are costly, we can raise it.
 
-:::: {#exm-24_6 .example title="Changing the classification threshold"}
+::: {#exm-24_6 .example title="Sweeping the classification threshold"}
 
-The following table compares accuracy, sensitivity, and specificity for three possible thresholds.
+Instead of trying a few thresholds, we compute sensitivity, specificity, and accuracy for every threshold from 0.05 to 0.95.
 
 ```{r message=FALSE, warning=FALSE}
-threshold_summary <- map_dfr(c(0.25, 0.50, 0.75), function(cutoff) {
-  thresholded_results <- disease_predictions |>
+#| fig-alt: "Sensitivity, specificity, and accuracy of the disease model plotted against the classification threshold; sensitivity falls and specificity rises as the threshold increases."
+
+threshold_metrics <- function(predictions, cutoff) {
+  predictions |>
+    mutate(.pred_threshold = factor(if_else(.pred_1 >= cutoff, "1", "0"),
+                                    levels = c("0", "1"))) |>
+    summarize(
+      threshold = cutoff,
+      true_positives = sum(Y == "1" & .pred_threshold == "1"),
+      false_positives = sum(Y == "0" & .pred_threshold == "1"),
+      true_negatives = sum(Y == "0" & .pred_threshold == "0"),
+      false_negatives = sum(Y == "1" & .pred_threshold == "0")
+    ) |>
     mutate(
-      .pred_threshold = factor(
-        if_else(.pred_1 >= cutoff, "1", "0"),
-        levels = levels(Y)
-      )
+      sensitivity = true_positives / (true_positives + false_negatives),
+      specificity = true_negatives / (true_negatives + false_positives),
+      accuracy = (true_positives + true_negatives) / nrow(predictions)
     )
+}
 
-  summary(
-    conf_mat(thresholded_results, truth = Y, estimate = .pred_threshold),
-    event_level = "second"
-  ) |>
-    filter(.metric %in% c("accuracy", "sens", "spec")) |>
-    select(.metric, .estimate) |>
-    pivot_wider(names_from = .metric, values_from = .estimate) |>
-    mutate(threshold = cutoff, .before = 1)
-})
+threshold_sweep <- map(
+  round(seq(0.05, 0.95, by = 0.01), 2),
+  \(cutoff) threshold_metrics(disease_predictions, cutoff)
+) |>
+  list_rbind()
 
-threshold_summary |>
-  knitr::kable(digits = 3)
+threshold_sweep |>
+  filter(threshold %in% c(0.25, 0.50, 0.75)) |>
+  select(threshold, sensitivity, specificity, accuracy)
+
+threshold_sweep |>
+  pivot_longer(c(sensitivity, specificity, accuracy),
+               names_to = "metric", values_to = "value") |>
+  ggplot(aes(x = threshold, y = value, color = metric)) +
+  geom_line(linewidth = 1) +
+  geom_vline(xintercept = 0.5, linetype = "dashed", color = "gray50") +
+  scale_color_manual(values = c(accuracy = "gray30", sensitivity = "#0072B2",
+                                specificity = "#D55E00")) +
+  labs(
+    x = "Threshold",
+    y = NULL,
+    color = NULL,
+    title = "Classification metrics across thresholds"
+  ) +
+  theme_minimal()
 ```
 
-Lowering the threshold increases sensitivity but usually lowers specificity. Raising the threshold has the opposite effect. The best threshold depends on the context and on the consequences of different kinds of mistakes.
-
-::::
-
-::: {.callout-warning collapse="false" title="The threshold should reflect the cost of mistakes"}
-
-A 0.5 threshold treats false positives and false negatives as if they have similar consequences. That may not be reasonable.
-
-For a disease screening problem, a false negative may be more costly than a false positive because a sick person is missed. In that case, a lower threshold may be preferred because it catches more true disease cases, even though it creates more false positives.
+As the threshold rises, fewer people are classified as having the disease, so sensitivity falls and specificity rises. Accuracy is fairly flat over a wide range of thresholds and is highest at a fairly high threshold. That is a consequence of the class imbalance: with more 0s than 1s, accuracy rewards predicting 0. Choosing the threshold that maximizes accuracy usually means accepting low sensitivity.
 
 :::
 
-:::: {#exm-24_7 .example title="Comparing thresholds with a simple cost rule"}
+::: {.callout-warning collapse="false" title="The threshold should reflect the cost of mistakes"}
 
-Suppose a false positive has cost 1 and a false negative has cost 5. These numbers are only for illustration, but they show how the preferred threshold can depend on the consequences of different errors.
+A 0.5 threshold treats false positives and false negatives as equally bad. That may not be reasonable.
+
+In disease screening, a false negative (a sick person who is missed) may be much worse than a false positive (a healthy person sent for a follow-up test). Then a lower threshold makes sense, because it catches more true cases at the price of more false positives.
+
+:::
+
+If the predicted probabilities are accurate and a false negative costs $c_{FN}$ while a false positive costs $c_{FP}$, the expected cost of classifying a person as positive is $(1-\pi)c_{FP}$ and of classifying them as negative is $\pi\,c_{FN}$. Classifying as positive is cheaper when
+$$
+\pi > \frac{c_{FP}}{c_{FP} + c_{FN}}.
+$$
+With equal costs this gives the familiar 0.5. If false negatives cost five times as much as false positives, the threshold is $1/6 \approx 0.17$.
+
+:::: {#exm-24_7 .example title="Choosing a threshold with a cost rule"}
+
+Suppose a false positive costs 1 and a false negative costs 5. These numbers are only for illustration. We compute the total cost at every threshold.
 
 ```{r message=FALSE, warning=FALSE}
-threshold_costs <- map_dfr(c(0.25, 0.50, 0.75), function(cutoff) {
-  thresholded_results <- disease_predictions |>
-    mutate(
-      .pred_threshold = factor(
-        if_else(.pred_1 >= cutoff, "1", "0"),
-        levels = levels(Y)
-      )
-    )
+#| fig-alt: "Total misclassification cost plotted against threshold for costs of 1 per false positive and 5 per false negative, with the minimum cost threshold and the theoretical threshold of one sixth marked."
+#| fig-height: 3.5
 
-  thresholded_results |>
-    summarize(
-      false_positives = sum(Y == "0" & .pred_threshold == "1"),
-      false_negatives = sum(Y == "1" & .pred_threshold == "0")
-    ) |>
-    mutate(threshold = cutoff, .before = 1)
-}) |>
-  mutate(
-    total_cost = false_positives * 1 + false_negatives * 5
-  )
+cost_fp <- 1
+cost_fn <- 5
+
+threshold_costs <- threshold_sweep |>
+  mutate(total_cost = false_positives * cost_fp + false_negatives * cost_fn)
 
 threshold_costs |>
-  knitr::kable(digits = 3)
+  filter(threshold %in% c(0.17, 0.25, 0.50, 0.75)) |>
+  select(threshold, false_positives, false_negatives, total_cost)
+
+best_threshold <- threshold_costs |>
+  slice_min(total_cost, n = 1, with_ties = FALSE)
+
+best_threshold |>
+  select(threshold, false_positives, false_negatives, total_cost)
+
+threshold_costs |>
+  ggplot(aes(x = threshold, y = total_cost)) +
+  geom_line(linewidth = 1, color = "#0072B2") +
+  geom_vline(xintercept = cost_fp / (cost_fp + cost_fn),
+             linetype = "dashed", color = "#D55E00") +
+  geom_point(data = best_threshold, size = 3, color = "#D55E00") +
+  annotate("text", x = cost_fp / (cost_fp + cost_fn) + 0.01,
+           y = max(threshold_costs$total_cost),
+           label = "1/6", hjust = 0, color = "#D55E00") +
+  labs(
+    x = "Threshold",
+    y = "Total cost",
+    title = "Total cost when a false negative costs 5 times a false positive"
+  ) +
+  theme_minimal()
 ```
 
-Under this example cost rule, the threshold with the lowest total cost would be preferred. A different application could lead to a different cost rule and therefore a different threshold.
+Under this cost rule, the 0.5 threshold is far from the cheapest. The total cost is lowest at a threshold near the theoretical value of 1/6, where the model classifies many more people as positive and misses far fewer cases.
+
+The threshold here was chosen using the same data used to fit the model and to count the errors. The cost at the chosen threshold is therefore optimistic. Choosing a threshold is a tuning decision, and like any other tuning decision it should be made with cross-validation or a validation set, then checked on separate test data.
 
 ::::
 
 ## ROC Curves
 
-A Receiver Operating Characteristic (ROC) curve summarizes how sensitivity and specificity change across all possible classification thresholds.
+A Receiver Operating Characteristic (ROC) curve shows how sensitivity and specificity trade off across all possible thresholds. It plots sensitivity (the true positive rate) against $1-\text{specificity}$ (the false positive rate). Each point on the curve is one threshold: a very high threshold classifies nobody as positive, which is the point (0, 0), and a very low threshold classifies everybody as positive, which is (1, 1).
 
-The ROC curve plots sensitivity, also called the true positive rate, against the false positive rate, which is $1-\text{specificity}$.
-
-The diagonal line represents a random classifier. A better classifier has an ROC curve that bows above this diagonal. The upper-left corner represents perfect classification, with sensitivity equal to 1 and specificity equal to 1.
+The diagonal line is a classifier that assigns probabilities at random. A useful classifier has a curve that bows above the diagonal, and a perfect one goes straight up to the upper-left corner, where sensitivity and specificity are both 1.
 
 ### Area Under the Curve (AUC)
 
-The **area under the ROC curve (AUC)** provides a single-number summary of separation ability:
+The area under the ROC curve (AUC) summarizes the whole curve in one number:
 
-- **AUC = 1**: perfect separation,
-- **AUC = 0.5**: random guessing,
-- **AUC < 0.5**: worse than random guessing, usually indicating a problem with the model or event coding.
+- AUC = 1: perfect separation,
+- AUC = 0.5: no better than random,
+- AUC < 0.5: worse than random, which usually means the event class was coded backward.
+
+AUC has a direct interpretation. Pick one person with the disease and one without, at random. The AUC is the probability that the model gives the person with the disease the higher predicted probability (counting ties as one half). This is why AUC is called a measure of *discrimination*: it measures how well the model ranks cases above non-cases.
 
 :::: {#exm-24_8 .example title="ROC curve and AUC for the disease model"}
 
@@ -396,25 +748,153 @@ The **area under the ROC curve (AUC)** provides a single-number summary of separ
 disease_predictions |>
   roc_curve(truth = Y, .pred_1, event_level = "second") |>
   autoplot()
+
+disease_predictions |>
+  roc_auc(truth = Y, .pred_1, event_level = "second")
 ```
+
+We can check the concordance interpretation by comparing every case with every non-case.
 
 ```{r message=FALSE, warning=FALSE}
-disease_predictions |>
-  roc_auc(truth = Y, .pred_1, event_level = "second") |>
-  knitr::kable(digits = 3)
+case_probs <- disease_predictions$.pred_1[disease_predictions$Y == "1"]
+noncase_probs <- disease_predictions$.pred_1[disease_predictions$Y == "0"]
+
+pair_comparisons <- outer(case_probs, noncase_probs, "-")
+
+tibble(
+  pairs = length(pair_comparisons),
+  case_higher = mean(pair_comparisons > 0),
+  tied = mean(pair_comparisons == 0),
+  concordance = mean(pair_comparisons > 0) + 0.5 * mean(pair_comparisons == 0)
+)
 ```
 
-The AUC estimates how well the fitted probabilities rank disease-present observations above disease-absent observations. Unlike accuracy, AUC does not depend on one specific classification threshold.
+Of the `r length(case_probs) * length(noncase_probs)` case/non-case pairs, the model ranks the case higher in about `r scales::percent(mean(pair_comparisons > 0) + 0.5 * mean(pair_comparisons == 0), 1)` of them, which equals the AUC. AUC does not depend on any one threshold.
 
 ::::
 
+### What AUC Does Not Measure
+
+AUC depends only on the ranking of the predicted probabilities, not on their values. Any transformation that keeps the order of the probabilities leaves the ROC curve and the AUC unchanged, even if it makes the probabilities wildly wrong. A model can have a high AUC and still give probabilities that are systematically too high or too low.
+
+Whether the predicted probabilities match the observed frequencies is called *calibration*. If a model is well calibrated, then among all the people it gives a probability of about 0.3, about 30% have the disease. A calibration plot groups the observations by predicted probability and plots the observed proportion in each group against the average predicted probability. A well-calibrated model has points near the line $y = x$.
+
+The *Brier score* summarizes calibration and discrimination together. It is the mean squared difference between the predicted probability and the 0/1 outcome, $\frac{1}{n}\sum(\hat\pi_i - y_i)^2$. Smaller is better, and predicting the overall event rate for everyone gives a baseline of $\bar{y}(1 - \bar{y})$.
+
+::: {#exm-24_calibration .example title="Same AUC, different calibration"}
+
+We compare the model's predicted probabilities with a distorted version, $\hat\pi^3$. Cubing keeps the order of the probabilities but pushes them all toward 0.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Calibration plot with observed disease rate against mean predicted probability in five groups, for the original model and for cubed probabilities; the original points lie near the diagonal and the cubed points lie well above it."
+
+calibration_compare <- disease_predictions |>
+  mutate(.pred_cubed = .pred_1^3) |>
+  select(Y, Original = .pred_1, Cubed = .pred_cubed) |>
+  pivot_longer(-Y, names_to = "probabilities", values_to = "p")
+
+calibration_compare |>
+  group_by(probabilities) |>
+  summarize(
+    auc = roc_auc_vec(Y, p, event_level = "second"),
+    brier = brier_class_vec(Y, p, event_level = "second"),
+    .groups = "drop"
+  )
+
+mean_y <- mean(disease_predictions$Y == "1")
+c(baseline_brier = mean_y * (1 - mean_y))
+
+calibration_compare |>
+  group_by(probabilities) |>
+  mutate(bin = ntile(p, 5)) |>
+  group_by(probabilities, bin) |>
+  summarize(
+    mean_predicted = mean(p),
+    observed_rate = mean(Y == "1"),
+    n = n(),
+    .groups = "drop"
+  ) |>
+  ggplot(aes(x = mean_predicted, y = observed_rate, color = probabilities)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed") +
+  geom_line() +
+  geom_point(size = 3) +
+  scale_color_manual(values = c(Cubed = "#D55E00", Original = "#0072B2")) +
+  coord_equal(xlim = c(0, 1), ylim = c(0, 1)) +
+  labs(
+    x = "Mean predicted probability in group",
+    y = "Observed disease rate in group",
+    color = NULL,
+    title = "Calibration plot, five groups"
+  ) +
+  theme_minimal()
+```
+
+The two sets of probabilities have exactly the same AUC. The cubed probabilities badly underestimate the risk. In the highest group they average about 0.3 where the observed disease rate is close to 0.6, and in the lower groups they are near 0 where 5% to 30% of people had the disease. The Brier score catches this, and the calibration plot shows it. The original model's points lie close to the diagonal. They should, since these are in-sample predictions, and logistic regression with an intercept always matches the overall event rate on its own training data. Calibration on new data is the real test.
+
+:::
+
+If the predictions will be used as probabilities (to tell a patient their risk, or to set a threshold from costs as above), calibration matters as much as discrimination. If they will be used only to rank people (who should be screened first), AUC is the more relevant summary.
+
+### Predictive Values Depend on Prevalence
+
+Sensitivity and specificity describe the model's behavior within the cases and within the non-cases. The predictive values also depend on how common the event is. By Bayes' theorem,
+$$
+\text{PPV} = \frac{\text{sens} \times p}{\text{sens} \times p + (1-\text{spec})(1-p)},
+$$
+where $p$ is the prevalence, the proportion of the population with the event.
+
+::: {#exm-24_prevalence .example title="The same test in populations with different prevalence"}
+
+Consider a classifier with sensitivity 0.90 and specificity 0.90, applied to populations where the disease is more or less common.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Positive and negative predictive values for a test with 90 percent sensitivity and specificity, plotted against prevalence on a log scale; PPV falls sharply as prevalence decreases."
+#| fig-height: 3.5
+
+sens <- 0.90
+spec <- 0.90
+
+predictive_values <- function(prevalence) {
+  tibble(
+    prevalence = prevalence,
+    PPV = sens * prevalence /
+      (sens * prevalence + (1 - spec) * (1 - prevalence)),
+    NPV = spec * (1 - prevalence) /
+      (spec * (1 - prevalence) + (1 - sens) * prevalence)
+  )
+}
+
+predictive_values(c(0.001, 0.01, 0.10, 0.32, 0.50))
+
+prevalence_curve <- predictive_values(10^seq(-3, log10(0.9), length.out = 200))
+
+prevalence_curve |>
+  pivot_longer(c(PPV, NPV), names_to = "measure", values_to = "value") |>
+  ggplot(aes(x = prevalence, y = value, color = measure)) +
+  geom_line(linewidth = 1) +
+  scale_x_log10(labels = scales::label_percent()) +
+  scale_y_continuous(labels = scales::label_percent()) +
+  scale_color_manual(values = c(NPV = "#D55E00", PPV = "#0072B2")) +
+  labs(
+    x = "Prevalence (log scale)",
+    y = NULL,
+    color = NULL,
+    title = "Predictive values of a test with 90% sensitivity and specificity"
+  ) +
+  theme_minimal()
+```
+
+At a prevalence of 32%, as in the outbreak data, about four out of five positive predictions are correct. At a prevalence of 1%, the same classifier's positive predictions are right less than 10% of the time, because the 10% false positive rate applied to the 99% without the disease swamps the true positives. A model's PPV from one study does not transfer to a population with a different prevalence. Sensitivity and specificity transfer better, though they too can change if the cases in the new population are milder or more severe.
+
+:::
+
 ## Train-Test Evaluation
 
-The preceding metrics were calculated using the same data used to fit the model. That is useful for learning the mechanics, but it is not an honest estimate of future predictive performance. A train-test split gives a better validation example.
+All of the metrics so far were computed on the same data used to fit the model. That is fine for learning the mechanics but gives an optimistic estimate of how the model will do on new people. The validation methods from Chapter 22 apply to classification just as they do to regression.
 
 :::: {#exm-24_9 .example title="Evaluating the disease model on a testing set"}
 
-We create a stratified split so that the training and testing sets preserve the disease-present and disease-absent proportions as much as possible.
+We make a stratified split so that the training and testing sets have about the same proportion of disease cases.
 
 ```{r message=FALSE, warning=FALSE}
 set.seed(3386)
@@ -438,11 +918,10 @@ bind_rows(
 ) |>
   group_by(split) |>
   mutate(proportion = n / sum(n)) |>
-  ungroup() |>
-  knitr::kable(digits = 3)
+  ungroup()
 ```
 
-Now we fit the workflow on the training set and evaluate predictions on the testing set.
+We fit the workflow on the training set and evaluate on the testing set.
 
 ```{r message=FALSE, warning=FALSE}
 disease_train_fit <- disease_workflow |>
@@ -469,41 +948,115 @@ bind_rows(
   summary(disease_test_confusion, event_level = "second") |>
     filter(.metric %in% c("accuracy", "sens", "spec", "ppv", "npv")),
   disease_test_predictions |>
-    roc_auc(truth = Y, .pred_1, event_level = "second")
-) |>
-  knitr::kable(digits = 3)
+    roc_auc(truth = Y, .pred_1, event_level = "second"),
+  disease_test_predictions |>
+    brier_class(truth = Y, .pred_1, event_level = "second")
+)
 ```
 
-The testing-set metrics are based only on observations that were not used to estimate the model coefficients. Because this dataset is small, the testing-set estimates can be unstable, but they better represent the validation logic introduced in @sec-ridge and Chapter 22.
+These metrics use only people who were not used to estimate the coefficients. The testing set, though, has only `r nrow(disease_test)` people, `r sum(disease_test$Y == "1")` of them with the disease. A sensitivity computed from `r sum(disease_test$Y == "1")` cases can only take `r sum(disease_test$Y == "1") + 1` possible values, and one person more or less changes it by about `r round(100 / sum(disease_test$Y == "1"))` percentage points.
 
 ::::
 
+With a dataset this small, repeated cross-validation gives a steadier estimate than one split.
+
+::: {#exm-24_cv .example title="Repeated cross-validation for the disease model"}
+
+We use five-fold cross-validation, stratified on $Y$ and repeated ten times. For AUC and the Brier score the choice of event level does not matter (they come out the same either way), so we can use the default metric settings.
+
+```{r message=FALSE, warning=FALSE}
+#| fig-alt: "Dot plot of AUC, Brier score, and accuracy from 50 cross-validation folds for the disease model, showing wide spread across folds."
+#| fig-height: 3.5
+
+set.seed(3386)
+
+disease_folds <- vfold_cv(disease_data, v = 5, repeats = 10, strata = Y)
+
+disease_cv <- fit_resamples(
+  disease_workflow,
+  resamples = disease_folds,
+  metrics = metric_set(roc_auc, brier_class, accuracy)
+)
+
+collect_metrics(disease_cv)
+
+in_sample <- tibble(
+  .metric = c("roc_auc", "brier_class", "accuracy"),
+  .estimate = c(
+    roc_auc_vec(disease_predictions$Y, disease_predictions$.pred_1,
+                event_level = "second"),
+    brier_class_vec(disease_predictions$Y, disease_predictions$.pred_1,
+                    event_level = "second"),
+    accuracy_vec(disease_predictions$Y, disease_predictions$.pred_class)
+  )
+)
+
+collect_metrics(disease_cv, summarize = FALSE) |>
+  ggplot(aes(x = .estimate, y = .metric)) +
+  geom_jitter(height = 0.15, alpha = 0.4) +
+  geom_point(data = in_sample, color = "#D55E00", size = 4, shape = 18) +
+  labs(
+    x = "Estimate",
+    y = NULL,
+    title = "Fold-level metrics from 10 repeats of 5-fold CV",
+    subtitle = "Orange diamond = in-sample value"
+  ) +
+  theme_minimal()
+```
+
+The cross-validated AUC is a little lower than the in-sample AUC, and the cross-validated Brier score is a little higher, as we would expect: the model does somewhat worse on people it was not fit to. The fold-to-fold spread is large. Each fold has about 20 people and 6 cases, so any single fold, or any single train-test split, could have given a much better or much worse impression of the model.
+
+:::
+
+## Things to Watch Out For
+
+::: {.callout-warning collapse="false" title="Common mistakes with logistic regression and classification"}
+
+- Getting the event level wrong. `glm()` models the second factor level; `yardstick` treats the first level as the event unless `event_level = "second"` is set. A mistake swaps sensitivity with specificity and PPV with NPV, and turns an AUC of 0.8 into 0.2.
+- Judging a model by accuracy alone. Compare it with the no-information rate, the proportion in the larger class (@exm-24_null).
+- Using 0.5 as the threshold without thinking about the costs of the two kinds of error (@exm-24_7).
+- Choosing the threshold on the test data. The threshold is a tuning parameter; choose it with training data or cross-validation.
+- Treating AUC as a measure of whether the probabilities are right. AUC measures ranking only; check calibration too (@exm-24_calibration).
+- Carrying PPV and NPV over to a population with a different prevalence (@exm-24_prevalence).
+- Reporting an odds ratio without saying what it was adjusted for, or comparing odds ratios from models with different predictors (@exm-24_noncollapse).
+- Interpreting the main-effect coefficient as "the" effect of a predictor that is in an interaction (@exm-24_interaction).
+- Fitting too many predictors for the number of events. With 31 cases, this dataset supports only a few coefficients, and adding more invites the separation problems described in the previous chapter.
+- Reading odds ratios from an observational study as causal effects.
+
+:::
+
 ## Recap
 
-In this chapter, we fit and evaluated a multiple logistic regression model using `tidymodels`.
+This chapter fit, tested, and evaluated a multiple logistic regression model with `tidymodels`.
 
 | Idea | Meaning |
 |---|---|
-| **Multiple logistic regression** | Logistic regression with more than one predictor. |
-| **Linear predictor** | The logit-scale fitted value $\eta_i=\mathbf{x}_i^\prime\boldsymbol{\beta}$. |
-| **Partial odds ratio** | The multiplicative change in odds for one predictor, holding the other predictors fixed. |
-| **Odds-ratio confidence interval** | A range of plausible values for a population odds ratio. |
-| **Reference group** | The group represented by all indicator variables equal to 0. |
-| **Targeted exploratory plot** | A focused plot that examines one predictor-response relationship more clearly than a broad matrix. |
-| **Predicted probability** | The fitted probability that an observation belongs to the event class. |
-| **Predicted class** | The class assigned after applying a classification threshold. |
-| **Confusion matrix** | A table comparing predicted classes to observed classes. |
-| **False positive** | An observation predicted as event-present when the event is truly absent. |
-| **False negative** | An observation predicted as event-absent when the event is truly present. |
-| **Sensitivity** | The proportion of true event cases correctly classified as event cases. |
-| **Specificity** | The proportion of true nonevent cases correctly classified as nonevent cases. |
-| **Threshold** | The probability cutoff used to convert predicted probabilities into predicted classes. |
-| **Cost-based threshold choice** | Choosing a threshold based on the consequences of false positives and false negatives. |
-| **ROC curve** | A curve showing sensitivity and false positive rate across many thresholds. |
-| **AUC** | A threshold-free summary of how well the model separates the two classes. |
-| **Event level** | The class treated as the event of interest when computing classification metrics. |
-| **In-sample evaluation** | Evaluating predictions on the same data used to fit the model. |
-| **Train-test evaluation** | Fitting the model on training data and evaluating it on held-out testing data. |
+| Multiple logistic regression | Logistic regression with more than one predictor. |
+| Linear predictor | The logit-scale fitted value $\eta_i=\mathbf{x}_i^\prime\boldsymbol{\beta}$. |
+| Partial odds ratio | The multiplicative change in odds for one predictor, holding the other predictors fixed. |
+| Odds-ratio confidence interval | A range of plausible values for a population odds ratio, found by exponentiating the interval for $\beta_j$. |
+| Reference group | The group with all of its indicator variables equal to 0. |
+| Empirical logit plot | Logits of observed proportions in groups of a predictor, used to check linearity on the logit scale. |
+| Likelihood ratio test | Compares nested models by the drop in deviance, with a $\chi^2$ reference distribution; the counterpart of the partial $F$ test. |
+| Effect plot | Fitted probabilities plotted against a predictor, with separate curves for groups. |
+| Interaction | A term that lets the odds ratio for one predictor depend on another. |
+| Non-collapsibility | Odds ratios change when a predictor related to the response is added, even if it is unrelated to the other predictors. |
+| Predicted probability | The fitted probability that an observation is in the event class. |
+| Predicted class | The class assigned after applying a threshold to the predicted probability. |
+| Confusion matrix | A table of predicted classes against observed classes. |
+| False positive / false negative | Predicted event when there is none / predicted no event when there is one. |
+| Sensitivity / specificity | The proportion of events / non-events classified correctly. |
+| PPV / NPV | The proportion of predicted events / non-events that are correct; both depend on prevalence. |
+| No-information rate | The accuracy of always predicting the larger class. |
+| Threshold | The probability cutoff used to convert probabilities into classes. |
+| Cost-based threshold | $c_{FP}/(c_{FP} + c_{FN})$, the threshold that minimizes expected cost when the probabilities are calibrated. |
+| ROC curve | Sensitivity against false positive rate across all thresholds. |
+| AUC | The probability that a random event gets a higher predicted probability than a random non-event. |
+| Calibration | Agreement between predicted probabilities and observed event rates. |
+| Brier score | The mean squared difference between predicted probabilities and 0/1 outcomes. |
+| Event level | The class treated as the event when computing classification metrics. |
+| In-sample evaluation | Evaluating predictions on the data used to fit the model; optimistic. |
+| Train-test and cross-validation | Evaluating predictions on data not used to fit the model. |
 
 ## Check your understanding
 
@@ -515,97 +1068,102 @@ In this chapter, we fit and evaluated a multiple logistic regression model using
 
 3. Why is an indicator variable needed for middle socioeconomic class but not for upper socioeconomic class in this example?
 
-4. What is the event class in the disease outbreak example?
+4. What is an empirical logit plot, and why is it more useful than a scatterplot of $Y$ against age?
 
-5. Why is it important to make the event class explicit when computing sensitivity and specificity?
+5. The age coefficient is 0.0298. What is the odds ratio for a 10-year difference in age?
 
-6. What does `type = "prob"` return in a tidymodels logistic regression workflow?
+6. Why does testing whether socioeconomic class matters require a test of two coefficients, and what test is used?
 
-7. What does `type = "class"` return?
+7. In @exm-24_effects, the sector odds ratio is the same at every age. Why does the difference in probability between the sectors change with age?
 
-8. What does the fitted logit represent?
+8. In a model with an age-by-sector interaction, what does $\exp(\hat\beta_{X1})$ represent?
 
-9. How is a predicted probability converted into a predicted class when the threshold is 0.5?
+9. Why might the sector odds ratio change when age and class are added to the model? Give two reasons.
 
-10. What is a false positive in the disease outbreak example?
+10. What is the event class in the disease outbreak example, and why must it be stated explicitly in `yardstick`?
 
-11. What is a false negative in the disease outbreak example?
+11. What do `type = "raw"`, `type = "prob"`, and `type = "class"` return?
 
-12. What does sensitivity measure?
+12. What are a false positive and a false negative in the disease outbreak example?
 
-13. What does specificity measure?
+13. What do sensitivity, specificity, PPV, and NPV measure?
 
-14. Why might we lower the classification threshold below 0.5?
+14. The model's in-sample accuracy is 0.71. Why is that less impressive than it sounds?
 
-15. Why might we raise the classification threshold above 0.5?
+15. Why might we lower the classification threshold below 0.5? Why might we raise it?
 
-16. What does an ROC curve show?
+16. A false negative costs 9 times as much as a false positive. If the probabilities are well calibrated, what threshold minimizes expected cost?
 
-17. Why is AUC called threshold-free?
+17. Why is choosing the threshold that minimizes cost on the training data optimistic?
 
-18. Why should the odds-ratio interpretations in this chapter not automatically be interpreted causally?
+18. What does an ROC curve show, and what are the points (0, 0) and (1, 1) on it?
 
-19. What does an odds-ratio confidence interval communicate?
+19. Give the probability interpretation of AUC.
 
-20. Why can a targeted exploratory plot be more useful than a large scatterplot matrix?
+20. A colleague reports AUC = 0.22. What is the most likely explanation?
 
-21. Why are in-sample classification metrics not a clean estimate of future performance?
+21. Two models have the same AUC. Can one still be better? Explain using calibration.
 
-22. How does a train-test split improve the validation logic?
+22. A test with sensitivity and specificity of 0.90 is used to screen a population with 1% prevalence. Roughly what fraction of positive results are true positives?
 
-23. How can false-positive and false-negative costs change the preferred classification threshold?
+23. Why are in-sample classification metrics not a clean estimate of future performance, and why can a single small testing set be unreliable?
+
+24. Why should the odds-ratio interpretations in this chapter not automatically be interpreted causally?
 
 :::
 
 ::: {.callout-tip collapse="true" title="Solutions"}
 
-1. **It includes several predictors in the linear predictor.** The model still uses a logit link, but $\eta_i$ can include quantitative predictors, indicator variables, interactions, or transformations.
+1. It puts several predictors in the linear predictor. The model still uses a logit link, and $\eta_i$ can include quantitative predictors, indicators, interactions, or transformations.
 
-2. **It isolates one predictor's association.** The odds ratio for one predictor describes its association with the odds of the event when the other predictors are kept at the same values.
+2. The odds ratio for one predictor describes its association with the odds of the event when the other predictors are kept at the same values.
 
-3. **Upper class is the reference group.** With three classes, two indicator variables are enough. When both indicators are 0, the observation belongs to the upper-class reference group.
+3. Upper class is the reference group. With three classes, two indicators are enough; when both are 0, the person is upper class.
 
-4. **The event class is disease present, $Y=1$.** This is the outcome whose probability is modeled and evaluated.
+4. It groups observations by the predictor, converts each group's observed proportion to a logit, and plots the logits against the group means. A plot of 0s and 1s shows almost nothing about the shape of the relationship, while the empirical logits show whether the log-odds change linearly with the predictor.
 
-5. **Metrics depend on which class is treated as the event.** Reversing the event class reverses the meanings of sensitivity and specificity.
+5. $\exp(10 \times 0.0298) = \exp(0.298) \approx 1.35$.
 
-6. **It returns predicted probabilities.** For a binary response, the output includes one probability column for each class.
+6. Class is one variable represented by two indicators, so "class has no effect" means both coefficients are zero. The likelihood ratio (drop-in-deviance) test compares the model with and without both indicators, using a $\chi^2$ distribution with 2 degrees of freedom.
 
-7. **It returns predicted classes.** The probabilities are converted into class labels using a threshold or highest-probability rule.
+7. The same multiplicative change in odds corresponds to different changes in probability depending on where on the S-curve the starting probability is. Probabilities near 0 change little in absolute terms; probabilities near the middle change the most.
 
-8. **It is the prediction on the log-odds scale.** The fitted logit is $\hat{\eta}_i=\mathbf{x}_i^\prime\hat{\boldsymbol{\beta}}$.
+8. The odds ratio for a one-year increase in age in sector 1 (where $X_4 = 0$). In sector 2 it is $\exp(\hat\beta_{X1} + \hat\beta_{X1:X4})$.
 
-9. **Classify as 1 if the predicted probability of 1 is at least 0.5.** Otherwise, classify as 0.
+9. Confounding: if sector is related to age or class, part of the unadjusted sector difference reflects those variables. Non-collapsibility: even predictors unrelated to sector change the sector odds ratio if they are related to the response.
 
-10. **A false positive is predicted disease when disease is actually absent.** In symbols, the model predicts 1 but the observed value is 0.
+10. Disease present, $Y = 1$. `yardstick` treats the first factor level as the event by default, and here the first level is `0`, so without `event_level = "second"`, sensitivity and specificity (and PPV and NPV) would be swapped.
 
-11. **A false negative is predicted no disease when disease is actually present.** In symbols, the model predicts 0 but the observed value is 1.
+11. `"raw"` returns the linear predictor on the logit scale, `"prob"` returns a probability column for each class, and `"class"` returns the predicted class using a 0.5 threshold.
 
-12. **Sensitivity measures detection of true events.** It is the proportion of disease-present observations correctly classified as disease present.
+12. A false positive is a person predicted to have the disease who does not. A false negative is a person predicted not to have it who does.
 
-13. **Specificity measures detection of true nonevents.** It is the proportion of disease-absent observations correctly classified as disease absent.
+13. Sensitivity is the fraction of people with the disease who are predicted to have it. Specificity is the fraction without the disease who are predicted not to have it. PPV is the fraction of positive predictions that are correct, and NPV is the fraction of negative predictions that are correct.
 
-14. **To catch more true disease cases.** Lowering the threshold usually increases sensitivity but may create more false positives.
+14. 68% of the people do not have the disease, so predicting "no disease" for everyone already has accuracy 0.68. The model improves on that by only a few points, and its sensitivity at 0.5 is low.
 
-15. **To avoid false alarms.** Raising the threshold usually increases specificity but may create more false negatives.
+15. Lower the threshold to catch more true cases when false negatives are costly (higher sensitivity, lower specificity). Raise it to avoid false alarms when false positives are costly.
 
-16. **It shows the tradeoff across thresholds.** The ROC curve plots sensitivity against the false positive rate for many possible cutoffs.
+16. $c_{FP}/(c_{FP} + c_{FN}) = 1/(1 + 9) = 0.10$.
 
-17. **It summarizes performance across many thresholds.** AUC does not depend on choosing one cutoff such as 0.5.
+17. The threshold was chosen to fit the particular errors in those data. Like any tuning parameter chosen and evaluated on the same data, it will look better than it will perform on new data.
 
-18. **The study may be observational.** Logistic regression estimates associations after adjusting for included predictors, but causal interpretation requires stronger design and assumptions.
+18. It shows sensitivity against the false positive rate as the threshold varies. (0, 0) is a threshold so high that nothing is classified positive; (1, 1) is a threshold so low that everything is.
 
-19. **It communicates uncertainty about the odds ratio.** If the interval is wide, the estimate is imprecise. If it contains 1, the data are compatible with no multiplicative change in the odds.
+19. It is the probability that a randomly chosen person with the event gets a higher predicted probability than a randomly chosen person without it, with ties counted as one half.
 
-20. **It focuses attention.** A large matrix can be useful for scanning, but a targeted plot can make one predictor-response relationship easier to interpret.
+20. The event level is probably reversed, so the metric is treating the probability of the non-event as the score for the event. Reversing it gives AUC = 0.78.
 
-21. **The model has already seen those data.** In-sample metrics can be too optimistic because the same observations were used for fitting and evaluation.
+21. Yes. AUC depends only on the ranking of the predictions. One model's probabilities can match observed rates while the other's are systematically too high or too low; a calibration plot or the Brier score shows the difference.
 
-22. **It separates fitting from evaluation.** The model is estimated on the training data and then judged on held-out testing data.
+22. $\text{PPV} = (0.9 \times 0.01)/(0.9 \times 0.01 + 0.1 \times 0.99) \approx 0.083$, so fewer than 1 in 10.
 
-23. **Different mistakes may have different consequences.** If false negatives are costly, a lower threshold may be preferred; if false positives are costly, a higher threshold may be preferred.
+23. The model was fit to those same observations, so in-sample metrics are optimistic. A small testing set has few events, so metrics like sensitivity can change a lot with one or two observations; repeated cross-validation gives a steadier estimate.
+
+24. The data are observational. Logistic regression estimates associations after adjusting for the included predictors, and people in different sectors or classes may differ in ways the model does not include. Causal conclusions need a stronger design or stronger assumptions.
 
 :::
+
 
 
 
